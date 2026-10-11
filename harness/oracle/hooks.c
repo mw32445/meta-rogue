@@ -560,6 +560,44 @@ __wrap_md_gethomedir(void)
     return dir;
 }
 
+/* the wizard's "names" score listing: the pinned user name, not getpwuid() */
+char *
+__wrap_md_getrealname(int uid)
+{
+    const char *n = getenv("ROGUE_NAME");
+
+    (void) uid;
+    return (char *) (n != NULL ? n : "rodney");
+}
+
+/*
+ * ROGUEOPTS is handed out from a NUL-padded copy: parse_opts() reads past the
+ * end of a string option with no value ("name", "file=~"); the padding makes
+ * that read NULs, as the port does.  parse_opts() writes into the string (the
+ * inven value's case), and main() and playit() both parse it: one buffer.
+ */
+extern char *__real_getenv(const char *);
+
+char *
+__wrap_getenv(const char *name)
+{
+    static char opts[4096];
+    static int copied;
+    char *v;
+
+    if (strcmp(name, "ROGUEOPTS") != 0)
+	return __real_getenv(name);
+    v = __real_getenv(name);
+    if (v == NULL)
+	return NULL;
+    if (!copied)
+    {
+	strncpy(opts, v, sizeof opts - 64);
+	copied = 1;
+    }
+    return opts;
+}
+
 int  __wrap_md_shellescape(void) { return 0; }	/* never fork a shell */
 void __wrap_md_sleep(int s) { (void) s; }
 

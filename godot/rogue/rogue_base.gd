@@ -536,6 +536,8 @@ static var _things_line_cnt := 0
 static var _things_newpage := false
 static var _add_line_maxlen := -1
 static var _print_disc_obj := Thing.new()
+## options.c
+static var _get_num_buf := ""	## get_num(): static char buf[MAXSTR] (MASTER)
 ## save.c
 static var _save_scoreline := PackedByteArray()	## static char scoreline[100]
 ## weapons.c
@@ -670,6 +672,7 @@ static func reset() -> void:
 	numscores = NUMSCORES
 	Numname = NUMNAME
 	scoreboard = null
+	_get_num_buf = ""
 	_save_scoreline = PackedByteArray()
 	_save_scoreline.resize(100)
 
@@ -1256,6 +1259,11 @@ static func sprintf(fmt: String, args: Array = []) -> String:
 			99:	# c
 				var v := int(args[ai]) if ai < args.size() else 0
 				ai += 1
+				if (v & 0xFF) == 0:
+					# a NUL ends the C string the caller uses
+					if not left and width > 1:
+						out += " ".repeat(width - 1)
+					return out
 				s = char(v & 0xFF)
 			115:	# s
 				var a: Variant = args[ai] if ai < args.size() else null

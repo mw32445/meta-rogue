@@ -60,12 +60,18 @@ static func main() -> void:
 			await exit(0)
 			return
 		elif argv[1] == "-d":
+			var seed0 := seed
 			dnum = rnd(100)	# throw away some rnd()s to break patterns
-			while true:
-				dnum -= 1
-				if dnum == 0:
-					break
-				rnd(100)
+			if dnum == 0:
+				# while (--dnum) wraps C's 32-bit int: 2^32 - 1 more draws, a full
+				# period of the RNG minus one, which leaves seed where it started.
+				seed = seed0
+			else:
+				while true:
+					dnum -= 1
+					if dnum == 0:
+						break
+					rnd(100)
 			purse = rnd(100) + 1
 			level = rnd(100) + 1
 			initscr()
