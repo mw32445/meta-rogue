@@ -25,6 +25,7 @@
 #define NCURSES_INTERNALS 1	/* WINDOW fields: _flags, _cury, _curx */
 #include <curses.h>
 #include <errno.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -378,12 +379,48 @@ log_step(int key)
     fflush(f);
 }
 
+/*
+ * Interactive mode (ROGUE_KEYS=-, used by harness/bot.py): the step is
+ * logged with K-2 before the key is known, then the key is read from stdin,
+ * one decimal number per line; end of input ends the run.
+ */
+static int interactive = -1;
+
+static int
+interactive_key(void)
+{
+    char line[64];
+
+    log_step(-2);
+    if (__real_fgets(line, sizeof line, stdin) == NULL)
+	return -1;
+    return atoi(line);
+}
+
 /* Next scripted key.  Logs the step; ends the run when the script is used up. */
 static int
 scripted_key(void)
 {
     int key;
 
+    if (interactive < 0)
+    {
+	const char *p = getenv("ROGUE_KEYS");
+
+	interactive = p != NULL && strcmp(p, "-") == 0;
+    }
+    if (interactive)
+    {
+	key = interactive_key();
+	if (key < 0)
+	{
+	    fprintf(dump(), "END %ld\n", step);
+	    fflush(dumpf);
+	    fflush(stdout);
+	    __real_exit(0);
+	}
+	return key;
+    }
     if (keys == NULL)
 	load_keys();
     key = keypos < nkeys ? keys[keypos++] : -1;
@@ -660,6 +697,48 @@ __wrap_chmod(const char *path, mode_t mode)
 	return -1;
     }
     return __real_chmod(path, mode);
+}
+
+/*
+ * A crash of the C game (a NULL dereference: see docs/FIDELITY.md) is logged
+ * as "EXIT 128+signal", like a shell reports it; the port exits with the
+ * same status at the same point.  setup() resets the signals to SIG_DFL, so
+ * the handlers are installed again after it.
+ */
+static void
+crashed(int sig)
+{
+    if (dumpf != NULL)
+    {
+	fprintf(dumpf, "EXIT %d\n", 128 + sig);
+	fflush(dumpf);
+    }
+    fflush(stdout);
+    _exit(128 + sig);
+}
+
+static void
+catch_crashes(void)
+{
+    signal(SIGSEGV, crashed);
+    signal(SIGBUS, crashed);
+    signal(SIGFPE, crashed);
+    signal(SIGILL, crashed);
+}
+
+__attribute__((constructor)) static void
+hooks_init(void)
+{
+    catch_crashes();
+}
+
+extern void __real_md_onsignal_default(void);
+
+void
+__wrap_md_onsignal_default(void)
+{
+    __real_md_onsignal_default();
+    catch_crashes();
 }
 
 /* free is a no-op: use-after-free reads see intact objects, like the GC'd port */
