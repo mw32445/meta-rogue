@@ -35,6 +35,8 @@ original built as a test oracle (`harness/`). The C sources here are unchanged.
 - Play: open `godot/project.godot` in Godot 4.7 and press F5. See [godot/README.md](godot/README.md).
 - How it works and how it is verified: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - Every deliberate difference from the stock C build: [docs/FIDELITY.md](docs/FIDELITY.md).
+- What the playable game adds on top, each behind a switch (the bug fixes, the Fighters'
+  Guild): [docs/CHANGES.md](docs/CHANGES.md).
 - Working on it: [CLAUDE.md](CLAUDE.md) (commands, rules, tests).
 
 ---
