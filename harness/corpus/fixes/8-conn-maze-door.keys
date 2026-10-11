@@ -1,0 +1,8 @@
+# difftest: seed=1659 master=1 arg=
+# FIX 8: conn() waited forever for a passage square on the bottom row of a top-row maze, a row between two rows of maze cells with no link in range (passages.c:174-178): seed 1659 level 5. Fixed: a link is dug at an even offset; the level is generated (godot/tests/fixes_test.gd checks that it, and every level of the other hanging seeds, is connected)
+# expect-classic: the level generator is stuck
+# expect-not-fixed: the level generator is stuck
+# expect-fixed: Level: 5
+# expect-not-classic: Level: 5
+# expect-fixed: ---More (level map)---
+4 4 4 4 6 32

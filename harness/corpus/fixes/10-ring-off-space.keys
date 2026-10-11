@@ -1,0 +1,6 @@
+# difftest: seed=901 master=1 arg=
+# FIX 10: ring_off() (R) said "was wearing <ring>(f)" with no space before the pack letter (rings.c:122)
+# expect-classic: Was wearing a germanium ring(f)
+# expect-fixed: Was wearing a germanium ring (f)
+# expect-not-fixed: ring(f)
+67 61 51 32 80 102 108 32 82 32

@@ -1,0 +1,3 @@
+# difftest: seed=1203 master=1 arg=
+# FIX N12 (wizard): show_map() (^F) turned standout on for each hidden square but off only for a square whose flags are all 0, so most of the map after the first hidden square was inverse (wizard.c:275-280). Text is the same in both modes; the oracle diff checks the attributes and godot/tests/fixes_test.gd checks that only hidden squares stand out
+4 4 4 6 32

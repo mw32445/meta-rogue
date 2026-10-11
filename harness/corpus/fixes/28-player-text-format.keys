@@ -1,0 +1,12 @@
+# difftest: seed=2801 opts=fruit=a%%%%b master=1 arg=
+# FIX 28: player text used as a printf format: the fruit name in the see-invisible potion message (potions.c:167+374), ^P repeating the last message (command.c:287) and the wizard whatis ^W (wizard.c:72); with fruit=a%%%%b classic prints a%%b
+# expect-classic: This potion tastes like a%%b juice
+# expect-classic: My, that was a yummy a%%b
+# expect-classic: An a%%b
+# expect-fixed: This potion tastes like a%%%%b juice
+# expect-fixed: An a%%%%b
+# expect-not-fixed: tastes like a%%b juice
+# expect-not-fixed: yummy a%%b
+# expect-not-fixed: An a%%b
+67 33 52 32 113 102 32 27 67 58 49 32 67 58 49 32 101 102 16 23
+102 32

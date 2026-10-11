@@ -1,0 +1,20 @@
+# difftest: seed=1101 master=1 arg=
+# FIX 11: an object thrown where it cannot land (diagonally into a room corner) vanishes with the name weap_info[o_which] whatever its type: a potion was an arrow, a ring (null) (weapons.c:149-150); fixed: named by its type
+# expect-classic: The arrow vanishes as it hits the ground
+# expect-classic: The (null) vanishes
+# expect-classic: The long sword vanishes
+# expect-fixed: The potion vanishes as it hits the ground
+# expect-fixed: The scroll vanishes
+# expect-fixed: The ring vanishes
+# expect-fixed: The slime-mold vanishes
+# expect-fixed: The staff vanishes
+# expect-fixed: The studded leather armor vanishes
+# expect-not-fixed: The arrow vanishes
+# expect-not-fixed: (null)
+# expect-not-fixed: magic mapping vanishes
+# expect-not-fixed: long sword vanishes
+# expect-not-fixed: dagger vanishes
+# expect-not-fixed: short bow vanishes
+67 33 51 32 67 63 98 32 67 61 57 32 67 58 49 32 67 47 52 32
+67 93 50 110 32 104 104 104 104 104 104 104 104 104 104 116 121 102 116 121
+103 32 116 121 104 32 116 121 105 32 116 121 106 32 116 121 107 32

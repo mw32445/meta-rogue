@@ -1,0 +1,11 @@
+# difftest: seed=5101 master=1 arg=
+# FIX N10: while hallucinating, visuals() shows the unseen stairs as a random object; come_down() restores objects and monsters but not the stairs, which stay an object until redrawn (daemons.c:194-235 vs 259-260). Wizard: ^I, a potion of hallucination, ^T until in the stairs room, rest until "Everything looks SO boring now.", one step onto the stairs row
+# expect-classic: |.!..@
+# expect-not-classic: |.%..@
+# expect-fixed: |.%..@
+# expect-not-fixed: |.!..@
+9 32 32 32 32 32 32 32 32 6 32 67 33 49 32 113 104 32 20 20
+20 20 20 20 20 20 20 20 20 20 20 20 53 48 115 53 48 115 53 48
+115 53 48 115 53 48 115 53 48 115 53 48 115 53 48 115 53 48 115 53
+48 115 53 48 115 53 48 115 53 48 115 53 48 115 53 48 115 53 48 115
+53 48 115 53 48 115 115 106 115

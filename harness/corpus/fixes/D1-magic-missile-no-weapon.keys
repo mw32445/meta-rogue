@@ -1,0 +1,7 @@
+# difftest: seed=3114 master=1 arg=
+# FIX D1: magic missile with no wielded weapon (the mace is dropped): do_zap() kept the static bolt o_launch stale, so roll_em() used its empty o_damage and the missile always missed (sticks.c, WS_MISSILE)
+# expect-classic: You missed the kestrel
+# expect-fixed: You have defeated the kestrel
+# expect-not-fixed: You missed the kestrel
+100 99 32 67 47 54 32 67 63 101 32 114 102 27 122 121 99 32 122 121
+99 32 122 121 99 32

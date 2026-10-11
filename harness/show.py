@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Show the screens of a key script around some step, from the oracle and/or the port.
 
-  show.py KEYFILE --step N [--before 2] [--after 0] [--port] [--digest]
+  show.py KEYFILE --step N [--before 2] [--after 0] [--port] [--digest] [--fixes]
 
-Uses the run options in the key file's header (seed, opts, master, args). For a
-chain file, --run K picks the run (0-based); earlier runs are replayed first.
+Uses the run options in the key file's header (seed, opts, master, fixes, args). For
+a chain file, --run K picks the run (0-based); earlier runs are replayed first.
+--fixes runs the fixed oracle and the port with RogueBase.fixes on, as difftest.py does.
 """
 import argparse
 import os
@@ -50,8 +51,10 @@ def main():
     ap.add_argument("--port", action="store_true", help="also run the port and show both")
     ap.add_argument("--digest", action="store_true")
     ap.add_argument("--run", type=int, default=0)
+    ap.add_argument("--fixes", action="store_true",
+                    help="RogueBase.fixes on, against the fixed oracle (harness/oracle/fixes.patch)")
     a = ap.parse_args()
-    case = difftest.read_case(os.path.abspath(a.keys))
+    case = difftest.set_fixes(difftest.read_case(os.path.abspath(a.keys)), a.fixes)
     first = max(1, a.step - a.before)
     work = tempfile.mkdtemp(prefix="show", dir=difftest.OUT)
     t = difftest.tag(case, a.run)

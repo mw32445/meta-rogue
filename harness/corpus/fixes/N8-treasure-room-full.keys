@@ -1,0 +1,7 @@
+# difftest: seed=3001017 master=1 arg=
+# FIX N8: treas_room() ignored find_floor() failing (20 tries in a 3x3 room with one square left) and put the object on the last square tried: here a scroll on the room gold, which it hides (new_level.c:202-206); the wizard map after one ^D
+# expect-classic: |=)?+######
+# expect-fixed: |=)*+######
+# expect-not-fixed: |=)?+
+# expect-not-classic: |=)*+
+4 6 32

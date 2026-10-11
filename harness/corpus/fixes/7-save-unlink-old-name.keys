@@ -1,0 +1,12 @@
+# difftest: seed=701
+# FIX 7: save_game() overwriting an existing file of another name unlinked the old save name, file_name, instead of that file (save.c:104). Game 1 saves to ./rogue.save, game 2 to foo, game 3 overwrites foo (classic: ./rogue.save is deleted), then rogue -r restores ./rogue.save (classic: no such file, exit 1) and v shows the version
+# expect-fixed: mctesq was here
+# expect-not-classic: mctesq was here
+# run: seed=701
+83 121
+# run: seed=702
+83 110 102 111 111 13
+# run: seed=703
+83 110 102 111 111 13 121
+# run: seed=701 arg=-r
+118 32

@@ -1,0 +1,20 @@
+# difftest: seed=3011 master=1 arg=
+# FIX typos: cinnibar (init.c:173), missle (sticks.c:189,191), tripy (potions.c:28), Onenes (scrolls.c:285), It make (potions.c:204): a cinnabar staff, a magic missile at nothing, then confusion and remove curse while hallucinating, and restore strength
+# expect-classic: You now have a cinnibar staff
+# expect-classic: The missle vanishes with a puff of smoke
+# expect-classic: What a tripy feeling!
+# expect-classic: in touch with the Universal Onenes-
+# expect-classic: It make you feel warm all over
+# expect-fixed: You now have a cinnabar staff
+# expect-fixed: The missile vanishes with a puff of smoke
+# expect-fixed: What a trippy feeling!
+# expect-fixed: in touch with the Universal Oneness
+# expect-fixed: It makes you feel warm all over
+# expect-not-fixed: cinnibar
+# expect-not-fixed: missle
+# expect-not-fixed: tripy
+# expect-not-fixed: Universal Onenes-
+# expect-not-fixed: It make you
+67 47 57 32 67 47 54 32 122 104 103 32 67 33 49 32 113 104 32 67
+33 48 32 113 104 32 27 67 63 102 32 114 104 32 27 67 33 98 32 113
+104 32 27
