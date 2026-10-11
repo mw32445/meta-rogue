@@ -1,5 +1,11 @@
 # Plan: Port Rogue 5.4.4 (C/curses) to Godot 4 — 1:1, verified against the original
 
+> **Status: done.** All phases are complete. The port matches the original at every
+> keystroke in 5,029 final test runs, with 0 divergences. The tests reach 91.1% of the
+> original's game-logic lines (about 96% of the reachable ones). See `VERIFICATION.md`
+> for the results, `FIDELITY.md` for the documented differences, and `ARCHITECTURE.md`
+> for how it works. The plan below is kept as written.
+
 ## Context
 The repo is a fork of the Rogue 5.4.4 archive: ~16.8K lines of C, of which ~10K is game logic
 (the rest is portability glue, save serialization, and DES crypt for the wizard password). The user
