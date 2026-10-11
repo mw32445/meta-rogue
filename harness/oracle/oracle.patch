@@ -144,3 +144,68 @@
              
      return(READSTAT);
  }
+--- a/passages.c	2026-10-11 06:35:33.973240133 +0000
++++ b/passages.c	2026-10-11 06:35:33.987433326 +0000
+@@ -14,6 +14,8 @@
+ #include <curses.h>
+ #include "rogue.h"
+ 
++void oracle_stuck(void);	/* oracle: hooks.c */
++
+ /*
+  * do_passages:
+  *	Draw all the passages on a level.
+@@ -171,16 +173,26 @@
+ 	epos.x = rpt->r_pos.x;			/* end of move */
+ 	epos.y = rpt->r_pos.y;
+ 	if (!(rpf->r_flags & ISGONE))		/* if not gone pick door pos */
++	{
++	    int tries = 0;			/* oracle: see oracle_stuck() */
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		spos.x = rpf->r_pos.x + rnd(rpf->r_max.x - 2) + 1;
+ 		spos.y = rpf->r_pos.y + rpf->r_max.y - 1;
+ 	    } while ((rpf->r_flags&ISMAZE) && !(flat(spos.y, spos.x)&F_PASS));
++	}
+ 	if (!(rpt->r_flags & ISGONE))
++	{
++	    int tries = 0;
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		epos.x = rpt->r_pos.x + rnd(rpt->r_max.x - 2) + 1;
+ 	    } while ((rpt->r_flags&ISMAZE) && !(flat(epos.y, epos.x)&F_PASS));
++	}
+ 	distance = abs(spos.y - epos.y) - 1;	/* distance to move */
+ 	turn_delta.y = 0;			/* direction to turn */
+ 	turn_delta.x = (spos.x < epos.x ? 1 : -1);
+@@ -197,16 +209,26 @@
+ 	epos.x = rpt->r_pos.x;
+ 	epos.y = rpt->r_pos.y;
+ 	if (!(rpf->r_flags & ISGONE))
++	{
++	    int tries = 0;
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		spos.x = rpf->r_pos.x + rpf->r_max.x - 1;
+ 		spos.y = rpf->r_pos.y + rnd(rpf->r_max.y - 2) + 1;
+ 	    } while ((rpf->r_flags&ISMAZE) && !(flat(spos.y, spos.x)&F_PASS));
++	}
+ 	if (!(rpt->r_flags & ISGONE))
++	{
++	    int tries = 0;
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		epos.y = rpt->r_pos.y + rnd(rpt->r_max.y - 2) + 1;
+ 	    } while ((rpt->r_flags&ISMAZE) && !(flat(epos.y, epos.x)&F_PASS));
++	}
+ 	distance = abs(spos.x - epos.x) - 1;
+ 	turn_delta.y = (spos.y < epos.y ? 1 : -1);
+ 	turn_delta.x = 0;

@@ -7,6 +7,7 @@
 #   std     the default build (no wizard mode)               -O2
 #   master  wizard mode compiled in (-DMASTER)               -O2
 #   cov     default build with gcov instrumentation          -O0 --coverage
+#   covmaster  wizard mode with gcov instrumentation         -O0 --coverage
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -21,13 +22,13 @@ cd "$out"
 patch -p1 --quiet < "$here/oracle.patch"
 
 conf=()
-[ "$variant" = master ] && conf+=(--enable-wizardmode)
+case "$variant" in master|covmaster) conf+=(--enable-wizardmode) ;; esac
 ./configure "${conf[@]}" > configure.log 2>&1
 
 common=(-g -std=gnu17 -fwrapv -ftrivial-auto-var-init=zero -fcommon -DHAVE_CONFIG_H -w)
 case "$variant" in
     std|master) cflags=(-O2 "${common[@]}") ;;
-    cov)        cflags=(-O0 --coverage "${common[@]}") ;;
+    cov|covmaster) cflags=(-O0 --coverage "${common[@]}") ;;
     *) echo "unknown variant: $variant" >&2; exit 2 ;;
 esac
 

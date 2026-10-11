@@ -48,6 +48,11 @@ style is "Clear").
 - **Real name.** The wizard's score listing prints `md_getrealname(uid)`; in tests it
   is the pinned user name.
 
+## Hangs in the original
+| Where | What C does | Port and oracle |
+|---|---|---|
+| `passages.c` `conn()` | The door-picking `do { } while` loops never end when a maze room has no passage square on the side the door must go. About 7 in 3000 seeds hit this within 40 levels (e.g. MASTER seed 1659, four `^D`). | After 10,000 tries (a legitimate loop fails that often with probability about e^-434) the game ends: `endwin()`, a message on stdout, exit status 1 (oracle patch + `hooks.c` `oracle_stuck()`, port `Passages._stuck()`). Regression: `harness/corpus/conn-hang-1659.keys`. |
+
 ## Deliberate deviations (port only)
 - **Save files** keep C's encrypted header (the version string and screen size) but
   use the port's own encoding for the game state, so C and port save files are not

@@ -741,6 +741,19 @@ __wrap_md_onsignal_default(void)
     catch_crashes();
 }
 
+/*
+ * conn()'s door-picking loops spin forever when a maze room has no passage
+ * square on the side the door must go (oracle.patch, passages.c).  After
+ * 10000 tries the game ends; the port does the same (docs/FIDELITY.md).
+ */
+void
+oracle_stuck(void)
+{
+    endwin();
+    printf("\nrogue: the level generator is stuck (a hang in Rogue 5.4.4); the game cannot continue.\n");
+    exit(1);
+}
+
 /* free is a no-op: use-after-free reads see intact objects, like the GC'd port */
 void __wrap_free(void *p) { (void) p; }
 

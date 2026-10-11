@@ -13,6 +13,11 @@
 class_name Passages
 extends RogueBase
 
+## conn()'s door-picking loops spin forever in Rogue 5.4.4 when a maze room has
+## no passage square on the side the door must go (docs/FIDELITY.md). After
+## this many tries the game ends instead; the oracle does the same.
+const STUCK_TRIES := 10000
+
 
 ## struct rdes (the room graph description of do_passages())
 class Rdes:
@@ -167,13 +172,23 @@ static func conn(r1: int, r2: int) -> void:
 		epos.x = rpt.r_pos.x			# end of move
 		epos.y = rpt.r_pos.y
 		if (rpf.r_flags & ISGONE) == 0:		# if not gone pick door pos
+			var tries := 0
 			while true:
+				tries += 1
+				if tries > STUCK_TRIES:
+					await _stuck()
+					return
 				spos.x = rpf.r_pos.x + rnd(rpf.r_max.x - 2) + 1
 				spos.y = rpf.r_pos.y + rpf.r_max.y - 1
 				if not ((rpf.r_flags & ISMAZE) != 0 and (flat(spos.y, spos.x) & F_PASS) == 0):
 					break
 		if (rpt.r_flags & ISGONE) == 0:
+			var tries := 0
 			while true:
+				tries += 1
+				if tries > STUCK_TRIES:
+					await _stuck()
+					return
 				epos.x = rpt.r_pos.x + rnd(rpt.r_max.x - 2) + 1
 				if not ((rpt.r_flags & ISMAZE) != 0 and (flat(epos.y, epos.x) & F_PASS) == 0):
 					break
@@ -191,13 +206,23 @@ static func conn(r1: int, r2: int) -> void:
 		epos.x = rpt.r_pos.x
 		epos.y = rpt.r_pos.y
 		if (rpf.r_flags & ISGONE) == 0:
+			var tries := 0
 			while true:
+				tries += 1
+				if tries > STUCK_TRIES:
+					await _stuck()
+					return
 				spos.x = rpf.r_pos.x + rpf.r_max.x - 1
 				spos.y = rpf.r_pos.y + rnd(rpf.r_max.y - 2) + 1
 				if not ((rpf.r_flags & ISMAZE) != 0 and (flat(spos.y, spos.x) & F_PASS) == 0):
 					break
 		if (rpt.r_flags & ISGONE) == 0:
+			var tries := 0
 			while true:
+				tries += 1
+				if tries > STUCK_TRIES:
+					await _stuck()
+					return
 				epos.y = rpt.r_pos.y + rnd(rpt.r_max.y - 2) + 1
 				if not ((rpt.r_flags & ISMAZE) != 0 and (flat(epos.y, epos.x) & F_PASS) == 0):
 					break
@@ -354,3 +379,10 @@ static func numpass(y: int, x: int) -> void:
 	numpass(y - 1, x)
 	numpass(y, x + 1)
 	numpass(y, x - 1)
+
+
+## The level generator is stuck (see STUCK_TRIES): end the game.
+static func _stuck() -> void:
+	endwin()
+	printf("\nrogue: the level generator is stuck (a hang in Rogue 5.4.4); the game cannot continue.\n")
+	await exit(1)
