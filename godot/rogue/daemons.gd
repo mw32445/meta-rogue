@@ -4,45 +4,45 @@ extends RogueBase
 
 
 ## daemons.c: void doctor()
-static func doctor():
+static func doctor(_arg: int = 0):
 	_todo_sync("doctor")
 
 ## daemons.c: void swander()
-static func swander():
+static func swander(_arg: int = 0):
 	_todo_sync("swander")
 
 ## daemons.c: void rollwand()
-static func rollwand():
+static func rollwand(_arg: int = 0):
 	await _todo("rollwand")
 
 ## daemons.c: void unconfuse()
-static func unconfuse():
+static func unconfuse(_arg: int = 0):
 	await _todo("unconfuse")
 
 ## daemons.c: void unsee()
-static func unsee():
+static func unsee(_arg: int = 0):
 	_todo_sync("unsee")
 
 ## daemons.c: void sight()
-static func sight():
+static func sight(_arg: int = 0):
 	await _todo("sight")
 
 ## daemons.c: void nohaste()
-static func nohaste():
+static func nohaste(_arg: int = 0):
 	await _todo("nohaste")
 
 ## daemons.c: void stomach()
-static func stomach():
+static func stomach(_arg: int = 0):
 	await _todo("stomach")
 
 ## daemons.c: void come_down()
-static func come_down():
+static func come_down(_arg: int = 0):
 	await _todo("come_down")
 
 ## daemons.c: void visuals()
-static func visuals():
+static func visuals(_arg: int = 0):
 	_todo_sync("visuals")
 
 ## daemons.c: void land()
-static func land():
+static func land(_arg: int = 0):
 	await _todo("land")

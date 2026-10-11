@@ -4,7 +4,7 @@ extends RogueBase
 
 
 ## chase.c: void runners()
-static func runners():
+static func runners(_arg: int = 0):
 	await _todo("runners")
 
 ## chase.c: int move_monst(THING *)

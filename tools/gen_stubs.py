@@ -55,7 +55,10 @@ RENAME_FUNC = {"call": "call_"}
 def stub(name, info, blocking):
     gd_name = RENAME_FUNC.get(name, name)
     params = [RENAME.get(p, p) for p in info["params"] if p]
-    if name in ("msg", "addmsg"):
+    if name in ("runners", "doctor", "swander", "stomach", "rollwand", "unconfuse",
+                "nohaste", "unsee", "sight", "land", "come_down", "visuals"):
+        params = ["_arg: int = 0"]
+    elif name in ("msg", "addmsg"):
         params = ["fmt: String", "args: Array = []"]
     elif name == "doadd":
         params = ["fmt: String", "args: Array"]
