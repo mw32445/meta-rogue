@@ -798,7 +798,8 @@ func _test_screen() -> void:
 		and _row(g, 1).contains("Coffers 1834 gold: 17 of 20 heroes") and _row(g, 2).contains("Pack 5/23"))
 	for c in [27, ord("q"), ord("Q"), 3, 4, 26]:
 		g.key(c)
-	_check("screen: no way out but down", got.is_empty() and _row(g, 23).contains("no backing out"))
+	_check("screen: no way out but down (Escape and the like do nothing)", got.is_empty()
+		and _row(g, 0).contains("QUARTERMASTER'S STORES") and _row(g, 23).strip_edges() == "")
 	g.key(ord("1"))
 	g.key(ord("+"))
 	_check("screen: + buys strength", g.shop.strength == 1 and _row(g, 2).contains("Spent 100")
@@ -812,10 +813,10 @@ func _test_screen() -> void:
 	g.key(ord("+"))
 	g.key(ord("-"))
 	_check("screen: an identification is final", g.shop.pot_ids == 1
-		and _row(g, 23).contains("not taken back"))
+		and _row(g, 23).contains("an identification can't be returned"))
 	g.key(ord("?"))
-	_check("screen: ? shows the rules with the formula", _row(g, 5).contains("coffers = best / 2")
-		and _row(g, 6).contains("1834 gold"))
+	_check("screen: ? shows the formula", _row(g, 2).contains("coffers = best / 2")
+		and _row(g, 3).contains("1834 gold"))
 	g.key(ord(" "))
 	g.key(ord(">"))
 	_check("screen: > asks first", got.is_empty() and _row(g, 23).contains("Descend into the Dungeons of Doom?"))

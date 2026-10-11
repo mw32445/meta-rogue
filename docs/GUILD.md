@@ -39,11 +39,13 @@ The stores:
 | `+` or `l` | buy one |
 | `-` or `h` | return one |
 | `1`-`8`, left/right, Tab | section |
-| `?` | the rules, with the coffers formula and its numbers |
+| `?` | the coffers formula with its numbers, and the keys |
 | `>` or Enter | descend (asks `[y/n]`) |
 
-The bottom line is the Quartermaster's. It greets each section and says why a purchase
-is refused (coffers, pack, a limit, an issued item, a final identification).
+The screen has no explanatory text and no flavor lines: only the lists, their short
+headings and prices. The bottom line stays empty unless a key was refused; it then
+says why, in Rogue's message style ("you can't afford that", "there's no room in your
+pack", "an identification can't be returned", ...).
 
 When a game ends, the end screen shows the 20-entry list and then one line:
 `The Guild's coffers now hold N gold. [Enter: the Guild, Esc: quit]`.
@@ -86,12 +88,12 @@ scrolls cost `base * 2^k` once their kind is known.
 | | +2 max hit points (12 to start) | 60 * 2^k |
 | Arms | your weapon, +1,+1: dagger, spear (free), mace (issued), long sword, two-handed sword | 0 / 0 / - / 190 / 540 (its price over the mace) |
 | | spare weapon, +0,+0, known: spear, mace, long sword, two-handed sword | 40 / 60 / 250 / 600 |
-| | smithing: +1 to the lower of hit and damage (damage first), per weapon, the bow too | 75 * 2^k |
+| | enhance: +1 to the lower of hit and damage (damage first), per weapon, the bow too | 75 * 2^k |
 | Armour | your armour, +1: leather, studded (free), ring mail (issued), scale, chain, splint, banded, plate | 0 / 0 / - / 140 / 340 / 640 / 640 / 1040 |
 | | spare armour, +0, known | leather 20, ring mail 60, studded 60, scale 200, chain 400, splint 700, banded 700, plate 1100 |
-| | the armourer: -1 armour class, per suit | 100 * 2^k |
+| | enhance: -1 armour class, per suit | 100 * 2^k |
 | Rings | known; protection, add strength, dexterity, increase damage come +1; teleportation and aggravate monster are cursed (as in the dungeon) | regeneration 900, slow digestion 700, stealth 600, increase damage 550, protection 500, add strength 500, dexterity 450, sustain strength 400, maintain armor 400, see invisible 300, searching 250, teleportation 200, aggravate monster 10, adornment free; copies * 4^k |
-| | the enchanter: +1 to a bonus ring | 150 * 2^k |
+| | enhance: +1 to a bonus ring | 150 * 2^k |
 | | polishing a ring of adornment: a total winner sells it for its worth (10 plus its stone's, learned in the dungeon) times 2^k (at most 7) | 5 * 2^k (half what it adds to a plain 10-gold ring) |
 | Wands | wands and staves, known, 5 charges (light 15) | teleport away 900, slow monster 650, lightning/fire/cold 600, cancellation 500, drain life 400, polymorph 300, magic missile 250, teleport to 150, light 120, haste monster 5, invisibility 5, nothing 5; copies * 4^k |
 | | recharging: +2 charges, per wand | 80 * 2^k |
@@ -188,8 +190,8 @@ worth 80 to a winner.
   weapons and armour follow the orders in the catalog (`WEAPON_START_ORDER`, ...).
 - **Growth.** `GuildCatalog.grow(base, num, den, k)` is `floor(base * (num/den)^k)`,
   in exact integers.
-- **Text.** The Quartermaster's lines are in `guild_screen.gd`; the section texts are in
-  `GuildShop.offers()`.
+- **Text.** The section headings are in `GuildShop.offers()`; the refusal messages in
+  `GuildScreen._refused()`.
 
 After a change, run `tools/check.sh` and `godot/tests/guild_test.gd`. The food-versus-
 rings invariant and the price schedules are asserted there.

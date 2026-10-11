@@ -439,7 +439,7 @@ func _identify(potions: bool) -> String:
 ## - an offer: "id" (for buy/refund), "label", "info" (what the student has),
 ##   "note", "price" (of the next one; 0 is free) and "status" (when it cannot be
 ##   bought: "max", "yours", ...; else ""), "mark" ("*" on the student's choice);
-## - a heading: "head"; a line of text: "text".
+## - a heading: "head".
 func offers(section: int) -> Array:
 	var out: Array = []
 	match section:
@@ -448,22 +448,18 @@ func offers(section: int) -> Array:
 				C.grow(C.STR_PRICE, 2, 1, strength), "max" if strength_now() >= C.STR_MAX else ""))
 			out.append(_offer("hp", "Hit points", _change(C.HP_START, hp_now()),
 				"next +%d" % C.HP_STEP, C.grow(C.HP_PRICE, 2, 1, hit_points), ""))
-			out.append({"text": ""})
-			out.append({"text": "Every student is issued some food, a +1 ring mail, a +1,+1 mace,"})
-			out.append({"text": "a +1 short bow, 25 to 39 arrows and a pack of 23 slots."})
-			out.append({"text": "Anything more is paid for from the coffers, here and now."})
 		1:
-			out.append({"head": "Your weapon: it comes +1,+1 (a lighter one costs nothing)"})
+			out.append({"head": "Your weapon"})
 			for w in C.WEAPON_START_ORDER:
 				var o := _offer("sw:%d" % w, C.title(C.WEAPONS[w][0]), "damage " + C.WEAPONS[w][4],
 					"", C.WEAPONS[w][2], "yours" if w == weapon else "")
 				o.mark = "*" if w == weapon else ""
 				out.append(o)
-			out.append({"head": "Spare weapons, +0,+0"})
+			out.append({"head": "Spare weapons"})
 			for w in C.WEAPON_SPARE_ORDER:
 				out.append(_offer("xw:%d" % w, C.title(C.WEAPONS[w][0]), "damage " + C.WEAPONS[w][4],
 					_have(_owned(spare_weapons, w)), C.WEAPONS[w][3], ""))
-			out.append({"head": "The smithy: +1 to the lower of hit and damage"})
+			out.append({"head": "Enhance"})
 			out.append(_weapon_enh("ew:you", C.title(C.WEAPONS[weapon][0]) + " (yours)", 1, 1,
 				weapon_enh))
 			out.append(_weapon_enh("ew:bow", "Short bow", 1, 0, bow_enh))
@@ -471,24 +467,24 @@ func offers(section: int) -> Array:
 				out.append(_weapon_enh("ew:%d" % i, C.title(C.WEAPONS[spare_weapons[i].which][0])
 					+ " (spare)", 0, 0, spare_weapons[i].enh))
 		2:
-			out.append({"head": "Your armour: it comes +1 (a lighter one costs nothing)"})
+			out.append({"head": "Your armour"})
 			for a in C.ARMOR_ORDER:
 				var o := _offer("sa:%d" % a, C.title(C.ARMORS[a][0]),
 					"protection %d" % (11 - C.A_CLASS[a]), "", C.ARMORS[a][2], "yours" if a == armor else "")
 				o.mark = "*" if a == armor else ""
 				out.append(o)
-			out.append({"head": "Spare armour, +0"})
+			out.append({"head": "Spare armour"})
 			for a in C.ARMOR_ORDER:
 				out.append(_offer("xa:%d" % a, C.title(C.ARMORS[a][0]),
 					"protection %d" % (10 - C.A_CLASS[a]), _have(_owned(spare_armors, a)),
 					C.ARMORS[a][3], ""))
-			out.append({"head": "The armourer: -1 armour class"})
+			out.append({"head": "Enhance"})
 			out.append(_armor_enh("ea:you", C.title(C.ARMORS[armor][0]) + " (yours)", 1, armor_enh))
 			for i in spare_armors.size():
 				out.append(_armor_enh("ea:%d" % i, C.title(C.ARMORS[spare_armors[i].which][0])
 					+ " (spare)", 0, spare_armors[i].enh))
 		3:
-			out.append({"head": "Rings, known; the second of a kind costs four times as much"})
+			out.append({"head": "Rings"})
 			for r in _by_price(C.RINGS):
 				var o := _offer("rg:%d" % r, C.title(C.RINGS[r][0]), _have(_owned(rings, r)), "",
 					C.grow(C.RINGS[r][2], C.RING_COPY_FACTOR, 1, _owned(rings, r)), "")
@@ -501,7 +497,7 @@ func offers(section: int) -> Array:
 			for i in rings.size():
 				if C.is_bonus_ring(rings[i].which):
 					if not head:
-						out.append({"head": "The enchanter: +1 to a ring"})
+						out.append({"head": "Enhance"})
 						head = true
 					out.append(_offer("er:%d" % i, C.title(C.RINGS[rings[i].which][0]),
 						_change_s("+%d" % 1, "+%d" % (1 + rings[i].enh)), "next +1",
@@ -510,20 +506,19 @@ func offers(section: int) -> Array:
 			for i in rings.size():
 				if rings[i].which == C.RING_ADORNMENT:
 					if not head:
-						out.append({"head": "Polishing: a winner sells the ring for twice as much"})
+						out.append({"head": "Polish"})
 						head = true
 					var e: int = rings[i].enh
 					out.append(_offer("pr:%d" % i, "Adornment",
 						_change_s("worth x1", "x%d" % (1 << e)), "next x2",
 						C.grow(C.POLISH_PRICE, 2, 1, e), "max" if e >= C.POLISH_MAX else ""))
 		4:
-			out.append({"head": "Wands and staves, known: %d charges (light %d)" % [C.STICK_CHARGES,
-				C.STICK_LIGHT_CHARGES]})
+			out.append({"head": "Wands and staves"})
 			for s in _by_price(C.STICKS):
 				out.append(_offer("wd:%d" % s, C.title(C.STICKS[s][0]), _have(_owned(sticks, s)), "",
 					C.grow(C.STICKS[s][2], C.STICK_COPY_FACTOR, 1, _owned(sticks, s)), ""))
 			if not sticks.is_empty():
-				out.append({"head": "Recharging: +%d charges" % C.CHARGE_STEP})
+				out.append({"head": "Recharge"})
 			for i in sticks.size():
 				var base := charges_of(sticks[i].which, 0)
 				out.append(_offer("ec:%d" % i, C.title(C.STICKS[sticks[i].which][0]),
@@ -538,14 +533,8 @@ func offers(section: int) -> Array:
 			out.append(_offer("ip" if potions else "is", "Identify a %s" % ("potion" if potions else "scroll"),
 				"%d of %d known" % [nk, table.size()], "final", C.IDENTIFY_PRICE,
 				"all known" if nk == table.size() else ""))
-			if potions:
-				out.append({"text": "The alchemist names one unknown kind, the common ones more often."})
-				out.append({"text": "No bottle comes with the name, and a name is not taken back."})
-			else:
-				out.append({"text": "The scribe reads out one unknown kind, the common ones more often."})
-				out.append({"text": "No scroll comes with the reading, and a reading is not taken back."})
 			if nk > 0:
-				out.append({"head": "Known %s, for sale" % ("potions" if potions else "scrolls")})
+				out.append({"head": "Known %s" % ("potions" if potions else "scrolls")})
 			for k in _by_price(table):
 				if known[k]:
 					out.append(_offer(("bp:%d" if potions else "bs:%d") % k, C.title(table[k][0]),
@@ -562,9 +551,6 @@ func offers(section: int) -> Array:
 			out.append(_offer("pk", "A bigger pack", _change(C.PACK_START, pack_size()) + " slots",
 				"next +1", C.grow(C.PACK_PRICE, C.PACK_NUM, C.PACK_DEN, slots),
 				"max" if pack_size() >= C.PACK_MAX else ""))
-			out.append({"text": ""})
-			out.append({"text": "Extra arrows go onto your quiver. Darts, shuriken and daggers"})
-			out.append({"text": "make one stack each. A bigger pack holds one more thing."})
 	return out
 
 
