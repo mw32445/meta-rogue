@@ -409,7 +409,10 @@ static func add_line(fmt: Variant, arg: Variant) -> int:
 		if _add_line_maxlen < 0:
 			_add_line_maxlen = prompt.length()
 		if _things_line_cnt >= LINES - 1 or fmt == null:
-			if inv_type == INV_OVER and fmt == null and not _things_newpage:
+			# FIX 29: with a line ending at column 78 or 79 the window would
+			# start left of the screen; newwin() fails and nothing is shown
+			if inv_type == INV_OVER and fmt == null and not _things_newpage \
+					and (not fixes or COLS - _add_line_maxlen - 3 >= 0):
 				await Io.msg("")
 				refresh()
 				tw = newwin(_things_line_cnt + 1, _add_line_maxlen + 2, 0, COLS - _add_line_maxlen - 3)

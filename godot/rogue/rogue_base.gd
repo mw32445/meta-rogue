@@ -976,7 +976,7 @@ static func INDEX(y: int, x: int) -> Place:
 	if idx >= 0 and idx < MAXLINES * MAXCOLS:
 		return places[idx]
 	_dummy_place.p_ch = 32
-	_dummy_place.p_flags = 0
+	_dummy_place.p_flags = F_REAL if fixes else 0	# FIX 27: off the map is solid rock
 	_dummy_place.p_monst = null
 	return _dummy_place
 

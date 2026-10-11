@@ -102,7 +102,10 @@ static func ring_off() -> void:
 		return
 	if await Things.dropcheck(obj):
 		var nm: String = await Things.inv_name(obj, true)
-		await Io.msg("was wearing %s(%c)", [nm, obj.o_packch])
+		if fixes:	# FIX 10: a space before the pack letter
+			await Io.msg("was wearing %s (%c)", [nm, obj.o_packch])
+		else:
+			await Io.msg("was wearing %s(%c)", [nm, obj.o_packch])
 
 
 ## gethand:

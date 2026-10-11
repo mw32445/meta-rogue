@@ -106,7 +106,12 @@ static func quaff() -> void:
 			await Io.msg("you feel stronger, now.  What bulging muscles!")
 		P_MFIND:
 			player.t_flags |= SEEMONST
-			Daemon.fuse(D_TURN_SEE, 1, HUHDURATION, AFTER())	# C: fuse((void(*)())turn_see, TRUE, ...)
+			if fixes and Daemon.find_slot(D_TURN_SEE) != null:
+				# FIX 30: lengthen the fuse already burning, as other potions
+				# do, instead of filling the 20 daemon slots
+				Daemon.lengthen(D_TURN_SEE, HUHDURATION)
+			else:
+				Daemon.fuse(D_TURN_SEE, 1, HUHDURATION, AFTER())	# C: fuse((void(*)())turn_see, TRUE, ...)
 			if not turn_see(false):
 				await Io.msg("you have a %s feeling for a moment, then it passes",
 					[Misc.choose_str("normal", "strange")])
@@ -184,7 +189,10 @@ static func quaff() -> void:
 				pstats.s_str = Misc.add_str(pstats.s_str, cur_ring[LEFT].o_arm)
 			if ISRING(RIGHT, R_ADDSTR):
 				pstats.s_str = Misc.add_str(pstats.s_str, cur_ring[RIGHT].o_arm)
-			await Io.msg("hey, this tastes great.  It make you feel warm all over")
+			if fixes:	# FIX typo
+				await Io.msg("hey, this tastes great.  It makes you feel warm all over")
+			else:
+				await Io.msg("hey, this tastes great.  It make you feel warm all over")
 		P_BLIND:
 			await do_pot(P_BLIND, true)
 		P_LEVIT:
@@ -288,6 +296,8 @@ static func seen_stairs() -> bool:
 ## raise_level:
 ##	The guy just magically went up a level.
 static func raise_level() -> void:
+	if fixes and e_levels[pstats.s_lvl - 1] == 0:
+		return	# FIX 14: the top level (21): there is none above (C dropped to 1)
 	pstats.s_exp = e_levels[pstats.s_lvl - 1] + 1
 	await Misc.check_level()
 
@@ -309,7 +319,10 @@ static func do_pot(type_: int, knowit: bool) -> void:
 		await Misc.look(false)
 	else:
 		Daemon.lengthen(pp["pa_daemon"], t)
-	await Io.msg(Misc.choose_str(_pa_str(pp["pa_high"]), _pa_str(pp["pa_straight"])))
+	if fixes:	# FIX 28: text (the fruit, for P_SEEINVIS), not a format
+		await Io.msg("%s", [Misc.choose_str(_pa_str(pp["pa_high"]), _pa_str(pp["pa_straight"]))])
+	else:
+		await Io.msg(Misc.choose_str(_pa_str(pp["pa_high"]), _pa_str(pp["pa_straight"])))
 
 
 ## (port) Read a PACT pa_high / pa_straight char *: the PA_PRBUF entries
@@ -317,4 +330,6 @@ static func do_pot(type_: int, knowit: bool) -> void:
 static func _pa_str(s: Variant) -> Variant:
 	if s is StringName:
 		return prbuf
+	if fixes and s == "what a tripy feeling!":	# FIX typo (p_actions[P_CONFUSE])
+		return "what a trippy feeling!"
 	return s

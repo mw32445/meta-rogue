@@ -95,7 +95,10 @@ static func save_game() -> void:
 				if go_over:
 					break
 				await Io.msg("file name: %s", [buf])
-				Mdport.md_unlink(file_name)
+				if fixes:	# FIX 7: remove the file being overwritten, not the old save name
+					Mdport.md_unlink(buf)
+				else:
+					Mdport.md_unlink(file_name)
 			file_name = buf
 			var err := _open_error(file_name)
 			if err == "":

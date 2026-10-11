@@ -125,7 +125,8 @@ static func stomach(_arg: int = 0) -> void:
 
 		if food_left < MORETIME and oldfood >= MORETIME:
 			hungry_state = 2
-			await Io.msg(Misc.choose_str("the munchies are interfering with your motor capabilites",
+			await Io.msg(Misc.choose_str("the munchies are interfering with your motor capabilities"
+				if fixes else "the munchies are interfering with your motor capabilites",	# FIX typo
 				"you are starting to feel weak"))
 		elif food_left < 2 * MORETIME and oldfood >= 2 * MORETIME:
 			hungry_state = 1
@@ -162,6 +163,10 @@ static func come_down(_arg: int = 0) -> void:
 		if Chase.cansee(tp.o_pos.y, tp.o_pos.x):
 			mvaddch(tp.o_pos.y, tp.o_pos.x, tp.o_type)
 		tp = tp.l_next
+
+	# FIX N10: undo the stairs, which visuals() changes as it does the things
+	if fixes and not seenstairs and Chase.cansee(stairs.y, stairs.x) and not ce(hero, stairs):
+		mvaddch(stairs.y, stairs.x, STAIRS)
 
 	# undo the monsters
 	seemonst = on(player, SEEMONST)

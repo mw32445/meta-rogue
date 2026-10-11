@@ -85,18 +85,22 @@ static func read_scroll() -> void:
 					# Don't put a monster in top of the player.
 					if y == hero.y and x == hero.x:
 						continue
+					# FIX 12: nor on a monster (winat() gives a xeroc's disguise)
+					if fixes and moat(y, x) != null:
+						continue
 					# Or anything else nasty
 					ch = winat(y, x)
 					if Io.step_ok(ch):
 						if ch == SCROLL:
 							var sobj: Thing = await Misc.find_obj(y, x)
 							if sobj == null:
-								# UB: a xeroc disguised as a scroll leaves no object
-								# here; C dereferences find_obj()'s NULL and crashes
-								# (docs/FIDELITY.md: exit status 139, as the oracle).
-								await exit(139)
-								return
-							if sobj.o_which == S_SCARE:
+								if not fixes:
+									# UB: a xeroc disguised as a scroll leaves no object
+									# here; C dereferences find_obj()'s NULL and crashes
+									# (docs/FIDELITY.md: exit status 139, as the oracle).
+									await exit(139)
+									return
+							elif sobj.o_which == S_SCARE:
 								continue
 						i += 1
 						if rnd(i) == 0:
@@ -218,7 +222,8 @@ static func read_scroll() -> void:
 			uncurse(cur_weapon)
 			uncurse(cur_ring[LEFT])
 			uncurse(cur_ring[RIGHT])
-			await Io.msg(Misc.choose_str("you feel in touch with the Universal Onenes",
+			await Io.msg(Misc.choose_str("you feel in touch with the Universal Oneness" if fixes
+				else "you feel in touch with the Universal Onenes",	# FIX typo
 				"you feel as if somebody is watching over you"))
 		S_AGGR:
 			# This scroll aggravates all the monsters on the current

@@ -73,6 +73,8 @@ static func fight(mp: Coord, weap: Thing, thrown: bool) -> int:
 	count = 0
 	quiet = 0
 	if tp == null:
+		if fixes:	# FIX 13: no monster there (a monster letter is an object): no fight
+			return 0
 		# runto(mp) cannot find the monster either: in MASTER builds it says
 		# so with msg(), then C dereferences the NULL monster and crashes
 		# (docs/FIDELITY.md: exit status 139, as the oracle reports it).
@@ -169,7 +171,10 @@ static func attack(mp: Thing) -> int:
 					if no_command == 0:
 						await Io.addmsg("you are frozen")
 						if not terse:
-							await Io.addmsg(" by the %s", [mname])
+							if fixes:	# FIX 9: set_mname() already says "the"
+								await Io.addmsg(" by %s", [mname])
+							else:
+								await Io.addmsg(" by the %s", [mname])
 						await Io.endmsg()
 					no_command += rnd(2) + 2
 					if no_command > BORE_LEVEL:
@@ -201,6 +206,8 @@ static func attack(mp: Thing) -> int:
 							if pstats.s_lvl == 0:
 								pstats.s_exp = 0
 								pstats.s_lvl = 1
+							elif fixes:	# FIX N1: the experience of the new level, not the old one
+								pstats.s_exp = e_levels[pstats.s_lvl - 2] + 1 if pstats.s_lvl >= 2 else 1
 							else:
 								pstats.s_exp = e_levels[pstats.s_lvl - 1] + 1
 							fewer = roll(1, 10)
@@ -217,7 +224,10 @@ static func attack(mp: Thing) -> int:
 					# Venus Flytrap stops the poor guy from moving
 					player.t_flags |= ISHELD
 					vf_hit += 1
-					monsters[ord("F") - ord("A")].m_stats.s_dmg = sprintf("%dx1", [vf_hit])
+					if fixes:	# FIX 26: this flytrap's own damage, not the template's
+						mp.t_stats.s_dmg = sprintf("%dx1", [vf_hit])
+					else:
+						monsters[ord("F") - ord("A")].m_stats.s_dmg = sprintf("%dx1", [vf_hit])
 					pstats.s_hpt -= 1
 					if pstats.s_hpt <= 0:
 						await Rip.death(ord("F"))
@@ -256,7 +266,10 @@ static func attack(mp: Thing) -> int:
 					if steal != null:
 						await remove_mon(mp.t_pos, moat(mp.t_pos.y, mp.t_pos.x), false)
 						mp = null
-						Pack.leave_pack(steal, false, false)
+						if fixes:	# FIX N4: one item off a stack, as its own object
+							steal = Pack.leave_pack(steal, true, false)
+						else:
+							Pack.leave_pack(steal, false, false)
 						var nm: String = await Things.inv_name(steal, true)
 						await Io.msg("she stole %s!", [nm])
 						List.discard(steal)

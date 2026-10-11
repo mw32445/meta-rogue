@@ -1,0 +1,658 @@
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/chase.c b/chase.c
+--- a/chase.c	2026-10-11 19:36:42.560574292 +0000
++++ b/chase.c	2026-10-11 19:37:25.997390245 +0000
+@@ -19,6 +19,22 @@
+ static coord ch_ret;				/* Where chasing takes you */
+ 
+ /*
++ * on_mlist:
++ *	FIX N5: is the monster still on mlist?  (A monster that was
++ *	killed has been detached from it.)
++ */
++static bool
++on_mlist(THING *tp)
++{
++    THING *mp;
++
++    for (mp = mlist; mp != NULL; mp = next(mp))
++	if (mp == tp)
++	    return TRUE;
++    return FALSE;
++}
++
++/*
+  * runners:
+  *	Make all the running monsters move.
+  */
+@@ -48,6 +64,12 @@
+ 		to_death = FALSE;
+ 	    }
+ 	}
++	/*
++	 * FIX N5: a dragon's flame killed the monster that was next:
++	 * go on with the one now after tp
++	 */
++	if (next != NULL && !on_mlist(next))
++	    next = next(tp);
+     }
+     if (has_hit)
+     {
+@@ -86,9 +108,9 @@
+     if (!ce(*new_loc, th->t_pos))
+     {
+ 	mvaddch(th->t_pos.y, th->t_pos.x, th->t_oldch);
++	oroom = th->t_room;	/* FIX 3: the room it leaves, so a change of room is seen */
+ 	th->t_room = roomin(new_loc);
+ 	set_oldch(th, new_loc);
+-	oroom = th->t_room;
+ 	moat(th->t_pos.y, th->t_pos.x) = NULL;
+ 
+ 	if (oroom != th->t_room)
+@@ -496,7 +518,7 @@
+ coord *
+ find_dest(THING *tp)
+ {
+-    register THING *obj;
++    register THING *obj, *mp;
+     register int prob;
+ 
+     if ((prob = monsters[tp->t_type - 'A'].m_carry) <= 0 || tp->t_room == proom
+@@ -508,10 +530,11 @@
+ 	    continue;
+ 	if (roomin(&obj->o_pos) == tp->t_room && rnd(100) < prob)
+ 	{
+-	    for (tp = mlist; tp != NULL; tp = next(tp))
+-		if (tp->t_dest == &obj->o_pos)
++	    /* FIX 4: a loop variable of its own; tp stays the monster */
++	    for (mp = mlist; mp != NULL; mp = next(mp))
++		if (mp->t_dest == &obj->o_pos)
+ 		    break;
+-	    if (tp == NULL)
++	    if (mp == NULL)
+ 		return &obj->o_pos;
+ 	}
+     }
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/command.c b/command.c
+--- a/command.c	2026-10-11 19:36:42.534714699 +0000
++++ b/command.c	2026-10-11 19:37:02.577390647 +0000
+@@ -212,9 +212,9 @@
+ 		    goto over;
+ 		}
+ 		when 'F':
+-		    kamikaze = TRUE;
+ 		    /* FALLTHROUGH */
+ 		case 'f':
++		    kamikaze = (ch == 'F');	/* FIX 2: f clears what an earlier F left set */
+ 		    if (!get_dir())
+ 		    {
+ 			after = FALSE;
+@@ -284,7 +284,7 @@
+ 		    else
+ 			after = FALSE;
+ 		when 'D': after = FALSE; discovered();
+-		when CTRL('P'): after = FALSE; msg(huh);
++		when CTRL('P'): after = FALSE; msg("%s", huh);	/* FIX 28: text, not a format */
+ 		when CTRL('R'):
+ 		    after = FALSE;
+ 		    clearok(curscr,TRUE);
+@@ -390,7 +390,7 @@
+ 			when CTRL('I'):
+ 			{
+ 			    int i;
+-			    THING *obj;
++			    THING *obj, *op;
+ 
+ 			    for (i = 0; i < 9; i++)
+ 				raise_level();
+@@ -402,7 +402,11 @@
+ 			    obj->o_hplus = 1;
+ 			    obj->o_dplus = 1;
+ 			    add_pack(obj, TRUE);
+-			    cur_weapon = obj;
++			    /* FIX N13: wield it only if it fit in the pack */
++			    for (op = pack; op != NULL && op != obj; op = next(op))
++				continue;
++			    if (op != NULL)
++				cur_weapon = obj;
+ 			    /*
+ 			     * And his suit of armor
+ 			     */
+@@ -413,8 +417,12 @@
+ 			    obj->o_flags |= ISKNOW;
+ 			    obj->o_count = 1;
+ 			    obj->o_group = 0;
+-			    cur_armor = obj;
+ 			    add_pack(obj, TRUE);
++			    /* FIX N13: wear it only if it fit in the pack */
++			    for (op = pack; op != NULL && op != obj; op = next(op))
++				continue;
++			    if (op != NULL)
++				cur_armor = obj;
+ 			}
+ 			when '*' :
+ 			    pr_list();
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/daemons.c b/daemons.c
+--- a/daemons.c	2026-10-11 19:36:42.640675223 +0000
++++ b/daemons.c	2026-10-11 19:38:53.638406014 +0000
+@@ -169,7 +169,7 @@
+ 	if (food_left < MORETIME && oldfood >= MORETIME)
+ 	{
+ 	    hungry_state = 2;
+-	    msg(choose_str("the munchies are interfering with your motor capabilites",
++	    msg(choose_str("the munchies are interfering with your motor capabilities",	/* FIX typo */
+ 			   "you are starting to feel weak"));
+ 	}
+ 	else if (food_left < 2 * MORETIME && oldfood >= 2 * MORETIME)
+@@ -217,6 +217,12 @@
+ 	    mvaddch(tp->o_pos.y, tp->o_pos.x, tp->o_type);
+ 
+     /*
++     * FIX N10: undo the stairs, which visuals() changes as it does the things
++     */
++    if (!seenstairs && cansee(stairs.y, stairs.x) && !ce(hero, stairs))
++	mvaddch(stairs.y, stairs.x, STAIRS);
++
++    /*
+      * undo the monsters
+      */
+     seemonst = on(player, SEEMONST);
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/fight.c b/fight.c
+--- a/fight.c	2026-10-11 19:36:42.598205477 +0000
++++ b/fight.c	2026-10-11 19:38:27.328529536 +0000
+@@ -82,6 +82,8 @@
+      */
+     count = 0;
+     quiet = 0;
++    if (tp == NULL)		/* FIX 13: no monster there (a monster letter */
++	return FALSE;		/* is an object): nothing to fight */
+     runto(mp);
+     /*
+      * Let him know it was really a xeroc (if it was one).
+@@ -201,7 +203,7 @@
+ 		    {
+ 			addmsg("you are frozen");
+ 			if (!terse)
+-			    addmsg(" by the %s", mname);
++			    addmsg(" by %s", mname);	/* FIX 9: set_mname() says "the" */
+ 			endmsg();
+ 		    }
+ 		    no_command += rnd(2) + 2;
+@@ -248,8 +250,8 @@
+ 				pstats.s_exp = 0;
+ 				pstats.s_lvl = 1;
+ 			    }
+-			    else
+-				pstats.s_exp = e_levels[pstats.s_lvl-1]+1;
++			    else	/* FIX N1: the experience of the new level */
++				pstats.s_exp = pstats.s_lvl >= 2 ? e_levels[pstats.s_lvl-2]+1 : 1;
+ 			    fewer = roll(1, 10);
+ 			}
+ 			else
+@@ -267,7 +269,8 @@
+ 		     * Venus Flytrap stops the poor guy from moving
+ 		     */
+ 		    player.t_flags |= ISHELD;
+-		    sprintf(monsters['F'-'A'].m_stats.s_dmg,"%dx1", ++vf_hit);
++		    /* FIX 26: this flytrap's own damage, not the template's */
++		    sprintf(mp->t_stats.s_dmg,"%dx1", ++vf_hit);
+ 		    if (--pstats.s_hpt <= 0)
+ 			death('F');
+ 		when 'L':
+@@ -307,7 +310,8 @@
+ 		    {
+ 			remove_mon(&mp->t_pos, moat(mp->t_pos.y, mp->t_pos.x), FALSE);
+                         mp=NULL;
+-			leave_pack(steal, FALSE, FALSE);
++			/* FIX N4: one item off a stack, as its own object */
++			steal = leave_pack(steal, TRUE, FALSE);
+ 			msg("she stole %s!", inv_name(steal, TRUE));
+ 			discard(steal);
+ 		    }
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/init.c b/init.c
+--- a/init.c	2026-10-11 19:36:42.563903760 +0000
++++ b/init.c	2026-10-11 19:38:53.638932126 +0000
+@@ -170,7 +170,7 @@
+     "birch",
+     "cedar",
+     "cherry",
+-    "cinnibar",
++    "cinnabar",		/* FIX typo */
+     "cypress",
+     "dogwood",
+     "driftwood",
+@@ -284,6 +284,16 @@
+ 	    *cp++ = ' ';
+ 	}
+ 	*--cp = '\0';
++	/*
++	 * FIX N11: a word the length limit left empty still got its
++	 * space: drop doubled and trailing spaces (same RNG calls)
++	 */
++	for (sp = cp = prbuf; *sp; sp++)
++	    if (*sp != ' ' || (cp > prbuf && cp[-1] != ' '))
++		*cp++ = *sp;
++	while (cp > prbuf && cp[-1] == ' ')
++	    cp--;
++	*cp = '\0';
+ 	s_names[i] = (char *) malloc((unsigned) strlen(prbuf)+1);
+ 	strcpy(s_names[i], prbuf);
+     }
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/monsters.c b/monsters.c
+--- a/monsters.c	2026-10-11 19:36:42.548151277 +0000
++++ b/monsters.c	2026-10-11 19:38:53.637545319 +0000
+@@ -156,7 +156,10 @@
+ 
+ #ifdef MASTER
+     if ((tp = moat(y, x)) == NULL)
++    {
+ 	msg("can't find monster in wake_monster");
++	return NULL;	/* FIX N14: nothing to wake (a monster letter is an object) */
++    }
+ #else
+     tp = moat(y, x);
+     if (tp == NULL) 	 	 
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/move.c b/move.c
+--- a/move.c	2026-10-11 19:36:42.551195164 +0000
++++ b/move.c	2026-10-11 19:38:53.639357345 +0000
+@@ -296,7 +296,7 @@
+                 when 7: msg("you suddenly feel very thirsty");
+                 when 8: msg("you feel time speed up suddenly");
+                 when 9: msg("time now seems to be going slower");
+-                when 10: msg("you pack turns %s!", rainbow[rnd(cNCOLORS)]);
++                when 10: msg("your pack turns %s!", rainbow[rnd(cNCOLORS)]);	/* FIX typo */
+             }
+ 	when T_SLEEP:
+ 	    no_command += SLEEPTIME;
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/new_level.c b/new_level.c
+--- a/new_level.c	2026-10-11 19:36:42.572968997 +0000
++++ b/new_level.c	2026-10-11 19:38:53.634779733 +0000
+@@ -28,6 +28,7 @@
+     int i;
+ 
+     player.t_flags &= ~ISHELD;	/* unhold when you go down just in case */
++    vf_hit = 0;			/* FIX 26: the hold ends, and the flytrap's count */
+     if (level > max_level)
+ 	max_level = level;
+     /*
+@@ -199,7 +200,8 @@
+     num_monst = nm = rnd(spots) + MINTREAS;
+     while (nm--)
+     {
+-	find_floor(rp, &mp, 2 * MAXTRIES, FALSE);
++	if (!find_floor(rp, &mp, 2 * MAXTRIES, FALSE))
++	    continue;	/* FIX N8: no free floor found: no object (was: the last square) */
+ 	tp = new_thing();
+ 	tp->o_pos = mp;
+ 	attach(lvl_obj, tp);
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/options.c b/options.c
+--- a/options.c	2026-10-11 19:36:42.575188221 +0000
++++ b/options.c	2026-10-11 19:38:53.637020542 +0000
+@@ -378,12 +378,12 @@
+ int
+ get_num(void *vp, WINDOW *win)
+ {
+-    short *opt = (short *) vp;
++    int *opt = (int *) vp;	/* FIX 22: o_goldval is an int (was: short) */
+     int i;
+     static char buf[MAXSTR];
+ 
+     if ((i = get_str(buf, win)) == NORM)
+-	*opt = (short) atoi(buf);
++	*opt = atoi(buf);
+     return i;
+ }
+ #endif
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/pack.c b/pack.c
+--- a/pack.c	2026-10-11 19:36:42.641782263 +0000
++++ b/pack.c	2026-10-11 19:37:44.889389921 +0000
+@@ -25,7 +25,7 @@
+ void
+ add_pack(THING *obj, bool silent)
+ {
+-    THING *op, *lp;
++    THING *op, *lp, *mp;
+     bool from_floor;
+ 
+     from_floor = FALSE;
+@@ -52,9 +52,10 @@
+ 
+     if (pack == NULL)
+     {
++	if (!pack_room(from_floor, obj))	/* FIX 5: take it off the floor */
++	    return;
+ 	pack = obj;
+ 	obj->o_packch = pack_char();
+-	inpack++;
+     }
+     else
+     {
+@@ -81,6 +82,10 @@
+ 			    return;
+ 			op->o_count++;
+ dump_it:
++			/* FIX N3: redirect its pursuers before obj is gone */
++			for (mp = mlist; mp != NULL; mp = next(mp))
++			    if (mp->t_dest == &obj->o_pos)
++				mp->t_dest = &hero;
+ 			discard(obj);
+ 			obj = op;
+ 			lp = NULL;
+@@ -221,6 +226,8 @@
+ 	if ((unsigned) (obj->o_packch - 'a') < 26)	/* oracle: o_packch 0 wrote */
+ 	    pack_used[obj->o_packch - 'a'] = FALSE;	/* before the array */
+ 	detach(pack, obj);
++	if (obj->o_type == AMULET)	/* FIX N2: thrown or stolen, it is gone */
++	    amulet = FALSE;
+     }
+     return nobj;
+ }
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/passages.c b/passages.c
+--- a/passages.c	2026-10-11 19:36:42.641340789 +0000
++++ b/passages.c	2026-10-11 19:38:18.949389336 +0000
+@@ -17,6 +17,33 @@
+ void oracle_stuck(void);	/* oracle: hooks.c */
+ 
+ /*
++ * maze_door:
++ *	FIX 8: conn() picks a door among squares 1..n of a row (dy 0, dx 1)
++ *	or column (dy 1, dx 0) of a room starting at (y, x), and for a maze
++ *	it waits for a passage square there.  A maze's cells are at even
++ *	offsets from its corner; a row or column between two rows or
++ *	columns of cells has a passage square only where the maze links
++ *	them, and may have none in range: the loop never ended.  Then dig
++ *	one at an even offset, which links two cells.
++ */
++static void
++maze_door(struct room *rp, int y, int x, int dy, int dx, int n)
++{
++    int i, k;
++    coord c;
++
++    if (!(rp->r_flags & ISMAZE))
++	return;
++    for (i = 1; i <= n; i++)
++	if (flat(y + i * dy, x + i * dx) & F_PASS)
++	    return;
++    k = 2 * (rnd(n / 2) + 1);
++    c.y = y + k * dy;
++    c.x = x + k * dx;
++    putpass(&c);
++}
++
++/*
+  * do_passages:
+  *	Draw all the passages on a level.
+  */
+@@ -175,6 +202,8 @@
+ 	if (!(rpf->r_flags & ISGONE))		/* if not gone pick door pos */
+ 	{
+ 	    int tries = 0;			/* oracle: see oracle_stuck() */
++	    maze_door(rpf, rpf->r_pos.y + rpf->r_max.y - 1, rpf->r_pos.x, 0, 1,
++		      rpf->r_max.x - 2);	/* FIX 8 */
+ 	    do
+ 	    {
+ 		if (++tries > 10000)
+@@ -186,6 +215,7 @@
+ 	if (!(rpt->r_flags & ISGONE))
+ 	{
+ 	    int tries = 0;
++	    maze_door(rpt, epos.y, rpt->r_pos.x, 0, 1, rpt->r_max.x - 2);	/* FIX 8 */
+ 	    do
+ 	    {
+ 		if (++tries > 10000)
+@@ -211,6 +241,8 @@
+ 	if (!(rpf->r_flags & ISGONE))
+ 	{
+ 	    int tries = 0;
++	    maze_door(rpf, rpf->r_pos.y, rpf->r_pos.x + rpf->r_max.x - 1, 1, 0,
++		      rpf->r_max.y - 2);	/* FIX 8 */
+ 	    do
+ 	    {
+ 		if (++tries > 10000)
+@@ -222,6 +254,7 @@
+ 	if (!(rpt->r_flags & ISGONE))
+ 	{
+ 	    int tries = 0;
++	    maze_door(rpt, rpt->r_pos.y, epos.x, 1, 0, rpt->r_max.y - 2);	/* FIX 8 */
+ 	    do
+ 	    {
+ 		if (++tries > 10000)
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/potions.c b/potions.c
+--- a/potions.c	2026-10-11 19:36:42.588320257 +0000
++++ b/potions.c	2026-10-11 19:39:10.537762586 +0000
+@@ -14,6 +14,8 @@
+ #include <ctype.h>
+ #include "rogue.h"
+ 
++struct delayed_action *find_slot(void (*func)());	/* daemon.c (FIX 30) */
++
+ typedef struct
+ {
+     int pa_flags;
+@@ -25,7 +27,7 @@
+ static PACT p_actions[] =
+ {
+ 	{ ISHUH,	unconfuse,	HUHDURATION,	/* P_CONFUSE */
+-		"what a tripy feeling!",
++		"what a trippy feeling!",	/* FIX typo */
+ 		"wait, what's going on here. Huh? What? Who?" },
+ 	{ ISHALU,	come_down,	SEEDURATION,	/* P_LSD */
+ 		"Oh, wow!  Everything seems so cosmic!",
+@@ -111,7 +113,14 @@
+ 	    msg("you feel stronger, now.  What bulging muscles!");
+ 	when P_MFIND:
+ 	    player.t_flags |= SEEMONST;
+-	    fuse((void(*)())turn_see, TRUE, HUHDURATION, AFTER);
++	    /*
++	     * FIX 30: lengthen the fuse already burning, as other potions
++	     * do, instead of filling the 20 daemon slots
++	     */
++	    if (find_slot((void(*)())turn_see) != NULL)
++		lengthen((void(*)())turn_see, HUHDURATION);
++	    else
++		fuse((void(*)())turn_see, TRUE, HUHDURATION, AFTER);
+ 	    if (!turn_see(FALSE))
+ 		msg("you have a %s feeling for a moment, then it passes",
+ 		    choose_str("normal", "strange"));
+@@ -201,7 +210,7 @@
+ 		add_str(&pstats.s_str, cur_ring[LEFT]->o_arm);
+ 	    if (ISRING(RIGHT, R_ADDSTR))
+ 		add_str(&pstats.s_str, cur_ring[RIGHT]->o_arm);
+-	    msg("hey, this tastes great.  It make you feel warm all over");
++	    msg("hey, this tastes great.  It makes you feel warm all over");	/* FIX typo */
+ 	when P_BLIND:
+ 	    do_pot(P_BLIND, TRUE);
+ 	when P_LEVIT:
+@@ -343,6 +352,8 @@
+ void
+ raise_level()
+ {
++    if (e_levels[pstats.s_lvl-1] == 0)	/* FIX 14: the top level (21): none above */
++	return;
+     pstats.s_exp = e_levels[pstats.s_lvl-1] + 1L;
+     check_level();
+ }
+@@ -371,5 +382,5 @@
+     }
+     else
+ 	lengthen(pp->pa_daemon, t);
+-    msg(choose_str(pp->pa_high, pp->pa_straight));
++    msg("%s", choose_str(pp->pa_high, pp->pa_straight));	/* FIX 28: text, not a format */
+ }
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/rings.c b/rings.c
+--- a/rings.c	2026-10-11 19:36:42.614103092 +0000
++++ b/rings.c	2026-10-11 19:38:53.636300494 +0000
+@@ -119,7 +119,7 @@
+ 	return;
+     }
+     if (dropcheck(obj))
+-	msg("was wearing %s(%c)", inv_name(obj, TRUE), obj->o_packch);
++	msg("was wearing %s (%c)", inv_name(obj, TRUE), obj->o_packch);	/* FIX 10 */
+ }
+ 
+ /*
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/save.c b/save.c
+--- a/save.c	2026-10-11 19:36:42.618448641 +0000
++++ b/save.c	2026-10-11 19:37:47.341389879 +0000
+@@ -101,7 +101,7 @@
+ 		    msg("Please answer Y or N");
+ 	    }
+ 	    msg("file name: %s", buf);
+-	    md_unlink(file_name);
++	    md_unlink(buf);		/* FIX 7: the file being overwritten */
+ 	}
+ 	strcpy(file_name, buf);
+ 	if ((savef = fopen(file_name, "w")) == NULL)
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/scrolls.c b/scrolls.c
+--- a/scrolls.c	2026-10-11 19:36:42.603129799 +0000
++++ b/scrolls.c	2026-10-11 19:39:10.537008441 +0000
+@@ -22,7 +22,7 @@
+ void
+ read_scroll()
+ {
+-    THING *obj;
++    THING *obj, *sobj;
+     PLACE *pp;
+     int y, x;
+     char ch;
+@@ -125,10 +125,14 @@
+ 		    /*
+ 		     * Or anything else nasty
+ 		     */
+-		    else if (step_ok(ch = winat(y, x)))
++		    /*
++		     * FIX 12: nor on a monster (winat() gives a xeroc's disguise)
++		     */
++		    else if (moat(y, x) == NULL && step_ok(ch = winat(y, x)))
+ 		    {
+ 			if (ch == SCROLL
+-			    && find_obj(y, x)->o_which == S_SCARE)
++			    && (sobj = find_obj(y, x)) != NULL
++			    && sobj->o_which == S_SCARE)
+ 				continue;
+ 			else if (rnd(++i) == 0)
+ 			{
+@@ -282,7 +286,7 @@
+ 	    uncurse(cur_weapon);
+ 	    uncurse(cur_ring[LEFT]);
+ 	    uncurse(cur_ring[RIGHT]);
+-	    msg(choose_str("you feel in touch with the Universal Onenes",
++	    msg(choose_str("you feel in touch with the Universal Oneness",	/* FIX typo */
+ 			   "you feel as if somebody is watching over you"));
+ 	when S_AGGR:
+ 	    /*
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/sticks.c b/sticks.c
+--- a/sticks.c	2026-10-11 19:36:42.640140793 +0000
++++ b/sticks.c	2026-10-11 19:38:53.635303700 +0000
+@@ -116,7 +116,10 @@
+ 	    {
+ 		monster = tp->t_type;
+ 		if (monster == 'F')
++		{
+ 		    player.t_flags &= ~ISHELD;
++		    vf_hit = 0;		/* FIX 26: the hold ends, and the flytrap's count */
++		}
+ 		switch (obj->o_which) {
+ 		    case WS_INVIS:
+ 			tp->t_flags |= ISINVIS;
+@@ -181,14 +184,16 @@
+ 	    bolt.o_flags = ISMISL;
+ 	    if (cur_weapon != NULL)
+ 		bolt.o_launch = cur_weapon->o_which;
++	    else	/* FIX D1: no launcher: o_hurldmg (bolt is static: o_launch was stale) */
++		bolt.o_launch = -1;
+ 	    do_motion(&bolt, delta.y, delta.x);
+ 	    if ((tp = moat(bolt.o_pos.y, bolt.o_pos.x)) != NULL
+ 		&& !save_throw(VS_MAGIC, tp))
+ 		    hit_monster(unc(bolt.o_pos), &bolt);
+ 	    else if (terse)
+-		msg("missle vanishes");
++		msg("missile vanishes");	/* FIX typo */
+ 	    else
+-		msg("the missle vanishes with a puff of smoke");
++		msg("the missile vanishes with a puff of smoke");	/* FIX typo */
+ 	when WS_HASTE_M:
+ 	case WS_SLOW_M:
+ 	    y = hero.y;
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/things.c b/things.c
+--- a/things.c	2026-10-11 19:36:42.616262757 +0000
++++ b/things.c	2026-10-11 19:38:53.637826454 +0000
+@@ -496,7 +496,12 @@
+ 	    maxlen = (int) strlen(prompt);
+ 	if (line_cnt >= LINES - 1 || fmt == NULL)
+ 	{
+-	    if (inv_type == INV_OVER && fmt == NULL && !newpage)
++	    /*
++	     * FIX 29: with a line ending at column 78 or 79 the window would
++	     * start left of the screen; newwin() fails and nothing is shown
++	     */
++	    if (inv_type == INV_OVER && fmt == NULL && !newpage
++		&& COLS - maxlen - 3 >= 0)
+ 	    {
+ 		msg("");
+ 		refresh();
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/weapons.c b/weapons.c
+--- a/weapons.c	2026-10-11 19:36:42.641553954 +0000
++++ b/weapons.c	2026-10-11 19:39:10.538203237 +0000
+@@ -114,6 +114,27 @@
+ }
+ 
+ /*
++ * fall_name:
++ *	FIX 11: fall()'s name for a thrown object of any type
++ */
++static char *
++fall_name(THING *obj)
++{
++    switch (obj->o_type)
++    {
++	case WEAPON: return weap_info[obj->o_which].oi_name;
++	case ARMOR: return arm_info[obj->o_which].oi_name;
++	case POTION: return "potion";
++	case SCROLL: return "scroll";
++	case RING: return "ring";
++	case STICK: return ws_type[obj->o_which];
++	case FOOD: return obj->o_which == 1 ? fruit : "food";
++	case AMULET: return "Amulet of Yendor";
++    }
++    return "object";
++}
++
++/*
+  * fall:
+  *	Drop an item someplace around here.
+  */
+@@ -150,10 +171,8 @@
+ 	 * oracle: any pack object can be thrown; past the end of weap_info[]
+ 	 * the std/master builds read scr_info[], which follows it in memory
+ 	 */
+-	msg("the %s vanishes as it hits the ground",
+-	    obj->o_which <= MAXWEAPONS ? weap_info[obj->o_which].oi_name
+-	    : obj->o_which - (MAXWEAPONS + 1) < MAXSCROLLS
+-		? scr_info[obj->o_which - (MAXWEAPONS + 1)].oi_name : NULL);
++	/* FIX 11: any pack object can be thrown: name it by its type */
++	msg("the %s vanishes as it hits the ground", fall_name(obj));
+     }
+     discard(obj);
+ }
+diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/wizard.c b/wizard.c
+--- a/wizard.c	2026-10-11 19:36:42.642213844 +0000
++++ b/wizard.c	2026-10-11 19:38:53.637274833 +0000
+@@ -71,7 +71,7 @@
+         when RING:
+ 	    set_know(obj, ring_info);
+     }
+-    msg(inv_name(obj, FALSE));
++    msg("%s", inv_name(obj, FALSE));	/* FIX 28: text, not a format */
+ }
+ 
+ /*
+@@ -280,7 +280,7 @@
+ 		wstandout(hw);
+ 	    wmove(hw, y, x);
+ 	    waddch(hw, chat(y, x));
+-	    if (!real)
++	    if (!(real & F_REAL))	/* FIX N12: end each hidden square's standout */
+ 		wstandend(hw);
+ 	}
+     show_win("---More (level map)---");

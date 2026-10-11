@@ -26,6 +26,8 @@ static func new_level() -> void:
 	var i: int
 
 	player.t_flags &= ~ISHELD	# unhold when you go down just in case
+	if fixes:	# FIX 26: the hold ends, and with it the flytrap's count
+		vf_hit = 0
 	if level > max_level:
 		max_level = level
 	# Clean things off from last level
@@ -151,7 +153,8 @@ static func treas_room() -> void:
 	num_monst = nm
 	while nm != 0:	# while (nm--)  (nm >= 2 here; its final -1 is never read)
 		nm -= 1
-		Rooms.find_floor(rp, mp, 2 * MAXTRIES, false)
+		if not Rooms.find_floor(rp, mp, 2 * MAXTRIES, false) and fixes:
+			continue	# FIX N8: no free floor found: no object (C reused the last square)
 		tp = Things.new_thing()
 		tp.o_pos.copy_from(mp)
 		lvl_obj = List._attach(lvl_obj, tp)

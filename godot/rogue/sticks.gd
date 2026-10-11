@@ -78,6 +78,8 @@ static func do_zap() -> void:
 				monster = tp.t_type
 				if monster == ord("F"):
 					player.t_flags &= ~ISHELD
+					if fixes:	# FIX 26: the hold ends, and with it the flytrap's count
+						vf_hit = 0
 				match obj.o_which:
 					WS_INVIS:
 						tp.t_flags |= ISINVIS
@@ -131,14 +133,17 @@ static func do_zap() -> void:
 			bolt.o_flags = ISMISL
 			if cur_weapon != null:
 				bolt.o_launch = cur_weapon.o_which
+			elif fixes:	# FIX D1: no launcher: o_hurldmg (bolt is static: o_launch was stale)
+				bolt.o_launch = -1
 			Weapons.do_motion(bolt, delta.y, delta.x)
 			tp = moat(bolt.o_pos.y, bolt.o_pos.x)
 			if tp != null and not Monsters.save_throw(VS_MAGIC, tp):
 				await Weapons.hit_monster(bolt.o_pos.y, bolt.o_pos.x, bolt)
 			elif terse:
-				await Io.msg("missle vanishes")
+				await Io.msg("missile vanishes" if fixes else "missle vanishes")	# FIX typo
 			else:
-				await Io.msg("the missle vanishes with a puff of smoke")
+				await Io.msg("the missile vanishes with a puff of smoke" if fixes	# FIX typo
+					else "the missle vanishes with a puff of smoke")
 		WS_HASTE_M, WS_SLOW_M:
 			y = hero.y
 			x = hero.x

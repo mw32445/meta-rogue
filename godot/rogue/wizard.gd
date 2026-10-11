@@ -64,7 +64,10 @@ static func whatis(insist: bool, type_: int) -> void:
 		RING:
 			set_know(obj, ring_info)
 	var nm: String = await Things.inv_name(obj, false)
-	await Io.msg(nm)
+	if fixes:	# FIX 28: the name (with the fruit or a call name) is not a format
+		await Io.msg("%s", [nm])
+	else:
+		await Io.msg(nm)
 
 
 ## set_know:
@@ -224,7 +227,10 @@ static func show_map() -> void:
 				wstandout(hw)
 			wmove(hw, y, x)
 			waddch(hw, chat(y, x))
-			if real == 0:
+			if fixes:	# FIX N12: end the standout of each hidden square
+				if (real & F_REAL) == 0:
+					wstandend(hw)
+			elif real == 0:
 				wstandend(hw)
 	await Io.show_win("---More (level map)---")
 
