@@ -203,16 +203,12 @@ def lint(path, project):
 
 
 def main():
-    files = sys.argv[1:]
-    if not files:
-        for d, _, fs in os.walk(os.path.join(ROOT, "godot")):
-            if "/." in d:
-                continue
-            files += [os.path.join(d, f) for f in fs if f.endswith(".gd")]
     every = []
     for d, _, fs in os.walk(os.path.join(ROOT, "godot")):
-        if "/." not in d:
+        # skip dot folders (godot/.godot) inside the project, wherever the checkout is
+        if "/." not in "/" + os.path.relpath(d, ROOT):
             every += [os.path.join(d, f) for f in fs if f.endswith(".gd")]
+    files = sys.argv[1:] or every
     project = project_classes(every)
     problems = []
     for f in sorted(files):
