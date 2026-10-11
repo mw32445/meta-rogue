@@ -8,7 +8,8 @@
 
 Read `docs/ARCHITECTURE.md` first. `docs/CONVENTIONS.md` has the translation rules;
 `docs/FIDELITY.md` lists every place where the port or the oracle deliberately differs
-from the stock C build.
+from the stock C build. `docs/CHANGES.md` lists the deliberate gameplay changes
+(`docs/FIXES.md`: the bug fixes; `docs/GUILD.md`: the Fighters' Guild).
 
 ## Setup
 `tools/setup_env.sh` installs Godot 4.7.2 at `/root/bin/godot` (it downloads it, or
@@ -18,14 +19,15 @@ then `godot` on PATH, then `/root/bin/godot`.
 ## Commands
 | What | Command |
 |---|---|
-| Compile every script + the await lint (run after any GDScript change) | `tools/check.sh` |
+| Compile every script + the await and names lints (run after any GDScript change) | `tools/check.sh` |
 | Same for a few modules, isolated from half-edited others | `tools/check.sh --quick godot/rogue/fight.gd` |
 | Everything (oracle builds, curses fuzz, corpus, seeds, fuzz) | `harness/run_all.sh` (about 1 h) or `harness/run_all.sh --quick` |
 | Random games vs the C | `python3 harness/difftest.py fuzz --count 50 [--len 800] [--opts ROGUEOPTS] [--wizard]` |
+| The same with the bug fixes on, vs the fixed C | add `--fixes` to any difftest mode |
 | Level generation, save/restore, regression scripts | `python3 harness/difftest.py seeds --count 200` / `saves --count 50` / `corpus` |
 | Look at a divergence | `python3 harness/show.py KEYFILE --step N --port [--digest]` |
 | Which C lines the tests reach | `python3 harness/coverage.py --reset DIR...` |
-| Play | Open `godot/project.godot` in Godot 4.7 and press F5. Headless replay: `godot --headless --path godot --script res://tests/replay.gd -- --keys K --dump D` |
+| Play | Open `godot/project.godot` in Godot 4.7 and press F5 (`--classic` after `--` on the command line plays the untouched original). Headless replay: `godot --headless --path godot --script res://tests/replay.gd -- --keys K --dump D [--fixes] [--guild --loadout F.json]` |
 
 A divergence report gives the first differing keystroke, both screens, and the digest
 fields that differ (`harness/DUMP_FORMAT.md`). Add a script that reproduced a fixed bug
@@ -48,6 +50,10 @@ to `harness/corpus/`, with a comment line saying what it covers.
    change. Lists use `l_next`/`l_prev`. `char` is signed. See CONVENTIONS.md.
 4. **Same-file calls are unqualified; other modules are qualified** (`Io.msg`).
    `rnd()`/`roll()` live in RogueBase. The order of RNG calls is what the tests check.
+5. **No Godot names.** A declared name (function, variable, constant, parameter, local)
+   must not be a Godot built-in function, class, type, singleton or base-class member:
+   an unqualified call reaches the built-in first. Add a trailing `_` (`sign_`, `seed_`).
+   `tools/lint_names.py` enforces it.
 
 ## Gameplay changes and the 1:1 baseline
 The differential tests compare against the original. An intentional gameplay change
@@ -60,6 +66,18 @@ makes them fail wherever behavior changes. Recommended approach:
 - Test new behavior with your own scripts and expectations; the oracle cannot judge
   it.
 - Record deliberate changes in `docs/CHANGES.md`.
+
+Two switches exist (`RogueBase`, set by the host like `MASTER`, untouched by `reset()`):
+- `fixes`: the bug fixes (`docs/FIXES.md`). Each is an `if fixes:` branch at the bug
+  site, and the same fix is in `harness/oracle/fixes.patch` (oracle variants `fixed`,
+  `fixedmaster`; edit with `harness/oracle/edit_fixes.sh`), so `difftest.py --fixes`
+  verifies the fixed game against C. A change that can be written in C too can follow
+  this pattern and keep full differential coverage.
+- `guild`: the Fighters' Guild (`docs/GUILD.md`), tested by `godot/tests/guild_test.gd`
+  and replays with `--guild --loadout F.json`.
+
+Key scripts can assert behavior: `# expect-classic: TEXT` / `# expect-fixed: TEXT` (and
+`expect-not-...`) must hold on the port's screens or stdout in that mode.
 
 ## Gotchas
 - **GDScript:**

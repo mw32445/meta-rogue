@@ -1,7 +1,7 @@
 # Verification record
 
 How the port was shown to be 1:1 with Rogue 5.4.4, and what the tests do and do not
-reach. `docs/ARCHITECTURE.md` §8 describes the tools; `harness/run_all.sh` reruns the
+reach. `docs/ARCHITECTURE.md` §9 describes the tools; `harness/run_all.sh` reruns the
 standard suite.
 
 ## Method

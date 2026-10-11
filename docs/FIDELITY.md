@@ -89,7 +89,9 @@ style is "Clear").
 - **Wizard mode** (the MASTER build) accepts any password; the oracle does the same.
 
 ## Known quirks kept on purpose (bugs in the original)
-These are kept because they are part of 5.4.4's behavior:
+These are kept because they are part of 5.4.4's behavior. The classic game (the switch
+`fixes` off, as in every test against the stock oracle) keeps them; the playable game
+fixes them, and `docs/FIXES.md` lists each fix and the oracle variant that checks it:
 - Numpad 5 maps to `u`.
 - `F` leaves `kamikaze` set after a cancelled direction.
 - `relocate()` never calls `find_dest()`.

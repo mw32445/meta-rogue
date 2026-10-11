@@ -15,12 +15,13 @@ every keyboard read.
 | `godot/rogue/types/*.gd` | `Thing`, `Coord`, `Room`, `Stats`, `Place`, `ObjInfo`, `Monster`, `DelayedAction`, ... (C structs as reference types). |
 | `godot/curses/curses.gd` | `Curses`: an exact emulation of the ncurses 6.4 subset Rogue uses, plus the key queue and the stdout byte stream. |
 | `godot/ui/` | `TerminalView` (draws the screen, maps keys) and `main.gd` (runs games). |
+| `godot/guild/` | The Fighters' Guild, behind the switch `guild` (section 7): the shop before each new game, its catalog, and the loadout it applies (`docs/GUILD.md`). |
 | `godot/tests/` | `replay.gd` (the step-log runner), `check_all.gd`, `curses_fuzz.gd`, `ui_screenshot.gd`, Phase 0 spikes. |
-| `harness/oracle/` | Builds the original C with `oracle.patch` (fidelity fixes) and `hooks.c` (scripted input, step log, pinned environment). |
+| `harness/oracle/` | Builds the original C with `oracle.patch` (fidelity fixes) and `hooks.c` (scripted input, step log, pinned environment); the `fixed` variants add `fixes.patch`, the bug fixes of the switch `fixes` (section 7). |
 | `harness/difftest.py` | Oracle vs port on the same inputs; first differing step; screen and state diff. |
-| `harness/bot.py`, `coverage.py`, `show.py`, `run_all.sh`, `corpus/`, `curses_fuzz/` | Test tools (section 8). |
-| `tools/` | `callgraph.py` (blocking list, symbol table, audits), `lint_await.py`, `check.sh`, `gen_stubs.py`, `setup_env.sh`. |
-| `docs/` | `CONVENTIONS.md` (translation rules), `FIDELITY.md` (every deviation and undefined-behavior choice), `AUDIT.md` (call-graph audits), `PORT_PLAN.md`, `requests/` (translator notes). |
+| `harness/bot.py`, `coverage.py`, `show.py`, `run_all.sh`, `corpus/`, `curses_fuzz/` | Test tools (section 9). |
+| `tools/` | `callgraph.py` (blocking list, symbol table, audits), `lint_await.py`, `lint_names.py` (no Godot built-in names), `check.sh`, `gen_stubs.py`, `gen_godot_globals.py`, `setup_env.sh`. |
+| `docs/` | `CONVENTIONS.md` (translation rules), `FIDELITY.md` (every deviation and undefined-behavior choice), `CHANGES.md` (deliberate gameplay changes), `FIXES.md` (the bug fixes), `GUILD.md` (the Fighters' Guild), `VERIFICATION.md`, `AUDIT.md` (call-graph audits), `PORT_PLAN.md`, `requests/` (translator notes). |
 
 ## 2. Modules and state
 - **One static-function class per C file**, with the C function names, the C order and
@@ -103,14 +104,34 @@ has C's layout and encryption.
   - Closing the window auto-saves, as SIGHUP does in C.
   - When a game ends, Enter starts a new one.
 
-## 7. Fidelity policy
+## 7. Gameplay switches
+The port is the baseline for gameplay changes, and each change sits behind a switch:
+a `RogueBase` static var that the host sets before `Main.main()` and `reset()` leaves
+alone, like `MASTER`. The playable game turns the switches on; `godot/tests/replay.gd`
+turns one on only when a test asks (`fixes=1`, `guild=1`), so the classic game stays
+1:1 and `harness/run_all.sh` keeps guarding every rule nobody changed.
+- **`fixes`** fixes the bugs of 5.4.4 that `docs/FIXES.md` lists. Each fix is an
+  `if fixes:` branch at the bug site, and the same fix is in C, in
+  `harness/oracle/fixes.patch` (the oracle variants `fixed` and `fixedmaster`; edit it
+  with `harness/oracle/edit_fixes.sh`). So the fixed game is verified keystroke by
+  keystroke like the classic one: `difftest.py --fixes`. The per-bug scripts in
+  `harness/corpus/fixes/` also carry `# expect-classic:` / `# expect-fixed:` lines,
+  which check the behavior itself on the port's screens.
+- **`guild`** turns on the Fighters' Guild (`docs/GUILD.md`): a 20-entry Hall of
+  Fame, the shop before each new game, and the loadout it buys (`RogueBase.loadout`,
+  applied by `Main.main()`). The oracle cannot judge it; its own tests are
+  `godot/tests/guild_test.gd` and replays with `--guild --loadout FILE`.
+- `--classic` on the game's command line turns both off (with separate save and score
+  files). `docs/CHANGES.md` lists every deliberate change and its switch.
+
+## 8. Fidelity policy
 The original has undefined behavior: uninitialized reads, reads and writes out of
 bounds, use after free, unsequenced RNG calls, and two hangs. For each case one
 deterministic behavior was chosen and applied identically in the oracle and in the port.
 `docs/FIDELITY.md` lists every case, every pinned environment value, and the few
 deliberate port-only deviations.
 
-## 8. Verification
+## 9. Verification
 - **The oracle** is the original C plus `oracle.patch`, with `hooks.c` linked through
   `-Wl,--wrap`. The hooks provide:
   - scripted keys, `fgets` and `wgetnstr`;
@@ -127,14 +148,15 @@ deliberate port-only deviations.
     and object creation;
   - `saves`: save/restore chains;
   - `corpus`: regression scripts in `harness/corpus`;
-  - `one`.
+  - `one`;
+  - `--fixes` with any mode: the port with the bug fixes on, against the fixed C.
 - **Other tools:**
   - `harness/bot.py` plays the oracle reactively to record long games.
   - `harness/coverage.py` measures gcov line coverage of the C by any set of scripts.
   - `harness/show.py` prints the screens around a step.
   - `harness/run_all.sh` runs everything.
 
-## 9. Phase 0 spike results (Godot 4.7.2)
+## 10. Phase 0 spike results (Godot 4.7.2)
 | Question | Result |
 |---|---|
 | Static-function coroutines across a 3-file class cycle, with inherited static vars | Work. Calls resume through every level and static state is shared. |
