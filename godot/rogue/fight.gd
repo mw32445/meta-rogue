@@ -72,6 +72,14 @@ static func fight(mp: Coord, weap: Thing, thrown: bool) -> int:
 	# place.
 	count = 0
 	quiet = 0
+	if tp == null:
+		# runto(mp) cannot find the monster either: in MASTER builds it says
+		# so with msg(), then C dereferences the NULL monster and crashes
+		# (docs/FIDELITY.md: exit status 139, as the oracle reports it).
+		if MASTER:
+			await Io.msg("couldn't find monster in runto at (%d,%d)", [mp.y, mp.x])
+		await exit(139)
+		return 0
 	Chase.runto(mp)
 	# Let him know it was really a xeroc (if it was one).
 	ch = 0

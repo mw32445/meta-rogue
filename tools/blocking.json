@@ -1,5 +1,6 @@
 {
  "note": "Functions that can (transitively) wait for keyboard input. In the port each is a coroutine and every call to it must be awaited (tools/lint_await.py).",
+ "port_blocking": {},
  "input_primitives": [
   "abort",
   "exit",

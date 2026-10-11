@@ -432,6 +432,29 @@ end_if_doomed(void)
     exit(1);
 }
 
+/*
+ * The wizard's create_obj() with a kind past the type's tables reads foreign
+ * memory (garbage names, crashes): no object is created (oracle.patch,
+ * wizard.c; the port does the same).
+ */
+int
+oracle_bad_which(int type, int which)
+{
+    int n;
+
+    switch (type)
+    {
+	case POTION: n = MAXPOTIONS; break;
+	case SCROLL: n = MAXSCROLLS; break;
+	case STICK:  n = MAXSTICKS; break;
+	case RING:   n = MAXRINGS; break;
+	case WEAPON: n = MAXWEAPONS; break;
+	case ARMOR:  n = MAXARMORS; break;
+	default:     return 0;
+    }
+    return which < 0 || which >= n;
+}
+
 /* Next scripted key.  Logs the step; ends the run when the script is used up. */
 static int
 scripted_key(void)

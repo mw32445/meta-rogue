@@ -103,11 +103,14 @@ static func create_obj() -> void:
 	mpos = 0
 	await Io.msg("which %c do you want? (0-f)", [obj.o_type])
 	ch = await Io.readchar()
-	# UB: a key outside 0-9a-f gives an o_which past the end of the tables
 	obj.o_which = (ch - ord("0") if isdigit(ch) else ch - ord("a") + 10)
 	obj.o_group = 0
 	obj.o_count = 1
 	mpos = 0
+	# A kind past the type's tables reads foreign memory in C (garbage names,
+	# crashes): no object is created, as in the oracle (docs/FIDELITY.md).
+	if _bad_which(obj.o_type, obj.o_which):
+		return
 	if obj.o_type == WEAPON or obj.o_type == ARMOR:
 		await Io.msg("blessing? (+,-,n)")
 		bless = await Io.readchar()
@@ -224,3 +227,24 @@ static func show_map() -> void:
 			if real == 0:
 				wstandend(hw)
 	await Io.show_win("---More (level map)---")
+
+
+## create_obj(): whether a kind is past the end of its type's tables.
+static func _bad_which(type_: int, which: int) -> bool:
+	var n := 0
+	match type_:
+		POTION:
+			n = MAXPOTIONS
+		SCROLL:
+			n = MAXSCROLLS
+		STICK:
+			n = MAXSTICKS
+		RING:
+			n = MAXRINGS
+		WEAPON:
+			n = MAXWEAPONS
+		ARMOR:
+			n = MAXARMORS
+		_:
+			return false
+	return which < 0 or which >= n

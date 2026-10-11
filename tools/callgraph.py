@@ -331,9 +331,14 @@ def main():
         sym["variables"].append(v)
     json.dump(sym, open(os.path.join(ROOT, "tools", "symbols.json"), "w"), indent=1, sort_keys=True)
 
+    # port_blocking: functions that the port (after gameplay changes) makes wait
+    # for input although the C does not; maintained by hand, kept here
+    old_path = os.path.join(ROOT, "tools", "blocking.json")
+    port_blocking = json.load(open(old_path)).get("port_blocking", {}) if os.path.exists(old_path) else {}
     blk = {
         "note": "Functions that can (transitively) wait for keyboard input. In the port each is a "
                 "coroutine and every call to it must be awaited (tools/lint_await.py).",
+        "port_blocking": port_blocking,
         "input_primitives": sorted(INPUT_PRIMITIVES),
         "indirect_targets": {f"{k[0]}:{k[1]}": v for k, v in INDIRECT_TARGETS.items()},
         "port_nonblocking": PORT_NONBLOCKING,

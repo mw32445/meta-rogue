@@ -82,6 +82,8 @@ def main():
     blk = json.load(open(os.path.join(ROOT, "tools", "blocking.json")))
     c_funcs = {RENAME_FUNC.get(f, f) for f in sym["functions"]}
     listed = {RENAME_FUNC.get(f, f) for f in blk["blocking"]}
+    # coroutines added by changes to the port itself (gameplay changes), with reasons
+    listed |= {RENAME_FUNC.get(f, f) for f in blk.get("port_blocking", {})}
     files = [os.path.join(dp, f) for dp, _, fs in os.walk(os.path.join(ROOT, "godot", "rogue"))
              for f in fs if f.endswith(".gd")]
     only = {os.path.realpath(f) for f in sys.argv[1:]}   # report only these (all are parsed)
