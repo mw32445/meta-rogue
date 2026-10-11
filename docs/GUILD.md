@@ -181,9 +181,10 @@ may be floats). Every key is optional:
 worth 80 to a winner.
 
 ## 7. Tuning
-- **Prices.** Every price, kind and limit is in `godot/guild/catalog.gd` (the screen
-  sorts the lists by price), together with the game's names and dungeon frequencies,
-  which the test checks against the game's tables.
+- **Prices.** Every price, kind and limit is in `godot/guild/catalog.gd`, together
+  with the game's names and dungeon frequencies, which the test checks against the
+  game's tables. The screen lists rings, wands, potions and scrolls dearest first;
+  weapons and armour follow the orders in the catalog (`WEAPON_START_ORDER`, ...).
 - **Growth.** `GuildCatalog.grow(base, num, den, k)` is `floor(base * (num/den)^k)`,
   in exact integers.
 - **Text.** The Quartermaster's lines are in `guild_screen.gd`; the section texts are in

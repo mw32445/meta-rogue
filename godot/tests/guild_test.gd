@@ -29,6 +29,7 @@ func _initialize() -> void:
 	_test_letters()
 	_test_polish_win()
 	_test_big_pack()
+	_test_screen()
 	_clean()
 	print("guild_test: %d passed, %d failed" % [_passes, _fails])
 	quit(1 if _fails > 0 else 0)
@@ -771,3 +772,53 @@ func _test_big_pack() -> void:
 	for f in DirAccess.get_files_at(dir):
 		DirAccess.remove_absolute(dir.path_join(f))
 	DirAccess.remove_absolute(dir)
+
+
+# ---- the Guild screen ---------------------------------------------------------
+
+## The screen's text row y.
+static func _row(g: GuildScreen, y: int) -> String:
+	var s := ""
+	for x in 80:
+		var c: int = g.cs.curscr.get_cell(y, x) & 0xFF
+		s += char(c) if c >= 32 and c < 127 else "?"
+	return s
+
+
+func _test_screen() -> void:
+	var path := _dir.path_join("screen.scr")
+	_write_hall(path, [2400, 1500, 1000, 800, 700, 600, 500, 400, 350, 300, 250, 200, 150, 100,
+		80, 50, 20], 20)
+	var g := GuildScreen.new(path)
+	var got: Array = []
+	g.descended.connect(func(lo: Dictionary) -> void: got.append(lo))
+	_check("screen: the title and the coffers", _row(g, 0).contains("THE FIGHTERS' GUILD")
+		and _row(g, 1).contains("Coffers 1834 gold: 17 of 20 heroes") and _row(g, 2).contains("Pack 5/23"))
+	for c in [27, ord("q"), ord("Q"), 3, 4, 26]:
+		g.key(c)
+	_check("screen: no way out but down", got.is_empty() and _row(g, 23).contains("no backing out"))
+	g.key(ord("1"))
+	g.key(ord("+"))
+	_check("screen: + buys strength", g.shop.strength == 1 and _row(g, 2).contains("Spent 100")
+		and _row(g, 5).contains("16 -> 17"))
+	g.key(ord("2"))
+	g.key(ord("j"))
+	g.key(ord("+"))
+	_check("screen: the cursor starts on your weapon; j and + take the long sword",
+		g.shop.weapon == 1 and _row(g, 2).contains("Spent 290"))
+	g.key(ord("6"))
+	g.key(ord("+"))
+	g.key(ord("-"))
+	_check("screen: an identification is final", g.shop.pot_ids == 1
+		and _row(g, 23).contains("not taken back"))
+	g.key(ord("?"))
+	_check("screen: ? shows the rules with the formula", _row(g, 5).contains("coffers = best / 2")
+		and _row(g, 6).contains("1834 gold"))
+	g.key(ord(" "))
+	g.key(ord(">"))
+	_check("screen: > asks first", got.is_empty() and _row(g, 23).contains("Descend into the Dungeons of Doom?"))
+	g.key(ord("n"))
+	g.key(13)
+	g.key(ord("y"))
+	_check("screen: y descends with the loadout", got.size() == 1 and got[0].str == 1
+		and got[0].weapon.which == 1 and got[0].know_potions.size() == 1)
