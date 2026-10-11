@@ -25,6 +25,20 @@ Thank you for your interest in preserving and improving this classic game! ‚ù§Ô∏
 
 ---
 
+## Godot port (this branch)
+
+This branch adds a **1:1 port of Rogue 5.4.4 to Godot 4.7 (GDScript)** in `godot/`. Given
+the same seed and keystrokes it shows exactly the same screens and makes the same random
+choices as the C game in this repository, which is verified step by step against the
+original built as a test oracle (`harness/`). The C sources here are unchanged.
+
+- Play: open `godot/project.godot` in Godot 4.7 and press F5. See [godot/README.md](godot/README.md).
+- How it works and how it is verified: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+- Every deliberate difference from the stock C build: [docs/FIDELITY.md](docs/FIDELITY.md).
+- Working on it: [CLAUDE.md](CLAUDE.md) (commands, rules, tests).
+
+---
+
 ## Table of Contents
 
 - [Quick Start](#quick-start)
