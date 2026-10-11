@@ -16,7 +16,7 @@ static func save_file(savef):
 	await _todo("save_file")
 
 ## save.c: bool restore(char *, char **)
-static func restore(file, envp):
+static func restore(file, envp = null):
 	await _todo("restore")
 	return false
 

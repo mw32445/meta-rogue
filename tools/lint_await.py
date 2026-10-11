@@ -82,8 +82,9 @@ def main():
     blk = json.load(open(os.path.join(ROOT, "tools", "blocking.json")))
     c_funcs = {RENAME_FUNC.get(f, f) for f in sym["functions"]}
     listed = {RENAME_FUNC.get(f, f) for f in blk["blocking"]}
-    files = sys.argv[1:] or [os.path.join(dp, f) for dp, _, fs in os.walk(os.path.join(ROOT, "godot", "rogue"))
-                             for f in fs if f.endswith(".gd")]
+    files = [os.path.join(dp, f) for dp, _, fs in os.walk(os.path.join(ROOT, "godot", "rogue"))
+             for f in fs if f.endswith(".gd")]
+    only = {os.path.realpath(f) for f in sys.argv[1:]}   # report only these (all are parsed)
     modules = {}
     for p in files:
         cls, funcs = parse(p)
@@ -138,9 +139,11 @@ def main():
                         continue
                     if is_coro(qual, name, cls) and not awaited:
                         errors.append(f"{p}:{n}: call to coroutine {qual + '.' if qual else ''}{name}() is not awaited")
+    if only:
+        errors = [e for e in errors if os.path.realpath(e.split(":")[0]) in only]
     for e in errors:
         print(e)
-    print(f"lint_await: {len(errors)} problem(s) in {len(modules)} files")
+    print(f"lint_await: {len(errors)} problem(s) in {len(only) or len(modules)} file(s)")
     sys.exit(1 if errors else 0)
 
 

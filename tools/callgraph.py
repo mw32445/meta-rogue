@@ -32,7 +32,7 @@ PLATFORM_FILES = {"mdport.c", "state.c", "xcrypt.c", "mach_dep.c"}
 
 # Library primitives that wait for keyboard input.
 # exit/abort end the program: in the port they suspend forever, so their callers are coroutines too.
-INPUT_PRIMITIVES = {"wgetch", "wgetnstr", "fgets", "getchar", "md_getpass", "exit", "abort"}
+INPUT_PRIMITIVES = {"wgetch", "wgetnstr", "fgets", "getchar", "exit", "abort"}
 RNG_GLOBAL = "seed"
 
 # Function-pointer call sites -> possible targets (verified by hand, see docs/AUDIT.md).
@@ -66,6 +66,9 @@ PORT_NONBLOCKING = {
     "runto": "MASTER msg('couldn't find monster in runto') is followed by a NULL dereference",
     "new_thing": "MASTER debug() + wait_for in a default case that pick_one() never reaches",
     "badcheck": "MASTER check that a fixed probability table sums to 100; it always does",
+    "md_normaluser": "platform: no setuid/setgid in the port, so the exit on failure is unreachable",
+    "md_shellescape": "platform: the port spawns no shell (the oracle stubs it too)",
+    "md_getpass": "platform: wizard password read from the tty; the oracle returns a fixed string",
 }
 # Functions that return a pointer to a static buffer, and which buffer.
 STATIC_BUFFER_FUNCS = {

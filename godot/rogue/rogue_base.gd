@@ -323,6 +323,9 @@ static var env_home := "/home/rodney/"	## md_gethomedir(), with trailing '/'
 static var env_time := 1000000000	## time(NULL)
 static var env_pid := 0			## md_getpid()
 static var env_uid := 1000		## md_getuid()
+static var env_seedvar: Variant = null	## getenv("SEED") (MASTER only)
+static var env_scorefile := "rogue.scr"	## SCOREFILE (configure default: relative to the cwd)
+static var env_lockfile := "rogue.lck"	## LOCKFILE
 static var argv: PackedStringArray = PackedStringArray()
 
 # =========================================================================
@@ -1272,6 +1275,11 @@ static var stdscr: Curses.CWindow:
 static var curscr: Curses.CWindow:
 	get:
 		return cs.curscr
+
+
+## initscr(): the emulation's screens already exist; nothing to do.
+static func initscr() -> Curses.CWindow:
+	return cs.stdscr
 
 
 static func move(y: int, x: int) -> int:
