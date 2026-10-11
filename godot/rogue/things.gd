@@ -38,6 +38,8 @@ static func inv_name(obj: Thing, drop: bool) -> String:
 			nameit(obj, "potion", p_colors[which], pot_info[which], PRF_NULLSTR)
 		RING:
 			nameit(obj, "ring", r_stones[which], ring_info[which], PRF_RING_NUM)
+			if guild and which == R_NOP and obj.o_arm > 11:	# polished by the Guild
+				prbuf += sprintf(" [worth %d]", [10 << (obj.o_arm - 11)])
 		STICK:
 			nameit(obj, ws_type[which], ws_made[which], ws_info[which], PRF_CHARGE_STR)
 		SCROLL:
@@ -446,7 +448,11 @@ static func add_line(fmt: Variant, arg: Variant) -> int:
 				await Io.wait_for(ord(" "))
 				clearok(curscr, true)
 				wclear(hw)
-				touchwin(stdscr)
+				# guild mode (inventories past 23 lines): stdscr is touched after the
+				# last page only; touched sooner, the getch() that waits on the next
+				# page repaints stdscr over it (in C too)
+				if not guild or fmt == null:
+					touchwin(stdscr)
 			_things_newpage = true
 			_things_line_cnt = 0
 			_add_line_maxlen = prompt.length()

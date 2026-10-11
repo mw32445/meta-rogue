@@ -21,6 +21,7 @@ func _initialize() -> void:
 
 
 func _start() -> void:
+	load("res://ui/main.gd").skip_guild = true	# a new game starts at once
 	_main = load("res://main.tscn").instantiate()
 	root.add_child(_main)
 

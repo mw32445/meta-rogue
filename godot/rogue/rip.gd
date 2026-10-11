@@ -353,6 +353,8 @@ static func total_winner() -> void:
 						worth += obj.o_arm * 100
 					else:
 						worth = 10
+				if guild and obj.o_which == R_NOP and obj.o_arm > 11:	# polished by the Guild
+					worth = 10 << (obj.o_arm - 11)
 				if (obj.o_flags & ISKNOW) == 0:
 					worth /= 2
 				obj.o_flags |= ISKNOW

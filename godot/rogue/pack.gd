@@ -124,7 +124,7 @@ static func add_pack(obj: Thing, silent: bool) -> void:
 ##	appropriate message
 static func pack_room(from_floor: bool, obj: Thing) -> bool:
 	inpack += 1
-	if inpack > MAXPACK:
+	if inpack > (maxpack if guild else MAXPACK):	# guild mode: the Guild sells bigger packs
 		if not terse:
 			await Io.addmsg("there's ")
 		await Io.addmsg("no room")
@@ -133,7 +133,7 @@ static func pack_room(from_floor: bool, obj: Thing) -> bool:
 		await Io.endmsg()
 		if from_floor:
 			await move_msg(obj)
-		inpack = MAXPACK
+		inpack = maxpack if guild else MAXPACK
 		return false
 
 	if from_floor:
@@ -167,7 +167,7 @@ static func leave_pack(obj: Thing, newobj: bool, all: bool) -> Thing:
 		# UB: an o_packch outside 'a'..'z' (0 for an object that never got a
 		# pack letter, reachable through the add_pack() empty-pack quirk)
 		# writes outside pack_used[] in C; the write is dropped here.
-		var used := obj.o_packch - ord("a")
+		var used := _pack_index(obj.o_packch)
 		if used >= 0 and used < pack_used.size():
 			pack_used[used] = false
 		pack = List._detach(pack, obj)
@@ -186,7 +186,7 @@ static func pack_char() -> int:
 		bp += 1
 	if bp < pack_used.size():
 		pack_used[bp] = true
-	return to_schar(bp + ord("a"))
+	return to_schar(_pack_letter(bp))
 
 
 ## inventory:
@@ -380,3 +380,19 @@ static func reset_last() -> void:
 	last_comm = l_last_comm
 	last_dir = l_last_dir
 	last_pick = l_last_pick
+
+
+## Guild mode (docs/GUILD.md): past 'z' the pack letters go on with 'A'-'Z', and
+## pack_used has 52 entries (Main.main()). These map a letter to its pack_used
+## index and back; in classic mode they are C's ch - 'a' and 'a' + bp, out-of-range
+## values included.
+static func _pack_index(ch: int) -> int:
+	if guild and ch >= ord("A") and ch <= ord("Z"):
+		return ch - ord("A") + 26
+	return ch - ord("a")
+
+
+static func _pack_letter(bp: int) -> int:
+	if guild and bp >= 26:
+		return bp - 26 + ord("A")
+	return bp + ord("a")

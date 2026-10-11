@@ -45,6 +45,12 @@ static func main() -> void:
 		dnum = lowtime + Mdport.md_getpid()
 	seed_ = dnum & 0xFFFFFFFF
 
+	if guild:	# the Fighters' Guild (docs/GUILD.md): a 20-entry Hall of Fame, and
+				# pack letters a-z then A-Z for the bigger packs it sells
+		numscores = 20
+		Numname = "Twenty"
+		pack_used.resize(52)
+		pack_used.fill(false)
 	MachDep.open_score()
 
 	# Drop setuid/setgid after opening the scoreboard file.
@@ -97,6 +103,9 @@ static func main() -> void:
 	Init.init_colors()		# Set up colors of potions
 	Init.init_stones()		# Set up stone settings of rings
 	Init.init_materials()		# Set up materials of wands
+	if guild and loadout != null:	# the Guild's purchases (docs/GUILD.md), used once
+		await Loadout.apply(loadout)
+		loadout = null
 	MachDep.setup()
 
 	# The screen must be at least NUMLINES x NUMCOLS

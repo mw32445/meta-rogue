@@ -14,11 +14,21 @@ signal key_pressed(code: int)
 
 const COLS := 80
 const ROWS := 24
+## The stdout console shows up to this many rows (a smaller font) before it
+## scrolls: the Guild's 20-entry Hall of Fame list is about 27 lines.
+const CONSOLE_ROWS := 32
 const FG := Color(0.82, 0.82, 0.82)
 const BG := Color(0.0, 0.0, 0.0)
 const BLINK := 0.53
 
-var cs: Curses = null
+## The curses screen shown (a game's, or the Guild's). A new one is drawn afresh.
+var cs: Curses = null:
+	set(v):
+		cs = v
+		_seen_version = -1
+		_console_bytes = -1
+		_console_cache = []
+		queue_redraw()
 var font: Font = preload("res://fonts/DejaVuSansMono.ttf")
 var font_size := 16
 var cell := Vector2(10, 20)
@@ -39,15 +49,20 @@ func _ready() -> void:
 
 ## The largest font size whose 80x24 grid fits the control.
 func _fit() -> void:
+	font_size = _size_for(ROWS)
+	cell = Vector2(font.get_char_size(ord("M"), font_size).x, font.get_height(font_size))
+	ascent = font.get_ascent(font_size)
+	queue_redraw()
+
+
+## The largest font size whose 80 x rows grid fits the control.
+func _size_for(rows: int) -> int:
 	var ref := 64
 	var adv := font.get_char_size(ord("M"), ref).x
 	var hgt := font.get_height(ref)
 	var by_w := int(floor(size.x / (COLS * adv) * ref))
-	var by_h := int(floor(size.y / (ROWS * hgt) * ref))
-	font_size = maxi(6, mini(by_w, by_h))
-	cell = Vector2(font.get_char_size(ord("M"), font_size).x, font.get_height(font_size))
-	ascent = font.get_ascent(font_size)
-	queue_redraw()
+	var by_h := int(floor(size.y / (rows * hgt) * ref))
+	return maxi(6, mini(by_w, by_h))
 
 
 func _process(delta: float) -> void:
@@ -67,10 +82,10 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), BG)
 	if cs == null:
 		return
-	var origin := ((size - cell * Vector2(COLS, ROWS)) / 2).floor()
 	if cs.curses_gone or cs.isendwin():
-		_draw_console(origin)
+		_draw_console()
 		return
+	var origin := ((size - cell * Vector2(COLS, ROWS)) / 2).floor()
 	var w := cs.curscr
 	for y in ROWS:
 		for x in COLS:
@@ -92,20 +107,32 @@ func _draw_cursor(pos: Vector2) -> void:
 	draw_rect(Rect2(pos + Vector2(0, cell.y - h), Vector2(cell.x, h)), FG)
 
 
-## The stdout stream as a terminal shows it: the last 24 lines.
-func _draw_console(origin: Vector2) -> void:
+## The stdout stream as a terminal shows it: the last 24 lines, or up to
+## CONSOLE_ROWS in a smaller font when there are more.
+func _draw_console() -> void:
 	var lines := _console_lines()
-	var first := maxi(0, lines.size() - ROWS)
+	var rows := clampi(lines.size(), ROWS, CONSOLE_ROWS)
+	var fs := font_size
+	var c_cell := cell
+	var c_ascent := ascent
+	if rows > ROWS:
+		fs = _size_for(rows)
+		c_cell = Vector2(font.get_char_size(ord("M"), fs).x, font.get_height(fs))
+		c_ascent = font.get_ascent(fs)
+	var origin := ((size - c_cell * Vector2(COLS, rows)) / 2).floor()
+	var first := maxi(0, lines.size() - rows)
 	for i in range(first, lines.size()):
 		var s: String = lines[i]
 		for x in mini(s.length(), COLS):
 			var c := s.unicode_at(x)
 			if c > 32 and c < 127:
-				draw_char(font, origin + Vector2(x * cell.x, (i - first) * cell.y + ascent), s[x],
-					font_size, FG)
+				draw_char(font, origin + Vector2(x * c_cell.x, (i - first) * c_cell.y + c_ascent), s[x],
+					fs, FG)
 	if _cursor_on and has_focus() and not lines.is_empty():
 		var last: String = lines[lines.size() - 1]
-		_draw_cursor(origin + Vector2(mini(last.length(), COLS - 1), lines.size() - 1 - first) * cell)
+		var pos := origin + Vector2(mini(last.length(), COLS - 1), lines.size() - 1 - first) * c_cell
+		var h := maxf(2.0, floorf(c_cell.y / 8))
+		draw_rect(Rect2(pos + Vector2(0, c_cell.y - h), Vector2(c_cell.x, h)), FG)
 
 
 ## Interpret the stdout bytes: newline (with the tty's CR), carriage return,
