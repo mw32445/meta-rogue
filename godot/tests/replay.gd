@@ -75,6 +75,7 @@ func _run(o: Dictionary) -> void:
 	RogueBase.env_home = o.get("home", "/home/rodney/")
 	RogueBase.env_uid = int(o.get("uid", "1000"))
 	RogueBase.env_cwd = o.get("cwd", "")
+	RogueBase.env_sandbox = true
 	RogueBase.env_rogueopts = null if o.has("no-opts") or not o.has("opts") else o["opts"]
 	RogueBase.MASTER = o.has("master")
 	var argv := PackedStringArray(["rogue"])
@@ -104,6 +105,7 @@ func _run(o: Dictionary) -> void:
 		var so := FileAccess.open(o["stdout"], FileAccess.WRITE)
 		so.store_buffer(cs.stdout_bytes)
 		so.close()
+	cs.abandon()
 	RogueBase.cs = null
 
 

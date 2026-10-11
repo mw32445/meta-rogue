@@ -164,9 +164,9 @@ static func restore(file: String, _envp: Variant = null) -> bool:
 	Mdport.md_tstphold()
 
 	var path := cpath(file)
-	var is_dir := file != "" and DirAccess.dir_exists_absolute(path)
+	var is_dir := file != "" and not outside_rundir(file) and DirAccess.dir_exists_absolute(path)
 	var inf: FileAccess = null
-	if file != "" and not is_dir:
+	if file != "" and not is_dir and not outside_rundir(file):
 		inf = FileAccess.open(path, FileAccess.READ)
 	if inf == null and not is_dir:
 		# perror(file)
@@ -374,7 +374,7 @@ static func _stat(name: String) -> bool:
 
 ## strerror(errno) of fopen(name, "w"), or "" when it would succeed.
 static func _open_error(name: String) -> String:
-	if name == "":
+	if name == "" or outside_rundir(name):
 		return "No such file or directory"
 	var path := cpath(name)
 	if DirAccess.dir_exists_absolute(path) or name.ends_with("/"):

@@ -22,6 +22,9 @@ such choice, plus the few deliberate deviations.
 | `io.c` message buffer | `msgbuf[143]` can overflow on very long messages (`strcat`). | Strings are dynamic. The test generator keeps typed names short, so this never triggers in tests. |
 | player-typed names used as a format string (`msg(huh)` etc.) | `%` sequences read missing arguments. | Missing arguments format as 0 / "". The test generator types no `%`. |
 | ESC followed quickly by another key | `md_readchar()` swallows the ESC if the next key arrives within ~100 ms. | ESC is always standalone: the look-ahead `getch` in halfdelay mode returns ERR at once. |
+| `state.c` `rs_read_daemons()` | After the loop it tests `d_list[20]`, one past the end, and may zero 12 bytes of whatever global follows. | Removed (oracle patch); the port has no such write. |
+| `state.c` room references | A monster or player in a corridor is saved as room -1 and restored as `&rooms[-1]`, a pointer into a foreign global. | Corridors are saved as `MAXROOMS + i` and restored exactly (oracle patch and port). |
+| `state.c` daemons | `land`, `come_down`, `visuals` and `turn_see` have no save id; they are restored as NULL with their slot still active, and the next `do_daemons`/`do_fuses` calls NULL. | Saved as ids 10-13 and restored (oracle patch and port). |
 
 ## Environment pinned in tests (real values in normal play)
 In tests these are fixed: `time()` (seed and tombstone year), the pid (seed), the user
@@ -31,14 +34,29 @@ style is "Clear").
 
 - **Seed.** In both programs `seed = time + pid`, so tests set
   `pid = SEED - TIME`.
+- **File sandbox.** In tests, a file name that leaves the run directory (`/x`,
+  `../x`, `a/b`; a leading `./` is allowed) cannot be opened, unlinked or chmod'ed
+  (ENOENT), because the fuzzer types random save and option file names. The oracle
+  wraps `fopen`/`unlink`/`chmod`; the port checks `RogueBase.outside_rundir()`.
 - **Shell escape.** `!` runs no shell. The screen and prompt sequence is kept.
 
 ## Deliberate deviations (port only)
-- **Save files** use the port's own format.
-  - The two C save bugs are fixed: 4 daemon functions missing from `rs_write_daemons`
-    (a crash on restore while hallucinating, levitating or detecting monsters), and
-    corridor rooms saved as `&rooms[-1]`.
-  - The set of state that is saved and restored is otherwise the same as C's.
+- **Save files** keep C's encrypted header (the version string and screen size) but
+  use the port's own encoding for the game state, so C and port save files are not
+  interchangeable (each reports "Sorry, saved game is out of date." for the other's).
+  - The set of state that is saved and restored is the same as C's, with the same
+    losses: pack objects by index (a `last_pick` that is not in the pack is lost),
+    `t_dest` re-targeted to the hero unless it is the hero, a monster, a level object
+    or a room's gold, places' monsters by index, stdscr by cell. Everything else
+    restarts at its fresh-process value.
+  - The two C save bugs are fixed, as in the oracle (table above).
+  - A damaged save file is refused ("Sorry, saved game is out of date."); C restores
+    whatever it manages to read.
+  - The `mvcur()` before saving writes ncurses' bytes for xterm (`\r\e[24d`) to
+    stdout, as the C does.
+- **Score file** entries have C's layout (an encrypted 1024-byte name and 100-byte
+  score line). C also writes the random bytes left after the name's NUL by
+  `score()`'s initialization; the port writes zeros there.
 - **Messages on paths that are unreachable, or that crash the C game**, are reported
   with `push_error` instead of `msg()`. This lets these functions stay ordinary,
   non-coroutine functions. They are listed in `tools/blocking.json` →

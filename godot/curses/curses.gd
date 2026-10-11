@@ -728,6 +728,14 @@ func read_line(size: int) -> String:
 
 
 ## exit(status): record it, notify the host, and never return.
+## Drop the suspended game: disconnecting the input signals frees the
+## coroutine chain waiting on them (it holds this object, so it would leak).
+func abandon() -> void:
+	for sig in [_key_ready, _halt, script_finished, program_exited]:
+		for c in sig.get_connections():
+			sig.disconnect(c["callable"])
+
+
 func exit_program(status: int) -> void:
 	exit_status = status
 	if exit_hook.is_valid():

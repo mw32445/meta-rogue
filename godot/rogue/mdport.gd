@@ -64,7 +64,7 @@ static func md_unlink_open_file(file: String, _inf: Variant = null) -> int:
 
 static func md_unlink(file: String) -> int:
 	var path := cpath(file)
-	if file != "" and FileAccess.file_exists(path):
+	if file != "" and not outside_rundir(file) and FileAccess.file_exists(path):
 		return 0 if DirAccess.remove_absolute(path) == OK else -1
 	return -1
 

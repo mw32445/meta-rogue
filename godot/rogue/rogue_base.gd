@@ -330,6 +330,21 @@ static var env_lockfile := "rogue.lck"	## LOCKFILE
 static var env_cwd := ""
 
 
+## Test mode: files may only be written in the run directory (the oracle's
+## hooks.c refuses the same names with ENOENT).
+static var env_sandbox := false
+
+
+## A file name that leaves the run directory ("/x", "../x", "a/b"; a leading
+## "./" is allowed) while the sandbox is on.
+static func outside_rundir(p: String) -> bool:
+	if not env_sandbox:
+		return false
+	if p.begins_with("./"):
+		p = p.substr(2)
+	return p.contains("/")
+
+
 ## A C file name as the port opens it (relative names resolve against env_cwd).
 static func cpath(p: String) -> String:
 	if env_cwd == "" or p.is_absolute_path() or p.begins_with("user://") or p.begins_with("res://"):

@@ -42,7 +42,7 @@ gcc "${cflags[@]}" -I. -c "$here/hooks.c" -o hooks.o
 
 wraps=(wgetch wgetnstr fgets halfdelay nocbreak raw initscr delwin baudrate
        erasechar killchar time getpid md_getuid md_getusername md_gethomedir
-       md_shellescape md_sleep md_crypt md_getpass free exit)
+       md_shellescape md_sleep md_crypt md_getpass free exit fopen unlink chmod)
 ldwrap=()
 for w in "${wraps[@]}"; do ldwrap+=("-Wl,--wrap=$w"); done
 

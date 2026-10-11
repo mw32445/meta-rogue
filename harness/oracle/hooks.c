@@ -24,11 +24,13 @@
 
 #define NCURSES_INTERNALS 1	/* WINDOW fields: _flags, _cury, _curx */
 #include <curses.h>
+#include <errno.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
 #include "rogue.h"
@@ -39,6 +41,9 @@ extern int __real_halfdelay(int);
 extern int __real_nocbreak(void);
 extern int __real_raw(void);
 extern int __real_delwin(WINDOW *);
+extern FILE *__real_fopen(const char *, const char *);
+extern int __real_unlink(const char *);
+extern int __real_chmod(const char *, mode_t);
 
 static FILE *dumpf;
 static int *keys, nkeys, keypos;
@@ -63,7 +68,7 @@ dump(void)
     if (dumpf == NULL)
     {
 	path = getenv("ROGUE_DUMP");
-	dumpf = path != NULL ? fopen(path, "w") : stderr;
+	dumpf = path != NULL ? __real_fopen(path, "w") : stderr;
 	if (dumpf == NULL)
 	{
 	    perror("oracle: ROGUE_DUMP");
@@ -84,7 +89,7 @@ load_keys(void)
     long v;
 
     nkeys = 0;
-    if (path == NULL || (f = fopen(path, "r")) == NULL)
+    if (path == NULL || (f = __real_fopen(path, "r")) == NULL)
 	return;
     for (;;)
     {
@@ -488,7 +493,7 @@ __wrap_raw(void)
 WINDOW *
 __wrap_initscr(void)
 {
-    FILE *out = fopen("/dev/null", "w"), *in = fopen("/dev/null", "r");
+    FILE *out = __real_fopen("/dev/null", "w"), *in = __real_fopen("/dev/null", "r");
     const char *term = getenv("TERM");
 
     if (term == NULL)
@@ -571,6 +576,53 @@ __wrap_md_crypt(char *key, char *salt)
 #endif
 }
 char *__wrap_md_getpass(char *prompt) { (void) prompt; return "oracle"; }
+
+/*
+ * Sandbox: the game may only touch files in its run directory (the cwd).  A
+ * file name typed at a save or option prompt that leaves it ("/x", "../x",
+ * "a/b"; a leading "./" is allowed) is refused with ENOENT.  The port's test
+ * mode refuses the same names (RogueBase.env_sandbox).
+ */
+static int
+outside_rundir(const char *path)
+{
+    if (path[0] == '.' && path[1] == '/')
+	path += 2;
+    return strchr(path, '/') != NULL;
+}
+
+FILE *
+__wrap_fopen(const char *path, const char *mode)
+{
+    if (outside_rundir(path))
+    {
+	errno = ENOENT;
+	return NULL;
+    }
+    return __real_fopen(path, mode);
+}
+
+int
+__wrap_unlink(const char *path)
+{
+    if (outside_rundir(path))
+    {
+	errno = ENOENT;
+	return -1;
+    }
+    return __real_unlink(path);
+}
+
+int
+__wrap_chmod(const char *path, mode_t mode)
+{
+    if (outside_rundir(path))
+    {
+	errno = ENOENT;
+	return -1;
+    }
+    return __real_chmod(path, mode);
+}
 
 /* free is a no-op: use-after-free reads see intact objects, like the GC'd port */
 void __wrap_free(void *p) { (void) p; }
