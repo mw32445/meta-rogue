@@ -514,7 +514,7 @@ func offers(section: int) -> Array:
 						head = true
 					var e: int = rings[i].enh
 					out.append(_offer("pr:%d" % i, "Adornment",
-						_change_s("worth %d" % C.ADORN_WORTH, str(C.ADORN_WORTH << e)), "next x2",
+						_change_s("worth x1", "x%d" % (1 << e)), "next x2",
 						C.grow(C.POLISH_PRICE, 2, 1, e), "max" if e >= C.POLISH_MAX else ""))
 		4:
 			out.append({"head": "Wands and staves, known: %d charges (light %d)" % [C.STICK_CHARGES,

@@ -198,8 +198,8 @@ func _bought(o: Dictionary) -> String:
 		"er":
 			return "The enchanter whispers to the ring: %s now." % _after(shop.offers(section), o.id)
 		"pr":
-			return "Polished until it shines: a winner sells it for %s." \
-				% _after(shop.offers(section), o.id)
+			return "Polished until it shines: worth %s times as much to a winner." \
+				% _after(shop.offers(section), o.id).trim_prefix("x")
 		"wd":
 			return "A wand or staff of %s, charged. Point it away from me." % lo
 		"ec":

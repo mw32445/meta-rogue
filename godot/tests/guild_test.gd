@@ -565,7 +565,8 @@ func _test_loadout() -> void:
 		and R.scr_info[R.S_MAP].oi_know and R.ring_info[R.R_TELEPORT].oi_know)
 	_check("loadout: pack count", R.inpack == 19, R.inpack)
 	var nm: String = await Things.inv_name(ring, false)
-	_check("loadout: a polished ring shows its worth", nm.ends_with("[worth 80]"), nm)
+	_check("loadout: a polished ring shows its worth (10 + its stone's, x8)",
+		nm.ends_with("[worth %d]" % (R.ring_info[R.R_NOP].oi_worth << 3)), nm)
 	_stop_game(cs)
 	# a dagger as your weapon is one dagger
 	cs = _start_game({"weapon": {"which": 4, "enh": 0}})
@@ -716,16 +717,17 @@ static func _keys_of(path: String) -> PackedInt32Array:
 	return keys
 
 
-## A ring of adornment polished 3 times sells for 80 when the hero wins (the
-## corpus' wizard-mode win, which uses no pack letters, with the ring added).
+## A ring of adornment polished 3 times sells for 8 times its worth when the hero
+## wins: in this game it is set in granite (5), so 15 x 8 = 120 (the corpus'
+## wizard-mode win, which uses no pack letters, with the rings added).
 func _test_polish_win() -> void:
 	var keys := _keys_of(ProjectSettings.globalize_path("res://").path_join(
 		"../harness/corpus/scenarios/win-100.keys"))
 	var lo := {"rings": [{"which": 5, "enh": 3}, {"which": 5, "enh": 0}]}
 	var out := _play(lo, keys, 100, [""], _dir)
-	_check("polish: a total winner sells the polished ring for 80",
-		_seen("   Worth  Item") and _seen(")    80  A ring of adornment(")
-		and _seen(") [worth 80]"), out.right(200))
+	_check("polish: a total winner sells the polished ring for 8 x (10 + its stone)",
+		_seen("   Worth  Item") and _seen(")   120  A ring of adornment(granite)")
+		and _seen(") [worth 120]"), out.right(200))
 	_check("polish: an unpolished one as before (10 + its stone)",
 		_seen(")    15  A ring of adornment(granite)\n") or _seen(")    15  A ring of adornment(granite) "))
 	_check("polish: the Hall of Fame has twenty places", out.contains("Top Twenty Scores:"))

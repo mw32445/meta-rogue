@@ -92,7 +92,7 @@ scrolls cost `base * 2^k` once their kind is known.
 | | the armourer: -1 armour class, per suit | 100 * 2^k |
 | Rings | known; protection, add strength, dexterity, increase damage come +1; teleportation and aggravate monster are cursed (as in the dungeon) | regeneration 900, slow digestion 700, stealth 600, increase damage 550, protection 500, add strength 500, dexterity 450, sustain strength 400, maintain armor 400, see invisible 300, searching 250, teleportation 200, aggravate monster 10, adornment free; copies * 4^k |
 | | the enchanter: +1 to a bonus ring | 150 * 2^k |
-| | polishing a ring of adornment: a total winner sells it for 10 * 2^k (10, 20, ... 1280; at most 7) | 5 * 2^k (half what it adds) |
+| | polishing a ring of adornment: a total winner sells it for its worth (10 plus its stone's, learned in the dungeon) times 2^k (at most 7) | 5 * 2^k (half what it adds to a plain 10-gold ring) |
 | Wands | wands and staves, known, 5 charges (light 15) | teleport away 900, slow monster 650, lightning/fire/cold 600, cancellation 500, drain life 400, polymorph 300, magic missile 250, teleport to 150, light 120, haste monster 5, invisibility 5, nothing 5; copies * 4^k |
 | | recharging: +2 charges, per wand | 80 * 2^k |
 | Potions | identify one (random, weighted, final, no item) | 40 |
@@ -143,9 +143,10 @@ Notes:
   without it gives 23. All 52 `pack_used` entries are restored.
 - **A polished ring of adornment.** It keeps its polishes in its otherwise unused
   `o_arm` (11, `new_thing()`'s default, plus the polishes). Its name shows
-  `[worth N]`, and `total_winner()` sells it for `10 * 2^polishes`, with the usual
-  halving when unknown. An unpolished one sells as before, for 10 plus its stone's
-  value.
+  `[worth N]`, and `total_winner()` sells it for its worth (10 plus its stone's value,
+  `ring_info[R_NOP].oi_worth`) times `2^polishes`, with the usual halving when
+  unknown. An unpolished one sells as before. The stone is random per game, so the
+  shop prices a polish as if the ring were plain (10 gold): part of the gamble.
 - **Long inventories.** Past 23 lines Rogue pages them, but it touches `stdscr` after
   every page, so the `getch()` that waits on the next page repaints the map over it. This
   is a bug of the original; classic lists rarely get that long. In guild mode
@@ -219,7 +220,7 @@ rings invariant and the price schedules are asserted there.
   - the catalog against the game's tables;
   - loadouts applied to new games, and the shop's pack count equal to the game's;
   - letters past `z`;
-  - a won game selling a polished ring for 80;
+  - a won game selling a ring polished 3 times for 8 times its worth;
   - a 30-slot wizard game: both inventory pages, drop and pick up, save and restore.
 - **A loadout by hand.**
   `godot --headless --path godot --script res://tests/replay.gd -- --guild --loadout F.json --keys K --dump D --full 1`

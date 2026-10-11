@@ -107,8 +107,10 @@ const RING_CURSED: Array[int] = [6, 11]		# R_AGGR R_TELEPORT
 const RING_ADORNMENT := 5			# R_NOP
 ## +1 more to a bonus ring: 150 * 2^k.
 const RING_ENH_PRICE := 150
-## Polishing a ring of adornment doubles what a winner sells it for (10, 20, ...,
-## 1280); each polish costs half the value it adds: 5 * 2^k, at most 7 times.
+## Polishing a ring of adornment doubles what a winner sells it for: its worth, 10
+## plus the value of the stone it is set in (which the hero only sees in the dungeon),
+## times 2 per polish. Each polish costs 5 * 2^k (half what it adds to a plain 10-gold
+## ring), at most 7 times. The stone is part of the gamble.
 const ADORN_WORTH := 10
 const POLISH_PRICE := 5
 const POLISH_MAX := 7
