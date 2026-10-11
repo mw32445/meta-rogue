@@ -11,7 +11,8 @@ PATH: key files or directories of them. --master uses the wizard-mode build
 (covmaster) for every run; otherwise runs whose header says master=1 go to
 covmaster and the rest to cov. --reset clears earlier counts first.
 --annotate writes FILE.c.gcov listings (unexecuted lines are marked #####)
-into harness/out/coverage/.
+into harness/out/coverage/. --uncovered FILE prints the lines of FILE.c that
+neither build ran (without PATH, it reports the counts gathered so far).
 """
 import argparse
 import concurrent.futures as cf
@@ -38,8 +39,9 @@ def builddir(v):
     return os.path.join(HERE, "oracle", "build", v)
 
 
-def gcov_lines(v, name):
-    """(executable line numbers, executed line numbers) of one file in one build."""
+def gcov_lines(v, name, src=None):
+    """(executable line numbers, executed line numbers) of one file in one build;
+    src, if given, collects {line number: source text}."""
     d = builddir(v)
     if not os.path.exists(os.path.join(d, name + ".gcda")):
         return None
@@ -55,6 +57,8 @@ def gcov_lines(v, name):
         n = int(num)
         if n == 0:
             continue
+        if src is not None:
+            src[n] = parts[2]
         exe.add(n)
         if cnt not in ("#####", "====="):
             ran.add(n)
@@ -67,6 +71,7 @@ def main():
     ap.add_argument("--master", action="store_true")
     ap.add_argument("--reset", action="store_true")
     ap.add_argument("--annotate", action="append", default=[])
+    ap.add_argument("--uncovered", action="append", default=[])
     ap.add_argument("--jobs", type=int, default=4)
     a = ap.parse_args()
     for v in ("cov", "covmaster"):
@@ -109,6 +114,22 @@ def main():
         tt += len(exe)
         print(f"{n:12s} {len(exe):7d} {100 * len(ran) / len(exe):7.1f}%")
     print(f"game logic: {te}/{tt} lines = {100 * te / max(1, tt):.1f}%")
+    for f in a.uncovered:
+        name = f[:-2] if f.endswith(".c") else f
+        exe, ran, src = set(), set(), {}
+        for v in ("cov", "covmaster"):
+            r = gcov_lines(v, name, src)
+            if r:
+                exe |= r[0]
+                ran |= r[1]
+        miss = sorted(exe - ran)
+        print(f"===== {name}.c: {len(miss)} of {len(exe)} lines not run")
+        prev = None
+        for n in miss:
+            if prev is not None and n != prev + 1:
+                print("   ...")
+            print(f"{n:5d}: {src.get(n, '').rstrip()}")
+            prev = n
     if a.annotate:
         outd = os.path.join(HERE, "out", "coverage")
         os.makedirs(outd, exist_ok=True)

@@ -13,6 +13,8 @@ Writes key scripts (difftest format) that the random fuzzers rarely reach:
                            a cursed ring, identify ([+N]); also with ROGUEOPTS=terse
   scoreedit-<seed>.keys    chains: deaths fill the score file, then a wizard quits and
                            types "names" or "edit" (deleting entries), then `rogue -s`
+  fullpack-<seed>.keys     wizard mode: fill the pack (23 kinds), then one more
+  emptypack-<seed>.keys    drop everything, then inventory and item commands
 
 The games are played by harness/bot.py on the oracle, so they are real games; they are
 then fixed inputs for both programs.
@@ -58,6 +60,28 @@ def ring_keys():
     k += [o("r"), o("i"), 32, o("f"), 32, 32]        # identify the protection ring
     k += [o("i"), 32, 32]                            # inventory: [+N]
     k += [o("s")] * 30 + [27]                        # wear them a while (ring_eat)
+    return k
+
+
+def fullpack_keys():
+    o = ord
+    k = []
+    for w in "0123456789abcd":                       # 14 kinds of potion: f..s
+        k += [o("C"), o("!"), o(w), 32]
+    for w in "0123":                                 # 4 kinds of scroll: t..w (pack full)
+        k += [o("C"), o("?"), o(w), 32]
+    k += [o("C"), o("!"), o("0"), 32]                # a potion that stacks: still fits
+    k += [o("C"), o("?"), o("5"), 32, 32]            # a new kind: no room in your pack
+    k += [o("i"), 32, 32, o("s"), 27]
+    return k
+
+
+def emptypack_keys():
+    o = ord
+    k = []
+    for c, mv in zip("abcde", "lllll"):              # drop each item on its own square
+        k += [o("d"), o(c), 32, o(mv), 32]
+    k += [o("i"), 32, o("q"), 32, o("w"), 32, o("t"), 32, o("P"), 32, o("r"), 32, 27]
     return k
 
 
@@ -148,6 +172,13 @@ def main():
                             {"seed": seed, "master": True, "args": [""]})
         difftest.write_keys(os.path.join(a.out, f"rings-terse-{seed}.keys"), ring_keys(),
                             {"seed": seed, "master": True, "args": [""], "opts": "terse"})
+
+    # a full pack, and an empty one
+    for seed in range(950, 950 + a.seeds):
+        difftest.write_keys(os.path.join(a.out, f"fullpack-{seed}.keys"), fullpack_keys(),
+                            {"seed": seed, "master": True, "args": [""]})
+        difftest.write_keys(os.path.join(a.out, f"emptypack-{seed}.keys"), emptypack_keys(),
+                            {"seed": seed})
 
     # rogue -d: a random death screen, then return twice
     for seed in range(800, 800 + a.seeds):
