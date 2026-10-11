@@ -65,7 +65,7 @@ func _setup_env() -> void:
 			opts = a.substr(len("--rogueopts="))
 		elif a == "--master":
 			RogueBase.MASTER = true
-		else:
+		elif not a.begins_with("--"):	# other --options belong to test scripts
 			args.append(a)
 	if args.size() == 1 and FileAccess.file_exists(data + "/rogue.save"):
 		args.append("-r")

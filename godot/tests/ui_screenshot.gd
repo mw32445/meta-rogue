@@ -1,8 +1,9 @@
 ## UI smoke test: runs the main scene in a real window, types some keys and
 ## saves screenshots. Needs a display (e.g. xvfb-run):
 ##   xvfb-run -s "-screen 0 1280x800x24" godot --path godot \
-##       --script res://tests/ui_screenshot.gd -- --out /tmp/shot [--keys "lll i"]
-## Keys: characters are typed as is; "\e" is Escape, "\n" Enter.
+##       --script res://tests/ui_screenshot.gd -- --out=/tmp/shot [--keys="lll i"] [ROGUE ARGS]
+## Keys: characters are typed as is; "\e" is Escape, "\n" Enter. Arguments that
+## do not start with -- are Rogue's (e.g. -d), as for the game itself.
 extends SceneTree
 
 var _main: Node
@@ -13,12 +14,11 @@ var _shots := 0
 
 
 func _initialize() -> void:
-	var args := OS.get_cmdline_user_args()
-	for i in args.size() - 1:
-		if args[i] == "--out":
-			_out = args[i + 1]
-		elif args[i] == "--keys":
-			_keys = args[i + 1].replace("\\e", char(27)).replace("\\n", "\n")
+	for a in OS.get_cmdline_user_args():
+		if a.begins_with("--out="):
+			_out = a.substr(6)
+		elif a.begins_with("--keys="):
+			_keys = a.substr(7).replace("\\e", char(27)).replace("\\n", "\n")
 	_main = load("res://main.tscn").instantiate()
 	root.add_child(_main)
 
