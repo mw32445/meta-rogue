@@ -30,3 +30,4 @@ gdscript/warnings/shadowed_variable_base_class=0
 gdscript/warnings/return_value_discarded=0
 gdscript/warnings/narrowing_conversion=0
 gdscript/warnings/redundant_await=2
+gdscript/warnings/shadowed_global_identifier=2

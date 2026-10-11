@@ -29,8 +29,8 @@ statics live in RogueBase: `_command_countch`, `_command_direction`, `_command_n
 - `Misc.find_obj(y, x) -> Thing` is not a coroutine. On its MASTER "Non-object" path it assigns
   `prbuf` (C's `sprintf(prbuf, ...)`) and then calls `push_error(prbuf)` instead of `msg(prbuf)`.
   This is the documented FIDELITY deviation.
-- `Misc.sign(nm)` has the same name as GDScript's global `sign()`. Callers must use the qualified
-  `Misc.sign(...)`; chase.gd does.
+- `Misc.sign(nm)` is `Misc.sign_(nm)` in the port: an unqualified `sign()` call reaches GDScript's
+  global `sign()` first (CONVENTIONS.md §1).
 - `Misc.erase_lamp(pos: Coord, rp: Room)`, `Misc.trip_ch(y, x, ch) -> int`,
   `Misc.show_floor() -> bool`, `Misc.vowelstr(str_: String) -> String`,
   `Misc.choose_str(ts: String, ns: String) -> String`, `Misc.rnd_thing() -> int` and

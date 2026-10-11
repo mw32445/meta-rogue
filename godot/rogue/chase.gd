@@ -133,8 +133,8 @@ static func do_chase(th: Thing) -> int:
 					or absi(th.t_pos.y - hero.y) == absi(th.t_pos.x - hero.x)) \
 					and dist_cp(th.t_pos, hero) <= BOLT_LENGTH * BOLT_LENGTH \
 					and not on(th, ISCANC) and rnd(DRAGONSHOT) == 0:
-				delta.y = Misc.sign(hero.y - th.t_pos.y)
-				delta.x = Misc.sign(hero.x - th.t_pos.x)
+				delta.y = Misc.sign_(hero.y - th.t_pos.y)
+				delta.x = Misc.sign_(hero.x - th.t_pos.x)
 				if has_hit:
 					await Io.endmsg()
 				await Sticks.fire_bolt(th.t_pos, delta, "flame")

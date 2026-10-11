@@ -45,11 +45,12 @@ KEEP_MDPORT = {"md_readchar", "md_hasclreol", "md_getusername", "md_gethomedir",
 RENAME = {"range": "range_", "str": "str_", "len": "len_", "char": "char_", "in": "in_",
           "class": "class_", "var": "var_", "func": "func_", "match": "match_",
           "pass": "pass_", "print": "print_", "type": "type_", "max": "max_", "min": "min_",
-          "abs": "abs_", "seed": "seed_", "is": "is_", "as": "as_", "not": "not_"}
+          "abs": "abs_", "seed": "seed_", "exp": "exp_", "sign": "sign_", "is": "is_",
+          "as": "as_", "not": "not_"}
 
 
-# C functions whose names clash with Godot Object methods.
-RENAME_FUNC = {"call": "call_"}
+# C functions whose names clash with Godot Object methods or built-in functions.
+RENAME_FUNC = {"call": "call_", "sign": "sign_"}
 
 
 def stub(name, info, blocking):

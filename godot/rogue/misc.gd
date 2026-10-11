@@ -420,7 +420,8 @@ static func get_dir() -> bool:
 
 ## sign:
 ##	Return the sign of the number
-static func sign(nm: int) -> int:
+##	(sign_ in the port: an unqualified sign() call would reach Godot's built-in.)
+static func sign_(nm: int) -> int:
 	if nm < 0:
 		return -1
 	else:

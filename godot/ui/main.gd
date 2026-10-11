@@ -41,11 +41,11 @@ func _play() -> void:
 
 func _setup_env() -> void:
 	var data := OS.get_user_data_dir()
-	var name := ""
+	var user_name := ""
 	for v in ["USER", "USERNAME", "LOGNAME"]:
-		if name == "":
-			name = OS.get_environment(v)
-	RogueBase.env_name = name if name != "" else "rodney"
+		if user_name == "":
+			user_name = OS.get_environment(v)
+	RogueBase.env_name = user_name if user_name != "" else "rodney"
 	RogueBase.env_home = data + "/"
 	RogueBase.env_cwd = data
 	RogueBase.env_scorefile = data + "/rogue.scr"

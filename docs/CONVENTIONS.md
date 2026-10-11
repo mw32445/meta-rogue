@@ -21,11 +21,26 @@ Read these before starting:
   - The class-name table is `MODULES` in `tools/gen_stubs.py`. For example:
     `new_level.c` → `NewLevel`, `mach_dep.c` → `MachDep`, `mdport.c` → `Mdport`.
 - **Every C function becomes a `static func` with the same name.**
-  - The only exception is a name that clashes with a Godot `Object` method. Add a
-    trailing underscore: `call()` → `call_()`.
-- **Parameters keep their C names.** Names that are GDScript keywords or builtins
-  get a trailing `_`: `range_`, `str_`, `len_`, `char_`, `in_`, `type_`, `max_`,
-  `min_`, `pass_`, `match_`.
+  - The only exception is a name that clashes with a Godot name (below): add a
+    trailing underscore, `call()` → `call_()`, `sign()` → `sign_()`.
+- **Parameters, locals and globals keep their C names.** Names that are GDScript
+  keywords or builtins get a trailing `_`: `range_`, `str_`, `len_`, `char_`, `in_`,
+  `type_`, `max_`, `min_`, `pass_`, `match_`, `exp_`, `seed_` (the RNG state).
+- **No declared name may be a Godot name.** This covers every built-in or @GDScript
+  function, engine singleton, class and built-in type, and every member of the
+  script's native base class (`tr`, `name`, ...).
+  - Why: Godot resolves an unqualified call `f()` to a built-in function *before* a
+    class member, so a module function named `sign` is silently bypassed by `sign(x)`.
+    A variable named like a built-in shadows it.
+  - Enforcement: `tools/lint_names.py`, run by `tools/check.sh`, and the engine
+    warning `shadowed_global_identifier`, set to an error in `project.godot`.
+  - Exception: Godot's global *constants* are not checked. `OK` and the curses
+    `KEY_*` constants keep their C/ncurses names. A class member resolves before a
+    Godot global, so `OK` means ours in every `RogueBase` module and `KEY_DOWN` means
+    ours inside `Curses`. Everywhere else, write `Curses.KEY_DOWN`; a bare `KEY_DOWN`
+    there is Godot's key code (`terminal_view.gd` uses those on purpose).
+  - After a Godot upgrade, regenerate the name table: `godot --headless --doctool DIR`,
+    then `tools/gen_godot_globals.py DIR`.
 - **Keep the same parameter count and order.** Other modules call your functions,
   and their translators work from the C signature.
 - **Function-pointer daemons take one int argument:**
@@ -113,7 +128,7 @@ are references, because the C code keeps pointers to them: `t_dest = &hero`,
   work unchanged.
 - **`str_t` (`s_str`) is unsigned.** Follow the C code: `add_str` clamps.
 - **The RNG.** Only the RNG relies on 32-bit wraparound, and `rnd()` handles that.
-  - Assign the seed as `seed = dnum & 0xFFFFFFFF`.
+  - Assign the seed as `seed_ = dnum & 0xFFFFFFFF` (C's `seed`; see §1).
   - The raw `RN` macro is `RN()`.
 
 ## 4. Evaluation order: the RNG must be consumed identically

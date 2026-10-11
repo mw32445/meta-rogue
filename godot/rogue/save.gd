@@ -681,7 +681,7 @@ static func _save_state() -> Dictionary:
 	st["ws_type"] = ws_type.duplicate()
 	st["ints"] = [orig_dsusp, n_objs, ntraps, hungry_state, inpack, inv_type, level, max_level,
 		mpos, no_food, count, food_left, lastscore, no_command, no_move, purse, quiet, vf_hit,
-		dnum, seed]
+		dnum, seed_]
 	st["coords"] = [_coord(delta), _coord(oldpos), _coord(stairs)]
 
 	st["player"] = _thing(player)
@@ -833,7 +833,7 @@ static func _restore_state(st: Dictionary) -> bool:
 	quiet = n[16]
 	vf_hit = n[17]
 	dnum = n[18]
-	seed = n[19]
+	seed_ = n[19]
 	_set_coord(delta, st["coords"][0])
 	_set_coord(oldpos, st["coords"][1])
 	_set_coord(stairs, st["coords"][2])

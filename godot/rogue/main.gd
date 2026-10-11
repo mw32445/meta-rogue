@@ -43,7 +43,7 @@ static func main() -> void:
 		dnum = atoi(env_seedvar)
 	else:
 		dnum = lowtime + Mdport.md_getpid()
-	seed = dnum & 0xFFFFFFFF
+	seed_ = dnum & 0xFFFFFFFF
 
 	MachDep.open_score()
 
@@ -60,12 +60,12 @@ static func main() -> void:
 			await exit(0)
 			return
 		elif argv[1] == "-d":
-			var seed0 := seed
+			var seed0 := seed_
 			dnum = rnd(100)	# throw away some rnd()s to break patterns
 			if dnum == 0:
 				# while (--dnum) wraps C's 32-bit int: 2^32 - 1 more draws, a full
 				# period of the RNG minus one, which leaves seed where it started.
-				seed = seed0
+				seed_ = seed0
 			else:
 				while true:
 					dnum -= 1

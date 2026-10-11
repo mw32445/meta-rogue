@@ -426,7 +426,7 @@ static var quiet := 0
 static var vf_hit := 0
 static var dnum := 0
 ## RNG state, an unsigned 32-bit value (C: int seed with wrapping arithmetic)
-static var seed := 0
+static var seed_ := 0
 
 static var delta := Coord.new()
 static var oldpos := Coord.new()
@@ -626,7 +626,7 @@ static func reset() -> void:
 	quiet = 0
 	vf_hit = 0
 	dnum = 0
-	seed = 0
+	seed_ = 0
 
 	delta = Coord.new()
 	oldpos = Coord.new()
@@ -1034,14 +1034,14 @@ static func debug(fmt: String, args: Array = []) -> void:
 static func rnd(range_: int) -> int:
 	if range_ == 0:
 		return 0
-	seed = (seed * 11109 + 13849) & 0xFFFFFFFF
-	return ((seed >> 16) & 0xFFFF) % absi(range_)
+	seed_ = (seed_ * 11109 + 13849) & 0xFFFFFFFF
+	return ((seed_ >> 16) & 0xFFFF) % absi(range_)
 
 
 ## The raw RN macro (rip.c uses it directly).
 static func RN() -> int:
-	seed = (seed * 11109 + 13849) & 0xFFFFFFFF
-	return (seed >> 16) & 0xFFFF
+	seed_ = (seed_ * 11109 + 13849) & 0xFFFFFFFF
+	return (seed_ >> 16) & 0xFFFF
 
 
 ## roll: roll a number of dice
@@ -1213,7 +1213,7 @@ static func sprintf(fmt: String, args: Array = []) -> String:
 		i += 1
 		var s := ""
 		var numeric := false
-		var sign := ""
+		var sign_ := ""
 		match conv:
 			37:	# %%
 				out += "%"
@@ -1229,12 +1229,12 @@ static func sprintf(fmt: String, args: Array = []) -> String:
 					v = _to_int32(v)
 				numeric = true
 				if v < 0:
-					sign = "-"
+					sign_ = "-"
 					v = -v
 				elif plus:
-					sign = "+"
+					sign_ = "+"
 				elif space:
-					sign = " "
+					sign_ = " "
 				s = str(v)
 			117, 120, 88, 111:	# u x X o
 				var v := int(args[ai]) if ai < args.size() else 0
@@ -1255,7 +1255,7 @@ static func sprintf(fmt: String, args: Array = []) -> String:
 				else:
 					s = String.num_int64(v, 16, conv == 88)
 					if alt and v != 0:
-						sign = "0X" if conv == 88 else "0x"
+						sign_ = "0X" if conv == 88 else "0x"
 			99:	# c
 				var v := int(args[ai]) if ai < args.size() else 0
 				ai += 1
@@ -1279,16 +1279,16 @@ static func sprintf(fmt: String, args: Array = []) -> String:
 					s = "0" + s
 				if prec == 0 and s == "0":
 					s = ""
-			var total_len := sign.length() + s.length()
+			var total_len := sign_.length() + s.length()
 			if width > total_len:
 				if left:
-					s = sign + s + " ".repeat(width - total_len)
+					s = sign_ + s + " ".repeat(width - total_len)
 				elif zero and prec < 0:
-					s = sign + "0".repeat(width - total_len) + s
+					s = sign_ + "0".repeat(width - total_len) + s
 				else:
-					s = " ".repeat(width - total_len) + sign + s
+					s = " ".repeat(width - total_len) + sign_ + s
 			else:
-				s = sign + s
+				s = sign_ + s
 		elif width > s.length():
 			if left:
 				s = s + " ".repeat(width - s.length())

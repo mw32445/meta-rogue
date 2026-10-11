@@ -204,7 +204,7 @@ static func door_open(rp: Room) -> void:
 static func be_trapped(tc: Coord) -> int:
 	var pp: Place
 	var arrow: Thing
-	var tr: int
+	var tr_: int
 
 	if on(player, ISLEVIT):
 		return T_RUST	# anything that's not a door or teleport
@@ -212,9 +212,9 @@ static func be_trapped(tc: Coord) -> int:
 	count = 0	# C: count = FALSE
 	pp = INDEX(tc.y, tc.x)
 	pp.p_ch = TRAP
-	tr = pp.p_flags & F_TMASK
+	tr_ = pp.p_flags & F_TMASK
 	pp.p_flags |= F_SEEN
-	match tr:
+	match tr_:
 		T_DOOR:
 			level += 1
 			await NewLevel.new_level()
@@ -274,7 +274,7 @@ static func be_trapped(tc: Coord) -> int:
 			await Io.msg("a gush of water hits you on the head")
 			await rust_armor(cur_armor)
 	MachDep.flush_type()
-	return tr
+	return tr_
 
 
 ## rndmove:

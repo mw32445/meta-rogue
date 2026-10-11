@@ -18,7 +18,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RENAME_FUNC = {"call": "call_"}
+RENAME_FUNC = {"call": "call_", "sign": "sign_"}
 # Coroutine primitives that are not C functions.
 PRIMITIVES = {
     ("RogueBase", "getch"), ("RogueBase", "wgetch"), ("RogueBase", "wgetnstr"),

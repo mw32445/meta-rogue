@@ -11,9 +11,9 @@ var s_dmg := ""		## char s_dmg[13]
 var s_maxhp := 0
 
 
-func _init(str_ := 0, exp := 0, lvl := 0, arm := 0, hpt := 0, dmg := "", maxhp := 0) -> void:
+func _init(str_ := 0, exp_ := 0, lvl := 0, arm := 0, hpt := 0, dmg := "", maxhp := 0) -> void:
 	s_str = str_
-	s_exp = exp
+	s_exp = exp_
 	s_lvl = lvl
 	s_arm = arm
 	s_hpt = hpt

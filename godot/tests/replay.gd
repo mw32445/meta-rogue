@@ -143,7 +143,7 @@ func _on_step(key: int) -> void:
 	var dh := _fnv_str(d)
 	var full := _full_from >= 0 and _step >= _full_from
 	if cs.curses_gone:
-		_out.store_string("S%d K%d R%d Z D%08x\n" % [_step, key, RogueBase.seed, dh])
+		_out.store_string("S%d K%d R%d Z D%08x\n" % [_step, key, RogueBase.seed_, dh])
 	else:
 		var w := cs.curscr
 		var h := FNV_INIT
@@ -153,7 +153,7 @@ func _on_step(key: int) -> void:
 				for b in 4:
 					h = ((h ^ ((v >> (8 * b)) & 0xFF)) * FNV_PRIME) & 0xFFFFFFFF
 		var cur := "%d,%d" % [w._cury, w._curx] if cs.cursor_known else "?"
-		_out.store_string("S%d K%d R%d C%s X%08x D%08x\n" % [_step, key, RogueBase.seed, cur, h, dh])
+		_out.store_string("S%d K%d R%d C%s X%08x D%08x\n" % [_step, key, RogueBase.seed_, cur, h, dh])
 		if full:
 			var extra := "E"
 			for y in RogueBase.NUMLINES:

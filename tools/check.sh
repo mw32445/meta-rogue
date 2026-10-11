@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Compile GDScript and lint coroutine discipline (docs/CONVENTIONS.md §7).
+# Compile GDScript, lint coroutine discipline (docs/CONVENTIONS.md §7) and check that
+# no declared name clashes with a Godot built-in (§1, tools/lint_names.py).
 #
 #   tools/check.sh                    import + compile every script + lint
 #   tools/check.sh --quick FILE...    compile in an isolated copy of the project in
@@ -39,6 +40,7 @@ if [ "${1:-}" = "--quick" ]; then
     echo "$out" | filter
     [ $status -eq 0 ] && echo "compile: OK ($# file(s) checked in isolation)" || echo "check: compile FAILED"
     python3 "$root/tools/lint_await.py" "$@" || status=1
+    python3 "$root/tools/lint_names.py" || status=1
     exit $status
 fi
 
@@ -50,4 +52,5 @@ echo "$out" | grep -q "SCRIPT ERROR" && status=1
 echo "$out" | filter
 [ $status -eq 0 ] || { echo "check: compile FAILED (status $status)"; exit 1; }
 python3 "$root/tools/lint_await.py" || exit 1
+python3 "$root/tools/lint_names.py" || exit 1
 echo "check: OK"
