@@ -10,7 +10,9 @@
 #     that RogueBase.reset() starts each game from a clean state;
 #   - the same batches with the port's bug fixes on (RogueBase.fixes) against
 #     the "fixed" oracle (C + harness/oracle/fixes.patch), plus the
-#     expectations ("# expect-...") of the per-bug scripts in harness/corpus/fixes.
+#     expectations ("# expect-...") of the per-bug scripts in harness/corpus/fixes;
+#   - the Fighters' Guild's own tests (RogueBase.guild, which the oracle cannot
+#     judge): godot/tests/guild_test.gd.
 # Exit status 0 only if everything is identical.
 #
 # usage: harness/run_all.sh [--quick]     (--quick: smaller sweeps)
@@ -31,6 +33,10 @@ for v in std master fixed fixedmaster; do "$root/harness/oracle/build.sh" "$v" |
 
 step "GDScript compile + await lint"
 "$root/tools/check.sh" || fail=1
+
+step "the Fighters' Guild (godot/tests/guild_test.gd)"
+out="$("$GODOT" --headless --path "$root/godot" --script res://tests/guild_test.gd 2>&1)" || fail=1
+echo "$out" | grep -E "^(FAIL|guild_test:)"
 
 step "curses emulation vs ncurses ($cfuzz scripts)"
 python3 "$root/harness/curses_fuzz/run.py" --count "$cfuzz" --godot "$GODOT" || fail=1
