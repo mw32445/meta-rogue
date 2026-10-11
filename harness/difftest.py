@@ -291,6 +291,62 @@ def gen_keys(rng, n):
     return keys[:n]
 
 
+# create_obj (wizard 'C'): item type -> number of kinds ("which" keys 0-9a-h)
+CREATE = {"!": 14, "?": 18, "/": 14, "=": 14, ")": 9, "]": 8, ":": 2, ",": 1}
+BLESSED_RINGS = (0, 1, 7, 8)        # R_PROTECT R_ADDSTR R_ADDHIT R_ADDDAM ask "blessing?"
+
+
+def create_keys(rng):
+    """Keys for one wizard 'C'reate of a valid object."""
+    o = ord
+    t = rng.choice(list(CREATE) + ["*"])
+    if t == "*":
+        return [o("C"), o("*")] + [o(c) for c in str(rng.randint(1, 500))] + [13]
+    w = rng.randrange(CREATE[t])
+    keys = [o("C"), o(t), o("0123456789abcdefgh"[w])]
+    if t in ")]" or (t == "=" and w in BLESSED_RINGS):
+        keys.append(o(rng.choice("+-n")))
+    return keys
+
+
+def gen_keys_wizard(rng, n):
+    """Random play mixed with wizard commands (run with args [""], the MASTER oracle):
+    levels down/up (never above level 1), map, teleport, creating every kind of
+    object, power-up, whatis, object lists."""
+    keys = []
+    depth = 1
+    o = ord
+    while len(keys) < n:
+        p = rng.random()
+        if p < 0.55:
+            keys += gen_keys(rng, rng.randint(5, 40))
+        elif p < 0.65:
+            keys += create_keys(rng)
+            keys += [32, 32]
+        elif p < 0.73:
+            keys.append(4)                            # ^D: down a level
+            depth += 1
+        elif p < 0.76 and depth > 1:
+            keys.append(1)                            # ^A: up a level
+            depth -= 1
+        elif p < 0.80:
+            keys.append(rng.choice([6, 20, 5, 24, 3]))  # ^F map, ^T teleport, ^E food, ^X see, ^C pass
+        elif p < 0.82:
+            keys.append(9)                            # ^I: level 10, sword, plate mail
+        elif p < 0.85:
+            keys += [23, o(rng.choice("abcdefghij"))]  # ^W whatis
+        elif p < 0.88:
+            keys += [o("*"), o(rng.choice("!?/=)]:,*")), 32, 27]   # pr_list
+        elif p < 0.90:
+            keys += [o(rng.choice("$|"))]
+        elif p < 0.92:
+            keys += [o("+")]                          # leave wizard mode...
+            keys += [o("+"), o("x"), 13]              # ...and come back
+        else:
+            keys += [o("D"), 32, 27]                  # discoveries
+    return keys[:n]
+
+
 def write_keys(path, keys, case):
     hdr = f"# difftest: seed={case['seed']}"
     if case.get("opts") is not None:
@@ -405,6 +461,8 @@ def main():
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--keep", action="store_true")
     ap.add_argument("--save-failures", help="copy failing key scripts here")
+    ap.add_argument("--wizard", action="store_true",
+                    help="fuzz in wizard mode: MASTER oracle, args [\"\"], wizard commands")
     a = ap.parse_args()
     opts = None if a.no_opts else a.opts
     if a.mode == "one":
@@ -418,9 +476,14 @@ def main():
         for i in range(a.count):
             seed = a.first_seed + i
             rng = random.Random(seed * 7919)
-            case = {"seed": seed, "opts": opts, "master": a.master, "args": a.arg}
+            if a.wizard:
+                case = {"seed": seed, "opts": opts, "master": True, "args": [""]}
+                keys = gen_keys_wizard(rng, a.len)
+            else:
+                case = {"seed": seed, "opts": opts, "master": a.master, "args": a.arg}
+                keys = gen_keys(rng, a.len)
             path = os.path.join(kdir, f"fuzz{seed}.keys")
-            write_keys(path, gen_keys(rng, a.len), case)
+            write_keys(path, keys, case)
             case["keys"] = path
             cases.append(case)
         bad = run_cases(cases, a.jobs, a.keep)
