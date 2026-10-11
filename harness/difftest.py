@@ -10,6 +10,10 @@ the report re-runs both with full screens around it.
   difftest.py corpus [DIR]          replay every *.keys file (seed/options in its header)
   difftest.py seeds --count N [--first-seed S]   first screen of many seeds (level generation)
   difftest.py saves --count N [--len L] ...      save/restore chains (play, save, restore, ...)
+  difftest.py smoke --count N [--wizard] [--fixes] [--guild] [--menus]
+                                    the port alone on random scripts, for the switches the
+                                    oracle cannot judge: every run must end with no script
+                                    error (--guild gives each run a random Guild loadout)
 
 common options: --opts ROGUEOPTS | --no-opts, --master, --fixes, --arg A, --keep
 
@@ -97,6 +101,11 @@ def port_line(case, d, full=None, t=""):
         kv["master"] = "1"
     if case.get("fixes"):
         kv["fixes"] = "1"
+    for sw in ("guild", "menus"):
+        if case.get(sw):
+            kv[sw] = "1"
+    if case.get("loadout"):
+        kv["loadout"] = case["loadout"]
     if case.get("args"):
         kv["arg"] = "\x1f".join(case["args"])
     if full is not None:
@@ -472,6 +481,78 @@ def write_chain(path, case, runs):
 
 # ------------------------------------------------------------------ driver
 
+SMOKE_ERRORS = ("SCRIPT ERROR", "TIMEOUT", "Assertion failed", "two coroutines waiting")
+
+
+def random_loadout(rng, path):
+    """A random Guild loadout (godot/guild/loadout.gd's schema), written to path."""
+    import json
+    lo = {"maxpack": rng.choice([23, 23, 26, 30, 40, 52]), "str": rng.randint(0, 4),
+          "hp": rng.choice([0, 2, 4, 8]), "arrows": rng.choice([0, 10, 30]),
+          "food": rng.randint(0, 3),
+          "weapon": {"which": rng.choice([0, 1, 4, 5, 8]), "enh": rng.randint(0, 3)},
+          "armor": {"which": rng.randrange(8), "enh": rng.randint(0, 3)},
+          "bow": {"enh": rng.randint(0, 2)},
+          "weapons": [{"which": rng.choice([0, 1, 5, 8]), "enh": rng.randint(0, 2)}
+                      for _ in range(rng.randint(0, 2))],
+          "armors": [{"which": rng.randrange(8), "enh": rng.randint(0, 2)} for _ in range(rng.randint(0, 1))],
+          "missiles": [{"which": rng.choice([4, 6, 7]), "count": rng.randint(2, 20)}
+                       for _ in range(rng.randint(0, 2))],
+          "rings": [{"which": rng.randrange(14), "enh": rng.randint(0, 3)} for _ in range(rng.randint(0, 3))],
+          "sticks": [{"which": rng.randrange(14), "enh": rng.randint(0, 2)} for _ in range(rng.randint(0, 3))],
+          "potions": [{"which": rng.randrange(14), "count": rng.randint(1, 3)} for _ in range(rng.randint(0, 4))],
+          "scrolls": [{"which": rng.randrange(18), "count": rng.randint(1, 3)} for _ in range(rng.randint(0, 4))],
+          "know_potions": rng.sample(range(14), rng.randint(0, 5)),
+          "know_scrolls": rng.sample(range(18), rng.randint(0, 5))}
+    with open(path, "w") as f:
+        json.dump(lo, f)
+    return path
+
+
+def with_menu_keys(rng, keys):
+    """For smoke runs with the item menus on: after each item command, a few keys a
+    menu reads (*, space, Escape, pack letters), so every menu path is exercised."""
+    o = ord
+    out = []
+    for k in keys:
+        out.append(k)
+        if 0 < k < 128 and chr(k) in "qrewWPdctz" and rng.random() < 0.6:
+            for _ in range(rng.randint(1, 3)):
+                out.append(rng.choice([o("*"), o("*"), 32, 27, o(rng.choice("abcdefghijklmnopqrstuvwxyzAB"))]))
+    return out[:len(keys)]
+
+
+def run_smoke(cases, jobs, keep, batch_size=40):
+    """The port alone: every run must end (its log ends with END or EXIT) and no batch
+    may report a script error, a failed assertion or a timeout."""
+    os.makedirs(OUT, exist_ok=True)
+    work = tempfile.mkdtemp(prefix="smoke", dir=OUT)
+    dirs = [os.path.join(work, f"run{i:05d}") for i in range(len(cases))]
+    for d in dirs:
+        os.makedirs(d)
+    batches = [list(range(i, min(i + batch_size, len(cases)))) for i in range(0, len(cases), batch_size)]
+    with cf.ThreadPoolExecutor(max_workers=jobs) as ex:
+        errs = list(ex.map(lambda b: (b, run_port_batch(
+            [ln for i in b for ln in port_lines(cases[i], os.path.join(dirs[i], "port"))], work)), batches))
+    bad = 0
+    for b, err in errs:
+        lines = [l for l in port_errors(err, limit=40) if any(e in l for e in SMOKE_ERRORS)]
+        if lines:
+            bad += 1
+            print(f"SMOKE: errors in the batch of runs {b[0]}..{b[-1]} ({err}):\n    " + "\n    ".join(lines[:12]))
+    for c, d in zip(cases, dirs):
+        for k in range(len(runs_of(c))):
+            log = parse_log(os.path.join(d, "port", f"dump{tag(c, k)}.txt"))
+            if not log or not log[-1].startswith(("END", "EXIT")):
+                bad += 1
+                print(f"SMOKE: run did not end: keys={c['keys']} last log line: {log[-1] if log else None}")
+                break
+    print(f"smoke: {len(cases)} runs, {bad} problem(s)  ({work})")
+    if not keep and bad == 0:
+        shutil.rmtree(work, ignore_errors=True)
+    return bad
+
+
 def _expects(case):
     return any(m == expect_mode(case) for m, _, _ in case.get("expect", []))
 
@@ -520,7 +601,7 @@ def run_cases(cases, jobs, keep, batch_size=40):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["one", "fuzz", "corpus", "seeds", "saves"])
+    ap.add_argument("mode", choices=["one", "fuzz", "corpus", "seeds", "saves", "smoke"])
     ap.add_argument("dir", nargs="?")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--keys")
@@ -529,6 +610,8 @@ def main():
     ap.add_argument("--master", action="store_true")
     ap.add_argument("--fixes", action="store_true",
                     help="RogueBase.fixes on, against the fixed oracle (harness/oracle/fixes.patch)")
+    ap.add_argument("--guild", action="store_true", help="smoke only: the Fighters' Guild on")
+    ap.add_argument("--menus", action="store_true", help="smoke only: the item menus on")
     ap.add_argument("--arg", action="append", default=[])
     ap.add_argument("--count", type=int, default=100)
     ap.add_argument("--len", type=int, default=600)
@@ -540,6 +623,32 @@ def main():
                     help="fuzz in wizard mode: MASTER oracle, args [\"\"], wizard commands")
     a = ap.parse_args()
     opts = None if a.no_opts else a.opts
+    if (a.guild or a.menus) and a.mode != "smoke":
+        sys.exit("--guild and --menus change the game in ways the oracle cannot judge: use them with smoke")
+    if a.mode == "smoke":
+        os.makedirs(OUT, exist_ok=True)
+        kdir = tempfile.mkdtemp(prefix="keys", dir=OUT)
+        cases = []
+        for i in range(a.count):
+            seed = a.first_seed + i
+            rng = random.Random(seed * 7901)
+            if a.wizard:
+                case = {"seed": seed, "opts": opts, "master": True, "args": [""]}
+                keys = gen_keys_wizard(rng, a.len)
+            else:
+                case = {"seed": seed, "opts": opts, "master": a.master, "args": a.arg}
+                keys = gen_keys(rng, a.len)
+            set_fixes(case, a.fixes)
+            case["guild"], case["menus"] = a.guild, a.menus
+            if a.menus:
+                keys = with_menu_keys(rng, keys)
+            if a.guild:
+                case["loadout"] = random_loadout(rng, os.path.join(kdir, f"loadout{seed}.json"))
+            path = os.path.join(kdir, f"smoke{seed}.keys")
+            write_keys(path, keys, case)
+            case["keys"] = path
+            cases.append(case)
+        sys.exit(1 if run_smoke(cases, a.jobs, a.keep) else 0)
     if a.mode == "one":
         case = read_case(a.keys) if not a.seed else {"keys": os.path.abspath(a.keys), "seed": a.seed}
         case.update({"opts": opts, "master": a.master, "args": a.arg})

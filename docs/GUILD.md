@@ -152,7 +152,8 @@ Notes:
 - **Long inventories.** Past 23 lines Rogue pages them, but it touches `stdscr` after
   every page, so the `getch()` that waits on the next page repaints the map over it. This
   is a bug of the original; classic lists rarely get that long. In guild mode
-  `add_line()` touches `stdscr` after the last page only, so every page is seen.
+  `add_line()` touches `stdscr` after the last page only, so every page is seen (the
+  same change is bug fix 31 of the switch `fixes`, docs/FIXES.md).
 
 A dagger, a wand or a staff draws on the RNG, so a loadout changes the dungeon of a
 seed. This is fine in guild mode.

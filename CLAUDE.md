@@ -24,6 +24,7 @@ then `godot` on PATH, then `/root/bin/godot`.
 | Everything (oracle builds, curses fuzz, corpus, seeds, fuzz) | `harness/run_all.sh` (about 1 h) or `harness/run_all.sh --quick` |
 | Random games vs the C | `python3 harness/difftest.py fuzz --count 50 [--len 800] [--opts ROGUEOPTS] [--wizard]` |
 | The same with the bug fixes on, vs the fixed C | add `--fixes` to any difftest mode |
+| Random games with the playable game's switches, port only (crash/hang check) | `python3 harness/difftest.py smoke --fixes --guild --menus --count 50` |
 | Level generation, save/restore, regression scripts | `python3 harness/difftest.py seeds --count 200` / `saves --count 50` / `corpus` |
 | Look at a divergence | `python3 harness/show.py KEYFILE --step N --port [--digest]` |
 | Which C lines the tests reach | `python3 harness/coverage.py --reset DIR...` |
@@ -67,7 +68,7 @@ makes them fail wherever behavior changes. Recommended approach:
   it.
 - Record deliberate changes in `docs/CHANGES.md`.
 
-Two switches exist (`RogueBase`, set by the host like `MASTER`, untouched by `reset()`):
+Three switches exist (`RogueBase`, set by the host like `MASTER`, untouched by `reset()`):
 - `fixes`: the bug fixes (`docs/FIXES.md`). Each is an `if fixes:` branch at the bug
   site, and the same fix is in `harness/oracle/fixes.patch` (oracle variants `fixed`,
   `fixedmaster`; edit with `harness/oracle/edit_fixes.sh`), so `difftest.py --fixes`
@@ -75,6 +76,12 @@ Two switches exist (`RogueBase`, set by the host like `MASTER`, untouched by `re
   this pattern and keep full differential coverage.
 - `guild`: the Fighters' Guild (`docs/GUILD.md`), tested by `godot/tests/guild_test.gd`
   and replays with `--guild --loadout F.json`.
+- `menus`: PC Rogue-style item menus (`Pack.get_item`), tested by
+  `godot/tests/menus_test.gd`.
+
+For what the oracle cannot judge, `python3 harness/difftest.py smoke [--fixes] [--guild]
+[--menus] [--wizard] --count N` plays random games on the port alone and fails on any
+script error or hang.
 
 Key scripts can assert behavior: `# expect-classic: TEXT` / `# expect-fixed: TEXT` (and
 `expect-not-...`) must hold on the port's screens or stdout in that mode.

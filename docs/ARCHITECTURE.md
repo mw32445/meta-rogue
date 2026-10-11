@@ -121,8 +121,13 @@ turns one on only when a test asks (`fixes=1`, `guild=1`), so the classic game s
   Fame, the shop before each new game, and the loadout it buys (`RogueBase.loadout`,
   applied by `Main.main()`). The oracle cannot judge it; its own tests are
   `godot/tests/guild_test.gd` and replays with `--guild --loadout FILE`.
-- `--classic` on the game's command line turns both off (with separate save and score
-  files). `docs/CHANGES.md` lists every deliberate change and its switch.
+- **`menus`** makes item commands list the items that fit at once, as PC Rogue does
+  (`Pack.get_item`); tested by `godot/tests/menus_test.gd`.
+- Switches the oracle cannot judge also get smoke runs: `difftest.py smoke` plays
+  random games on the port alone with any switches on and fails on a script error or a
+  run that does not end.
+- `--classic` on the game's command line turns them all off (with separate save and
+  score files). `docs/CHANGES.md` lists every deliberate change and its switch.
 
 ## 8. Fidelity policy
 The original has undefined behavior: uninitialized reads, reads and writes out of

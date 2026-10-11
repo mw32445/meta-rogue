@@ -11,8 +11,10 @@
 #   - the same batches with the port's bug fixes on (RogueBase.fixes) against
 #     the "fixed" oracle (C + harness/oracle/fixes.patch), plus the
 #     expectations ("# expect-...") of the per-bug scripts in harness/corpus/fixes;
-#   - the Fighters' Guild's own tests (RogueBase.guild, which the oracle cannot
-#     judge): godot/tests/guild_test.gd.
+#   - the tests of what the oracle cannot judge: the Fighters' Guild
+#     (godot/tests/guild_test.gd), the item menus (godot/tests/menus_test.gd), the
+#     fixes' UI checks (godot/tests/fixes_test.gd), and smoke runs of random games
+#     with every switch on (difftest.py smoke: no script error, no hang).
 # Exit status 0 only if everything is identical.
 #
 # usage: harness/run_all.sh [--quick]     (--quick: smaller sweeps)
@@ -37,6 +39,14 @@ step "GDScript compile + await lint"
 step "the Fighters' Guild (godot/tests/guild_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/guild_test.gd 2>&1)" || fail=1
 echo "$out" | grep -E "^(FAIL|guild_test:)"
+
+step "the item menus (godot/tests/menus_test.gd)"
+out="$("$GODOT" --headless --path "$root/godot" --script res://tests/menus_test.gd 2>&1)" || fail=1
+echo "$out" | grep -E "^(FAIL|menus_test:)"
+
+step "the fixes' UI checks (godot/tests/fixes_test.gd)"
+out="$("$GODOT" --headless --path "$root/godot" --script res://tests/fixes_test.gd 2>&1)" || fail=1
+echo "$out" | grep -E "FAIL|fixes_test"
 
 step "curses emulation vs ncurses ($cfuzz scripts)"
 python3 "$root/harness/curses_fuzz/run.py" --count "$cfuzz" --godot "$GODOT" || fail=1
@@ -75,6 +85,11 @@ python3 "$root/harness/difftest.py" fuzz --fixes --wizard --count "$wiz" --len 1
 
 step "fixed: save/restore chains, $saves runs"
 python3 "$root/harness/difftest.py" saves --fixes --count "$saves" --len 500 --first-seed 600000 || fail=1
+
+# Every switch on (the playable game), the port alone: no script error, no hang.
+step "smoke: the playable game's switches, $fuzz runs"
+python3 "$root/harness/difftest.py" smoke --fixes --guild --menus --count "$fuzz" --len 1000 --first-seed 800000 || fail=1
+python3 "$root/harness/difftest.py" smoke --fixes --guild --menus --wizard --count "$wiz" --len 1500 --first-seed 900000 || fail=1
 
 echo
 if [ $fail -eq 0 ]; then echo "run_all: ALL OK"; else echo "run_all: FAILURES (see above)"; fi
