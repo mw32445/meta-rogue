@@ -3,8 +3,8 @@
 ## @(#)mach_dep.c	4.37 (Berkeley) 05/23/83
 ##
 ## The load-average and checkout code (MAXLOAD, MAXUSERS, CHECKTIME) is not
-## compiled into the default build and is not ported. The score file itself is
-## read and written by Save.rd_score/wr_score.
+## compiled into the default build and is not ported. The score file is opened
+## here and read and written by Save.rd_score/wr_score.
 class_name MachDep
 extends RogueBase
 
@@ -18,7 +18,23 @@ static func init_check() -> void:
 ## open_score:
 ##	Open up the score file for future use
 static func open_score() -> void:
-	pass
+	var scorefile := cpath(env_scorefile)
+
+	# We drop setgid privileges after opening the score file, so subsequent
+	# open()'s will fail.  Just reuse the earlier filehandle.
+	if scoreboard != null:
+		scoreboard.seek(0)
+		return
+
+	scoreboard = FileAccess.open(scorefile, FileAccess.READ_WRITE)	# "r+"
+
+	if scoreboard == null and not FileAccess.file_exists(scorefile):	# ENOENT
+		scoreboard = FileAccess.open(scorefile, FileAccess.WRITE_READ)	# "w+"
+		Mdport.md_chmod(scorefile, 436)	# 0664
+
+	if scoreboard == null:
+		printerr("Could not open %s for writing: %s" % [scorefile,
+			error_string(FileAccess.get_open_error())])
 
 
 ## setup:

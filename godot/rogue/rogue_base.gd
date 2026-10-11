@@ -1459,6 +1459,14 @@ static func getcury(win: Curses.CWindow) -> int:
 	return cs.getcury(win)
 
 
+static func getmaxy(win: Curses.CWindow) -> int:
+	return cs.getmaxy(win)
+
+
+static func getmaxx(win: Curses.CWindow) -> int:
+	return cs.getmaxx(win)
+
+
 static func getcurx(win: Curses.CWindow) -> int:
 	return cs.getcurx(win)
 
