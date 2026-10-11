@@ -13,6 +13,12 @@ config_version=5
 config/name="Rogue"
 config/description="Rogue 5.4.4 (Michael Toy, Ken Arnold, Glenn Wichman), ported 1:1 to Godot."
 config/features=PackedStringArray("4.7")
+run/main_scene="res://main.tscn"
+
+[display]
+
+window/size/viewport_width=1100
+window/size/viewport_height=660
 
 [debug]
 

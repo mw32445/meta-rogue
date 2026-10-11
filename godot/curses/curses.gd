@@ -155,6 +155,8 @@ var _endwin := false
 var _halfdelay := false
 ## score() deleted curscr: only the stdout stream remains (step log writes Z).
 var curses_gone := false
+## Bumped whenever the physical screen or stdout changes (the view redraws).
+var version := 0
 ## CWindow ids for test tooling; the game uses CWindow references.
 var windows: Dictionary = {}
 
@@ -242,6 +244,7 @@ func delwin(win: CWindow) -> int:
 		touchwin(win._parent)
 	if win == curscr:
 		curses_gone = true
+		version += 1
 	return OK
 
 
@@ -566,11 +569,13 @@ func wnoutrefresh(win: CWindow) -> int:
 	else:
 		cursor_known = false
 	win._flags &= ~_HASMOVED
+	version += 1
 	return OK
 
 
 func doupdate() -> int:
 	_endwin = false
+	version += 1
 	return OK
 
 
@@ -587,6 +592,7 @@ func wrefresh(win: CWindow) -> int:
 
 func endwin() -> int:
 	_endwin = true
+	version += 1
 	return OK
 
 
@@ -638,6 +644,7 @@ func flushinp() -> int:
 func stdout_write(s: String) -> void:
 	for i in s.length():
 		stdout_bytes.append(s.unicode_at(i) & 0xFF)
+	version += 1
 
 
 ## ---- input ---------------------------------------------------------------
@@ -727,7 +734,6 @@ func read_line(size: int) -> String:
 	return s.get_string_from_ascii()
 
 
-## exit(status): record it, notify the host, and never return.
 ## Drop the suspended game: disconnecting the input signals frees the
 ## coroutine chain waiting on them (it holds this object, so it would leak).
 func abandon() -> void:
@@ -736,6 +742,7 @@ func abandon() -> void:
 			sig.disconnect(c["callable"])
 
 
+## exit(status): record it, notify the host, and never return.
 func exit_program(status: int) -> void:
 	exit_status = status
 	if exit_hook.is_valid():
