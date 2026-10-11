@@ -510,11 +510,26 @@ def main():
         for i in range(a.count):
             seed = a.first_seed + i
             rng = random.Random(seed * 7907)
-            case = {"seed": seed, "opts": opts, "master": a.master}
-            save = [32, 27, 32, 27, 27, ord("S"), ord("y")]   # leave any prompt, then save
-            runs = [(a.arg, gen_keys(rng, rng.randint(20, a.len)) + save),
-                    (["-r"], gen_keys(rng, rng.randint(20, a.len)) + save),
-                    (["-r"], gen_keys(rng, rng.randint(20, a.len)))]
+            # leave any prompt, then save (a second y overwrites a save file
+            # that a wizard-mode restore did not delete)
+            save = [32, 27, 32, 27, 27, ord("S"), ord("y"), ord("y")]
+            if a.wizard:
+                # wizard mode: quaff one kind of potion first (each one starts
+                # a different daemon or fuse), go deeper and let monsters close
+                # in (some chase objects or gold), then save
+                case = {"seed": seed, "opts": opts, "master": True}
+                o = ord
+                potion = i % 14
+                first = ([o("C"), o("!"), o("0123456789abcd"[potion]), 32, 32, o("q"), o("f"), 32, 32]
+                         + [4] * rng.randint(0, 12) + [o("s")] * rng.randint(0, 30))
+                runs = [([""], first + gen_keys_wizard(rng, rng.randint(10, a.len)) + save),
+                        (["-r"], [o("s")] * rng.randint(0, 20) + gen_keys_wizard(rng, rng.randint(10, a.len)) + save),
+                        (["-r"], gen_keys_wizard(rng, rng.randint(10, a.len)))]
+            else:
+                case = {"seed": seed, "opts": opts, "master": a.master}
+                runs = [(a.arg, gen_keys(rng, rng.randint(20, a.len)) + save),
+                        (["-r"], gen_keys(rng, rng.randint(20, a.len)) + save),
+                        (["-r"], gen_keys(rng, rng.randint(20, a.len)))]
             path = os.path.join(kdir, f"save{seed}.keys")
             write_chain(path, case, runs)
             cases.append(read_case(path))

@@ -9,6 +9,10 @@ Writes key scripts (difftest format) that the random fuzzers rarely reach:
                            then `rogue -s` prints it
   notomb-<seed>.keys       a death with ROGUEOPTS=notombstone
   deathdemo-<seed>.keys    `rogue -d`: a random death screen
+  rings-<seed>.keys        wizard mode: rings on both hands, a third, the hand prompt,
+                           a cursed ring, identify ([+N]); also with ROGUEOPTS=terse
+  scoreedit-<seed>.keys    chains: deaths fill the score file, then a wizard quits and
+                           types "names" or "edit" (deleting entries), then `rogue -s`
 
 The games are played by harness/bot.py on the oracle, so they are real games; they are
 then fixed inputs for both programs.
@@ -36,6 +40,25 @@ def ended_by_death(path, case):
     out = open(os.path.join(d, "stdout.bin"), "rb").read()
     shutil.rmtree(d, ignore_errors=True)
     return b"[Press return to continue]" in out
+
+
+def ring_keys():
+    o = ord
+    k = []
+    k += [o("C"), o("="), o("0"), o("+"), 32]        # f: ring of protection, blessed
+    k += [o("P"), o("f"), o("l"), 32]                # put it on: which hand? left
+    k += [o("C"), o("="), o("6"), 32]                # g: aggravate monster (cursed)
+    k += [o("P"), o("g"), 32]                        # right hand by itself; aggravate()
+    k += [o("C"), o("="), o("3"), 32]                # h: searching
+    k += [o("P"), o("h"), 32]                        # already a ring on each hand
+    k += [o("R"), o("x"), 32, o("r"), 32]            # which hand? x: L or R; r: cursed
+    k += [o("R"), o("l"), 32]                        # take off the left one
+    k += [o("P"), o("h"), 32]                        # left hand by itself
+    k += [o("C"), o("?"), o("9"), 32]                # i: identify ring, wand or staff
+    k += [o("r"), o("i"), 32, o("f"), 32, 32]        # identify the protection ring
+    k += [o("i"), 32, 32]                            # inventory: [+N]
+    k += [o("s")] * 30 + [27]                        # wear them a while (ring_eat)
+    return k
 
 
 def main():
@@ -96,6 +119,35 @@ def main():
             shutil.copy(p, os.path.join(a.out, f"notomb-{seed}.keys"))
             n += 1
         seed += 1
+
+    # score listing for the wizard: "names", or "edit" with deletions, then -s
+    o = ord
+    for i in range(a.seeds):
+        group = deaths[3 * i:3 * i + 3]
+        if len(group) < 3:
+            break
+        for mode in ("names", "edit"):
+            path = os.path.join(a.out, f"scoreedit-{mode}-{group[0][0]}.keys")
+            with open(path, "w") as f:
+                f.write(f"# difftest: seed={group[0][0]}\n")
+                f.write(f"# deaths fill the score file; a wizard quits and types {mode!r} at the prompt\n")
+                for s_, keys in group:
+                    f.write(f"# run: seed={s_}\n")
+                    for j in range(0, len(keys), 20):
+                        f.write(" ".join(map(str, keys[j:j + 20])) + "\n")
+                quit_keys = [o("Q"), o("y")] + [o(c) for c in mode] + [13]
+                if mode == "edit":
+                    quit_keys += [o("d"), 13, 13, o("d"), 13, 13, 13]
+                f.write(f"# run: seed={group[0][0] + 1000} master=1 arg=\n")
+                f.write(" ".join(map(str, quit_keys)) + "\n")
+                f.write(f"# run: seed={group[0][0]} arg=-s\n")
+
+    # rings
+    for seed in range(900, 900 + a.seeds):
+        difftest.write_keys(os.path.join(a.out, f"rings-{seed}.keys"), ring_keys(),
+                            {"seed": seed, "master": True, "args": [""]})
+        difftest.write_keys(os.path.join(a.out, f"rings-terse-{seed}.keys"), ring_keys(),
+                            {"seed": seed, "master": True, "args": [""], "opts": "terse"})
 
     # rogue -d: a random death screen, then return twice
     for seed in range(800, 800 + a.seeds):

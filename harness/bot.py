@@ -97,7 +97,8 @@ class Bot:
     def __init__(self, rng, master=False, goal="deep"):
         self.rng = rng
         self.master = master
-        self.goal = goal            # "deep": go down; "win": take the Amulet up and out
+        self.goal = goal            # "deep": go down; "win": take the Amulet up and out;
+                                    # "arena": wizard power-up, many levels down, fight
         self.plan = collections.deque()   # keys still to send for the current action
         self.level = 0
         self.level_keys = 0
@@ -324,8 +325,12 @@ def play(seed, max_keys, out, opts=None, master=False, args=(), goal="deep"):
     bot = Bot(random.Random(seed * 104729 + 7), master, goal)
     if master and args and args[0] == "":
         bot.plan.append(9)         # wizard ^I: level 10, a +1,+1 two-handed sword, plate mail
-        if goal == "win":          # create the Amulet of Yendor: C , 0
-            bot.plan += [32, 32, ord("C"), ord(","), ord("0"), 32, 32]
+        if goal == "win":          # create the Amulet of Yendor: C , 0, and things
+            o = ord                # that total_winner() values: a potion, a ring, a wand
+            bot.plan += [32, 32, o("C"), o(","), o("0"), 32, 32, o("C"), o("!"), o("5"), 32, 32,
+                         o("C"), o("="), o("3"), 32, 32, o("C"), o("/"), o("2"), 32, 32]
+        if goal == "arena":        # straight down to where the nasty monsters live
+            bot.plan += [32, 32] + [4] * random.Random(seed).randint(6, 24) + [32, 32]
     keys = []
     deepest = 1
     try:
@@ -367,8 +372,9 @@ def main():
     ap.add_argument("--opts")
     ap.add_argument("--master", action="store_true")
     ap.add_argument("--jobs", type=int, default=4)
-    ap.add_argument("--goal", choices=["deep", "win"], default="deep",
-                    help="win (with --master): create the Amulet and climb out")
+    ap.add_argument("--goal", choices=["deep", "win", "arena"], default="deep",
+                    help="win (with --master): create the Amulet and climb out; "
+                         "arena (with --master): power up, go 6-24 levels down, fight")
     a = ap.parse_args()
     os.makedirs(a.out_dir, exist_ok=True)
     first = a.first_seed if a.first_seed is not None else a.seed

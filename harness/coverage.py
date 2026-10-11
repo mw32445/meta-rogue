@@ -78,7 +78,10 @@ def main():
                 os.remove(f)
     files = []
     for p in a.paths:
-        files += sorted(glob.glob(os.path.join(p, "*.keys"))) if os.path.isdir(p) else [p]
+        if os.path.isdir(p):
+            files += sorted(os.path.join(dp, f) for dp, _, fs in os.walk(p) for f in fs if f.endswith(".keys"))
+        else:
+            files.append(p)
     cases = [difftest.read_case(os.path.abspath(f)) for f in files]
     for c in cases:
         for sub in difftest.runs_of(c):
