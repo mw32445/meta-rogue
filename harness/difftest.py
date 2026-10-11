@@ -8,6 +8,7 @@ the report re-runs both with full screens around it.
   difftest.py one --seed N --keys FILE [common options]
   difftest.py fuzz --count N [--len L] [--first-seed S] [--jobs J] [common options]
   difftest.py corpus [DIR]          replay every *.keys file (seed/options in its header)
+  difftest.py seeds --count N [--first-seed S]   first screen of many seeds (level generation)
 
 common options: --opts ROGUEOPTS | --no-opts, --master, --arg A, --keep, --variant V
 
@@ -78,12 +79,36 @@ def port_line(case, d, full=None):
 
 
 def run_port_batch(lines, workdir):
+    """Run the port on a batch of runs in one Godot process; returns the stderr file."""
     batch = os.path.join(workdir, f"batch{os.getpid()}_{random.random():.9f}.txt")
     with open(batch, "w") as f:
         f.write("\n".join(lines) + "\n")
-    subprocess.run([GODOT, "--headless", "--path", os.path.join(ROOT, "godot"), "--script",
-                    "res://tests/replay.gd", "--", "--batch", batch],
-                   stdout=subprocess.DEVNULL, stderr=open(batch + ".err", "w"), timeout=3600)
+    err = batch + ".err"
+    try:
+        subprocess.run([GODOT, "--headless", "--path", os.path.join(ROOT, "godot"), "--script",
+                        "res://tests/replay.gd", "--", "--batch", batch],
+                       stdout=subprocess.DEVNULL, stderr=open(err, "w"), timeout=120 + 20 * len(lines))
+    except subprocess.TimeoutExpired:
+        open(err, "a").write("TIMEOUT: the Godot batch was killed\n")
+    return err
+
+
+def port_errors(err, limit=12):
+    """The first engine errors in a port run's stderr (GDScript errors and their locations)."""
+    try:
+        lines = open(err, errors="replace").read().splitlines()
+    except FileNotFoundError:
+        return []
+    out = []
+    for i, l in enumerate(lines):
+        if "ERROR" in l or l.startswith("TIMEOUT"):
+            out.append(l.strip())
+            for m in lines[i + 1:i + 4]:
+                if m.strip().startswith(("at:", "[0]", "[1]", "[2]")):
+                    out.append("    " + m.strip())
+        if len(out) >= limit:
+            break
+    return out
 
 
 # --------------------------------------------------------------- comparing
@@ -148,7 +173,10 @@ def report(case, d, idx, a, b):
         return "\n".join(out)
     first = max(1, step - 1)
     run_oracle(case, os.path.join(d, "oracle_full"), full=first)
-    run_port_batch([port_line(case, os.path.join(d, "port_full"), full=first)], d)
+    err = run_port_batch([port_line(case, os.path.join(d, "port_full"), full=first)], d)
+    errs = port_errors(err)
+    if errs:
+        out.append("  port errors:\n    " + "\n    ".join(errs))
     ro, eo, go = full_dump(os.path.join(d, "oracle_full", "dump.txt"), step)
     rp, ep, gp = full_dump(os.path.join(d, "port_full", "dump.txt"), step)
     keys = [int(t) for t in " ".join(l.split("#")[0] for l in open(case["keys"]).read().splitlines()).split()]
@@ -290,7 +318,7 @@ def run_cases(cases, jobs, keep, batch_size=40):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["one", "fuzz", "corpus"])
+    ap.add_argument("mode", choices=["one", "fuzz", "corpus", "seeds"])
     ap.add_argument("dir", nargs="?")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--keys")
@@ -324,6 +352,19 @@ def main():
             cases.append(case)
         bad = run_cases(cases, a.jobs, a.keep)
         sys.exit(1 if bad else 0)
+    if a.mode == "seeds":
+        # level generation: the first screen (and one ESC) for many seeds
+        os.makedirs(OUT, exist_ok=True)
+        kdir = tempfile.mkdtemp(prefix="keys", dir=OUT)
+        cases = []
+        for i in range(a.count):
+            seed = a.first_seed + i
+            case = {"seed": seed, "opts": opts, "master": a.master, "args": a.arg}
+            path = os.path.join(kdir, f"seed{seed}.keys")
+            write_keys(path, [27], case)
+            case["keys"] = path
+            cases.append(case)
+        sys.exit(1 if run_cases(cases, a.jobs, a.keep, batch_size=100) else 0)
     if a.mode == "corpus":
         d = a.dir or os.path.join(HERE, "corpus")
         cases = [read_case(os.path.join(d, f)) for f in sorted(os.listdir(d)) if f.endswith(".keys")]
