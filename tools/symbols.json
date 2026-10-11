@@ -1,0 +1,8845 @@
+{
+ "functions": {
+  "_attach": {
+   "calls": [],
+   "file": "list.c",
+   "line": 45,
+   "master_only": false,
+   "params": [
+    "list",
+    "item"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING **, THING *)"
+  },
+  "_detach": {
+   "calls": [],
+   "file": "list.c",
+   "line": 27,
+   "master_only": false,
+   "params": [
+    "list",
+    "item"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING **, THING *)"
+  },
+  "_free_list": {
+   "calls": [
+    "discard"
+   ],
+   "file": "list.c",
+   "line": 67,
+   "master_only": false,
+   "params": [
+    "ptr"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING **)"
+  },
+  "accnt_maze": {
+   "calls": [],
+   "file": "rooms.c",
+   "line": 304,
+   "master_only": false,
+   "params": [
+    "y",
+    "x",
+    "ny",
+    "nx"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, int, int, int)"
+  },
+  "add_haste": {
+   "calls": [
+    "extinguish",
+    "fuse",
+    "msg",
+    "rnd",
+    "spread"
+   ],
+   "file": "misc.c",
+   "line": 383,
+   "master_only": false,
+   "params": [
+    "potion"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (bool)"
+  },
+  "add_line": {
+   "calls": [
+    "clearok",
+    "delwin",
+    "getcurx",
+    "getcury",
+    "getmaxy",
+    "leaveok",
+    "md_hasclreol",
+    "msg",
+    "mvwin",
+    "mvwprintw",
+    "newwin",
+    "strlen",
+    "subwin",
+    "waddch",
+    "waddnstr",
+    "wait_for",
+    "wclear",
+    "werase",
+    "winch",
+    "wmove",
+    "wrefresh",
+    "wtouchln"
+   ],
+   "file": "things.c",
+   "line": 473,
+   "master_only": false,
+   "params": [
+    "fmt",
+    "arg"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char (char *, char *)"
+  },
+  "add_pack": {
+   "calls": [
+    "_detach",
+    "addmsg",
+    "discard",
+    "find_obj",
+    "floor_ch",
+    "inv_name",
+    "msg",
+    "pack_char",
+    "pack_room",
+    "waddch",
+    "wmove"
+   ],
+   "file": "pack.c",
+   "line": 26,
+   "master_only": false,
+   "params": [
+    "obj",
+    "silent"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, bool)"
+  },
+  "add_pass": {
+   "calls": [
+    "waddch",
+    "wattrset",
+    "wmove"
+   ],
+   "file": "passages.c",
+   "line": 322,
+   "master_only": true,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "add_str": {
+   "calls": [],
+   "file": "misc.c",
+   "line": 370,
+   "master_only": false,
+   "params": [
+    "sp",
+    "amt"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (str_t *, int)"
+  },
+  "addmsg": {
+   "calls": [
+    "__builtin_va_end",
+    "__builtin_va_start",
+    "doadd"
+   ],
+   "file": "io.c",
+   "line": 53,
+   "master_only": false,
+   "params": [
+    "fmt"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *, ...)"
+  },
+  "aggravate": {
+   "calls": [
+    "runto"
+   ],
+   "file": "misc.c",
+   "line": 408,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "ascii_to_bin": {
+   "calls": [],
+   "file": "xcrypt.c",
+   "line": 207,
+   "master_only": false,
+   "params": [
+    "ch"
+   ],
+   "platform": true,
+   "static": true,
+   "type": "int (char)"
+  },
+  "attack": {
+   "calls": [
+    "addmsg",
+    "chg_str",
+    "death",
+    "discard",
+    "endmsg",
+    "flush_type",
+    "hit",
+    "inv_name",
+    "is_magic",
+    "leave_pack",
+    "miss",
+    "msg",
+    "remove_mon",
+    "rnd",
+    "roll",
+    "roll_em",
+    "rust_armor",
+    "save",
+    "set_mname",
+    "sprintf",
+    "status",
+    "waddch",
+    "wmove"
+   ],
+   "file": "fight.c",
+   "line": 140,
+   "master_only": false,
+   "params": [
+    "mp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (THING *)"
+  },
+  "auto_save": {
+   "calls": [
+    "exit",
+    "fopen",
+    "md_ignoreallsignals",
+    "md_unlink_open_file",
+    "save_file"
+   ],
+   "file": "save.c",
+   "line": 122,
+   "master_only": false,
+   "params": [
+    "sig"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "badcheck": {
+   "calls": [
+    "fflush",
+    "getchar",
+    "printf"
+   ],
+   "file": "init.c",
+   "line": 422,
+   "master_only": true,
+   "params": [
+    "name",
+    "info",
+    "bound"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *, struct obj_info *, int)"
+  },
+  "be_trapped": {
+   "calls": [
+    "chg_str",
+    "death",
+    "fall",
+    "flush_type",
+    "init_weapon",
+    "msg",
+    "new_item",
+    "new_level",
+    "rnd",
+    "roll",
+    "rust_armor",
+    "save",
+    "spread",
+    "swing",
+    "teleport",
+    "waddch",
+    "wmove"
+   ],
+   "file": "move.c",
+   "line": 263,
+   "master_only": false,
+   "params": [
+    "tc"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char (coord *)"
+  },
+  "bounce": {
+   "calls": [
+    "addmsg",
+    "endmsg"
+   ],
+   "file": "fight.c",
+   "line": 579,
+   "master_only": false,
+   "params": [
+    "weap",
+    "mname",
+    "noend"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, char *, bool)"
+  },
+  "call": {
+   "calls": [
+    "addmsg",
+    "free",
+    "get_item",
+    "get_str",
+    "malloc",
+    "msg",
+    "strcpy",
+    "strlen"
+   ],
+   "file": "command.c",
+   "line": 720,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "call_it": {
+   "calls": [
+    "free",
+    "get_str",
+    "malloc",
+    "msg",
+    "strcpy",
+    "strlen"
+   ],
+   "file": "misc.c",
+   "line": 546,
+   "master_only": false,
+   "params": [
+    "info"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct obj_info *)"
+  },
+  "cansee": {
+   "calls": [
+    "dist",
+    "roomin",
+    "step_ok"
+   ],
+   "file": "chase.c",
+   "line": 468,
+   "master_only": false,
+   "params": [
+    "y",
+    "x"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (int, int)"
+  },
+  "center": {
+   "calls": [
+    "strlen"
+   ],
+   "file": "rip.c",
+   "line": 282,
+   "master_only": false,
+   "params": [
+    "str"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (char *)"
+  },
+  "charge_str": {
+   "calls": [
+    "sprintf"
+   ],
+   "file": "sticks.c",
+   "line": 420,
+   "master_only": false,
+   "params": [
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(THING *)"
+  },
+  "chase": {
+   "calls": [
+    "diag_ok",
+    "dist",
+    "dist_cp",
+    "rnd",
+    "rndmove",
+    "step_ok"
+   ],
+   "file": "chase.c",
+   "line": 314,
+   "master_only": false,
+   "params": [
+    "tp",
+    "ee"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (THING *, coord *)"
+  },
+  "check_level": {
+   "calls": [
+    "msg",
+    "roll"
+   ],
+   "file": "misc.c",
+   "line": 323,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "chg_str": {
+   "calls": [
+    "add_str"
+   ],
+   "file": "misc.c",
+   "line": 349,
+   "master_only": false,
+   "params": [
+    "amt"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "choose_str": {
+   "calls": [],
+   "file": "misc.c",
+   "line": 594,
+   "master_only": false,
+   "params": [
+    "ts",
+    "ns"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(char *, char *)"
+  },
+  "come_down": {
+   "calls": [
+    "cansee",
+    "kill_daemon",
+    "msg",
+    "waddch",
+    "wattrset",
+    "wmove"
+   ],
+   "file": "daemons.c",
+   "line": 194,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "command": {
+   "calls": [
+    "__ctype_b_loc",
+    "add_pack",
+    "add_pass",
+    "addmsg",
+    "call",
+    "clearok",
+    "create_obj",
+    "current",
+    "d_level",
+    "diag_ok",
+    "discovered",
+    "do_daemons",
+    "do_fuses",
+    "do_move",
+    "do_run",
+    "do_zap",
+    "drop",
+    "eat",
+    "endmsg",
+    "exit",
+    "get_dir",
+    "get_item",
+    "help",
+    "identify",
+    "illcom",
+    "init_weapon",
+    "inventory",
+    "levit_check",
+    "look",
+    "missile",
+    "msg",
+    "new_item",
+    "new_level",
+    "option",
+    "passwd",
+    "pick_up",
+    "picky_inven",
+    "pr_list",
+    "quaff",
+    "quit",
+    "raise_level",
+    "read_scroll",
+    "readchar",
+    "ring_off",
+    "ring_on",
+    "rnd",
+    "save_game",
+    "search",
+    "see_monst",
+    "shell",
+    "show_map",
+    "spread",
+    "status",
+    "take_off",
+    "teleport",
+    "turn_see",
+    "u_level",
+    "wear",
+    "whatis",
+    "wield",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "command.c",
+   "line": 24,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "conn": {
+   "calls": [
+    "abs",
+    "door",
+    "msg",
+    "putpass",
+    "rnd"
+   ],
+   "file": "passages.c",
+   "line": 133,
+   "master_only": false,
+   "params": [
+    "r1",
+    "r2"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, int)"
+  },
+  "create_obj": {
+   "calls": [
+    "__ctype_b_loc",
+    "add_pack",
+    "fix_stick",
+    "get_num",
+    "init_weapon",
+    "msg",
+    "new_item",
+    "readchar",
+    "rnd"
+   ],
+   "file": "wizard.c",
+   "line": 128,
+   "master_only": true,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "current": {
+   "calls": [
+    "addmsg",
+    "endmsg",
+    "inv_name"
+   ],
+   "file": "command.c",
+   "line": 797,
+   "master_only": false,
+   "params": [
+    "cur",
+    "how",
+    "where"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, char *, char *)"
+  },
+  "d_level": {
+   "calls": [
+    "levit_check",
+    "msg",
+    "new_level"
+   ],
+   "file": "command.c",
+   "line": 663,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "d_slot": {
+   "calls": [
+    "msg"
+   ],
+   "file": "daemon.c",
+   "line": 33,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "struct delayed_action *()"
+  },
+  "death": {
+   "calls": [
+    "center",
+    "fflush",
+    "fgets",
+    "killname",
+    "localtime",
+    "mvprintw",
+    "my_exit",
+    "printf",
+    "printw",
+    "score",
+    "signal",
+    "sprintf",
+    "time",
+    "vowelstr",
+    "waddch",
+    "waddnstr",
+    "wclear",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "rip.c",
+   "line": 228,
+   "master_only": false,
+   "params": [
+    "monst"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char)"
+  },
+  "death_monst": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "rip.c",
+   "line": 437,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "char ()"
+  },
+  "des_cipher": {
+   "calls": [
+    "des_init",
+    "do_des",
+    "memcpy",
+    "setup_salt",
+    "xhtonl",
+    "xntohl"
+   ],
+   "file": "xcrypt.c",
+   "line": 572,
+   "master_only": false,
+   "params": [
+    "in",
+    "out",
+    "salt",
+    "count"
+   ],
+   "platform": true,
+   "static": true,
+   "type": "int (const char *, char *, int, int)"
+  },
+  "des_init": {
+   "calls": [],
+   "file": "xcrypt.c",
+   "line": 225,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": true,
+   "type": "void ()"
+  },
+  "des_setkey": {
+   "calls": [
+    "des_init",
+    "xntohl"
+   ],
+   "file": "xcrypt.c",
+   "line": 375,
+   "master_only": false,
+   "params": [
+    "key"
+   ],
+   "platform": true,
+   "static": true,
+   "type": "int (const char *)"
+  },
+  "diag_ok": {
+   "calls": [
+    "step_ok"
+   ],
+   "file": "chase.c",
+   "line": 454,
+   "master_only": false,
+   "params": [
+    "sp",
+    "ep"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (coord *, coord *)"
+  },
+  "dig": {
+   "calls": [
+    "accnt_maze",
+    "dig",
+    "putpass",
+    "rnd"
+   ],
+   "file": "rooms.c",
+   "line": 244,
+   "master_only": false,
+   "params": [
+    "y",
+    "x"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, int)"
+  },
+  "directory_exists": {
+   "calls": [
+    "stat"
+   ],
+   "file": "mdport.c",
+   "line": 596,
+   "master_only": false,
+   "params": [
+    "dirname"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (char *)"
+  },
+  "discard": {
+   "calls": [
+    "free"
+   ],
+   "file": "list.c",
+   "line": 85,
+   "master_only": false,
+   "params": [
+    "item"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "discovered": {
+   "calls": [
+    "add_line",
+    "addmsg",
+    "end_line",
+    "msg",
+    "print_disc",
+    "readchar"
+   ],
+   "file": "things.c",
+   "line": 343,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "dist": {
+   "calls": [],
+   "file": "chase.c",
+   "line": 528,
+   "master_only": false,
+   "params": [
+    "y1",
+    "x1",
+    "y2",
+    "x2"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int, int, int, int)"
+  },
+  "dist_cp": {
+   "calls": [
+    "dist"
+   ],
+   "file": "chase.c",
+   "line": 538,
+   "master_only": false,
+   "params": [
+    "c1",
+    "c2"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (coord *, coord *)"
+  },
+  "do_chase": {
+   "calls": [
+    "_attach",
+    "_detach",
+    "abs",
+    "attack",
+    "chase",
+    "dist_cp",
+    "endmsg",
+    "find_dest",
+    "fire_bolt",
+    "relocate",
+    "rnd",
+    "roomin",
+    "sign"
+   ],
+   "file": "chase.c",
+   "line": 115,
+   "master_only": false,
+   "params": [
+    "th"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (THING *)"
+  },
+  "do_daemons": {
+   "calls": [],
+   "file": "daemon.c",
+   "line": 100,
+   "master_only": false,
+   "params": [
+    "flag"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "do_des": {
+   "calls": [],
+   "file": "xcrypt.c",
+   "line": 455,
+   "master_only": false,
+   "params": [
+    "l_in",
+    "r_in",
+    "l_out",
+    "r_out",
+    "count"
+   ],
+   "platform": true,
+   "static": true,
+   "type": "int (unsigned int, unsigned int, unsigned int *, unsigned int *, int)"
+  },
+  "do_fuses": {
+   "calls": [],
+   "file": "daemon.c",
+   "line": 164,
+   "master_only": false,
+   "params": [
+    "flag"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "do_maze": {
+   "calls": [
+    "dig",
+    "putpass",
+    "rnd"
+   ],
+   "file": "rooms.c",
+   "line": 214,
+   "master_only": false,
+   "params": [
+    "rp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct room *)"
+  },
+  "do_motion": {
+   "calls": [
+    "cansee",
+    "show_floor",
+    "step_ok",
+    "waddch",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "weapons.c",
+   "line": 74,
+   "master_only": false,
+   "params": [
+    "obj",
+    "ydelta",
+    "xdelta"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, int, int)"
+  },
+  "do_move": {
+   "calls": [
+    "__ctype_b_loc",
+    "be_trapped",
+    "diag_ok",
+    "enter_room",
+    "fight",
+    "floor_at",
+    "leave_room",
+    "msg",
+    "rnd",
+    "rndmove",
+    "roomin",
+    "turn_ok",
+    "turnref",
+    "waddch",
+    "wmove"
+   ],
+   "file": "move.c",
+   "line": 43,
+   "master_only": false,
+   "params": [
+    "dy",
+    "dx"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, int)"
+  },
+  "do_passages": {
+   "calls": [
+    "conn",
+    "passnum",
+    "rnd"
+   ],
+   "file": "passages.c",
+   "line": 23,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "do_pot": {
+   "calls": [
+    "choose_str",
+    "fuse",
+    "lengthen",
+    "look",
+    "msg",
+    "spread"
+   ],
+   "file": "potions.c",
+   "line": 357,
+   "master_only": false,
+   "params": [
+    "type",
+    "knowit"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, bool)"
+  },
+  "do_rooms": {
+   "calls": [
+    "_attach",
+    "draw_room",
+    "find_floor",
+    "give_pack",
+    "new_item",
+    "new_monster",
+    "randmonster",
+    "rnd",
+    "rnd_room"
+   ],
+   "file": "rooms.c",
+   "line": 31,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "do_run": {
+   "calls": [],
+   "file": "move.c",
+   "line": 29,
+   "master_only": false,
+   "params": [
+    "ch"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char)"
+  },
+  "do_zap": {
+   "calls": [
+    "_detach",
+    "addmsg",
+    "cansee",
+    "do_motion",
+    "drain",
+    "endmsg",
+    "enter_room",
+    "find_floor",
+    "fire_bolt",
+    "get_item",
+    "hit_monster",
+    "msg",
+    "new_monster",
+    "pick_color",
+    "relocate",
+    "rnd",
+    "runto",
+    "save_throw",
+    "see_monst",
+    "step_ok",
+    "strncpy",
+    "waddch",
+    "wmove"
+   ],
+   "file": "sticks.c",
+   "line": 48,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "doadd": {
+   "calls": [
+    "endmsg",
+    "strcat",
+    "strlen",
+    "vsprintf"
+   ],
+   "file": "io.c",
+   "line": 114,
+   "master_only": false,
+   "params": [
+    "fmt",
+    "args"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *, struct __va_list_tag *)"
+  },
+  "doctor": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "daemons.c",
+   "line": 21,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "door": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "passages.c",
+   "line": 293,
+   "master_only": false,
+   "params": [
+    "rm",
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct room *, coord *)"
+  },
+  "door_open": {
+   "calls": [
+    "__ctype_b_loc",
+    "wake_monster"
+   ],
+   "file": "move.c",
+   "line": 247,
+   "master_only": false,
+   "params": [
+    "rp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct room *)"
+  },
+  "drain": {
+   "calls": [
+    "killed",
+    "msg",
+    "runto",
+    "see_monst"
+   ],
+   "file": "sticks.c",
+   "line": 249,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "draw_room": {
+   "calls": [
+    "do_maze",
+    "horiz",
+    "vert"
+   ],
+   "file": "rooms.c",
+   "line": 153,
+   "master_only": false,
+   "params": [
+    "rp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct room *)"
+  },
+  "drop": {
+   "calls": [
+    "_attach",
+    "dropcheck",
+    "get_item",
+    "inv_name",
+    "leave_pack",
+    "msg"
+   ],
+   "file": "things.c",
+   "line": 142,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "dropcheck": {
+   "calls": [
+    "chg_str",
+    "extinguish",
+    "msg",
+    "unsee",
+    "waste_time"
+   ],
+   "file": "things.c",
+   "line": 176,
+   "master_only": false,
+   "params": [
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (THING *)"
+  },
+  "eat": {
+   "calls": [
+    "check_level",
+    "choose_str",
+    "get_item",
+    "leave_pack",
+    "msg",
+    "rnd"
+   ],
+   "file": "misc.c",
+   "line": 282,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "encread": {
+   "calls": [
+    "fread"
+   ],
+   "file": "save.c",
+   "line": 307,
+   "master_only": false,
+   "params": [
+    "start",
+    "size",
+    "inf"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "size_t (char *, size_t, FILE *)"
+  },
+  "encwrite": {
+   "calls": [
+    "putc"
+   ],
+   "file": "save.c",
+   "line": 275,
+   "master_only": false,
+   "params": [
+    "start",
+    "size",
+    "outf"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "size_t (char *, size_t, FILE *)"
+  },
+  "end_line": {
+   "calls": [
+    "add_line",
+    "msg"
+   ],
+   "file": "things.c",
+   "line": 568,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "endit": {
+   "calls": [
+    "fatal"
+   ],
+   "file": "main.c",
+   "line": 161,
+   "master_only": false,
+   "params": [
+    "sig"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "endmsg": {
+   "calls": [
+    "__ctype_b_loc",
+    "look",
+    "readchar",
+    "strcpy",
+    "toupper",
+    "waddnstr",
+    "wait_for",
+    "wclrtoeol",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "io.c",
+   "line": 68,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "int ()"
+  },
+  "enter_room": {
+   "calls": [
+    "door_open",
+    "roomin",
+    "see_monst",
+    "waddch",
+    "wattrset",
+    "winch",
+    "wmove"
+   ],
+   "file": "rooms.c",
+   "line": 374,
+   "master_only": false,
+   "params": [
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (coord *)"
+  },
+  "erase_lamp": {
+   "calls": [
+    "waddch",
+    "winch",
+    "wmove"
+   ],
+   "file": "misc.c",
+   "line": 217,
+   "master_only": false,
+   "params": [
+    "pos",
+    "rp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (coord *, struct room *)"
+  },
+  "exp_add": {
+   "calls": [],
+   "file": "monsters.c",
+   "line": 98,
+   "master_only": false,
+   "params": [
+    "tp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (THING *)"
+  },
+  "extinguish": {
+   "calls": [
+    "find_slot"
+   ],
+   "file": "daemon.c",
+   "line": 150,
+   "master_only": false,
+   "params": [
+    "func"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void (*)())"
+  },
+  "fall": {
+   "calls": [
+    "_attach",
+    "cansee",
+    "discard",
+    "endmsg",
+    "fallpos",
+    "msg",
+    "waddch",
+    "wmove"
+   ],
+   "file": "weapons.c",
+   "line": 122,
+   "master_only": false,
+   "params": [
+    "obj",
+    "pr"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, bool)"
+  },
+  "fallpos": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "weapons.c",
+   "line": 265,
+   "master_only": false,
+   "params": [
+    "pos",
+    "newpos"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (coord *, coord *)"
+  },
+  "fatal": {
+   "calls": [
+    "endwin",
+    "my_exit",
+    "waddnstr",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "main.c",
+   "line": 173,
+   "master_only": false,
+   "params": [
+    "s"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *)"
+  },
+  "fight": {
+   "calls": [
+    "bounce",
+    "choose_str",
+    "endmsg",
+    "hit",
+    "killed",
+    "miss",
+    "msg",
+    "pick_color",
+    "rnd",
+    "roll_em",
+    "runto",
+    "set_mname",
+    "thunk",
+    "waddch",
+    "wmove"
+   ],
+   "file": "fight.c",
+   "line": 64,
+   "master_only": false,
+   "params": [
+    "mp",
+    "weap",
+    "thrown"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (coord *, THING *, bool)"
+  },
+  "find_dest": {
+   "calls": [
+    "rnd",
+    "roomin",
+    "see_monst"
+   ],
+   "file": "chase.c",
+   "line": 497,
+   "master_only": false,
+   "params": [
+    "tp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "coord *(THING *)"
+  },
+  "find_floor": {
+   "calls": [
+    "rnd_pos",
+    "rnd_room",
+    "step_ok"
+   ],
+   "file": "rooms.c",
+   "line": 335,
+   "master_only": false,
+   "params": [
+    "rp",
+    "cp",
+    "limit",
+    "monst"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (struct room *, coord *, int, bool)"
+  },
+  "find_list_ptr": {
+   "calls": [],
+   "file": "state.c",
+   "line": 785,
+   "master_only": false,
+   "params": [
+    "l",
+    "ptr"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (THING *, void *)"
+  },
+  "find_obj": {
+   "calls": [
+    "msg",
+    "sprintf"
+   ],
+   "file": "misc.c",
+   "line": 257,
+   "master_only": false,
+   "params": [
+    "y",
+    "x"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "THING *(int, int)"
+  },
+  "find_object_coord": {
+   "calls": [],
+   "file": "state.c",
+   "line": 1504,
+   "master_only": false,
+   "params": [
+    "objlist",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (THING *, coord *)"
+  },
+  "find_room_coord": {
+   "calls": [],
+   "file": "state.c",
+   "line": 1472,
+   "master_only": false,
+   "params": [
+    "rmlist",
+    "c",
+    "n"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (struct room *, coord *, int)"
+  },
+  "find_slot": {
+   "calls": [],
+   "file": "daemon.c",
+   "line": 51,
+   "master_only": false,
+   "params": [
+    "func"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "struct delayed_action *(void (*)())"
+  },
+  "find_thing_coord": {
+   "calls": [],
+   "file": "state.c",
+   "line": 1484,
+   "master_only": false,
+   "params": [
+    "monlist",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (THING *, coord *)"
+  },
+  "fire_bolt": {
+   "calls": [
+    "addmsg",
+    "death",
+    "endmsg",
+    "hit_monster",
+    "msg",
+    "roll",
+    "runto",
+    "save",
+    "save_throw",
+    "set_mname",
+    "strcmp",
+    "strncpy",
+    "waddch",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "sticks.c",
+   "line": 300,
+   "master_only": false,
+   "params": [
+    "start",
+    "dir",
+    "name"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (coord *, coord *, char *)"
+  },
+  "fix_stick": {
+   "calls": [
+    "rnd",
+    "strcmp",
+    "strncpy"
+   ],
+   "file": "sticks.c",
+   "line": 25,
+   "master_only": false,
+   "params": [
+    "cur"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "floor_at": {
+   "calls": [
+    "floor_ch"
+   ],
+   "file": "pack.c",
+   "line": 482,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "char ()"
+  },
+  "floor_ch": {
+   "calls": [
+    "show_floor"
+   ],
+   "file": "pack.c",
+   "line": 469,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "char ()"
+  },
+  "flush_type": {
+   "calls": [
+    "flushinp"
+   ],
+   "file": "mach_dep.c",
+   "line": 454,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "fuse": {
+   "calls": [
+    "d_slot"
+   ],
+   "file": "daemon.c",
+   "line": 120,
+   "master_only": false,
+   "params": [
+    "func",
+    "arg",
+    "time",
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void (*)(), int, int, int)"
+  },
+  "get_bool": {
+   "calls": [
+    "getcurx",
+    "getcury",
+    "readchar",
+    "waddch",
+    "waddnstr",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "options.c",
+   "line": 171,
+   "master_only": false,
+   "params": [
+    "vp",
+    "win"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (void *, WINDOW *)"
+  },
+  "get_dir": {
+   "calls": [
+    "__ctype_b_loc",
+    "msg",
+    "readchar",
+    "reset_last",
+    "rnd",
+    "tolower"
+   ],
+   "file": "misc.c",
+   "line": 463,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "bool ()"
+  },
+  "get_inv_t": {
+   "calls": [
+    "getcurx",
+    "getcury",
+    "mvwprintw",
+    "readchar",
+    "waddnstr",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "options.c",
+   "line": 325,
+   "master_only": false,
+   "params": [
+    "vp",
+    "win"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (void *, WINDOW *)"
+  },
+  "get_item": {
+   "calls": [
+    "addmsg",
+    "inventory",
+    "msg",
+    "readchar",
+    "reset_last",
+    "unctrl"
+   ],
+   "file": "pack.c",
+   "line": 385,
+   "master_only": false,
+   "params": [
+    "purpose",
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "THING *(char *, int)"
+  },
+  "get_list_item": {
+   "calls": [],
+   "file": "state.c",
+   "line": 773,
+   "master_only": false,
+   "params": [
+    "l",
+    "i"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "void *(THING *, int)"
+  },
+  "get_num": {
+   "calls": [
+    "atoi",
+    "get_str"
+   ],
+   "file": "options.c",
+   "line": 379,
+   "master_only": true,
+   "params": [
+    "vp",
+    "win"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (void *, WINDOW *)"
+  },
+  "get_sf": {
+   "calls": [
+    "erase_lamp",
+    "get_bool",
+    "look"
+   ],
+   "file": "options.c",
+   "line": 221,
+   "master_only": false,
+   "params": [
+    "vp",
+    "win"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (void *, WINDOW *)"
+  },
+  "get_str": {
+   "calls": [
+    "__ctype_b_loc",
+    "erasechar",
+    "getcurx",
+    "getcury",
+    "killchar",
+    "mvwprintw",
+    "putchar",
+    "readchar",
+    "strcpy",
+    "strlen",
+    "strucpy",
+    "unctrl",
+    "waddch",
+    "waddnstr",
+    "wclrtoeol",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "options.c",
+   "line": 250,
+   "master_only": false,
+   "params": [
+    "vopt",
+    "win"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (void *, WINDOW *)"
+  },
+  "gethand": {
+   "calls": [
+    "msg",
+    "readchar"
+   ],
+   "file": "rings.c",
+   "line": 130,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "int ()"
+  },
+  "getltchars": {
+   "calls": [
+    "md_dsuspchar",
+    "md_setdsuspchar",
+    "md_suspchar"
+   ],
+   "file": "mach_dep.c",
+   "line": 166,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "give_pack": {
+   "calls": [
+    "_attach",
+    "new_thing",
+    "rnd"
+   ],
+   "file": "monsters.c",
+   "line": 218,
+   "master_only": false,
+   "params": [
+    "tp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "help": {
+   "calls": [
+    "clearok",
+    "getmaxy",
+    "msg",
+    "readchar",
+    "unctrl",
+    "waddnstr",
+    "wait_for",
+    "wclear",
+    "wmove",
+    "wrefresh",
+    "wtouchln"
+   ],
+   "file": "command.c",
+   "line": 538,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "hit": {
+   "calls": [
+    "addmsg",
+    "endmsg",
+    "prname",
+    "rnd"
+   ],
+   "file": "fight.c",
+   "line": 523,
+   "master_only": false,
+   "params": [
+    "er",
+    "ee",
+    "noend"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *, char *, bool)"
+  },
+  "hit_monster": {
+   "calls": [
+    "fight"
+   ],
+   "file": "weapons.c",
+   "line": 196,
+   "master_only": false,
+   "params": [
+    "y",
+    "x",
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int, int, THING *)"
+  },
+  "horiz": {
+   "calls": [],
+   "file": "rooms.c",
+   "line": 195,
+   "master_only": false,
+   "params": [
+    "rp",
+    "starty"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct room *, int)"
+  },
+  "identify": {
+   "calls": [
+    "__ctype_b_loc",
+    "msg",
+    "readchar",
+    "unctrl"
+   ],
+   "file": "command.c",
+   "line": 608,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "illcom": {
+   "calls": [
+    "msg",
+    "unctrl"
+   ],
+   "file": "command.c",
+   "line": 461,
+   "master_only": false,
+   "params": [
+    "ch"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "init_check": {
+   "calls": [],
+   "file": "mach_dep.c",
+   "line": 78,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "init_colors": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "init.c",
+   "line": 240,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "init_materials": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "init.c",
+   "line": 319,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "init_names": {
+   "calls": [
+    "malloc",
+    "rnd",
+    "strcpy",
+    "strlen"
+   ],
+   "file": "init.c",
+   "line": 263,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "init_player": {
+   "calls": [
+    "add_pack",
+    "init_weapon",
+    "new_item",
+    "rnd"
+   ],
+   "file": "init.c",
+   "line": 24,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "init_probs": {
+   "calls": [
+    "sumprobs"
+   ],
+   "file": "init.c",
+   "line": 405,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "init_stones": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "init.c",
+   "line": 297,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "init_weapon": {
+   "calls": [
+    "rnd",
+    "strncpy"
+   ],
+   "file": "weapons.c",
+   "line": 161,
+   "master_only": false,
+   "params": [
+    "weap",
+    "which"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, int)"
+  },
+  "inv_name": {
+   "calls": [
+    "__ctype_b_loc",
+    "msg",
+    "nameit",
+    "num",
+    "sprintf",
+    "strcat",
+    "strcpy",
+    "strlen",
+    "tolower",
+    "toupper",
+    "unctrl",
+    "vowelstr"
+   ],
+   "file": "things.c",
+   "line": 25,
+   "master_only": false,
+   "params": [
+    "obj",
+    "drop"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(THING *, bool)"
+  },
+  "inventory": {
+   "calls": [
+    "add_line",
+    "end_line",
+    "inv_name",
+    "msg",
+    "sprintf",
+    "strcpy"
+   ],
+   "file": "pack.c",
+   "line": 248,
+   "master_only": false,
+   "params": [
+    "list",
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (THING *, int)"
+  },
+  "invis_on": {
+   "calls": [
+    "see_monst",
+    "waddch",
+    "wmove"
+   ],
+   "file": "potions.c",
+   "line": 256,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "is_current": {
+   "calls": [
+    "addmsg",
+    "msg"
+   ],
+   "file": "misc.c",
+   "line": 442,
+   "master_only": false,
+   "params": [
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (THING *)"
+  },
+  "is_magic": {
+   "calls": [],
+   "file": "potions.c",
+   "line": 232,
+   "master_only": false,
+   "params": [
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (THING *)"
+  },
+  "is_symlink": {
+   "calls": [
+    "lstat"
+   ],
+   "file": "mach_dep.c",
+   "line": 215,
+   "master_only": false,
+   "params": [
+    "sp"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "bool (char *)"
+  },
+  "kill_daemon": {
+   "calls": [
+    "find_slot"
+   ],
+   "file": "daemon.c",
+   "line": 82,
+   "master_only": false,
+   "params": [
+    "func"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void (*)())"
+  },
+  "killed": {
+   "calls": [
+    "_attach",
+    "addmsg",
+    "check_level",
+    "fallpos",
+    "flush_type",
+    "msg",
+    "new_item",
+    "remove_mon",
+    "rnd",
+    "save",
+    "set_mname",
+    "strcpy"
+   ],
+   "file": "fight.c",
+   "line": 629,
+   "master_only": false,
+   "params": [
+    "tp",
+    "pr"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, bool)"
+  },
+  "killname": {
+   "calls": [
+    "__ctype_b_loc",
+    "sprintf",
+    "strcat",
+    "vowelstr"
+   ],
+   "file": "rip.c",
+   "line": 393,
+   "master_only": false,
+   "params": [
+    "monst",
+    "doart"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(char, bool)"
+  },
+  "land": {
+   "calls": [
+    "choose_str",
+    "msg"
+   ],
+   "file": "daemons.c",
+   "line": 290,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "leave": {
+   "calls": [
+    "endwin",
+    "isendwin",
+    "mvcur",
+    "my_exit",
+    "putchar",
+    "setbuf"
+   ],
+   "file": "main.c",
+   "line": 332,
+   "master_only": false,
+   "params": [
+    "sig"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "leave_pack": {
+   "calls": [
+    "_detach",
+    "new_item"
+   ],
+   "file": "pack.c",
+   "line": 197,
+   "master_only": false,
+   "params": [
+    "obj",
+    "newobj",
+    "all"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "THING *(THING *, bool, bool)"
+  },
+  "leave_room": {
+   "calls": [
+    "__ctype_b_loc",
+    "door_open",
+    "waddch",
+    "wattrset",
+    "winch",
+    "wmove"
+   ],
+   "file": "rooms.c",
+   "line": 421,
+   "master_only": false,
+   "params": [
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (coord *)"
+  },
+  "lengthen": {
+   "calls": [
+    "find_slot"
+   ],
+   "file": "daemon.c",
+   "line": 136,
+   "master_only": false,
+   "params": [
+    "func",
+    "xtime"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void (*)(), int)"
+  },
+  "levit_check": {
+   "calls": [
+    "msg"
+   ],
+   "file": "command.c",
+   "line": 707,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "bool ()"
+  },
+  "list_size": {
+   "calls": [],
+   "file": "state.c",
+   "line": 797,
+   "master_only": false,
+   "params": [
+    "l"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (THING *)"
+  },
+  "lock_sc": {
+   "calls": [
+    "fgets",
+    "fopen",
+    "md_sleep",
+    "md_unlink",
+    "printf",
+    "stat",
+    "time"
+   ],
+   "file": "mach_dep.c",
+   "line": 374,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "bool ()"
+  },
+  "look": {
+   "calls": [
+    "erase_lamp",
+    "rnd",
+    "see_monst",
+    "step_ok",
+    "trip_ch",
+    "waddch",
+    "wake_monster",
+    "winch",
+    "wmove"
+   ],
+   "file": "misc.c",
+   "line": 27,
+   "master_only": false,
+   "params": [
+    "wakeup"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (bool)"
+  },
+  "main": {
+   "calls": [
+    "atoi",
+    "death",
+    "death_monst",
+    "endwin",
+    "exit",
+    "fflush",
+    "fuse",
+    "getenv",
+    "getltchars",
+    "idlok",
+    "init_check",
+    "init_colors",
+    "init_materials",
+    "init_names",
+    "init_player",
+    "init_probs",
+    "init_stones",
+    "initscr",
+    "md_crypt",
+    "md_gethomedir",
+    "md_getpass",
+    "md_getpid",
+    "md_getusername",
+    "md_init",
+    "md_normaluser",
+    "my_exit",
+    "new_level",
+    "newwin",
+    "open_score",
+    "parse_opts",
+    "playit",
+    "printf",
+    "restore",
+    "rnd",
+    "score",
+    "setup",
+    "spread",
+    "start_daemon",
+    "strcat",
+    "strcmp",
+    "strcpy",
+    "strlen",
+    "strncpy",
+    "strucpy",
+    "time"
+   ],
+   "file": "main.c",
+   "line": 23,
+   "master_only": false,
+   "params": [
+    "argc",
+    "argv",
+    "envp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int, char **, char **)"
+  },
+  "md_chmod": {
+   "calls": [
+    "chmod"
+   ],
+   "file": "mdport.c",
+   "line": 355,
+   "master_only": false,
+   "params": [
+    "filename",
+    "mode"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (char *, int)"
+  },
+  "md_crypt": {
+   "calls": [
+    "xcrypt"
+   ],
+   "file": "mdport.c",
+   "line": 629,
+   "master_only": false,
+   "params": [
+    "key",
+    "salt"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "char *(char *, char *)"
+  },
+  "md_dsuspchar": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 719,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_erasechar": {
+   "calls": [
+    "erasechar"
+   ],
+   "file": "mdport.c",
+   "line": 695,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_gethomedir": {
+   "calls": [
+    "getenv",
+    "getpwuid",
+    "getuid",
+    "strcmp",
+    "strlen",
+    "strncat",
+    "strncpy"
+   ],
+   "file": "mdport.c",
+   "line": 453,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "char *()"
+  },
+  "md_getpass": {
+   "calls": [
+    "getpass"
+   ],
+   "file": "mdport.c",
+   "line": 635,
+   "master_only": false,
+   "params": [
+    "prompt"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "char *(char *)"
+  },
+  "md_getpid": {
+   "calls": [
+    "getpid"
+   ],
+   "file": "mdport.c",
+   "line": 410,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_getrealname": {
+   "calls": [
+    "getpwuid",
+    "sprintf"
+   ],
+   "file": "mdport.c",
+   "line": 607,
+   "master_only": false,
+   "params": [
+    "uid"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "char *(int)"
+  },
+  "md_getshell": {
+   "calls": [
+    "getenv",
+    "getpwuid",
+    "getuid",
+    "strncpy"
+   ],
+   "file": "mdport.c",
+   "line": 520,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "char *()"
+  },
+  "md_getuid": {
+   "calls": [
+    "getuid"
+   ],
+   "file": "mdport.c",
+   "line": 400,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_getusername": {
+   "calls": [
+    "getenv",
+    "getpwuid",
+    "getuid",
+    "strncpy"
+   ],
+   "file": "mdport.c",
+   "line": 420,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "char *()"
+  },
+  "md_hasclreol": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 258,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_ignoreallsignals": {
+   "calls": [
+    "signal"
+   ],
+   "file": "mdport.c",
+   "line": 1373,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_init": {
+   "calls": [
+    "md_onsignal_exit"
+   ],
+   "file": "mdport.c",
+   "line": 114,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_killchar": {
+   "calls": [
+    "killchar"
+   ],
+   "file": "mdport.c",
+   "line": 707,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_loadav": {
+   "calls": [
+    "getloadavg"
+   ],
+   "file": "mdport.c",
+   "line": 1356,
+   "master_only": false,
+   "params": [
+    "avg"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "void (double *)"
+  },
+  "md_normaluser": {
+   "calls": [
+    "exit",
+    "getgid",
+    "getuid",
+    "perror",
+    "setresgid",
+    "setresuid"
+   ],
+   "file": "mdport.c",
+   "line": 365,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_onsignal_autosave": {
+   "calls": [
+    "signal"
+   ],
+   "file": "mdport.c",
+   "line": 217,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_onsignal_default": {
+   "calls": [
+    "signal"
+   ],
+   "file": "mdport.c",
+   "line": 141,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_onsignal_exit": {
+   "calls": [
+    "signal"
+   ],
+   "file": "mdport.c",
+   "line": 179,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_putchar": {
+   "calls": [
+    "putchar"
+   ],
+   "file": "mdport.c",
+   "line": 276,
+   "master_only": false,
+   "params": [
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "void (int)"
+  },
+  "md_raw_standend": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 309,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_raw_standout": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 286,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_readchar": {
+   "calls": [
+    "halfdelay",
+    "nocbreak",
+    "raw",
+    "tolower",
+    "toupper",
+    "wgetch"
+   ],
+   "file": "mdport.c",
+   "line": 1080,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_setdsuspchar": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 737,
+   "master_only": false,
+   "params": [
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (int)"
+  },
+  "md_setsuspchar": {
+   "calls": [
+    "tcgetattr"
+   ],
+   "file": "mdport.c",
+   "line": 774,
+   "master_only": false,
+   "params": [
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (int)"
+  },
+  "md_shellescape": {
+   "calls": [
+    "_exit",
+    "execl",
+    "fork",
+    "md_getshell",
+    "md_normaluser",
+    "perror",
+    "signal",
+    "sleep",
+    "wait"
+   ],
+   "file": "mdport.c",
+   "line": 547,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_sleep": {
+   "calls": [
+    "sleep"
+   ],
+   "file": "mdport.c",
+   "line": 510,
+   "master_only": false,
+   "params": [
+    "s"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "void (int)"
+  },
+  "md_suspchar": {
+   "calls": [
+    "tcgetattr"
+   ],
+   "file": "mdport.c",
+   "line": 756,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "int ()"
+  },
+  "md_tstphold": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 1382,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_tstpresume": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 1397,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_tstpsignal": {
+   "calls": [],
+   "file": "mdport.c",
+   "line": 1405,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "md_unlink": {
+   "calls": [
+    "unlink"
+   ],
+   "file": "mdport.c",
+   "line": 344,
+   "master_only": false,
+   "params": [
+    "file"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (char *)"
+  },
+  "md_unlink_open_file": {
+   "calls": [
+    "unlink"
+   ],
+   "file": "mdport.c",
+   "line": 332,
+   "master_only": false,
+   "params": [
+    "file",
+    "inf"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (char *, FILE *)"
+  },
+  "miss": {
+   "calls": [
+    "addmsg",
+    "endmsg",
+    "prname",
+    "rnd"
+   ],
+   "file": "fight.c",
+   "line": 553,
+   "master_only": false,
+   "params": [
+    "er",
+    "ee",
+    "noend"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *, char *, bool)"
+  },
+  "missile": {
+   "calls": [
+    "do_motion",
+    "dropcheck",
+    "fall",
+    "get_item",
+    "hit_monster",
+    "is_current",
+    "leave_pack"
+   ],
+   "file": "weapons.c",
+   "line": 45,
+   "master_only": false,
+   "params": [
+    "ydelta",
+    "xdelta"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, int)"
+  },
+  "money": {
+   "calls": [
+    "addmsg",
+    "floor_ch",
+    "msg",
+    "waddch",
+    "wmove"
+   ],
+   "file": "pack.c",
+   "line": 451,
+   "master_only": false,
+   "params": [
+    "value"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "move_monst": {
+   "calls": [
+    "do_chase"
+   ],
+   "file": "chase.c",
+   "line": 64,
+   "master_only": false,
+   "params": [
+    "tp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (THING *)"
+  },
+  "move_msg": {
+   "calls": [
+    "addmsg",
+    "inv_name",
+    "msg"
+   ],
+   "file": "pack.c",
+   "line": 339,
+   "master_only": false,
+   "params": [
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "msg": {
+   "calls": [
+    "__builtin_va_end",
+    "__builtin_va_start",
+    "doadd",
+    "endmsg",
+    "wclrtoeol",
+    "wmove"
+   ],
+   "file": "io.c",
+   "line": 24,
+   "master_only": false,
+   "params": [
+    "fmt"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (char *, ...)"
+  },
+  "my_exit": {
+   "calls": [
+    "exit",
+    "resetltchars"
+   ],
+   "file": "main.c",
+   "line": 391,
+   "master_only": false,
+   "params": [
+    "st"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "nameit": {
+   "calls": [
+    "sprintf",
+    "strlen",
+    "vowelstr"
+   ],
+   "file": "things.c",
+   "line": 618,
+   "master_only": false,
+   "params": [
+    "obj",
+    "type",
+    "which",
+    "op",
+    "prfunc"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, char *, char *, struct obj_info *, char *(*)(THING *))"
+  },
+  "new_item": {
+   "calls": [
+    "calloc",
+    "msg"
+   ],
+   "file": "list.c",
+   "line": 98,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "THING *()"
+  },
+  "new_level": {
+   "calls": [
+    "_free_list",
+    "do_passages",
+    "do_rooms",
+    "enter_room",
+    "find_floor",
+    "put_things",
+    "rnd",
+    "roomin",
+    "turn_see",
+    "visuals",
+    "waddch",
+    "wclear",
+    "wmove"
+   ],
+   "file": "new_level.c",
+   "line": 23,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "new_monster": {
+   "calls": [
+    "_attach",
+    "exp_add",
+    "rnd_thing",
+    "roll",
+    "roomin",
+    "runto",
+    "strcpy",
+    "winch",
+    "wmove"
+   ],
+   "file": "monsters.c",
+   "line": 60,
+   "master_only": false,
+   "params": [
+    "tp",
+    "type",
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, char, coord *)"
+  },
+  "new_thing": {
+   "calls": [
+    "fix_stick",
+    "init_weapon",
+    "msg",
+    "new_item",
+    "pick_one",
+    "rnd",
+    "strncpy",
+    "wait_for"
+   ],
+   "file": "things.c",
+   "line": 217,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "THING *()"
+  },
+  "nohaste": {
+   "calls": [
+    "msg"
+   ],
+   "file": "daemons.c",
+   "line": 128,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "nothing": {
+   "calls": [
+    "sprintf",
+    "strlen"
+   ],
+   "file": "things.c",
+   "line": 589,
+   "master_only": false,
+   "params": [
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(char)"
+  },
+  "nullstr": {
+   "calls": [],
+   "file": "things.c",
+   "line": 646,
+   "master_only": false,
+   "params": [
+    "ignored"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(THING *)"
+  },
+  "num": {
+   "calls": [
+    "sprintf",
+    "strlen"
+   ],
+   "file": "weapons.c",
+   "line": 210,
+   "master_only": false,
+   "params": [
+    "n1",
+    "n2",
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(int, int, char)"
+  },
+  "numpass": {
+   "calls": [
+    "numpass"
+   ],
+   "file": "passages.c",
+   "line": 387,
+   "master_only": false,
+   "params": [
+    "y",
+    "x"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, int)"
+  },
+  "open_score": {
+   "calls": [
+    "__errno_location",
+    "fflush",
+    "fopen",
+    "fprintf",
+    "md_chmod",
+    "rewind",
+    "strerror"
+   ],
+   "file": "mach_dep.c",
+   "line": 100,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "option": {
+   "calls": [
+    "clearok",
+    "getmaxy",
+    "pr_optname",
+    "putchar",
+    "waddch",
+    "waddnstr",
+    "wait_for",
+    "wclear",
+    "wmove",
+    "wrefresh",
+    "wtouchln"
+   ],
+   "file": "options.c",
+   "line": 71,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "pack_char": {
+   "calls": [],
+   "file": "pack.c",
+   "line": 232,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "char ()"
+  },
+  "pack_room": {
+   "calls": [
+    "_detach",
+    "addmsg",
+    "endmsg",
+    "floor_ch",
+    "move_msg",
+    "waddch",
+    "wmove"
+   ],
+   "file": "pack.c",
+   "line": 166,
+   "master_only": false,
+   "params": [
+    "from_floor",
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (bool, THING *)"
+  },
+  "parse_opts": {
+   "calls": [
+    "__ctype_b_loc",
+    "strcpy",
+    "strlen",
+    "strncmp",
+    "strucpy",
+    "toupper"
+   ],
+   "file": "options.c",
+   "line": 401,
+   "master_only": false,
+   "params": [
+    "str"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *)"
+  },
+  "passnum": {
+   "calls": [
+    "numpass"
+   ],
+   "file": "passages.c",
+   "line": 364,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "passwd": {
+   "calls": [
+    "md_crypt",
+    "md_erasechar",
+    "md_killchar",
+    "msg",
+    "readchar",
+    "strcmp"
+   ],
+   "file": "wizard.c",
+   "line": 239,
+   "master_only": true,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "int ()"
+  },
+  "pick_color": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "init.c",
+   "line": 444,
+   "master_only": false,
+   "params": [
+    "col"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(char *)"
+  },
+  "pick_one": {
+   "calls": [
+    "msg",
+    "rnd"
+   ],
+   "file": "things.c",
+   "line": 306,
+   "master_only": false,
+   "params": [
+    "info",
+    "nitems"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (struct obj_info *, int)"
+  },
+  "pick_up": {
+   "calls": [
+    "_detach",
+    "add_pack",
+    "discard",
+    "find_obj",
+    "money",
+    "move_msg",
+    "msg",
+    "unctrl"
+   ],
+   "file": "pack.c",
+   "line": 295,
+   "master_only": false,
+   "params": [
+    "ch"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char)"
+  },
+  "picky_inven": {
+   "calls": [
+    "inv_name",
+    "msg",
+    "readchar",
+    "unctrl"
+   ],
+   "file": "pack.c",
+   "line": 352,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "playit": {
+   "calls": [
+    "baudrate",
+    "command",
+    "endit",
+    "getenv",
+    "md_hasclreol",
+    "parse_opts",
+    "roomin"
+   ],
+   "file": "main.c",
+   "line": 252,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "playltchars": {
+   "calls": [
+    "md_setdsuspchar",
+    "md_suspchar"
+   ],
+   "file": "mach_dep.c",
+   "line": 190,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void (void)"
+  },
+  "pr_list": {
+   "calls": [
+    "addmsg",
+    "msg",
+    "pr_spec",
+    "readchar"
+   ],
+   "file": "things.c",
+   "line": 659,
+   "master_only": true,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "pr_optname": {
+   "calls": [
+    "wprintw"
+   ],
+   "file": "options.c",
+   "line": 128,
+   "master_only": false,
+   "params": [
+    "op"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (OPTION *)"
+  },
+  "pr_spec": {
+   "calls": [
+    "add_line",
+    "end_line",
+    "sprintf"
+   ],
+   "file": "things.c",
+   "line": 695,
+   "master_only": true,
+   "params": [
+    "info",
+    "nitems"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct obj_info *, int)"
+  },
+  "print_disc": {
+   "calls": [
+    "add_line",
+    "inv_name",
+    "nothing",
+    "set_order"
+   ],
+   "file": "things.c",
+   "line": 403,
+   "master_only": false,
+   "params": [
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char)"
+  },
+  "prname": {
+   "calls": [
+    "strcpy",
+    "toupper"
+   ],
+   "file": "fight.c",
+   "line": 485,
+   "master_only": false,
+   "params": [
+    "mname",
+    "upper"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(char *, bool)"
+  },
+  "put_bool": {
+   "calls": [
+    "waddnstr"
+   ],
+   "file": "options.c",
+   "line": 139,
+   "master_only": false,
+   "params": [
+    "b"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void *)"
+  },
+  "put_inv_t": {
+   "calls": [
+    "waddnstr"
+   ],
+   "file": "options.c",
+   "line": 161,
+   "master_only": false,
+   "params": [
+    "ip"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void *)"
+  },
+  "put_str": {
+   "calls": [
+    "waddnstr"
+   ],
+   "file": "options.c",
+   "line": 150,
+   "master_only": false,
+   "params": [
+    "str"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void *)"
+  },
+  "put_things": {
+   "calls": [
+    "_attach",
+    "find_floor",
+    "new_item",
+    "new_thing",
+    "rnd",
+    "strncpy",
+    "treas_room"
+   ],
+   "file": "new_level.c",
+   "line": 124,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "putpass": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "passages.c",
+   "line": 274,
+   "master_only": false,
+   "params": [
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (coord *)"
+  },
+  "quaff": {
+   "calls": [
+    "add_haste",
+    "add_str",
+    "call_it",
+    "chg_str",
+    "choose_str",
+    "come_down",
+    "discard",
+    "do_pot",
+    "fuse",
+    "get_item",
+    "invis_on",
+    "is_magic",
+    "leave_pack",
+    "msg",
+    "raise_level",
+    "rnd",
+    "roll",
+    "seen_stairs",
+    "show_win",
+    "sight",
+    "spread",
+    "sprintf",
+    "start_daemon",
+    "status",
+    "turn_see",
+    "waddch",
+    "wclear",
+    "wmove"
+   ],
+   "file": "potions.c",
+   "line": 59,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "quit": {
+   "calls": [
+    "getcurx",
+    "getcury",
+    "msg",
+    "mvprintw",
+    "my_exit",
+    "readchar",
+    "score",
+    "signal",
+    "status",
+    "wclear",
+    "wclrtoeol",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "main.c",
+   "line": 290,
+   "master_only": false,
+   "params": [
+    "sig"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "raise_level": {
+   "calls": [
+    "check_level"
+   ],
+   "file": "potions.c",
+   "line": 344,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "randmonster": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "monsters.c",
+   "line": 37,
+   "master_only": false,
+   "params": [
+    "wander"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char (bool)"
+  },
+  "rd_score": {
+   "calls": [
+    "encread",
+    "rewind",
+    "sscanf"
+   ],
+   "file": "save.c",
+   "line": 342,
+   "master_only": false,
+   "params": [
+    "top_ten"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (SCORE *)"
+  },
+  "read_scroll": {
+   "calls": [
+    "addmsg",
+    "aggravate",
+    "call_it",
+    "choose_str",
+    "discard",
+    "endmsg",
+    "find_obj",
+    "get_item",
+    "leave_pack",
+    "look",
+    "msg",
+    "new_item",
+    "new_monster",
+    "pick_color",
+    "randmonster",
+    "rnd",
+    "show_win",
+    "spread",
+    "status",
+    "step_ok",
+    "teleport",
+    "uncurse",
+    "waddch",
+    "wclear",
+    "whatis",
+    "wmove"
+   ],
+   "file": "scrolls.c",
+   "line": 23,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "readchar": {
+   "calls": [
+    "md_readchar",
+    "quit"
+   ],
+   "file": "io.c",
+   "line": 151,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "char ()"
+  },
+  "relocate": {
+   "calls": [
+    "find_dest",
+    "roomin",
+    "see_monst",
+    "set_oldch",
+    "waddch",
+    "wattrset",
+    "wmove"
+   ],
+   "file": "chase.c",
+   "line": 82,
+   "master_only": false,
+   "params": [
+    "th",
+    "new_loc"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, coord *)"
+  },
+  "remove_mon": {
+   "calls": [
+    "_detach",
+    "discard",
+    "fall",
+    "flush_type",
+    "waddch",
+    "wmove"
+   ],
+   "file": "fight.c",
+   "line": 597,
+   "master_only": false,
+   "params": [
+    "mp",
+    "tp",
+    "waskill"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (coord *, THING *, bool)"
+  },
+  "reset_last": {
+   "calls": [],
+   "file": "pack.c",
+   "line": 498,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "resetltchars": {
+   "calls": [
+    "md_setdsuspchar"
+   ],
+   "file": "mach_dep.c",
+   "line": 178,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void (void)"
+  },
+  "restore": {
+   "calls": [
+    "clearok",
+    "encread",
+    "endwin",
+    "fflush",
+    "fopen",
+    "initscr",
+    "is_symlink",
+    "keypad",
+    "md_getpid",
+    "md_tstphold",
+    "md_tstpresume",
+    "md_unlink_open_file",
+    "msg",
+    "newwin",
+    "perror",
+    "playit",
+    "printf",
+    "rs_restore_file",
+    "setup",
+    "srand",
+    "sscanf",
+    "stat",
+    "strcmp",
+    "strcpy",
+    "strlen"
+   ],
+   "file": "save.c",
+   "line": 163,
+   "master_only": false,
+   "params": [
+    "file",
+    "envp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (char *, char **)"
+  },
+  "ring_eat": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "rings.c",
+   "line": 159,
+   "master_only": false,
+   "params": [
+    "hand"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int)"
+  },
+  "ring_num": {
+   "calls": [
+    "num",
+    "sprintf"
+   ],
+   "file": "rings.c",
+   "line": 187,
+   "master_only": false,
+   "params": [
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(THING *)"
+  },
+  "ring_off": {
+   "calls": [
+    "dropcheck",
+    "gethand",
+    "inv_name",
+    "msg"
+   ],
+   "file": "rings.c",
+   "line": 94,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "ring_on": {
+   "calls": [
+    "addmsg",
+    "aggravate",
+    "chg_str",
+    "get_item",
+    "gethand",
+    "inv_name",
+    "invis_on",
+    "is_current",
+    "msg"
+   ],
+   "file": "rings.c",
+   "line": 22,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "rnd": {
+   "calls": [
+    "abs"
+   ],
+   "file": "main.c",
+   "line": 186,
+   "master_only": false,
+   "params": [
+    "range"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int)"
+  },
+  "rnd_pos": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "rooms.c",
+   "line": 323,
+   "master_only": false,
+   "params": [
+    "rp",
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct room *, coord *)"
+  },
+  "rnd_room": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "new_level.c",
+   "line": 107,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "int ()"
+  },
+  "rnd_thing": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "misc.c",
+   "line": 574,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "char ()"
+  },
+  "rndmove": {
+   "calls": [
+    "diag_ok",
+    "rnd",
+    "step_ok"
+   ],
+   "file": "move.c",
+   "line": 361,
+   "master_only": false,
+   "params": [
+    "who"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "coord *(THING *)"
+  },
+  "roll": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "main.c",
+   "line": 196,
+   "master_only": false,
+   "params": [
+    "number",
+    "sides"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int, int)"
+  },
+  "roll_em": {
+   "calls": [
+    "atoi",
+    "msg",
+    "roll",
+    "strchr",
+    "swing"
+   ],
+   "file": "fight.c",
+   "line": 391,
+   "master_only": false,
+   "params": [
+    "thatt",
+    "thdef",
+    "weap",
+    "hurl"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (THING *, THING *, THING *, bool)"
+  },
+  "rollwand": {
+   "calls": [
+    "fuse",
+    "kill_daemon",
+    "roll",
+    "spread",
+    "wanderer"
+   ],
+   "file": "daemons.c",
+   "line": 64,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "roomin": {
+   "calls": [
+    "abort",
+    "msg"
+   ],
+   "file": "chase.c",
+   "line": 425,
+   "master_only": false,
+   "params": [
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "struct room *(coord *)"
+  },
+  "rs_fix_thing": {
+   "calls": [
+    "get_list_item"
+   ],
+   "file": "state.c",
+   "line": 1690,
+   "master_only": false,
+   "params": [
+    "t"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "rs_fix_thing_list": {
+   "calls": [
+    "rs_fix_thing"
+   ],
+   "file": "state.c",
+   "line": 1771,
+   "master_only": false,
+   "params": [
+    "list"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "rs_read": {
+   "calls": [
+    "encread"
+   ],
+   "file": "state.c",
+   "line": 88,
+   "master_only": false,
+   "params": [
+    "inf",
+    "ptr",
+    "size"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, void *, size_t)"
+  },
+  "rs_read_boolean": {
+   "calls": [
+    "rs_read"
+   ],
+   "file": "state.c",
+   "line": 251,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, bool *)"
+  },
+  "rs_read_booleans": {
+   "calls": [
+    "rs_read_boolean",
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 283,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, bool *, int)"
+  },
+  "rs_read_char": {
+   "calls": [
+    "rs_read"
+   ],
+   "file": "state.c",
+   "line": 160,
+   "master_only": false,
+   "params": [
+    "inf",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char *)"
+  },
+  "rs_read_chars": {
+   "calls": [
+    "rs_read",
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 183,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char *, int)"
+  },
+  "rs_read_coord": {
+   "calls": [
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 699,
+   "master_only": false,
+   "params": [
+    "inf",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, coord *)"
+  },
+  "rs_read_daemons": {
+   "calls": [
+    "rs_read_int",
+    "rs_read_marker"
+   ],
+   "file": "state.c",
+   "line": 1068,
+   "master_only": false,
+   "params": [
+    "inf",
+    "d_list",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct delayed_action *, int)"
+  },
+  "rs_read_int": {
+   "calls": [
+    "rs_read"
+   ],
+   "file": "state.c",
+   "line": 123,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, int *)"
+  },
+  "rs_read_ints": {
+   "calls": [
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 218,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, int *, int)"
+  },
+  "rs_read_marker": {
+   "calls": [
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 490,
+   "master_only": false,
+   "params": [
+    "inf",
+    "id"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, int)"
+  },
+  "rs_read_monsters": {
+   "calls": [
+    "rs_read_int",
+    "rs_read_marker",
+    "rs_read_stats"
+   ],
+   "file": "state.c",
+   "line": 1318,
+   "master_only": false,
+   "params": [
+    "inf",
+    "m",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct monster *, int)"
+  },
+  "rs_read_new_string": {
+   "calls": [
+    "malloc",
+    "rs_read_chars",
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 543,
+   "master_only": false,
+   "params": [
+    "inf",
+    "s"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char **)"
+  },
+  "rs_read_new_strings": {
+   "calls": [
+    "rs_read_int",
+    "rs_read_new_string"
+   ],
+   "file": "state.c",
+   "line": 609,
+   "master_only": false,
+   "params": [
+    "inf",
+    "s",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char **, int)"
+  },
+  "rs_read_obj_info": {
+   "calls": [
+    "rs_read_boolean",
+    "rs_read_int",
+    "rs_read_marker",
+    "rs_read_new_string"
+   ],
+   "file": "state.c",
+   "line": 1150,
+   "master_only": false,
+   "params": [
+    "inf",
+    "mi",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct obj_info *, int)"
+  },
+  "rs_read_object": {
+   "calls": [
+    "rs_read_char",
+    "rs_read_chars",
+    "rs_read_coord",
+    "rs_read_int",
+    "rs_read_marker",
+    "rs_read_new_string"
+   ],
+   "file": "state.c",
+   "line": 1363,
+   "master_only": false,
+   "params": [
+    "inf",
+    "o"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *)"
+  },
+  "rs_read_object_list": {
+   "calls": [
+    "memset",
+    "new_item",
+    "rs_read_int",
+    "rs_read_marker",
+    "rs_read_object"
+   ],
+   "file": "state.c",
+   "line": 1403,
+   "master_only": false,
+   "params": [
+    "inf",
+    "list"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING **)"
+  },
+  "rs_read_object_reference": {
+   "calls": [
+    "get_list_item",
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 1457,
+   "master_only": false,
+   "params": [
+    "inf",
+    "list",
+    "item"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *, THING **)"
+  },
+  "rs_read_places": {
+   "calls": [
+    "rs_read_char",
+    "rs_read_thing_reference"
+   ],
+   "file": "state.c",
+   "line": 1864,
+   "master_only": false,
+   "params": [
+    "inf",
+    "places",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, PLACE *, int)"
+  },
+  "rs_read_potions": {
+   "calls": [
+    "rs_read_string_index"
+   ],
+   "file": "state.c",
+   "line": 928,
+   "master_only": false,
+   "params": [
+    "inf"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_read_rings": {
+   "calls": [
+    "rs_read_stone_index"
+   ],
+   "file": "state.c",
+   "line": 956,
+   "master_only": false,
+   "params": [
+    "inf"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_read_room": {
+   "calls": [
+    "rs_read_coord",
+    "rs_read_int",
+    "rs_read_short"
+   ],
+   "file": "state.c",
+   "line": 1206,
+   "master_only": false,
+   "params": [
+    "inf",
+    "r"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct room *)"
+  },
+  "rs_read_room_reference": {
+   "calls": [
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 1286,
+   "master_only": false,
+   "params": [
+    "inf",
+    "rp"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct room **)"
+  },
+  "rs_read_rooms": {
+   "calls": [
+    "rs_read_int",
+    "rs_read_room"
+   ],
+   "file": "state.c",
+   "line": 1250,
+   "master_only": false,
+   "params": [
+    "inf",
+    "r",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct room *, int)"
+  },
+  "rs_read_scrolls": {
+   "calls": [
+    "rs_read_new_string"
+   ],
+   "file": "state.c",
+   "line": 900,
+   "master_only": false,
+   "params": [
+    "inf"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_read_short": {
+   "calls": [
+    "rs_read"
+   ],
+   "file": "state.c",
+   "line": 324,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, short *)"
+  },
+  "rs_read_shorts": {
+   "calls": [
+    "rs_read_int",
+    "rs_read_short"
+   ],
+   "file": "state.c",
+   "line": 365,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, short *, int)"
+  },
+  "rs_read_stats": {
+   "calls": [
+    "rs_read_chars",
+    "rs_read_int",
+    "rs_read_marker",
+    "rs_read_str_t"
+   ],
+   "file": "state.c",
+   "line": 828,
+   "master_only": false,
+   "params": [
+    "inf",
+    "s"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct stats *)"
+  },
+  "rs_read_sticks": {
+   "calls": [
+    "rs_read_int",
+    "rs_read_string_index"
+   ],
+   "file": "state.c",
+   "line": 995,
+   "master_only": false,
+   "params": [
+    "inf"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_read_stone_index": {
+   "calls": [
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 866,
+   "master_only": false,
+   "params": [
+    "inf",
+    "master",
+    "maxindex",
+    "str"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, STONE *, int, char **)"
+  },
+  "rs_read_str_t": {
+   "calls": [
+    "rs_read_uint"
+   ],
+   "file": "state.c",
+   "line": 676,
+   "master_only": false,
+   "params": [
+    "inf",
+    "st"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, str_t *)"
+  },
+  "rs_read_string": {
+   "calls": [
+    "rs_read_chars",
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 525,
+   "master_only": false,
+   "params": [
+    "inf",
+    "s",
+    "max"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char *, int)"
+  },
+  "rs_read_string_index": {
+   "calls": [
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 645,
+   "master_only": false,
+   "params": [
+    "inf",
+    "master",
+    "maxindex",
+    "str"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char **, int, char **)"
+  },
+  "rs_read_strings": {
+   "calls": [
+    "rs_read_int",
+    "rs_read_string"
+   ],
+   "file": "state.c",
+   "line": 588,
+   "master_only": false,
+   "params": [
+    "inf",
+    "s",
+    "count",
+    "max"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char **, int, int)"
+  },
+  "rs_read_thing": {
+   "calls": [
+    "get_list_item",
+    "rs_read_boolean",
+    "rs_read_char",
+    "rs_read_coord",
+    "rs_read_int",
+    "rs_read_marker",
+    "rs_read_object_list",
+    "rs_read_room_reference",
+    "rs_read_short",
+    "rs_read_stats"
+   ],
+   "file": "state.c",
+   "line": 1613,
+   "master_only": false,
+   "params": [
+    "inf",
+    "t"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *)"
+  },
+  "rs_read_thing_list": {
+   "calls": [
+    "new_item",
+    "rs_read_int",
+    "rs_read_marker",
+    "rs_read_thing"
+   ],
+   "file": "state.c",
+   "line": 1733,
+   "master_only": false,
+   "params": [
+    "inf",
+    "list"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING **)"
+  },
+  "rs_read_thing_reference": {
+   "calls": [
+    "get_list_item",
+    "rs_read_int"
+   ],
+   "file": "state.c",
+   "line": 1800,
+   "master_only": false,
+   "params": [
+    "inf",
+    "list",
+    "item"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *, THING **)"
+  },
+  "rs_read_thing_references": {
+   "calls": [
+    "rs_read_thing_reference"
+   ],
+   "file": "state.c",
+   "line": 1832,
+   "master_only": false,
+   "params": [
+    "inf",
+    "list",
+    "items",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *, THING **, int)"
+  },
+  "rs_read_uint": {
+   "calls": [
+    "rs_read"
+   ],
+   "file": "state.c",
+   "line": 453,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, unsigned int *)"
+  },
+  "rs_read_ushort": {
+   "calls": [
+    "rs_read"
+   ],
+   "file": "state.c",
+   "line": 406,
+   "master_only": false,
+   "params": [
+    "inf",
+    "i"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, unsigned short *)"
+  },
+  "rs_read_window": {
+   "calls": [
+    "getmaxx",
+    "getmaxy",
+    "rs_read_int",
+    "rs_read_marker",
+    "waddch",
+    "wmove"
+   ],
+   "file": "state.c",
+   "line": 742,
+   "master_only": false,
+   "params": [
+    "inf",
+    "win"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, WINDOW *)"
+  },
+  "rs_restore_file": {
+   "calls": [
+    "rs_fix_thing",
+    "rs_fix_thing_list",
+    "rs_read_boolean",
+    "rs_read_booleans",
+    "rs_read_char",
+    "rs_read_chars",
+    "rs_read_coord",
+    "rs_read_daemons",
+    "rs_read_int",
+    "rs_read_ints",
+    "rs_read_monsters",
+    "rs_read_new_string",
+    "rs_read_new_strings",
+    "rs_read_obj_info",
+    "rs_read_object_list",
+    "rs_read_object_reference",
+    "rs_read_places",
+    "rs_read_potions",
+    "rs_read_rings",
+    "rs_read_room_reference",
+    "rs_read_rooms",
+    "rs_read_scrolls",
+    "rs_read_stats",
+    "rs_read_sticks",
+    "rs_read_thing",
+    "rs_read_thing_list",
+    "rs_read_window"
+   ],
+   "file": "state.c",
+   "line": 2010,
+   "master_only": false,
+   "params": [
+    "inf"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_save_file": {
+   "calls": [
+    "rs_write_boolean",
+    "rs_write_booleans",
+    "rs_write_char",
+    "rs_write_chars",
+    "rs_write_coord",
+    "rs_write_daemons",
+    "rs_write_int",
+    "rs_write_ints",
+    "rs_write_monsters",
+    "rs_write_obj_info",
+    "rs_write_object_list",
+    "rs_write_object_reference",
+    "rs_write_places",
+    "rs_write_potions",
+    "rs_write_rings",
+    "rs_write_room_reference",
+    "rs_write_rooms",
+    "rs_write_scrolls",
+    "rs_write_stats",
+    "rs_write_sticks",
+    "rs_write_string",
+    "rs_write_strings",
+    "rs_write_thing",
+    "rs_write_thing_list",
+    "rs_write_window"
+   ],
+   "file": "state.c",
+   "line": 1882,
+   "master_only": false,
+   "params": [
+    "savef"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_write": {
+   "calls": [
+    "encwrite"
+   ],
+   "file": "state.c",
+   "line": 76,
+   "master_only": false,
+   "params": [
+    "savef",
+    "ptr",
+    "size"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, void *, size_t)"
+  },
+  "rs_write_boolean": {
+   "calls": [
+    "rs_write"
+   ],
+   "file": "state.c",
+   "line": 238,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, int)"
+  },
+  "rs_write_booleans": {
+   "calls": [
+    "rs_write_boolean",
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 266,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, bool *, int)"
+  },
+  "rs_write_char": {
+   "calls": [
+    "rs_write"
+   ],
+   "file": "state.c",
+   "line": 149,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char)"
+  },
+  "rs_write_chars": {
+   "calls": [
+    "rs_write",
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 171,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char *, int)"
+  },
+  "rs_write_coord": {
+   "calls": [
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 687,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, coord)"
+  },
+  "rs_write_daemons": {
+   "calls": [
+    "rs_write_int",
+    "rs_write_marker"
+   ],
+   "file": "state.c",
+   "line": 1022,
+   "master_only": false,
+   "params": [
+    "savef",
+    "d_list",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct delayed_action *, int)"
+  },
+  "rs_write_int": {
+   "calls": [
+    "rs_write"
+   ],
+   "file": "state.c",
+   "line": 100,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, int)"
+  },
+  "rs_write_ints": {
+   "calls": [
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 201,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, int *, int)"
+  },
+  "rs_write_marker": {
+   "calls": [
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 479,
+   "master_only": false,
+   "params": [
+    "savef",
+    "id"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, int)"
+  },
+  "rs_write_monsters": {
+   "calls": [
+    "rs_write_int",
+    "rs_write_marker",
+    "rs_write_stats"
+   ],
+   "file": "state.c",
+   "line": 1301,
+   "master_only": false,
+   "params": [
+    "savef",
+    "m",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct monster *, int)"
+  },
+  "rs_write_obj_info": {
+   "calls": [
+    "rs_write_boolean",
+    "rs_write_int",
+    "rs_write_marker",
+    "rs_write_string"
+   ],
+   "file": "state.c",
+   "line": 1127,
+   "master_only": false,
+   "params": [
+    "savef",
+    "i",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct obj_info *, int)"
+  },
+  "rs_write_object": {
+   "calls": [
+    "rs_write_char",
+    "rs_write_chars",
+    "rs_write_coord",
+    "rs_write_int",
+    "rs_write_marker",
+    "rs_write_string"
+   ],
+   "file": "state.c",
+   "line": 1339,
+   "master_only": false,
+   "params": [
+    "savef",
+    "o"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *)"
+  },
+  "rs_write_object_list": {
+   "calls": [
+    "list_size",
+    "rs_write_int",
+    "rs_write_marker",
+    "rs_write_object"
+   ],
+   "file": "state.c",
+   "line": 1388,
+   "master_only": false,
+   "params": [
+    "savef",
+    "l"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *)"
+  },
+  "rs_write_object_reference": {
+   "calls": [
+    "find_list_ptr",
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 1442,
+   "master_only": false,
+   "params": [
+    "savef",
+    "list",
+    "item"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *, THING *)"
+  },
+  "rs_write_places": {
+   "calls": [
+    "rs_write_char",
+    "rs_write_thing_reference"
+   ],
+   "file": "state.c",
+   "line": 1846,
+   "master_only": false,
+   "params": [
+    "savef",
+    "places",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, PLACE *, int)"
+  },
+  "rs_write_potions": {
+   "calls": [
+    "rs_write_string_index"
+   ],
+   "file": "state.c",
+   "line": 914,
+   "master_only": false,
+   "params": [
+    "savef"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_write_rings": {
+   "calls": [
+    "rs_write_stone_index"
+   ],
+   "file": "state.c",
+   "line": 942,
+   "master_only": false,
+   "params": [
+    "savef"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_write_room": {
+   "calls": [
+    "rs_write_coord",
+    "rs_write_int",
+    "rs_write_short"
+   ],
+   "file": "state.c",
+   "line": 1178,
+   "master_only": false,
+   "params": [
+    "savef",
+    "r"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct room *)"
+  },
+  "rs_write_room_reference": {
+   "calls": [
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 1269,
+   "master_only": false,
+   "params": [
+    "savef",
+    "rp"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct room *)"
+  },
+  "rs_write_rooms": {
+   "calls": [
+    "rs_write_int",
+    "rs_write_room"
+   ],
+   "file": "state.c",
+   "line": 1234,
+   "master_only": false,
+   "params": [
+    "savef",
+    "r",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct room *, int)"
+  },
+  "rs_write_scrolls": {
+   "calls": [
+    "rs_write_string"
+   ],
+   "file": "state.c",
+   "line": 886,
+   "master_only": false,
+   "params": [
+    "savef"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_write_short": {
+   "calls": [
+    "rs_write"
+   ],
+   "file": "state.c",
+   "line": 303,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, short)"
+  },
+  "rs_write_shorts": {
+   "calls": [
+    "rs_write_int",
+    "rs_write_short"
+   ],
+   "file": "state.c",
+   "line": 348,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, short *, int)"
+  },
+  "rs_write_stats": {
+   "calls": [
+    "rs_write_chars",
+    "rs_write_int",
+    "rs_write_marker",
+    "rs_write_str_t"
+   ],
+   "file": "state.c",
+   "line": 810,
+   "master_only": false,
+   "params": [
+    "savef",
+    "s"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, struct stats *)"
+  },
+  "rs_write_sticks": {
+   "calls": [
+    "rs_write_int",
+    "rs_write_string_index",
+    "strcmp"
+   ],
+   "file": "state.c",
+   "line": 970,
+   "master_only": false,
+   "params": [
+    "savef"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *)"
+  },
+  "rs_write_stone_index": {
+   "calls": [
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 846,
+   "master_only": false,
+   "params": [
+    "savef",
+    "master",
+    "max",
+    "str"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, STONE *, int, const char *)"
+  },
+  "rs_write_str_t": {
+   "calls": [
+    "rs_write_uint"
+   ],
+   "file": "state.c",
+   "line": 665,
+   "master_only": false,
+   "params": [
+    "savef",
+    "st"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, str_t)"
+  },
+  "rs_write_string": {
+   "calls": [
+    "rs_write_chars",
+    "rs_write_int",
+    "strlen"
+   ],
+   "file": "state.c",
+   "line": 509,
+   "master_only": false,
+   "params": [
+    "savef",
+    "s"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char *)"
+  },
+  "rs_write_string_index": {
+   "calls": [
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 630,
+   "master_only": false,
+   "params": [
+    "savef",
+    "master",
+    "max",
+    "str"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char **, int, const char *)"
+  },
+  "rs_write_strings": {
+   "calls": [
+    "rs_write_int",
+    "rs_write_string"
+   ],
+   "file": "state.c",
+   "line": 571,
+   "master_only": false,
+   "params": [
+    "savef",
+    "s",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, char **, int)"
+  },
+  "rs_write_thing": {
+   "calls": [
+    "find_object_coord",
+    "find_room_coord",
+    "find_thing_coord",
+    "rs_write_boolean",
+    "rs_write_char",
+    "rs_write_coord",
+    "rs_write_int",
+    "rs_write_marker",
+    "rs_write_object_list",
+    "rs_write_room_reference",
+    "rs_write_short",
+    "rs_write_stats"
+   ],
+   "file": "state.c",
+   "line": 1524,
+   "master_only": false,
+   "params": [
+    "savef",
+    "t"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *)"
+  },
+  "rs_write_thing_list": {
+   "calls": [
+    "list_size",
+    "rs_write_int",
+    "rs_write_marker",
+    "rs_write_thing"
+   ],
+   "file": "state.c",
+   "line": 1708,
+   "master_only": false,
+   "params": [
+    "savef",
+    "l"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *)"
+  },
+  "rs_write_thing_reference": {
+   "calls": [
+    "find_list_ptr",
+    "rs_write_int"
+   ],
+   "file": "state.c",
+   "line": 1780,
+   "master_only": false,
+   "params": [
+    "savef",
+    "list",
+    "item"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *, THING *)"
+  },
+  "rs_write_thing_references": {
+   "calls": [
+    "rs_write_thing_reference"
+   ],
+   "file": "state.c",
+   "line": 1818,
+   "master_only": false,
+   "params": [
+    "savef",
+    "list",
+    "items",
+    "count"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, THING *, THING **, int)"
+  },
+  "rs_write_uint": {
+   "calls": [
+    "rs_write"
+   ],
+   "file": "state.c",
+   "line": 430,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, unsigned int)"
+  },
+  "rs_write_ushort": {
+   "calls": [
+    "rs_write"
+   ],
+   "file": "state.c",
+   "line": 385,
+   "master_only": false,
+   "params": [
+    "savef",
+    "c"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, unsigned short)"
+  },
+  "rs_write_window": {
+   "calls": [
+    "getmaxx",
+    "getmaxy",
+    "rs_write_int",
+    "rs_write_marker",
+    "winch",
+    "wmove"
+   ],
+   "file": "state.c",
+   "line": 719,
+   "master_only": false,
+   "params": [
+    "savef",
+    "win"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "int (FILE *, WINDOW *)"
+  },
+  "runners": {
+   "calls": [
+    "dist_cp",
+    "endmsg",
+    "move_monst"
+   ],
+   "file": "chase.c",
+   "line": 26,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "runto": {
+   "calls": [
+    "find_dest",
+    "msg"
+   ],
+   "file": "chase.c",
+   "line": 286,
+   "master_only": false,
+   "params": [
+    "runner"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (coord *)"
+  },
+  "rust_armor": {
+   "calls": [
+    "msg"
+   ],
+   "file": "move.c",
+   "line": 406,
+   "master_only": false,
+   "params": [
+    "arm"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "save": {
+   "calls": [
+    "save_throw"
+   ],
+   "file": "monsters.c",
+   "line": 242,
+   "master_only": false,
+   "params": [
+    "which"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int)"
+  },
+  "save_file": {
+   "calls": [
+    "encwrite",
+    "endwin",
+    "exit",
+    "fclose",
+    "fflush",
+    "md_chmod",
+    "mvcur",
+    "putchar",
+    "resetltchars",
+    "rs_save_file",
+    "sprintf",
+    "strlen"
+   ],
+   "file": "save.c",
+   "line": 140,
+   "master_only": false,
+   "params": [
+    "savef"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (FILE *)"
+  },
+  "save_game": {
+   "calls": [
+    "__errno_location",
+    "fopen",
+    "get_str",
+    "md_unlink",
+    "msg",
+    "readchar",
+    "save_file",
+    "stat",
+    "strcpy",
+    "strerror",
+    "waddnstr",
+    "wrefresh"
+   ],
+   "file": "save.c",
+   "line": 35,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "save_throw": {
+   "calls": [
+    "roll"
+   ],
+   "file": "monsters.c",
+   "line": 229,
+   "master_only": false,
+   "params": [
+    "which",
+    "tp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int, THING *)"
+  },
+  "score": {
+   "calls": [
+    "delwin",
+    "endwin",
+    "fflush",
+    "fgets",
+    "killname",
+    "lock_sc",
+    "malloc",
+    "md_getrealname",
+    "md_getuid",
+    "md_raw_standend",
+    "md_raw_standout",
+    "printf",
+    "putchar",
+    "rd_score",
+    "resetltchars",
+    "rnd",
+    "signal",
+    "start_score",
+    "strcmp",
+    "strncpy",
+    "unlock_sc",
+    "waddnstr",
+    "wgetnstr",
+    "wmove",
+    "wr_score",
+    "wrefresh"
+   ],
+   "file": "rip.c",
+   "line": 49,
+   "master_only": false,
+   "params": [
+    "amount",
+    "flags",
+    "monst"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int, int, char)"
+  },
+  "search": {
+   "calls": [
+    "addmsg",
+    "look",
+    "msg",
+    "rnd"
+   ],
+   "file": "command.c",
+   "line": 474,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "see_monst": {
+   "calls": [
+    "dist",
+    "step_ok"
+   ],
+   "file": "chase.c",
+   "line": 259,
+   "master_only": false,
+   "params": [
+    "mp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (THING *)"
+  },
+  "seen_stairs": {
+   "calls": [
+    "see_monst",
+    "winch",
+    "wmove"
+   ],
+   "file": "potions.c",
+   "line": 313,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "bool ()"
+  },
+  "set_know": {
+   "calls": [
+    "free"
+   ],
+   "file": "wizard.c",
+   "line": 81,
+   "master_only": false,
+   "params": [
+    "obj",
+    "info"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, struct obj_info *)"
+  },
+  "set_mname": {
+   "calls": [
+    "__ctype_b_loc",
+    "rnd",
+    "see_monst",
+    "strcpy",
+    "winch",
+    "wmove"
+   ],
+   "file": "fight.c",
+   "line": 349,
+   "master_only": false,
+   "params": [
+    "tp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(THING *)"
+  },
+  "set_oldch": {
+   "calls": [
+    "dist_cp",
+    "winch",
+    "wmove"
+   ],
+   "file": "chase.c",
+   "line": 235,
+   "master_only": false,
+   "params": [
+    "tp",
+    "cp"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, coord *)"
+  },
+  "set_order": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "things.c",
+   "line": 451,
+   "master_only": false,
+   "params": [
+    "order",
+    "numthings"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int *, int)"
+  },
+  "setup": {
+   "calls": [
+    "getltchars",
+    "keypad",
+    "md_onsignal_default",
+    "noecho",
+    "raw"
+   ],
+   "file": "mach_dep.c",
+   "line": 137,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "setup_salt": {
+   "calls": [],
+   "file": "xcrypt.c",
+   "line": 354,
+   "master_only": false,
+   "params": [
+    "salt"
+   ],
+   "platform": true,
+   "static": true,
+   "type": "void (int)"
+  },
+  "shell": {
+   "calls": [
+    "clearok",
+    "endwin",
+    "fflush",
+    "keypad",
+    "md_shellescape",
+    "noecho",
+    "playltchars",
+    "printf",
+    "putchar",
+    "raw",
+    "resetltchars",
+    "wait_for",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "main.c",
+   "line": 356,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "show_floor": {
+   "calls": [],
+   "file": "misc.c",
+   "line": 244,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "bool ()"
+  },
+  "show_map": {
+   "calls": [
+    "show_win",
+    "waddch",
+    "wattrset",
+    "wclear",
+    "wmove"
+   ],
+   "file": "wizard.c",
+   "line": 266,
+   "master_only": true,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "show_win": {
+   "calls": [
+    "clearok",
+    "getmaxy",
+    "waddnstr",
+    "wait_for",
+    "wmove",
+    "wrefresh",
+    "wtouchln"
+   ],
+   "file": "io.c",
+   "line": 264,
+   "master_only": false,
+   "params": [
+    "message"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *)"
+  },
+  "sight": {
+   "calls": [
+    "choose_str",
+    "enter_room",
+    "extinguish",
+    "msg"
+   ],
+   "file": "daemons.c",
+   "line": 110,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "sign": {
+   "calls": [],
+   "file": "misc.c",
+   "line": 522,
+   "master_only": false,
+   "params": [
+    "nm"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int)"
+  },
+  "spread": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "misc.c",
+   "line": 535,
+   "master_only": false,
+   "params": [
+    "nm"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int)"
+  },
+  "start_daemon": {
+   "calls": [
+    "d_slot"
+   ],
+   "file": "daemon.c",
+   "line": 66,
+   "master_only": false,
+   "params": [
+    "func",
+    "arg",
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (void (*)(), int, int)"
+  },
+  "start_score": {
+   "calls": [],
+   "file": "mach_dep.c",
+   "line": 203,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "status": {
+   "calls": [
+    "getcurx",
+    "getcury",
+    "msg",
+    "printw",
+    "wclrtoeol",
+    "wmove"
+   ],
+   "file": "io.c",
+   "line": 171,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "step_ok": {
+   "calls": [
+    "__ctype_b_loc"
+   ],
+   "file": "io.c",
+   "line": 133,
+   "master_only": false,
+   "params": [
+    "ch"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int)"
+  },
+  "stomach": {
+   "calls": [
+    "addmsg",
+    "choose_str",
+    "death",
+    "msg",
+    "ring_eat",
+    "rnd"
+   ],
+   "file": "daemons.c",
+   "line": 139,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "strucpy": {
+   "calls": [
+    "__ctype_b_loc"
+   ],
+   "file": "options.c",
+   "line": 490,
+   "master_only": false,
+   "params": [
+    "s1",
+    "s2",
+    "len"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (char *, char *, int)"
+  },
+  "sumprobs": {
+   "calls": [
+    "badcheck"
+   ],
+   "file": "init.c",
+   "line": 381,
+   "master_only": false,
+   "params": [
+    "info",
+    "bound"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct obj_info *, int)"
+  },
+  "swander": {
+   "calls": [
+    "spread",
+    "start_daemon"
+   ],
+   "file": "daemons.c",
+   "line": 53,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "swing": {
+   "calls": [
+    "rnd"
+   ],
+   "file": "fight.c",
+   "line": 378,
+   "master_only": false,
+   "params": [
+    "at_lvl",
+    "op_arm",
+    "wplus"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int, int, int)"
+  },
+  "take_off": {
+   "calls": [
+    "addmsg",
+    "dropcheck",
+    "inv_name",
+    "msg"
+   ],
+   "file": "armor.c",
+   "line": 55,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "teleport": {
+   "calls": [
+    "enter_room",
+    "find_floor",
+    "floor_at",
+    "flush_type",
+    "leave_room",
+    "look",
+    "roomin",
+    "strcpy",
+    "waddch",
+    "wmove"
+   ],
+   "file": "wizard.c",
+   "line": 200,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "thunk": {
+   "calls": [
+    "addmsg",
+    "endmsg"
+   ],
+   "file": "fight.c",
+   "line": 504,
+   "master_only": false,
+   "params": [
+    "weap",
+    "mname",
+    "noend"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *, char *, bool)"
+  },
+  "total_winner": {
+   "calls": [
+    "inv_name",
+    "my_exit",
+    "printw",
+    "score",
+    "waddnstr",
+    "wait_for",
+    "wattrset",
+    "wclear",
+    "wmove",
+    "wrefresh"
+   ],
+   "file": "rip.c",
+   "line": 293,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "treas_room": {
+   "calls": [
+    "_attach",
+    "find_floor",
+    "give_pack",
+    "new_item",
+    "new_monster",
+    "new_thing",
+    "randmonster",
+    "rnd",
+    "rnd_room"
+   ],
+   "file": "new_level.c",
+   "line": 187,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "trip_ch": {
+   "calls": [
+    "rnd_thing"
+   ],
+   "file": "misc.c",
+   "line": 190,
+   "master_only": false,
+   "params": [
+    "y",
+    "x",
+    "ch"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "int (int, int, int)"
+  },
+  "tstp": {
+   "calls": [
+    "clearok",
+    "endwin",
+    "fflush",
+    "getcurx",
+    "getcury",
+    "keypad",
+    "md_tstpresume",
+    "md_tstpsignal",
+    "mvcur",
+    "noecho",
+    "playltchars",
+    "raw",
+    "resetltchars",
+    "wrefresh"
+   ],
+   "file": "main.c",
+   "line": 211,
+   "master_only": false,
+   "params": [
+    "ignored"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "turn_ok": {
+   "calls": [],
+   "file": "move.c",
+   "line": 208,
+   "master_only": false,
+   "params": [
+    "y",
+    "x"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (int, int)"
+  },
+  "turn_see": {
+   "calls": [
+    "rnd",
+    "see_monst",
+    "waddch",
+    "wattrset",
+    "wmove"
+   ],
+   "file": "potions.c",
+   "line": 271,
+   "master_only": false,
+   "params": [
+    "turn_off"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "bool (bool)"
+  },
+  "turnref": {
+   "calls": [
+    "leaveok",
+    "wrefresh"
+   ],
+   "file": "move.c",
+   "line": 223,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "type_name": {
+   "calls": [],
+   "file": "wizard.c",
+   "line": 100,
+   "master_only": false,
+   "params": [
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(int)"
+  },
+  "u_level": {
+   "calls": [
+    "levit_check",
+    "msg",
+    "new_level",
+    "total_winner"
+   ],
+   "file": "command.c",
+   "line": 682,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "unconfuse": {
+   "calls": [
+    "choose_str",
+    "msg"
+   ],
+   "file": "daemons.c",
+   "line": 84,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "uncurse": {
+   "calls": [],
+   "file": "scrolls.c",
+   "line": 325,
+   "master_only": false,
+   "params": [
+    "obj"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (THING *)"
+  },
+  "unlock_sc": {
+   "calls": [
+    "fclose",
+    "md_unlink"
+   ],
+   "file": "mach_dep.c",
+   "line": 438,
+   "master_only": false,
+   "params": [],
+   "platform": true,
+   "static": false,
+   "type": "void ()"
+  },
+  "unsee": {
+   "calls": [
+    "see_monst",
+    "waddch",
+    "wmove"
+   ],
+   "file": "daemons.c",
+   "line": 95,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "vert": {
+   "calls": [],
+   "file": "rooms.c",
+   "line": 181,
+   "master_only": false,
+   "params": [
+    "rp",
+    "startx"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (struct room *, int)"
+  },
+  "visuals": {
+   "calls": [
+    "cansee",
+    "rnd",
+    "rnd_thing",
+    "see_monst",
+    "waddch",
+    "wattrset",
+    "wmove"
+   ],
+   "file": "daemons.c",
+   "line": 242,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "vowelstr": {
+   "calls": [],
+   "file": "misc.c",
+   "line": 422,
+   "master_only": false,
+   "params": [
+    "str"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "char *(char *)"
+  },
+  "wait_for": {
+   "calls": [
+    "readchar"
+   ],
+   "file": "io.c",
+   "line": 247,
+   "master_only": false,
+   "params": [
+    "ch"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (int)"
+  },
+  "wake_monster": {
+   "calls": [
+    "abort",
+    "addmsg",
+    "dist",
+    "endwin",
+    "fuse",
+    "lengthen",
+    "msg",
+    "rnd",
+    "save",
+    "set_mname",
+    "spread",
+    "strcmp"
+   ],
+   "file": "monsters.c",
+   "line": 151,
+   "master_only": false,
+   "params": [
+    "y",
+    "x"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "THING *(int, int)"
+  },
+  "wanderer": {
+   "calls": [
+    "find_floor",
+    "msg",
+    "new_item",
+    "new_monster",
+    "randmonster",
+    "rnd",
+    "roomin",
+    "runto",
+    "waddch",
+    "wattrset"
+   ],
+   "file": "monsters.c",
+   "line": 119,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "waste_time": {
+   "calls": [
+    "do_daemons",
+    "do_fuses",
+    "spread"
+   ],
+   "file": "armor.c",
+   "line": 83,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "wear": {
+   "calls": [
+    "addmsg",
+    "endmsg",
+    "get_item",
+    "inv_name",
+    "msg",
+    "waste_time"
+   ],
+   "file": "armor.c",
+   "line": 20,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "whatis": {
+   "calls": [
+    "get_item",
+    "inv_name",
+    "msg",
+    "set_know",
+    "type_name"
+   ],
+   "file": "wizard.c",
+   "line": 26,
+   "master_only": false,
+   "params": [
+    "insist",
+    "type"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (bool, int)"
+  },
+  "wield": {
+   "calls": [
+    "addmsg",
+    "dropcheck",
+    "get_item",
+    "inv_name",
+    "is_current",
+    "msg"
+   ],
+   "file": "weapons.c",
+   "line": 226,
+   "master_only": false,
+   "params": [],
+   "platform": false,
+   "static": false,
+   "type": "void ()"
+  },
+  "wr_score": {
+   "calls": [
+    "encwrite",
+    "memset",
+    "rewind",
+    "sprintf"
+   ],
+   "file": "save.c",
+   "line": 369,
+   "master_only": false,
+   "params": [
+    "top_ten"
+   ],
+   "platform": false,
+   "static": false,
+   "type": "void (SCORE *)"
+  },
+  "xcrypt": {
+   "calls": [
+    "ascii_to_bin",
+    "des_cipher",
+    "des_init",
+    "des_setkey",
+    "do_des",
+    "setup_salt",
+    "strlen",
+    "strncpy"
+   ],
+   "file": "xcrypt.c",
+   "line": 595,
+   "master_only": false,
+   "params": [
+    "key",
+    "setting"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "char *(const char *, const char *)"
+  },
+  "xhtonl": {
+   "calls": [],
+   "file": "xcrypt.c",
+   "line": 70,
+   "master_only": false,
+   "params": [
+    "x"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "unsigned int (unsigned int)"
+  },
+  "xntohl": {
+   "calls": [],
+   "file": "xcrypt.c",
+   "line": 58,
+   "master_only": false,
+   "params": [
+    "x"
+   ],
+   "platform": true,
+   "static": false,
+   "type": "unsigned int (unsigned int)"
+  }
+ },
+ "variables": [
+  {
+   "file": "chase.c",
+   "function": "cansee",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "tp",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "chase.c",
+   "init": null,
+   "line": 19,
+   "master_only": false,
+   "name": "ch_ret",
+   "storage": "static",
+   "type": "coord"
+  },
+  {
+   "file": "chase.c",
+   "function": "chase",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "tryp",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "chase.c",
+   "function": "do_chase",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "this",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "chase.c",
+   "function": "runners",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "orig_pos",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "command.c",
+   "function": "command",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "countch",
+   "storage": "static-local",
+   "type": "char"
+  },
+  {
+   "file": "command.c",
+   "function": "command",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "direction",
+   "storage": "static-local",
+   "type": "char"
+  },
+  {
+   "file": "command.c",
+   "function": "command",
+   "init": "FALSE",
+   "line": null,
+   "master_only": false,
+   "name": "newcount",
+   "storage": "static-local",
+   "type": "char"
+  },
+  {
+   "file": "command.c",
+   "function": "identify",
+   "init": "{\n\t{'|',\t\t\"wall of a room\",\t\tFALSE},\n\t{'-',\t\t\"wall of a room\",\t\tFALSE},\n\t{GOLD,\t\t\"gold\",\t\t\t\tFALSE},\n\t{STAIRS,\t\"a staircase\",\t\t\tFALSE},\n\t{DOOR,\t\t\"door\",\t\t\t\tFALSE},\n\t{FLOOR,\t\t\"room floor\",\t\t\tFALSE},\n\t{PLAYER,\t\"you\",\t\t\t\tFALSE},\n\t{PASSAGE,\t\"passage\",\t\t\tFALSE},\n\t{TRAP,\t\t\"trap\",\t\t\t\tFALSE},\n\t{POTION,\t\"potion\",\t\t\tFALSE},\n\t{SCROLL,\t\"scroll\",\t\t\tFALSE},\n\t{FOOD,\t\t\"food\",\t\t\t\tFALSE},\n\t{WEAPON,\t\"weapon\",\t\t\tFALSE},\n\t{' ',\t\t\"solid rock\",\t\t\tFALSE},\n\t{ARMOR,\t\t\"armor\",\t\t\tFALSE},\n\t{AMULET,\t\"the Amulet of Yendor\",\t\tFALSE},\n\t{RING,\t\t\"ring\",\t\t\t\tFALSE},\n\t{STICK,\t\t\"wand or staff\",\t\tFALSE},\n\t{'\\0'}\n    }",
+   "line": 613,
+   "master_only": false,
+   "name": "ident_list",
+   "storage": "static-local",
+   "type": "struct h_list[19]"
+  },
+  {
+   "file": "daemon.c",
+   "init": "{\n    _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_,\n    _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, \n}",
+   "line": 23,
+   "master_only": false,
+   "name": "d_list",
+   "storage": "global",
+   "type": "struct delayed_action[20]"
+  },
+  {
+   "file": "daemons.c",
+   "init": "0",
+   "line": 62,
+   "master_only": false,
+   "name": "between",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\t\t/* Armor class for each armor type */\n\t8,\t/* LEATHER */\n\t7,\t/* RING_MAIL */\n\t7,\t/* STUDDED_LEATHER */\n\t6,\t/* SCALE_MAIL */\n\t5,\t/* CHAIN_MAIL */\n\t4,\t/* SPLINT_MAIL */\n\t4,\t/* BANDED_MAIL */\n\t3,\t/* PLATE_MAIL */\n}",
+   "line": 99,
+   "master_only": false,
+   "name": "a_class",
+   "storage": "global",
+   "type": "int[8]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 16,
+   "master_only": false,
+   "name": "after",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 17,
+   "master_only": false,
+   "name": "again",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 20,
+   "master_only": false,
+   "name": "amulet",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { \"leather armor\",\t\t 20,\t 20, NULL, FALSE },\n    { \"ring mail\",\t\t 15,\t 25, NULL, FALSE },\n    { \"studded leather armor\",\t 15,\t 20, NULL, FALSE },\n    { \"scale mail\",\t\t 13,\t 30, NULL, FALSE },\n    { \"chain mail\",\t\t 12,\t 75, NULL, FALSE },\n    { \"splint mail\",\t\t 10,\t 80, NULL, FALSE },\n    { \"banded mail\",\t\t 10,\t 90, NULL, FALSE },\n    { \"plate mail\",\t\t  5,\t150, NULL, FALSE },\n}",
+   "line": 233,
+   "master_only": false,
+   "name": "arm_info",
+   "storage": "global",
+   "type": "struct obj_info[8]"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 110,
+   "master_only": false,
+   "name": "count",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 152,
+   "master_only": false,
+   "name": "cur_armor",
+   "storage": "global",
+   "type": "THING *"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 153,
+   "master_only": false,
+   "name": "cur_ring",
+   "storage": "global",
+   "type": "THING *[2]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 154,
+   "master_only": false,
+   "name": "cur_weapon",
+   "storage": "global",
+   "type": "THING *"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 146,
+   "master_only": false,
+   "name": "delta",
+   "storage": "global",
+   "type": "coord"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 52,
+   "master_only": false,
+   "name": "dir_ch",
+   "storage": "global",
+   "type": "char"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 120,
+   "master_only": false,
+   "name": "dnum",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 21,
+   "master_only": false,
+   "name": "door_stop",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n        10L,\n\t20L,\n\t40L,\n\t80L,\n       160L,\n       320L,\n       640L,\n      1300L,\n      2600L,\n      5200L,\n     13000L,\n     26000L,\n     50000L,\n    100000L,\n    200000L,\n    400000L,\n    800000L,\n   2000000L,\n   4000000L,\n   8000000L,\n\t 0L\n}",
+   "line": 122,
+   "master_only": false,
+   "name": "e_levels",
+   "storage": "global",
+   "type": "int[21]"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 22,
+   "master_only": false,
+   "name": "fight_flush",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 53,
+   "master_only": false,
+   "name": "file_name",
+   "storage": "global",
+   "type": "char[1024]"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 23,
+   "master_only": false,
+   "name": "firstmove",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 112,
+   "master_only": false,
+   "name": "food_left",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "{ 's', 'l', 'i', 'm', 'e', '-', 'm', 'o', 'l', 'd', '\\0' }",
+   "line": 65,
+   "master_only": false,
+   "name": "fruit",
+   "storage": "global",
+   "type": "char[1024]"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 24,
+   "master_only": false,
+   "name": "got_ltc",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 25,
+   "master_only": false,
+   "name": "has_hit",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    {'?',\t\"\tprints help\",\t\t\t\tTRUE},\n    {'/',\t\"\tidentify object\",\t\t\tTRUE},\n    {'h',\t\"\tleft\",\t\t\t\t\tTRUE},\n    {'j',\t\"\tdown\",\t\t\t\t\tTRUE},\n    {'k',\t\"\tup\",\t\t\t\t\tTRUE},\n    {'l',\t\"\tright\",\t\t\t\t\tTRUE},\n    {'y',\t\"\tup & left\",\t\t\t\tTRUE},\n    {'u',\t\"\tup & right\",\t\t\t\tTRUE},\n    {'b',\t\"\tdown & left\",\t\t\t\tTRUE},\n    {'n',\t\"\tdown & right\",\t\t\t\tTRUE},\n    {'H',\t\"\trun left\",\t\t\t\tFALSE},\n    {'J',\t\"\trun down\",\t\t\t\tFALSE},\n    {'K',\t\"\trun up\",\t\t\t\tFALSE},\n    {'L',\t\"\trun right\",\t\t\t\tFALSE},\n    {'Y',\t\"\trun up & left\",\t\t\t\tFALSE},\n    {'U',\t\"\trun up & right\",\t\t\tFALSE},\n    {'B',\t\"\trun down & left\",\t\t\tFALSE},\n    {'N',\t\"\trun down & right\",\t\t\tFALSE},\n    {CTRL('H'),\t\"\trun left until adjacent\",\t\tFALSE},\n    {CTRL('J'),\t\"\trun down until adjacent\",\t\tFALSE},\n    {CTRL('K'),\t\"\trun up until adjacent\",\t\t\tFALSE},\n    {CTRL('L'),\t\"\trun right until adjacent\",\t\tFALSE},\n    {CTRL('Y'),\t\"\trun up & left until adjacent\",\t\tFALSE},\n    {CTRL('U'),\t\"\trun up & right until adjacent\",\t\tFALSE},\n    {CTRL('B'),\t\"\trun down & left until adjacent\",\tFALSE},\n    {CTRL('N'),\t\"\trun down & right until adjacent\",\tFALSE},\n    {'\\0',\t\"\t<SHIFT><dir>: run that way\",\t\tTRUE},\n    {'\\0',\t\"\t<CTRL><dir>: run till adjacent\",\tTRUE},\n    {'f',\t\"<dir>\tfight till death or near death\",\tTRUE},\n    {'t',\t\"<dir>\tthrow something\",\t\t\tTRUE},\n    {'m',\t\"<dir>\tmove onto without picking up\",\t\tTRUE},\n    {'z',\t\"<dir>\tzap a wand in a direction\",\t\tTRUE},\n    {'^',\t\"<dir>\tidentify trap type\",\t\t\tTRUE},\n    {'s',\t\"\tsearch for trap/secret door\",\t\tTRUE},\n    {'>',\t\"\tgo down a staircase\",\t\t\tTRUE},\n    {'<',\t\"\tgo up a staircase\",\t\t\tTRUE},\n    {'.',\t\"\trest for a turn\",\t\t\tTRUE},\n    {',',\t\"\tpick something up\",\t\t\tTRUE},\n    {'i',\t\"\tinventory\",\t\t\t\tTRUE},\n    {'I',\t\"\tinventory single item\",\t\t\tTRUE},\n    {'q',\t\"\tquaff potion\",\t\t\t\tTRUE},\n    {'r',\t\"\tread scroll\",\t\t\t\tTRUE},\n    {'e',\t\"\teat food\",\t\t\t\tTRUE},\n    {'w',\t\"\twield a weapon\",\t\t\tTRUE},\n    {'W',\t\"\twear armor\",\t\t\t\tTRUE},\n    {'T',\t\"\ttake armor off\",\t\t\tTRUE},\n    {'P',\t\"\tput on ring\",\t\t\t\tTRUE},\n    {'R',\t\"\tremove ring\",\t\t\t\tTRUE},\n    {'d',\t\"\tdrop object\",\t\t\t\tTRUE},\n    {'c',\t\"\tcall object\",\t\t\t\tTRUE},\n    {'a',\t\"\trepeat last command\",\t\t\tTRUE},\n    {')',\t\"\tprint current weapon\",\t\t\tTRUE},\n    {']',\t\"\tprint current armor\",\t\t\tTRUE},\n    {'=',\t\"\tprint current rings\",\t\t\tTRUE},\n    {'@',\t\"\tprint current stats\",\t\t\tTRUE},\n    {'D',\t\"\trecall what's been discovered\",\t\tTRUE},\n    {'o',\t\"\texamine/set options\",\t\t\tTRUE},\n    {CTRL('R'),\t\"\tredraw screen\",\t\t\t\tTRUE},\n    {CTRL('P'),\t\"\trepeat last message\",\t\t\tTRUE},\n    {ESCAPE,\t\"\tcancel command\",\t\t\tTRUE},\n    {'S',\t\"\tsave game\",\t\t\t\tTRUE},\n    {'Q',\t\"\tquit\",\t\t\t\t\tTRUE},\n    {'!',\t\"\tshell escape\",\t\t\t\tTRUE},\n    {'F',\t\"<dir>\tfight till either of you dies\",\t\tTRUE},\n    {'v',\t\"\tprint version number\",\t\t\tTRUE},\n    {0,\t\tNULL }\n}",
+   "line": 324,
+   "master_only": false,
+   "name": "helpstr",
+   "storage": "global",
+   "type": "struct h_list[66]"
+  },
+  {
+   "file": "extern.c",
+   "init": "{ '\\0' }",
+   "line": 67,
+   "master_only": false,
+   "name": "home",
+   "storage": "global",
+   "type": "char[1024]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 54,
+   "master_only": false,
+   "name": "huh",
+   "storage": "global",
+   "type": "char[1024]"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 91,
+   "master_only": false,
+   "name": "hungry_state",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "NULL",
+   "line": 162,
+   "master_only": false,
+   "name": "hw",
+   "storage": "global",
+   "type": "WINDOW *"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 26,
+   "master_only": false,
+   "name": "in_shell",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 92,
+   "master_only": false,
+   "name": "inpack",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "TRUE",
+   "line": 27,
+   "master_only": false,
+   "name": "inv_describe",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n\t\"Overwrite\",\n\t\"Slow\",\n\t\"Clear\"\n}",
+   "line": 68,
+   "master_only": false,
+   "name": "inv_t_name",
+   "storage": "global",
+   "type": "char *[3]"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 93,
+   "master_only": false,
+   "name": "inv_type",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 28,
+   "master_only": false,
+   "name": "jump",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 29,
+   "master_only": false,
+   "name": "kamikaze",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "'\\0'",
+   "line": 73,
+   "master_only": false,
+   "name": "l_last_comm",
+   "storage": "global",
+   "type": "char"
+  },
+  {
+   "file": "extern.c",
+   "init": "'\\0'",
+   "line": 74,
+   "master_only": false,
+   "name": "l_last_dir",
+   "storage": "global",
+   "type": "char"
+  },
+  {
+   "file": "extern.c",
+   "init": "NULL",
+   "line": 155,
+   "master_only": false,
+   "name": "l_last_pick",
+   "storage": "global",
+   "type": "THING *"
+  },
+  {
+   "file": "extern.c",
+   "init": "'\\0'",
+   "line": 75,
+   "master_only": false,
+   "name": "last_comm",
+   "storage": "global",
+   "type": "char"
+  },
+  {
+   "file": "extern.c",
+   "init": "'\\0'",
+   "line": 76,
+   "master_only": false,
+   "name": "last_dir",
+   "storage": "global",
+   "type": "char"
+  },
+  {
+   "file": "extern.c",
+   "init": "NULL",
+   "line": 156,
+   "master_only": false,
+   "name": "last_pick",
+   "storage": "global",
+   "type": "THING *"
+  },
+  {
+   "file": "extern.c",
+   "init": "-1",
+   "line": 113,
+   "master_only": false,
+   "name": "lastscore",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "1",
+   "line": 94,
+   "master_only": false,
+   "name": "level",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 30,
+   "master_only": false,
+   "name": "lower_msg",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "NULL",
+   "line": 157,
+   "master_only": false,
+   "name": "lvl_obj",
+   "storage": "global",
+   "type": "THING *"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 95,
+   "master_only": false,
+   "name": "max_hit",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 96,
+   "master_only": false,
+   "name": "max_level",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "INIT_STATS",
+   "line": 166,
+   "master_only": false,
+   "name": "max_stats",
+   "storage": "global",
+   "type": "struct stats"
+  },
+  {
+   "file": "extern.c",
+   "init": "NULL",
+   "line": 158,
+   "master_only": false,
+   "name": "mlist",
+   "storage": "global",
+   "type": "THING *"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n/* Name\t\t CARRY\tFLAG    str, exp, lvl, amr, hpt, dmg */\n{ \"aquator\",\t   0,\tISMEAN,\t{ XX, 20,   5,   2, ___, \"0x0/0x0\" } },\n{ \"bat\",\t   0,\tISFLY,\t{ XX,  1,   1,   3, ___, \"1x2\" } },\n{ \"centaur\",\t  15,\t0,\t{ XX, 17,   4,   4, ___, \"1x2/1x5/1x5\" } },\n{ \"dragon\",\t 100,\tISMEAN,\t{ XX,5000, 10,  -1, ___, \"1x8/1x8/3x10\" } },\n{ \"emu\",\t   0,\tISMEAN,\t{ XX,  2,   1,   7, ___, \"1x2\" } },\n{ \"venus flytrap\", 0,\tISMEAN,\t{ XX, 80,   8,   3, ___, \"%%%x0\" } },\n\t/* NOTE: the damage is %%% so that xstr won't merge this */\n\t/* string with others, since it is written on in the program */\n{ \"griffin\",\t  20,\tISMEAN|ISFLY|ISREGEN, { XX,2000, 13,   2, ___, \"4x3/3x5\" } },\n{ \"hobgoblin\",\t   0,\tISMEAN,\t{ XX,  3,   1,   5, ___, \"1x8\" } },\n{ \"ice monster\",   0,\t0,\t{ XX,  5,   1,   9, ___, \"0x0\" } },\n{ \"jabberwock\",   70,\t0,\t{ XX,3000, 15,   6, ___, \"2x12/2x4\" } },\n{ \"kestrel\",\t   0,\tISMEAN|ISFLY,\t{ XX,  1,   1,   7, ___, \"1x4\" } },\n{ \"leprechaun\",\t   0,\t0,\t{ XX, 10,   3,   8, ___, \"1x1\" } },\n{ \"medusa\",\t  40,\tISMEAN,\t{ XX,200,   8,   2, ___, \"3x4/3x4/2x5\" } },\n{ \"nymph\",\t 100,\t0,\t{ XX, 37,   3,   9, ___, \"0x0\" } },\n{ \"orc\",\t  15,\tISGREED,{ XX,  5,   1,   6, ___, \"1x8\" } },\n{ \"phantom\",\t   0,\tISINVIS,{ XX,120,   8,   3, ___, \"4x4\" } },\n{ \"quagga\",\t   0,\tISMEAN,\t{ XX, 15,   3,   3, ___, \"1x5/1x5\" } },\n{ \"rattlesnake\",   0,\tISMEAN,\t{ XX,  9,   2,   3, ___, \"1x6\" } },\n{ \"snake\",\t   0,\tISMEAN,\t{ XX,  2,   1,   5, ___, \"1x3\" } },\n{ \"troll\",\t  50,\tISREGEN|ISMEAN,{ XX, 120, 6, 4, ___, \"1x8/1x8/2x6\" } },\n{ \"black unicorn\", 0,\tISMEAN,\t{ XX,190,   7,  -2, ___, \"1x9/1x9/2x9\" } },\n{ \"vampire\",\t  20,\tISREGEN|ISMEAN,{ XX,350,   8,   1, ___, \"1x10\" } },\n{ \"wraith\",\t   0,\t0,\t{ XX, 55,   5,   4, ___, \"1x6\" } },\n{ \"xeroc\",\t  30,\t0,\t{ XX,100,   7,   7, ___, \"4x4\" } },\n{ \"yeti\",\t  30,\t0,\t{ XX, 50,   4,   6, ___, \"1x6/1x6\" } },\n{ \"zombie\",\t   0,\tISMEAN,\t{ XX,  6,   2,   8, ___, \"1x8\" } }\n    }",
+   "line": 188,
+   "master_only": false,
+   "name": "monsters",
+   "storage": "global",
+   "type": "struct monster[26]"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 31,
+   "master_only": false,
+   "name": "move_on",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 97,
+   "master_only": false,
+   "name": "mpos",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 32,
+   "master_only": false,
+   "name": "msg_esc",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 89,
+   "master_only": false,
+   "name": "n_objs",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 114,
+   "master_only": false,
+   "name": "no_command",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 98,
+   "master_only": false,
+   "name": "no_food",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 115,
+   "master_only": false,
+   "name": "no_move",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 18,
+   "master_only": false,
+   "name": "noscore",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 90,
+   "master_only": false,
+   "name": "ntraps",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 147,
+   "master_only": false,
+   "name": "oldpos",
+   "storage": "global",
+   "type": "coord"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 168,
+   "master_only": false,
+   "name": "oldrp",
+   "storage": "global",
+   "type": "struct room *"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 64,
+   "master_only": false,
+   "name": "orig_dsusp",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 55,
+   "master_only": false,
+   "name": "p_colors",
+   "storage": "global",
+   "type": "char *[14]"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\t\t\t/* Is the character used in the pack? */\n    FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,\n    FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,\n    FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE\n}",
+   "line": 46,
+   "master_only": false,
+   "name": "pack_used",
+   "storage": "global",
+   "type": "bool[26]"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} },\n    { {0, 0}, {0, 0}, {0, 0}, 0, ISGONE|ISDARK, 0, {{0,0}} }\n}",
+   "line": 170,
+   "master_only": false,
+   "name": "passages",
+   "storage": "global",
+   "type": "struct room[13]"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 33,
+   "master_only": false,
+   "name": "passgo",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 150,
+   "master_only": false,
+   "name": "places",
+   "storage": "global",
+   "type": "PLACE[2560]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 159,
+   "master_only": false,
+   "name": "player",
+   "storage": "global",
+   "type": "THING"
+  },
+  {
+   "file": "extern.c",
+   "init": "TRUE",
+   "line": 34,
+   "master_only": false,
+   "name": "playing",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { \"confusion\",\t\t 7,   5, NULL, FALSE },\n    { \"hallucination\",\t\t 8,   5, NULL, FALSE },\n    { \"poison\",\t\t\t 8,   5, NULL, FALSE },\n    { \"gain strength\",\t\t13, 150, NULL, FALSE },\n    { \"see invisible\",\t\t 3, 100, NULL, FALSE },\n    { \"healing\",\t\t13, 130, NULL, FALSE },\n    { \"monster detection\",\t 6, 130, NULL, FALSE },\n    { \"magic detection\",\t 6, 105, NULL, FALSE },\n    { \"raise level\",\t\t 2, 250, NULL, FALSE },\n    { \"extra healing\",\t\t 5, 200, NULL, FALSE },\n    { \"haste self\",\t\t 5, 190, NULL, FALSE },\n    { \"restore strength\",\t13, 130, NULL, FALSE },\n    { \"blindness\",\t\t 5,   5, NULL, FALSE },\n    { \"levitation\",\t\t 6,  75, NULL, FALSE },\n}",
+   "line": 243,
+   "master_only": false,
+   "name": "pot_info",
+   "storage": "global",
+   "type": "struct obj_info[14]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 56,
+   "master_only": false,
+   "name": "prbuf",
+   "storage": "global",
+   "type": "char[2048]"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 116,
+   "master_only": false,
+   "name": "purse",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 35,
+   "master_only": false,
+   "name": "q_comm",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 117,
+   "master_only": false,
+   "name": "quiet",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 57,
+   "master_only": false,
+   "name": "r_stones",
+   "storage": "global",
+   "type": "char *[14]"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { \"protection\",\t\t 9, 400, NULL, FALSE },\n    { \"add strength\",\t\t 9, 400, NULL, FALSE },\n    { \"sustain strength\",\t 5, 280, NULL, FALSE },\n    { \"searching\",\t\t10, 420, NULL, FALSE },\n    { \"see invisible\",\t\t10, 310, NULL, FALSE },\n    { \"adornment\",\t\t 1,  10, NULL, FALSE },\n    { \"aggravate monster\",\t10,  10, NULL, FALSE },\n    { \"dexterity\",\t\t 8, 440, NULL, FALSE },\n    { \"increase damage\",\t 8, 400, NULL, FALSE },\n    { \"regeneration\",\t\t 4, 460, NULL, FALSE },\n    { \"slow digestion\",\t\t 9, 240, NULL, FALSE },\n    { \"teleportation\",\t\t 5,  30, NULL, FALSE },\n    { \"stealth\",\t\t 7, 470, NULL, FALSE },\n    { \"maintain armor\",\t\t 5, 380, NULL, FALSE },\n}",
+   "line": 259,
+   "master_only": false,
+   "name": "ring_info",
+   "storage": "global",
+   "type": "struct obj_info[14]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 169,
+   "master_only": false,
+   "name": "rooms",
+   "storage": "global",
+   "type": "struct room[9]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 58,
+   "master_only": false,
+   "name": "runch",
+   "storage": "global",
+   "type": "char"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 36,
+   "master_only": false,
+   "name": "running",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 59,
+   "master_only": false,
+   "name": "s_names",
+   "storage": "global",
+   "type": "char *[18]"
+  },
+  {
+   "file": "extern.c",
+   "init": "TRUE",
+   "line": 37,
+   "master_only": false,
+   "name": "save_msg",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "NULL",
+   "line": 111,
+   "master_only": false,
+   "name": "scoreboard",
+   "storage": "global",
+   "type": "FILE *"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { \"monster confusion\",\t\t 7, 140, NULL, FALSE },\n    { \"magic mapping\",\t\t\t 4, 150, NULL, FALSE },\n    { \"hold monster\",\t\t\t 2, 180, NULL, FALSE },\n    { \"sleep\",\t\t\t\t 3,   5, NULL, FALSE },\n    { \"enchant armor\",\t\t\t 7, 160, NULL, FALSE },\n    { \"identify potion\",\t\t10,  80, NULL, FALSE },\n    { \"identify scroll\",\t\t10,  80, NULL, FALSE },\n    { \"identify weapon\",\t\t 6,  80, NULL, FALSE },\n    { \"identify armor\",\t\t \t 7, 100, NULL, FALSE },\n    { \"identify ring, wand or staff\",\t10, 115, NULL, FALSE },\n    { \"scare monster\",\t\t\t 3, 200, NULL, FALSE },\n    { \"food detection\",\t\t\t 2,  60, NULL, FALSE },\n    { \"teleportation\",\t\t\t 5, 165, NULL, FALSE },\n    { \"enchant weapon\",\t\t\t 8, 150, NULL, FALSE },\n    { \"create monster\",\t\t\t 4,  75, NULL, FALSE },\n    { \"remove curse\",\t\t\t 7, 105, NULL, FALSE },\n    { \"aggravate monsters\",\t\t 3,  20, NULL, FALSE },\n    { \"protect armor\",\t\t\t 2, 250, NULL, FALSE },\n}",
+   "line": 275,
+   "master_only": false,
+   "name": "scr_info",
+   "storage": "global",
+   "type": "struct obj_info[18]"
+  },
+  {
+   "file": "extern.c",
+   "init": "TRUE",
+   "line": 38,
+   "master_only": false,
+   "name": "see_floor",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 121,
+   "master_only": false,
+   "name": "seed",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 19,
+   "master_only": false,
+   "name": "seenstairs",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 148,
+   "master_only": false,
+   "name": "stairs",
+   "storage": "global",
+   "type": "coord"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 39,
+   "master_only": false,
+   "name": "stat_msg",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 60,
+   "master_only": false,
+   "name": "take",
+   "storage": "global",
+   "type": "char"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 40,
+   "master_only": false,
+   "name": "terse",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { 0,\t\t\t26 },\t/* potion */\n    { 0,\t\t\t36 },\t/* scroll */\n    { 0,\t\t\t16 },\t/* food */\n    { 0,\t\t\t 7 },\t/* weapon */\n    { 0,\t\t\t 7 },\t/* armor */\n    { 0,\t\t\t 4 },\t/* ring */\n    { 0,\t\t\t 4 },\t/* stick */\n}",
+   "line": 223,
+   "master_only": false,
+   "name": "things",
+   "storage": "global",
+   "type": "struct obj_info[7]"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 41,
+   "master_only": false,
+   "name": "to_death",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "TRUE",
+   "line": 42,
+   "master_only": false,
+   "name": "tombstone",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\t\t\t/* Names of the traps */\n\t\"a trapdoor\",\n\t\"an arrow trap\",\n\t\"a sleeping gas trap\",\n\t\"a beartrap\",\n\t\"a teleport trap\",\n\t\"a poison dart trap\",\n\t\"a rust trap\",\n        \"a mysterious trap\"\n}",
+   "line": 77,
+   "master_only": false,
+   "name": "tr_name",
+   "storage": "global",
+   "type": "char *[8]"
+  },
+  {
+   "file": "extern.c",
+   "init": "0",
+   "line": 118,
+   "master_only": false,
+   "name": "vf_hit",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { \"mace\",\t\t\t\t11,   8, NULL, FALSE },\n    { \"long sword\",\t\t\t11,  15, NULL, FALSE },\n    { \"short bow\",\t\t\t12,  15, NULL, FALSE },\n    { \"arrow\",\t\t\t\t12,   1, NULL, FALSE },\n    { \"dagger\",\t\t\t\t 8,   3, NULL, FALSE },\n    { \"two handed sword\",\t\t10,  75, NULL, FALSE },\n    { \"dart\",\t\t\t\t12,   2, NULL, FALSE },\n    { \"shuriken\",\t\t\t12,   5, NULL, FALSE },\n    { \"spear\",\t\t\t\t12,   5, NULL, FALSE },\n    { NULL, 0 },\t/* DO NOT REMOVE: fake entry for dragon's breath */\n}",
+   "line": 295,
+   "master_only": false,
+   "name": "weap_info",
+   "storage": "global",
+   "type": "struct obj_info[10]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 61,
+   "master_only": false,
+   "name": "whoami",
+   "storage": "global",
+   "type": "char[1024]"
+  },
+  {
+   "file": "extern.c",
+   "init": "FALSE",
+   "line": 44,
+   "master_only": true,
+   "name": "wizard",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "extern.c",
+   "init": "{\n    { \"light\",\t\t\t12, 250, NULL, FALSE },\n    { \"invisibility\",\t\t 6,   5, NULL, FALSE },\n    { \"lightning\",\t\t 3, 330, NULL, FALSE },\n    { \"fire\",\t\t\t 3, 330, NULL, FALSE },\n    { \"cold\",\t\t\t 3, 330, NULL, FALSE },\n    { \"polymorph\",\t\t15, 310, NULL, FALSE },\n    { \"magic missile\",\t\t10, 170, NULL, FALSE },\n    { \"haste monster\",\t\t10,   5, NULL, FALSE },\n    { \"slow monster\",\t\t11, 350, NULL, FALSE },\n    { \"drain life\",\t\t 9, 300, NULL, FALSE },\n    { \"nothing\",\t\t 1,   5, NULL, FALSE },\n    { \"teleport away\",\t\t 6, 340, NULL, FALSE },\n    { \"teleport to\",\t\t 6,  50, NULL, FALSE },\n    { \"cancellation\",\t\t 5, 280, NULL, FALSE },\n}",
+   "line": 307,
+   "master_only": false,
+   "name": "ws_info",
+   "storage": "global",
+   "type": "struct obj_info[14]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 62,
+   "master_only": false,
+   "name": "ws_made",
+   "storage": "global",
+   "type": "char *[14]"
+  },
+  {
+   "file": "extern.c",
+   "init": null,
+   "line": 63,
+   "master_only": false,
+   "name": "ws_type",
+   "storage": "global",
+   "type": "char *[14]"
+  },
+  {
+   "file": "fight.c",
+   "init": "{\n    -7, -6, -5, -4, -3, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3,\n    3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6\n}",
+   "line": 54,
+   "master_only": false,
+   "name": "add_dam",
+   "storage": "static",
+   "type": "int[32]"
+  },
+  {
+   "file": "fight.c",
+   "init": "{\t\t/* strings for hitting */\n\t\" scored an excellent hit on \",\n\t\" hit \",\n\t\" have injured \",\n\t\" swing and hit \",\n\t\" scored an excellent hit on \",\n\t\" hit \",\n\t\" has injured \",\n\t\" swings and hits \"\n}",
+   "line": 21,
+   "master_only": false,
+   "name": "h_names",
+   "storage": "global",
+   "type": "char *[8]"
+  },
+  {
+   "file": "fight.c",
+   "init": "{\t\t/* strings for missing */\n\t\" miss\",\n\t\" swing and miss\",\n\t\" barely miss\",\n\t\" don't hit\",\n\t\" misses\",\n\t\" swings and misses\",\n\t\" barely misses\",\n\t\" doesn't hit\",\n}",
+   "line": 32,
+   "master_only": false,
+   "name": "m_names",
+   "storage": "global",
+   "type": "char *[8]"
+  },
+  {
+   "file": "fight.c",
+   "function": "prname",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "tbuf",
+   "storage": "static-local",
+   "type": "char[1024]"
+  },
+  {
+   "file": "fight.c",
+   "function": "set_mname",
+   "init": "{ 't', 'h', 'e', ' ' }",
+   "line": null,
+   "master_only": false,
+   "name": "tbuf",
+   "storage": "static-local",
+   "type": "char[1024]"
+  },
+  {
+   "file": "fight.c",
+   "init": "{\n    -7, -6, -5, -4, -3, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,\n    1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3,\n}",
+   "line": 46,
+   "master_only": false,
+   "name": "str_plus",
+   "storage": "static",
+   "type": "int[32]"
+  },
+  {
+   "file": "init.c",
+   "init": "NCOLORS",
+   "line": 112,
+   "master_only": false,
+   "name": "cNCOLORS",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "init.c",
+   "init": "NMETAL",
+   "line": 230,
+   "master_only": false,
+   "name": "cNMETAL",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "init.c",
+   "init": "NSTONES",
+   "line": 163,
+   "master_only": false,
+   "name": "cNSTONES",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "init.c",
+   "init": "NWOOD",
+   "line": 202,
+   "master_only": false,
+   "name": "cNWOOD",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "init.c",
+   "function": "init_materials",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "metused",
+   "storage": "static-local",
+   "type": "bool[22]"
+  },
+  {
+   "file": "init.c",
+   "init": "{\n    \"aluminum\",\n    \"beryllium\",\n    \"bone\",\n    \"brass\",\n    \"bronze\",\n    \"copper\",\n    \"electrum\",\n    \"gold\",\n    \"iron\",\n    \"lead\",\n    \"magnesium\",\n    \"mercury\",\n    \"nickel\",\n    \"pewter\",\n    \"platinum\",\n    \"steel\",\n    \"silver\",\n    \"silicon\",\n    \"tin\",\n    \"titanium\",\n    \"tungsten\",\n    \"zinc\",\n}",
+   "line": 204,
+   "master_only": false,
+   "name": "metal",
+   "storage": "global",
+   "type": "char *[22]"
+  },
+  {
+   "file": "init.c",
+   "init": "{\n    \"amber\",\n    \"aquamarine\",\n    \"black\",\n    \"blue\",\n    \"brown\",\n    \"clear\",\n    \"crimson\",\n    \"cyan\",\n    \"ecru\",\n    \"gold\",\n    \"green\",\n    \"grey\",\n    \"magenta\",\n    \"orange\",\n    \"pink\",\n    \"plaid\",\n    \"purple\",\n    \"red\",\n    \"silver\",\n    \"tan\",\n    \"tangerine\",\n    \"topaz\",\n    \"turquoise\",\n    \"vermilion\",\n    \"violet\",\n    \"white\",\n    \"yellow\",\n}",
+   "line": 81,
+   "master_only": false,
+   "name": "rainbow",
+   "storage": "global",
+   "type": "char *[27]"
+  },
+  {
+   "file": "init.c",
+   "init": "{\n    { \"agate\",\t\t 25},\n    { \"alexandrite\",\t 40},\n    { \"amethyst\",\t 50},\n    { \"carnelian\",\t 40},\n    { \"diamond\",\t300},\n    { \"emerald\",\t300},\n    { \"germanium\",\t225},\n    { \"granite\",\t  5},\n    { \"garnet\",\t\t 50},\n    { \"jade\",\t\t150},\n    { \"kryptonite\",\t300},\n    { \"lapis lazuli\",\t 50},\n    { \"moonstone\",\t 50},\n    { \"obsidian\",\t 15},\n    { \"onyx\",\t\t 60},\n    { \"opal\",\t\t200},\n    { \"pearl\",\t\t220},\n    { \"peridot\",\t 63},\n    { \"ruby\",\t\t350},\n    { \"sapphire\",\t285},\n    { \"stibotantalite\",\t200},\n    { \"tiger eye\",\t 50},\n    { \"topaz\",\t\t 60},\n    { \"turquoise\",\t 70},\n    { \"taaffeite\",\t300},\n    { \"zircon\",\t \t 80},\n}",
+   "line": 133,
+   "master_only": false,
+   "name": "stones",
+   "storage": "global",
+   "type": "STONE[26]"
+  },
+  {
+   "file": "init.c",
+   "init": "{\n    \"a\", \"ab\", \"ag\", \"aks\", \"ala\", \"an\", \"app\", \"arg\", \"arze\", \"ash\",\n    \"bek\", \"bie\", \"bit\", \"bjor\", \"blu\", \"bot\", \"bu\", \"byt\", \"comp\",\n    \"con\", \"cos\", \"cre\", \"dalf\", \"dan\", \"den\", \"do\", \"e\", \"eep\", \"el\",\n    \"eng\", \"er\", \"ere\", \"erk\", \"esh\", \"evs\", \"fa\", \"fid\", \"fri\", \"fu\",\n    \"gan\", \"gar\", \"glen\", \"gop\", \"gre\", \"ha\", \"hyd\", \"i\", \"ing\", \"ip\",\n    \"ish\", \"it\", \"ite\", \"iv\", \"jo\", \"kho\", \"kli\", \"klis\", \"la\", \"lech\",\n    \"mar\", \"me\", \"mi\", \"mic\", \"mik\", \"mon\", \"mung\", \"mur\", \"nej\",\n    \"nelg\", \"nep\", \"ner\", \"nes\", \"nes\", \"nih\", \"nin\", \"o\", \"od\", \"ood\",\n    \"org\", \"orn\", \"ox\", \"oxy\", \"pay\", \"ple\", \"plu\", \"po\", \"pot\",\n    \"prok\", \"re\", \"rea\", \"rhov\", \"ri\", \"ro\", \"rog\", \"rok\", \"rol\", \"sa\",\n    \"san\", \"sat\", \"sef\", \"seh\", \"shu\", \"ski\", \"sna\", \"sne\", \"snik\",\n    \"sno\", \"so\", \"sol\", \"sri\", \"sta\", \"sun\", \"ta\", \"tab\", \"tem\",\n    \"ther\", \"ti\", \"tox\", \"trol\", \"tue\", \"turs\", \"u\", \"ulk\", \"um\", \"un\",\n    \"uni\", \"ur\", \"val\", \"viv\", \"vly\", \"vom\", \"wah\", \"wed\", \"werg\",\n    \"wex\", \"whon\", \"wun\", \"xo\", \"y\", \"yot\", \"yu\", \"zant\", \"zeb\", \"zim\",\n    \"zok\", \"zon\", \"zum\",\n}",
+   "line": 114,
+   "master_only": false,
+   "name": "sylls",
+   "storage": "static",
+   "type": "char *[147]"
+  },
+  {
+   "file": "init.c",
+   "init": null,
+   "line": 233,
+   "master_only": false,
+   "name": "used",
+   "storage": "static",
+   "type": "bool[33]"
+  },
+  {
+   "file": "init.c",
+   "init": "{\n    \"avocado wood\",\n    \"balsa\",\n    \"bamboo\",\n    \"banyan\",\n    \"birch\",\n    \"cedar\",\n    \"cherry\",\n    \"cinnibar\",\n    \"cypress\",\n    \"dogwood\",\n    \"driftwood\",\n    \"ebony\",\n    \"elm\",\n    \"eucalyptus\",\n    \"fall\",\n    \"hemlock\",\n    \"holly\",\n    \"ironwood\",\n    \"kukui wood\",\n    \"mahogany\",\n    \"manzanita\",\n    \"maple\",\n    \"oaken\",\n    \"persimmon wood\",\n    \"pecan\",\n    \"pine\",\n    \"poplar\",\n    \"redwood\",\n    \"rosewood\",\n    \"spruce\",\n    \"teak\",\n    \"walnut\",\n    \"zebrawood\",\n}",
+   "line": 165,
+   "master_only": false,
+   "name": "wood",
+   "storage": "global",
+   "type": "char *[33]"
+  },
+  {
+   "file": "io.c",
+   "function": "doadd",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "buf",
+   "storage": "static-local",
+   "type": "char[1024]"
+  },
+  {
+   "file": "io.c",
+   "init": null,
+   "line": 19,
+   "master_only": false,
+   "name": "msgbuf",
+   "storage": "static",
+   "type": "char[143]"
+  },
+  {
+   "file": "io.c",
+   "init": "0",
+   "line": 20,
+   "master_only": false,
+   "name": "newpos",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "0",
+   "line": null,
+   "master_only": false,
+   "name": "hpwidth",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "0",
+   "line": null,
+   "master_only": false,
+   "name": "s_arm",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "0",
+   "line": null,
+   "master_only": false,
+   "name": "s_exp",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "0",
+   "line": null,
+   "master_only": false,
+   "name": "s_hp",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "0",
+   "line": null,
+   "master_only": false,
+   "name": "s_hungry",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "0",
+   "line": null,
+   "master_only": false,
+   "name": "s_lvl",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "-1",
+   "line": null,
+   "master_only": false,
+   "name": "s_pur",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "0",
+   "line": null,
+   "master_only": false,
+   "name": "s_str",
+   "storage": "static-local",
+   "type": "str_t"
+  },
+  {
+   "file": "io.c",
+   "function": "status",
+   "init": "{\n\t\"\", \"Hungry\", \"Weak\", \"Faint\"\n    }",
+   "line": 182,
+   "master_only": false,
+   "name": "state_name",
+   "storage": "static-local",
+   "type": "char *[4]"
+  },
+  {
+   "file": "list.c",
+   "init": "0",
+   "line": 18,
+   "master_only": true,
+   "name": "total",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "mach_dep.c",
+   "init": "NUMNAME",
+   "line": 60,
+   "master_only": false,
+   "name": "Numname",
+   "storage": "global",
+   "type": "char *"
+  },
+  {
+   "file": "mach_dep.c",
+   "init": "TRUE",
+   "line": 63,
+   "master_only": false,
+   "name": "allscore",
+   "storage": "global",
+   "type": "bool"
+  },
+  {
+   "file": "mach_dep.c",
+   "init": "NULL",
+   "line": 372,
+   "master_only": false,
+   "name": "lfd",
+   "storage": "static",
+   "type": "FILE *"
+  },
+  {
+   "file": "mach_dep.c",
+   "function": "lock_sc",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "sbuf",
+   "storage": "static-local",
+   "type": "struct stat"
+  },
+  {
+   "file": "mach_dep.c",
+   "init": "NUMSCORES",
+   "line": 59,
+   "master_only": false,
+   "name": "numscores",
+   "storage": "global",
+   "type": "unsigned int"
+  },
+  {
+   "file": "main.c",
+   "function": "leave",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "buf",
+   "storage": "static-local",
+   "type": "char[8192]"
+  },
+  {
+   "file": "mdport.c",
+   "function": "md_gethomedir",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "homedir",
+   "storage": "static-local",
+   "type": "char[4096]"
+  },
+  {
+   "file": "mdport.c",
+   "function": "md_getrealname",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "uidstr",
+   "storage": "static-local",
+   "type": "char[20]"
+  },
+  {
+   "file": "mdport.c",
+   "function": "md_getshell",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "shell",
+   "storage": "static-local",
+   "type": "char[4096]"
+  },
+  {
+   "file": "mdport.c",
+   "function": "md_getusername",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "login",
+   "storage": "static-local",
+   "type": "char[80]"
+  },
+  {
+   "file": "misc.c",
+   "function": "get_dir",
+   "init": "{0,0}",
+   "line": null,
+   "master_only": false,
+   "name": "last_delt",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "misc.c",
+   "function": "rnd_thing",
+   "init": "{\n\tPOTION, SCROLL, RING, STICK, FOOD, WEAPON, ARMOR, STAIRS, GOLD, AMULET\n    }",
+   "line": 577,
+   "master_only": false,
+   "name": "thing_list",
+   "storage": "static-local",
+   "type": "char[10]"
+  },
+  {
+   "file": "monsters.c",
+   "init": "{\n    'K', 'E', 'B', 'S', 'H', 'I', 'R', 'O', 'Z', 'L', 'C', 'Q', 'A',\n    'N', 'Y', 'F', 'T', 'W', 'P', 'X', 'U', 'M', 'V', 'G', 'J', 'D'\n}",
+   "line": 21,
+   "master_only": false,
+   "name": "lvl_mons",
+   "storage": "static",
+   "type": "char[26]"
+  },
+  {
+   "file": "monsters.c",
+   "init": "{\n    'K', 'E', 'B', 'S', 'H',   0, 'R', 'O', 'Z',   0, 'C', 'Q', 'A',\n      0, 'Y',   0, 'T', 'W', 'P',   0, 'U', 'M', 'V', 'G', 'J',   0\n}",
+   "line": 26,
+   "master_only": false,
+   "name": "wand_mons",
+   "storage": "static",
+   "type": "char[26]"
+  },
+  {
+   "file": "monsters.c",
+   "function": "wanderer",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "cp",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "move.c",
+   "init": null,
+   "line": 21,
+   "master_only": false,
+   "name": "nh",
+   "storage": "global",
+   "type": "coord"
+  },
+  {
+   "file": "move.c",
+   "function": "rndmove",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "ret",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "new_level.c",
+   "function": "treas_room",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "mp",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "options.c",
+   "function": "get_num",
+   "init": null,
+   "line": null,
+   "master_only": true,
+   "name": "buf",
+   "storage": "static-local",
+   "type": "char[1024]"
+  },
+  {
+   "file": "options.c",
+   "function": "get_str",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "buf",
+   "storage": "static-local",
+   "type": "char[1024]"
+  },
+  {
+   "file": "options.c",
+   "init": "{\n    {\"terse\",\t \"Terse output\",\n\t\t &terse,\tput_bool,\tget_bool\t},\n    {\"flush\",\t \"Flush typeahead during battle\",\n\t\t &fight_flush,\tput_bool,\tget_bool\t},\n    {\"jump\",\t \"Show position only at end of run\",\n\t\t &jump,\t\tput_bool,\tget_bool\t},\n    {\"seefloor\", \"Show the lamp-illuminated floor\",\n\t\t &see_floor,\tput_bool,\tget_sf\t\t},\n    {\"passgo\",\t\"Follow turnings in passageways\",\n\t\t &passgo,\tput_bool,\tget_bool\t},\n    {\"tombstone\", \"Print out tombstone when killed\",\n\t\t &tombstone,\tput_bool,\tget_bool\t},\n    {\"inven\",\t\"Inventory style\",\n\t\t &inv_type,\tput_inv_t,\tget_inv_t\t},\n    {\"name\",\t \"Name\",\n\t\t whoami,\tput_str,\tget_str\t\t},\n    {\"fruit\",\t \"Fruit\",\n\t\t fruit,\t\tput_str,\tget_str\t\t},\n    {\"file\",\t \"Save file\",\n\t\t file_name,\tput_str,\tget_str\t\t}\n}",
+   "line": 42,
+   "master_only": false,
+   "name": "optlist",
+   "storage": "global",
+   "type": "OPTION[10]"
+  },
+  {
+   "file": "pack.c",
+   "function": "inventory",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "inv_temp",
+   "storage": "static-local",
+   "type": "char[1024]"
+  },
+  {
+   "file": "passages.c",
+   "function": "conn",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "curr",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "passages.c",
+   "function": "conn",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "del",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "passages.c",
+   "function": "conn",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "epos",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "passages.c",
+   "function": "conn",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "spos",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "passages.c",
+   "function": "conn",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "turn_delta",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "passages.c",
+   "function": "do_passages",
+   "init": "{\n\t{ { 0, 1, 0, 1, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 1, 0, 1, 0, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 0, 1, 0, 0, 0, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 1, 0, 0, 0, 1, 0, 1, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 0, 1, 0, 1, 0, 1, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 0, 0, 1, 0, 1, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 0, 0, 0, 1, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 0, 0, 0, 0, 1, 0, 1, 0, 1 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n\t{ { 0, 0, 0, 0, 0, 1, 0, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 },\n    }",
+   "line": 33,
+   "master_only": false,
+   "name": "rdes",
+   "storage": "static-local",
+   "type": "struct rdes[9]"
+  },
+  {
+   "file": "passages.c",
+   "init": null,
+   "line": 360,
+   "master_only": false,
+   "name": "newpnum",
+   "storage": "static",
+   "type": "bool"
+  },
+  {
+   "file": "passages.c",
+   "init": null,
+   "line": 359,
+   "master_only": false,
+   "name": "pnum",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "potions.c",
+   "init": "{\n\t{ ISHUH,\tunconfuse,\tHUHDURATION,\t/* P_CONFUSE */\n\t\t\"what a tripy feeling!\",\n\t\t\"wait, what's going on here. Huh? What? Who?\" },\n\t{ ISHALU,\tcome_down,\tSEEDURATION,\t/* P_LSD */\n\t\t\"Oh, wow!  Everything seems so cosmic!\",\n\t\t\"Oh, wow!  Everything seems so cosmic!\" },\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_POISON */\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_STRENGTH */\n\t{ CANSEE,\tunsee,\tSEEDURATION,\t\t/* P_SEEINVIS */\n\t\tprbuf,\n\t\tprbuf },\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_HEALING */\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_MFIND */\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_TFIND  */\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_RAISE */\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_XHEAL */\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_HASTE */\n\t{ 0,\t\tNULL,\t0 },\t\t\t/* P_RESTORE */\n\t{ ISBLIND,\tsight,\tSEEDURATION,\t\t/* P_BLIND */\n\t\t\"oh, bummer!  Everything is dark!  Help!\",\n\t\t\"a cloak of darkness falls around you\" },\n\t{ ISLEVIT,\tland,\tHEALTIME,\t\t/* P_LEVIT */\n\t\t\"oh, wow!  You're floating in the air!\",\n\t\t\"you start to float in the air\" }\n}",
+   "line": 25,
+   "master_only": false,
+   "name": "p_actions",
+   "storage": "static",
+   "type": "PACT[14]"
+  },
+  {
+   "file": "rings.c",
+   "function": "ring_eat",
+   "init": "{\n\t 1,\t/* R_PROTECT */\t\t 1,\t/* R_ADDSTR */\n\t 1,\t/* R_SUSTSTR */\t\t-3,\t/* R_SEARCH */\n\t-5,\t/* R_SEEINVIS */\t 0,\t/* R_NOP */\n\t 0,\t/* R_AGGR */\t\t-3,\t/* R_ADDHIT */\n\t-3,\t/* R_ADDDAM */\t\t 2,\t/* R_REGEN */\n\t-2,\t/* R_DIGEST */\t\t 0,\t/* R_TELEPORT */\n\t 1,\t/* R_STEALTH */\t\t 1\t/* R_SUSTARM */\n    }",
+   "line": 163,
+   "master_only": false,
+   "name": "uses",
+   "storage": "static-local",
+   "type": "int[14]"
+  },
+  {
+   "file": "rings.c",
+   "function": "ring_num",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "buf",
+   "storage": "static-local",
+   "type": "char[10]"
+  },
+  {
+   "file": "rip.c",
+   "function": "death",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "date",
+   "storage": "static-local",
+   "type": "time_t"
+  },
+  {
+   "file": "rip.c",
+   "function": "death_monst",
+   "init": "{\n\t'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',\n\t'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',\n\t'Y', 'Z', 'a', 'b', 'h', 'd', 's',\n\t' '\t/* This is provided to generate the \"Wally the Wonder Badger\"\n\t\t   message for killer */\n    }",
+   "line": 439,
+   "master_only": false,
+   "name": "poss",
+   "storage": "static-local",
+   "type": "char[32]"
+  },
+  {
+   "file": "rip.c",
+   "function": "killname",
+   "init": "{\n\t{'a',\t\"arrow\",\t\tTRUE},\n\t{'b',\t\"bolt\",\t\t\tTRUE},\n\t{'d',\t\"dart\",\t\t\tTRUE},\n\t{'h',\t\"hypothermia\",\t\tFALSE},\n\t{'s',\t\"starvation\",\t\tFALSE},\n\t{'\\0'}\n    }",
+   "line": 398,
+   "master_only": false,
+   "name": "nlist",
+   "storage": "static-local",
+   "type": "struct h_list[6]"
+  },
+  {
+   "file": "rip.c",
+   "init": "{\n\"                       __________\\n\",\n\"                      /          \\\\\\n\",\n\"                     /    REST    \\\\\\n\",\n\"                    /      IN      \\\\\\n\",\n\"                   /     PEACE      \\\\\\n\",\n\"                  /                  \\\\\\n\",\n\"                  |                  |\\n\",\n\"                  |                  |\\n\",\n\"                  |   killed by a    |\\n\",\n\"                  |                  |\\n\",\n\"                  |       1980       |\\n\",\n\"                 *|     *  *  *      | *\\n\",\n\"         ________)/\\\\\\\\_//(\\\\/(/\\\\)/\\\\//\\\\/|_)_______\\n\",\n    0\n}",
+   "line": 25,
+   "master_only": false,
+   "name": "rip",
+   "storage": "static",
+   "type": "char *[14]"
+  },
+  {
+   "file": "rip.c",
+   "function": "score",
+   "init": "{\n\t\"killed\",\n\t\"quit\",\n\t\"A total winner\",\n\t\"killed with Amulet\"\n    }",
+   "line": 60,
+   "master_only": false,
+   "name": "reason",
+   "storage": "static-local",
+   "type": "char *[4]"
+  },
+  {
+   "file": "rooms.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "Maxx",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "rooms.c",
+   "init": null,
+   "line": 208,
+   "master_only": false,
+   "name": "Maxy",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "rooms.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "Startx",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "rooms.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "Starty",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "rooms.c",
+   "function": "dig",
+   "init": "{\n\t{2, 0}, {-2, 0}, {0, 2}, {0, -2}\n    }",
+   "line": 249,
+   "master_only": false,
+   "name": "del",
+   "storage": "static-local",
+   "type": "coord[4]"
+  },
+  {
+   "file": "rooms.c",
+   "function": "dig",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "pos",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "rooms.c",
+   "function": "do_maze",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "pos",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "rooms.c",
+   "function": "do_rooms",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "top",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "rooms.c",
+   "init": null,
+   "line": 210,
+   "master_only": false,
+   "name": "maze",
+   "storage": "static",
+   "type": "SPOT[9][27]"
+  },
+  {
+   "file": "save.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "encstr",
+   "storage": "extern",
+   "type": "char[]"
+  },
+  {
+   "file": "save.c",
+   "init": null,
+   "line": 27,
+   "master_only": false,
+   "name": "sbuf",
+   "storage": "static",
+   "type": "STAT"
+  },
+  {
+   "file": "save.c",
+   "init": null,
+   "line": 336,
+   "master_only": false,
+   "name": "scoreline",
+   "storage": "static",
+   "type": "char[100]"
+  },
+  {
+   "file": "save.c",
+   "init": null,
+   "line": 25,
+   "master_only": false,
+   "name": "version",
+   "storage": "extern",
+   "type": "char[]"
+  },
+  {
+   "file": "scrolls.c",
+   "function": "read_scroll",
+   "init": "{ 0, 0, 0, 0, 0, POTION, SCROLL, WEAPON, ARMOR, R_OR_S }",
+   "line": 152,
+   "master_only": false,
+   "name": "id_type",
+   "storage": "static-local",
+   "type": "char[10]"
+  },
+  {
+   "file": "scrolls.c",
+   "function": "read_scroll",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "mp",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "state.c",
+   "init": "0x01020304",
+   "line": 72,
+   "master_only": false,
+   "name": "endian",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "state.c",
+   "init": "FALSE",
+   "line": 71,
+   "master_only": false,
+   "name": "format_error",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "state.c",
+   "init": "FALSE",
+   "line": 69,
+   "master_only": false,
+   "name": "read_error",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "state.c",
+   "init": "FALSE",
+   "line": 70,
+   "master_only": false,
+   "name": "write_error",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "sticks.c",
+   "function": "charge_str",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "buf",
+   "storage": "static-local",
+   "type": "char[20]"
+  },
+  {
+   "file": "sticks.c",
+   "function": "do_zap",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "bolt",
+   "storage": "static-local",
+   "type": "THING"
+  },
+  {
+   "file": "sticks.c",
+   "function": "drain",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "drainee",
+   "storage": "static-local",
+   "type": "THING *[40]"
+  },
+  {
+   "file": "sticks.c",
+   "function": "fire_bolt",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "pos",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "sticks.c",
+   "function": "fire_bolt",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "spotpos",
+   "storage": "static-local",
+   "type": "coord[6]"
+  },
+  {
+   "file": "things.c",
+   "function": "add_line",
+   "init": "-1",
+   "line": null,
+   "master_only": false,
+   "name": "maxlen",
+   "storage": "static-local",
+   "type": "int"
+  },
+  {
+   "file": "things.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "lastarg",
+   "storage": "static",
+   "type": "char *"
+  },
+  {
+   "file": "things.c",
+   "init": null,
+   "line": 339,
+   "master_only": false,
+   "name": "lastfmt",
+   "storage": "static",
+   "type": "char *"
+  },
+  {
+   "file": "things.c",
+   "init": "0",
+   "line": 335,
+   "master_only": false,
+   "name": "line_cnt",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "things.c",
+   "init": "FALSE",
+   "line": 337,
+   "master_only": false,
+   "name": "newpage",
+   "storage": "static",
+   "type": "bool"
+  },
+  {
+   "file": "things.c",
+   "function": "print_disc",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "obj",
+   "storage": "static-local",
+   "type": "THING"
+  },
+  {
+   "file": "things.c",
+   "function": "print_disc",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "order",
+   "storage": "static-local",
+   "type": "int[18]"
+  },
+  {
+   "file": "vers.c",
+   "init": "\"\\300k||`\\251Y.'\\305\\321\\201+\\277~r\\\"]\\240_\\223=1\\341)\\222\\212\\241t;\\t$\\270\\314/<#\\201\\254\"",
+   "line": 15,
+   "master_only": false,
+   "name": "encstr",
+   "storage": "global",
+   "type": "char[40]"
+  },
+  {
+   "file": "vers.c",
+   "init": "\"5.4.4\"",
+   "line": 14,
+   "master_only": false,
+   "name": "release",
+   "storage": "global",
+   "type": "char *"
+  },
+  {
+   "file": "vers.c",
+   "init": "\"\\355kl{+\\204\\255\\313idJ\\361\\214=4:\\311\\271\\341wK<\\312\\321\\213,,7\\271/Rk%\\b\\312\\f\\246\"",
+   "line": 16,
+   "master_only": false,
+   "name": "statlist",
+   "storage": "global",
+   "type": "char[38]"
+  },
+  {
+   "file": "vers.c",
+   "init": "\"rogue (rogueforge) 09/05/07\"",
+   "line": 17,
+   "master_only": false,
+   "name": "version",
+   "storage": "global",
+   "type": "char[28]"
+  },
+  {
+   "file": "weapons.c",
+   "function": "fall",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "fpos",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "weapons.c",
+   "init": "2",
+   "line": 20,
+   "master_only": false,
+   "name": "group",
+   "storage": "global",
+   "type": "int"
+  },
+  {
+   "file": "weapons.c",
+   "function": "hit_monster",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "mp",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "weapons.c",
+   "init": "{\n    { \"2x4\",\t\"1x3\",\tNO_WEAPON,\t0,\t\t},\t/* Mace */\n    { \"3x4\",\t\"1x2\",\tNO_WEAPON,\t0,\t\t},\t/* Long sword */\n    { \"1x1\",\t\"1x1\",\tNO_WEAPON,\t0,\t\t},\t/* Bow */\n    { \"1x1\",\t\"2x3\",\tBOW,\t\tISMANY|ISMISL,\t},\t/* Arrow */\n    { \"1x6\",\t\"1x4\",\tNO_WEAPON,\tISMISL|ISMISL,\t},\t/* Dagger */\n    { \"4x4\",\t\"1x2\",\tNO_WEAPON,\t0,\t\t},\t/* 2h sword */\n    { \"1x1\",\t\"1x3\",\tNO_WEAPON,\tISMANY|ISMISL,\t},\t/* Dart */\n    { \"1x2\",\t\"2x4\",\tNO_WEAPON,\tISMANY|ISMISL,\t},\t/* Shuriken */\n    { \"2x3\",\t\"1x6\",\tNO_WEAPON,\tISMISL,\t\t},\t/* Spear */\n}",
+   "line": 27,
+   "master_only": false,
+   "name": "init_dam",
+   "storage": "static",
+   "type": "struct init_weaps[9]"
+  },
+  {
+   "file": "weapons.c",
+   "function": "num",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "numbuf",
+   "storage": "static-local",
+   "type": "char[10]"
+  },
+  {
+   "file": "wizard.c",
+   "function": "passwd",
+   "init": null,
+   "line": null,
+   "master_only": true,
+   "name": "buf",
+   "storage": "static-local",
+   "type": "char[1024]"
+  },
+  {
+   "file": "wizard.c",
+   "function": "teleport",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "c",
+   "storage": "static-local",
+   "type": "coord"
+  },
+  {
+   "file": "wizard.c",
+   "function": "type_name",
+   "init": "{\n\t{POTION, \"potion\",\t\tFALSE},\n\t{SCROLL, \"scroll\",\t\tFALSE},\n\t{FOOD,\t \"food\",\t\tFALSE},\n\t{R_OR_S, \"ring, wand or staff\",\tFALSE},\n\t{RING,\t \"ring\",\t\tFALSE},\n\t{STICK,\t \"wand or staff\",\tFALSE},\n\t{WEAPON, \"weapon\",\t\tFALSE},\n\t{ARMOR,\t \"suit of armor\",\tFALSE},\n    }",
+   "line": 103,
+   "master_only": false,
+   "name": "tlist",
+   "storage": "static-local",
+   "type": "struct h_list[8]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{\n\t58, 50, 42, 34, 26, 18, 10,  2, 60, 52, 44, 36, 28, 20, 12,  4,\n\t62, 54, 46, 38, 30, 22, 14,  6, 64, 56, 48, 40, 32, 24, 16,  8,\n\t57, 49, 41, 33, 25, 17,  9,  1, 59, 51, 43, 35, 27, 19, 11,  3,\n\t61, 53, 45, 37, 29, 21, 13,  5, 63, 55, 47, 39, 31, 23, 15,  7\n}",
+   "line": 83,
+   "master_only": false,
+   "name": "IP",
+   "storage": "static",
+   "type": "unsigned char[64]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "\"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\"",
+   "line": 201,
+   "master_only": false,
+   "name": "ascii64",
+   "storage": "static",
+   "type": "unsigned char[65]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "bits24",
+   "storage": "static",
+   "type": "unsigned int *"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 188,
+   "master_only": false,
+   "name": "bits28",
+   "storage": "static",
+   "type": "unsigned int *"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{\n\t0x80000000, 0x40000000, 0x20000000, 0x10000000,\n\t0x08000000, 0x04000000, 0x02000000, 0x01000000,\n\t0x00800000, 0x00400000, 0x00200000, 0x00100000,\n\t0x00080000, 0x00040000, 0x00020000, 0x00010000,\n\t0x00008000, 0x00004000, 0x00002000, 0x00001000,\n\t0x00000800, 0x00000400, 0x00000200, 0x00000100,\n\t0x00000080, 0x00000040, 0x00000020, 0x00000010,\n\t0x00000008, 0x00000004, 0x00000002, 0x00000001\n}",
+   "line": 172,
+   "master_only": false,
+   "name": "bits32",
+   "storage": "static",
+   "type": "unsigned int[32]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{ 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 }",
+   "line": 184,
+   "master_only": false,
+   "name": "bits8",
+   "storage": "static",
+   "type": "unsigned char[8]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 198,
+   "master_only": false,
+   "name": "comp_maskl",
+   "storage": "static",
+   "type": "unsigned int[8][128]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "comp_maskr",
+   "storage": "static",
+   "type": "unsigned int[8][128]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{\n\t14, 17, 11, 24,  1,  5,  3, 28, 15,  6, 21, 10,\n\t23, 19, 12,  4, 26,  8, 16,  7, 27, 20, 13,  2,\n\t41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,\n\t44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32\n}",
+   "line": 103,
+   "master_only": false,
+   "name": "comp_perm",
+   "storage": "static",
+   "type": "unsigned char[48]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 191,
+   "master_only": false,
+   "name": "de_keysl",
+   "storage": "static",
+   "type": "unsigned int[16]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "de_keysr",
+   "storage": "static",
+   "type": "unsigned int[16]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "0",
+   "line": 192,
+   "master_only": false,
+   "name": "des_initialised",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 190,
+   "master_only": false,
+   "name": "en_keysl",
+   "storage": "static",
+   "type": "unsigned int[16]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "en_keysr",
+   "storage": "static",
+   "type": "unsigned int[16]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "final_perm",
+   "storage": "static",
+   "type": "unsigned char[64]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 196,
+   "master_only": false,
+   "name": "fp_maskl",
+   "storage": "static",
+   "type": "unsigned int[8][256]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "fp_maskr",
+   "storage": "static",
+   "type": "unsigned int[8][256]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 189,
+   "master_only": false,
+   "name": "init_perm",
+   "storage": "static",
+   "type": "unsigned char[64]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 102,
+   "master_only": false,
+   "name": "inv_comp_perm",
+   "storage": "static",
+   "type": "unsigned char[56]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 90,
+   "master_only": false,
+   "name": "inv_key_perm",
+   "storage": "static",
+   "type": "unsigned char[64]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 195,
+   "master_only": false,
+   "name": "ip_maskl",
+   "storage": "static",
+   "type": "unsigned int[8][256]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "ip_maskr",
+   "storage": "static",
+   "type": "unsigned int[8][256]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{\n\t57, 49, 41, 33, 25, 17,  9,  1, 58, 50, 42, 34, 26, 18,\n\t10,  2, 59, 51, 43, 35, 27, 19, 11,  3, 60, 52, 44, 36,\n\t63, 55, 47, 39, 31, 23, 15,  7, 62, 54, 46, 38, 30, 22,\n\t14,  6, 61, 53, 45, 37, 29, 21, 13,  5, 28, 20, 12,  4\n}",
+   "line": 91,
+   "master_only": false,
+   "name": "key_perm",
+   "storage": "static",
+   "type": "unsigned char[56]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 197,
+   "master_only": false,
+   "name": "key_perm_maskl",
+   "storage": "static",
+   "type": "unsigned int[8][128]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "key_perm_maskr",
+   "storage": "static",
+   "type": "unsigned int[8][128]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{\n\t1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1\n}",
+   "line": 98,
+   "master_only": false,
+   "name": "key_shifts",
+   "storage": "static",
+   "type": "unsigned char[16]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 193,
+   "master_only": false,
+   "name": "m_sbox",
+   "storage": "static",
+   "type": "unsigned char[4][4096]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "0x01020304",
+   "line": 55,
+   "master_only": false,
+   "name": "md_endian",
+   "storage": "global",
+   "type": "unsigned int"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 199,
+   "master_only": false,
+   "name": "old_rawkey0",
+   "storage": "static",
+   "type": "unsigned int"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "old_rawkey1",
+   "storage": "static",
+   "type": "unsigned int"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 187,
+   "master_only": false,
+   "name": "old_salt",
+   "storage": "static",
+   "type": "int"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{\n\t16,  7, 20, 21, 29, 12, 28, 17,  1, 15, 23, 26,  5, 18, 31, 10,\n\t 2,  8, 24, 14, 32, 27,  3,  9, 19, 13, 30,  6, 22, 11,  4, 25\n}",
+   "line": 167,
+   "master_only": false,
+   "name": "pbox",
+   "storage": "static",
+   "type": "unsigned char[32]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 194,
+   "master_only": false,
+   "name": "psbox",
+   "storage": "static",
+   "type": "unsigned int[4][256]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 186,
+   "master_only": false,
+   "name": "saltbits",
+   "storage": "static",
+   "type": "unsigned int"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": "{\n\t{\n\t\t14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7,\n\t\t 0, 15,  7,  4, 14,  2, 13,  1, 10,  6, 12, 11,  9,  5,  3,  8,\n\t\t 4,  1, 14,  8, 13,  6,  2, 11, 15, 12,  9,  7,  3, 10,  5,  0,\n\t\t15, 12,  8,  2,  4,  9,  1,  7,  5, 11,  3, 14, 10,  0,  6, 13\n\t},\n\t{\n\t\t15,  1,  8, 14,  6, 11,  3,  4,  9,  7,  2, 13, 12,  0,  5, 10,\n\t\t 3, 13,  4,  7, 15,  2,  8, 14, 12,  0,  1, 10,  6,  9, 11,  5,\n\t\t 0, 14,  7, 11, 10,  4, 13,  1,  5,  8, 12,  6,  9,  3,  2, 15,\n\t\t13,  8, 10,  1,  3, 15,  4,  2, 11,  6,  7, 12,  0,  5, 14,  9\n\t},\n\t{\n\t\t10,  0,  9, 14,  6,  3, 15,  5,  1, 13, 12,  7, 11,  4,  2,  8,\n\t\t13,  7,  0,  9,  3,  4,  6, 10,  2,  8,  5, 14, 12, 11, 15,  1,\n\t\t13,  6,  4,  9,  8, 15,  3,  0, 11,  1,  2, 12,  5, 10, 14,  7,\n\t\t 1, 10, 13,  0,  6,  9,  8,  7,  4, 15, 14,  3, 11,  5,  2, 12\n\t},\n\t{\n\t\t 7, 13, 14,  3,  0,  6,  9, 10,  1,  2,  8,  5, 11, 12,  4, 15,\n\t\t13,  8, 11,  5,  6, 15,  0,  3,  4,  7,  2, 12,  1, 10, 14,  9,\n\t\t10,  6,  9,  0, 12, 11,  7, 13, 15,  1,  3, 14,  5,  2,  8,  4,\n\t\t 3, 15,  0,  6, 10,  1, 13,  8,  9,  4,  5, 11, 12,  7,  2, 14\n\t},\n\t{\n\t\t 2, 12,  4,  1,  7, 10, 11,  6,  8,  5,  3, 15, 13,  0, 14,  9,\n\t\t14, 11,  2, 12,  4,  7, 13,  1,  5,  0, 15, 10,  3,  9,  8,  6,\n\t\t 4,  2,  1, 11, 10, 13,  7,  8, 15,  9, 12,  5,  6,  3,  0, 14,\n\t\t11,  8, 12,  7,  1, 14,  2, 13,  6, 15,  0,  9, 10,  4,  5,  3\n\t},\n\t{\n\t\t12,  1, 10, 15,  9,  2,  6,  8,  0, 13,  3,  4, 14,  7,  5, 11,\n\t\t10, 15,  4,  2,  7, 12,  9,  5,  6,  1, 13, 14,  0, 11,  3,  8,\n\t\t 9, 14, 15,  5,  2,  8, 12,  3,  7,  0,  4, 10,  1, 13, 11,  6,\n\t\t 4,  3,  2, 12,  9,  5, 15, 10, 11, 14,  1,  7,  6,  0,  8, 13\n\t},\n\t{\n\t\t 4, 11,  2, 14, 15,  0,  8, 13,  3, 12,  9,  7,  5, 10,  6,  1,\n\t\t13,  0, 11,  7,  4,  9,  1, 10, 14,  3,  5, 12,  2, 15,  8,  6,\n\t\t 1,  4, 11, 13, 12,  3,  7, 14, 10, 15,  6,  8,  0,  5,  9,  2,\n\t\t 6, 11, 13,  8,  1,  4, 10,  7,  9,  5,  0, 15, 14,  2,  3, 12\n\t},\n\t{\n\t\t13,  2,  8,  4,  6, 15, 11,  1, 10,  9,  3, 14,  5,  0, 12,  7,\n\t\t 1, 15, 13,  8, 10,  3,  7,  4, 12,  5,  6, 11,  0, 14,  9,  2,\n\t\t 7, 11,  4,  1,  9, 12, 14,  2,  0,  6, 10, 13, 15,  3,  5,  8,\n\t\t 2,  1, 14,  7,  4, 10,  8, 13, 15, 12,  9,  0,  3,  5,  6, 11\n\t}\n}",
+   "line": 115,
+   "master_only": false,
+   "name": "sbox",
+   "storage": "static",
+   "type": "unsigned char[8][64]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 114,
+   "master_only": false,
+   "name": "u_sbox",
+   "storage": "static",
+   "type": "unsigned char[8][64]"
+  },
+  {
+   "file": "xcrypt.c",
+   "init": null,
+   "line": 166,
+   "master_only": false,
+   "name": "un_pbox",
+   "storage": "static",
+   "type": "unsigned char[32]"
+  },
+  {
+   "file": "xcrypt.c",
+   "function": "xcrypt",
+   "init": null,
+   "line": null,
+   "master_only": false,
+   "name": "output",
+   "storage": "static-local",
+   "type": "unsigned char[21]"
+  }
+ ]
+}

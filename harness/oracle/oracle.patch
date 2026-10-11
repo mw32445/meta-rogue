@@ -1,0 +1,76 @@
+--- a/main.c	2026-10-11 05:00:33.048827026 +0000
++++ b/main.c	2026-10-11 05:00:33.074528243 +0000
+@@ -238,8 +238,7 @@
+     getyx(curscr, y, x);
+     mvcur(y, x, oy, ox);
+     fflush(stdout);
+-    curscr->_cury = oy;
+-    curscr->_curx = ox;
++    /* ORACLE: removed curscr->_cury/_curx writes (opaque WINDOW in ncurses 6; tstp is dead code) */
+ }
+ 
+ /*
+--- a/io.c	2026-10-11 05:00:33.048990297 +0000
++++ b/io.c	2026-10-11 05:00:33.074672104 +0000
+@@ -220,7 +220,7 @@
+     if (stat_msg)
+     {
+ 	move(0, 0);
+-        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%ld  %s",
++        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%d  %s",
+ 	    level, purse, hpwidth, pstats.s_hpt, hpwidth, max_hp, pstats.s_str,
+ 	    max_stats.s_str, 10 - s_arm, pstats.s_lvl, pstats.s_exp,
+ 	    state_name[hungry_state]);
+--- a/sticks.c	2026-10-11 05:00:33.049008883 +0000
++++ b/sticks.c	2026-10-11 05:00:33.074752068 +0000
+@@ -307,6 +307,8 @@
+     static coord spotpos[BOLT_LENGTH];
+     THING bolt;
+ 
++    memset(&bolt, 0, sizeof bolt);	/* ORACLE: was uninitialized (UB) */
++    bolt.o_launch = -1;		/* ORACLE: intended: o_launch < 0 => use o_hurldmg "6x6" */
+     bolt.o_type = WEAPON;
+     bolt.o_which = FLAME;
+     strncpy(bolt.o_hurldmg,"6x6",sizeof(bolt.o_hurldmg));
+--- a/rogue.h	2026-10-11 05:00:33.049028430 +0000
++++ b/rogue.h	2026-10-11 05:00:33.075399222 +0000
+@@ -71,10 +71,11 @@
+ #define ISRING(h,r)	(cur_ring[h] != NULL && cur_ring[h]->o_which == r)
+ #define ISWEARING(r)	(ISRING(LEFT, r) || ISRING(RIGHT, r))
+ #define ISMULT(type) 	(type == POTION || type == SCROLL || type == FOOD)
+-#define INDEX(y,x)	(&places[((x) << 5) + (y)])
+-#define chat(y,x)	(places[((x) << 5) + (y)].p_ch)
+-#define flat(y,x)	(places[((x) << 5) + (y)].p_flags)
+-#define moat(y,x)	(places[((x) << 5) + (y)].p_monst)
++/* ORACLE: out-of-range map indices go to a blank dummy PLACE instead of foreign memory */
++#define INDEX(y,x)	(oracle_place((y), (x)))
++#define chat(y,x)	(oracle_place((y), (x))->p_ch)
++#define flat(y,x)	(oracle_place((y), (x))->p_flags)
++#define moat(y,x)	(oracle_place((y), (x))->p_monst)
+ #define unc(cp)		(cp).y, (cp).x
+ #ifdef MASTER
+ #define debug		if (wizard) msg
+@@ -447,6 +448,8 @@
+     THING *p_monst;
+ } PLACE;
+ 
++PLACE *oracle_place(int y, int x);	/* ORACLE: harness/oracle/hooks.c */
++
+ /*
+  * Array containing information on all the various types of monsters
+  */
+--- a/daemons.c	2026-10-11 05:00:33.049047559 +0000
++++ b/daemons.c	2026-10-11 05:00:33.075571772 +0000
+@@ -160,7 +160,11 @@
+     else
+     {
+ 	oldfood = food_left;
+-	food_left -= ring_eat(LEFT) + ring_eat(RIGHT) + 1 - amulet;
++	{ /* ORACLE: unsequenced in C; stock gcc evaluates LEFT then RIGHT */
++	    int ring_l = ring_eat(LEFT);
++	    int ring_r = ring_eat(RIGHT);
++	    food_left -= ring_l + ring_r + 1 - amulet;
++	}
+ 
+ 	if (food_left < MORETIME && oldfood >= MORETIME)
+ 	{

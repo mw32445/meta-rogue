@@ -1,0 +1,8 @@
+# oracle builds and test outputs
+/harness/oracle/build/
+/harness/out/
+__pycache__/
+*.pyc
+# Godot
+/godot/.godot/
+/godot/export_presets.cfg
