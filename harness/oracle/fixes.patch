@@ -591,6 +591,21 @@ diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/things.c b/things.c
  	    {
  		msg("");
  		refresh();
+@@ -540,7 +545,13 @@
+ 		wait_for(' ');
+ 		clearok(curscr, TRUE);
+ 		wclear(hw);
+-		touchwin(stdscr);
++		/*
++		 * FIX 31: stdscr is touched after the last page only; touched
++		 * sooner, the getch() that waits on the next page repaints it
++		 * over that page
++		 */
++		if (fmt == NULL)
++		    touchwin(stdscr);
+ 	    }
+ 	    newpage = TRUE;
+ 	    line_cnt = 0;
 diff -ruN -x '*.o' -x '*.orig' -x '*.rej' a/weapons.c b/weapons.c
 --- a/weapons.c	2026-10-11 19:36:42.641553954 +0000
 +++ b/weapons.c	2026-10-11 19:39:10.538203237 +0000

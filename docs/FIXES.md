@@ -66,6 +66,7 @@ sources at the repository root.
 | 28 | player text used as a format string | `28-player-text-format` |
 | 29 | overwrite inventory draws nothing for wide lines | `29-inven-overwrite-wide` |
 | 30 | monster detection fills the daemon slots | `30-monster-detection-fuse` |
+| 31 | a list past 23 lines loses its second page | `31-second-page` |
 | D1 | magic missile without a weapon always misses | `D1-magic-missile-no-weapon` |
 | N1 | a wraith's drain gives the level back at the next kill | `N1-wraith-drain-exp` |
 | N2 | the `amulet` flag survives throwing or theft | `N2-amulet-flag-thrown` |
@@ -309,6 +310,23 @@ sources at the repository root.
   monsters (its first 20-turn fuse ended the detection), fixed still does (one 60-turn
   fuse). The crash itself is not scripted: the port reports `d_slot()`'s failure with
   `push_error` (blocking.json `port_nonblocking`), unlike C.
+
+## 31. A list past 23 lines loses its second page
+- **Player saw:** a list longer than 23 lines (`D` `*` with many kinds known, the
+  wizard's `^G` on a level with many objects) showed its first page; after a space the
+  map came back and the game waited for another space. The second page never appeared.
+- **Cause:** `things.c:537-543`: the page-mode branch of `add_line()` calls
+  `touchwin(stdscr)` after every page. The next page is drawn in `hw` and refreshed, but
+  the `getch()` that waits on it (`wgetch(stdscr)`, `mdport.c:1089`) first refreshes the
+  touched `stdscr` and repaints the map over it.
+- **Port:** `Things.add_line()`: with the fixes `stdscr` is touched only after the last
+  page (`fmt == null`). Guild mode does the same without the fixes, since its
+  inventories pass 23 lines (docs/GUILD.md).
+- **C:** `things.c` `add_line()`: `if (fmt == NULL) touchwin(stdscr);`.
+- **Script:** `31-second-page`: wizard, all 14 potions and 7 scrolls created and
+  identified with `^W` (3 potions quaffed to free their slots), then `D` `*`: 26 lines.
+  The second page ("Haven't discovered anything about any rings", "... sticks") never
+  appears in classic and appears with the fixes.
 
 ## D1. Magic missile without a weapon
 - **Player saw:** zapping magic missile with no wielded weapon never hit ("You missed").
