@@ -9,6 +9,7 @@ the report re-runs both with full screens around it.
   difftest.py fuzz --count N [--len L] [--first-seed S] [--jobs J] [common options]
   difftest.py corpus [DIR]          replay every *.keys file (seed/options in its header)
   difftest.py seeds --count N [--first-seed S]   first screen of many seeds (level generation)
+  difftest.py saves --count N [--len L] ...      save/restore chains (play, save, restore, ...)
 
 common options: --opts ROGUEOPTS | --no-opts, --master, --arg A, --keep, --variant V
 
@@ -44,29 +45,45 @@ def oracle_bin(master, variant=None):
 
 # ------------------------------------------------------------------ running
 
-def run_oracle(case, d, full=None):
+def runs_of(case):
+    """A case is one run, or a chain of runs sharing a directory (save, then restore)."""
+    return case["chain"] if case.get("chain") else [case]
+
+
+def tag(case, k):
+    """File-name tag of run k: dump{tag}.txt, stdout{tag}.bin."""
+    return str(k) if case.get("chain") else ""
+
+
+def run_oracle(case, d, full=None, t=""):
     os.makedirs(d, exist_ok=True)
     env = {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "TERM": "xterm", "LINES": "24",
            "COLUMNS": "80", "TZ": "UTC", "ROGUE_SEED": str(case["seed"]), "ROGUE_TIME": str(TIME),
            "ROGUE_NAME": NAME, "ROGUE_HOME": HOME, "ROGUE_UID": str(UID),
-           "ROGUE_KEYS": case["keys"], "ROGUE_DUMP": os.path.join(d, "dump.txt")}
+           "ROGUE_KEYS": case["keys"], "ROGUE_DUMP": os.path.join(d, f"dump{t}.txt")}
     if case.get("opts") is not None:
         env["ROGUEOPTS"] = case["opts"]
     if full is not None:
         env["ROGUE_FULL"] = str(full)
     argv = [oracle_bin(case.get("master"), case.get("variant"))] + case.get("args", [])
-    with open(os.path.join(d, "stdout.bin"), "wb") as so:
+    with open(os.path.join(d, f"stdout{t}.bin"), "wb") as so:
         try:
             subprocess.run(argv, cwd=d, env=env, stdout=so, stderr=subprocess.DEVNULL, timeout=60)
         except subprocess.TimeoutExpired:
-            open(os.path.join(d, "dump.txt"), "a").write("TIMEOUT\n")
+            open(os.path.join(d, f"dump{t}.txt"), "a").write("TIMEOUT\n")
 
 
-def port_line(case, d, full=None):
+def run_oracle_all(case, d, full=None, full_run=None):
+    """Run a case (every run of a chain, in order, in one directory)."""
+    for k, sub in enumerate(runs_of(case)):
+        run_oracle(sub, d, full if full_run in (None, k) else None, tag(case, k))
+
+
+def port_line(case, d, full=None, t=""):
     os.makedirs(d, exist_ok=True)
     kv = {"seed": case["seed"], "time": TIME, "name": NAME, "home": HOME, "uid": UID,
-          "keys": case["keys"], "dump": os.path.join(d, "dump.txt"),
-          "stdout": os.path.join(d, "stdout.bin"), "cwd": d}
+          "keys": case["keys"], "dump": os.path.join(d, f"dump{t}.txt"),
+          "stdout": os.path.join(d, f"stdout{t}.bin"), "cwd": d}
     if case.get("opts") is not None:
         kv["opts"] = case["opts"]
     if case.get("master"):
@@ -76,6 +93,12 @@ def port_line(case, d, full=None):
     if full is not None:
         kv["full"] = full
     return "\t".join(f"{k}={v}" for k, v in kv.items())
+
+
+def port_lines(case, d, full=None, full_run=None):
+    """Batch lines for a case; a chain's runs stay together and in order."""
+    return [port_line(sub, d, full if full_run in (None, k) else None, tag(case, k))
+            for k, sub in enumerate(runs_of(case))]
 
 
 def run_port_batch(lines, workdir):
@@ -133,19 +156,24 @@ def step_equal(a, b):
     return True
 
 
-def compare(d):
-    o = parse_log(os.path.join(d, "oracle", "dump.txt"))
-    p = parse_log(os.path.join(d, "port", "dump.txt"))
-    for i, (a, b) in enumerate(zip(o, p)):
-        if not step_equal(a, b):
-            return i, a, b
-    if len(o) != len(p):
-        i = min(len(o), len(p))
-        return i, (o[i] if i < len(o) else "<end of log>"), (p[i] if i < len(p) else "<end of log>")
-    so = open(os.path.join(d, "oracle", "stdout.bin"), "rb").read() if os.path.exists(os.path.join(d, "oracle", "stdout.bin")) else b""
-    sp = open(os.path.join(d, "port", "stdout.bin"), "rb").read() if os.path.exists(os.path.join(d, "port", "stdout.bin")) else b""
-    if so != sp:
-        return -1, repr(so[-200:]), repr(sp[-200:])
+def compare(case, d):
+    """None, or (run, log line index, oracle line, port line) of the first difference;
+    a log line index of -1 means the stdout bytes differ."""
+    for k in range(len(runs_of(case))):
+        t = tag(case, k)
+        o = parse_log(os.path.join(d, "oracle", f"dump{t}.txt"))
+        p = parse_log(os.path.join(d, "port", f"dump{t}.txt"))
+        for i, (a, b) in enumerate(zip(o, p)):
+            if not step_equal(a, b):
+                return k, i, a, b
+        if len(o) != len(p):
+            i = min(len(o), len(p))
+            return k, i, (o[i] if i < len(o) else "<end of log>"), (p[i] if i < len(p) else "<end of log>")
+        fo, fp = os.path.join(d, "oracle", f"stdout{t}.bin"), os.path.join(d, "port", f"stdout{t}.bin")
+        so = open(fo, "rb").read() if os.path.exists(fo) else b""
+        sp = open(fp, "rb").read() if os.path.exists(fp) else b""
+        if so != sp:
+            return k, -1, repr(so[-200:]), repr(sp[-200:])
     return None
 
 
@@ -161,9 +189,13 @@ def full_dump(path, step):
     return [], "", ""
 
 
-def report(case, d, idx, a, b):
+def report(case, d, run, idx, a, b):
     out = [f"DIVERGENCE seed={case['seed']} keys={case['keys']} opts={case.get('opts')!r} "
            f"master={bool(case.get('master'))} args={case.get('args', [])}"]
+    if case.get("chain"):
+        sub = case["chain"][run]
+        out.append(f"  in run {run + 1} of {len(case['chain'])} of the chain (args={sub.get('args', [])}, "
+                   f"keys={sub['keys']})")
     if idx == -1:
         out.append(f"  stdout differs\n    oracle: ...{a}\n    port:   ...{b}")
         return "\n".join(out)
@@ -172,14 +204,15 @@ def report(case, d, idx, a, b):
     if step is None:
         return "\n".join(out)
     first = max(1, step - 1)
-    run_oracle(case, os.path.join(d, "oracle_full"), full=first)
-    err = run_port_batch([port_line(case, os.path.join(d, "port_full"), full=first)], d)
+    t = tag(case, run)
+    run_oracle_all(case, os.path.join(d, "oracle_full"), full=first, full_run=run)
+    err = run_port_batch(port_lines(case, os.path.join(d, "port_full"), full=first, full_run=run), d)
     errs = port_errors(err)
     if errs:
         out.append("  port errors:\n    " + "\n    ".join(errs))
-    ro, eo, go = full_dump(os.path.join(d, "oracle_full", "dump.txt"), step)
-    rp, ep, gp = full_dump(os.path.join(d, "port_full", "dump.txt"), step)
-    keys = [int(t) for t in " ".join(l.split("#")[0] for l in open(case["keys"]).read().splitlines()).split()]
+    ro, eo, go = full_dump(os.path.join(d, "oracle_full", f"dump{t}.txt"), step)
+    rp, ep, gp = full_dump(os.path.join(d, "port_full", f"dump{t}.txt"), step)
+    keys = [int(x) for x in " ".join(l.split("#")[0] for l in open(runs_of(case)[run]["keys"]).read().splitlines()).split()]
     recent = keys[max(0, step - 12):step]
     out.append(f"  keys before step {step}: {' '.join(_keyname(k) for k in recent)}")
     out.append("  screen (oracle | port, '*' marks differing rows):")
@@ -272,22 +305,61 @@ def write_keys(path, keys, case):
             f.write(" ".join(map(str, keys[i:i + 20])) + "\n")
 
 
+def _parse_opts(text, case):
+    for tok in text.strip().split(" "):
+        if "=" in tok:
+            k, v = tok.split("=", 1)
+            if k == "seed":
+                case["seed"] = int(v)
+            elif k == "opts":
+                case["opts"] = v
+            elif k == "master":
+                case["master"] = v == "1"
+            elif k == "arg":
+                case["args"] = v.split("\x1f")
+
+
 def read_case(path):
+    """A key file. A file with "# run: ..." sections is a chain: each section is
+    one run (its options override the header's), all in the same directory."""
     case = {"keys": path, "seed": 1}
-    first = open(path).readline()
-    if first.startswith("# difftest:"):
-        for tok in first[len("# difftest:"):].strip().split(" "):
-            if "=" in tok:
-                k, v = tok.split("=", 1)
-                if k == "seed":
-                    case["seed"] = int(v)
-                elif k == "opts":
-                    case["opts"] = v
-                elif k == "master":
-                    case["master"] = v == "1"
-                elif k == "arg":
-                    case["args"] = v.split("\x1f")
+    lines = open(path).read().splitlines()
+    if lines and lines[0].startswith("# difftest:"):
+        _parse_opts(lines[0][len("# difftest:"):], case)
+    if not any(l.startswith("# run:") for l in lines):
+        return case
+    os.makedirs(OUT, exist_ok=True)
+    tmp = tempfile.mkdtemp(prefix="chain", dir=OUT)
+    chain = []
+    for l in lines:
+        if l.startswith("# run:"):
+            sub = {k: v for k, v in case.items() if k != "keys"}
+            sub["args"] = []
+            _parse_opts(l[len("# run:"):], sub)
+            sub["keys"] = os.path.join(tmp, f"run{len(chain)}.keys")
+            open(sub["keys"], "w").close()
+            chain.append(sub)
+        elif chain:
+            with open(chain[-1]["keys"], "a") as f:
+                f.write(l + "\n")
+    case["chain"] = chain
     return case
+
+
+def write_chain(path, case, runs):
+    """Write a chain file: runs is a list of (args, keys)."""
+    hdr = f"# difftest: seed={case['seed']}"
+    if case.get("opts") is not None:
+        hdr += f" opts={case['opts']}"
+    if case.get("master"):
+        hdr += " master=1"
+    with open(path, "w") as f:
+        f.write(hdr + "\n")
+        for args, keys in runs:
+            # no args: no arg= token ("arg=" alone is one empty argument)
+            f.write("# run:" + (" arg=" + "\x1f".join(args) if args else "") + "\n")
+            for i in range(0, len(keys), 20):
+                f.write(" ".join(map(str, keys[i:i + 20])) + "\n")
 
 
 # ------------------------------------------------------------------ driver
@@ -301,12 +373,13 @@ def run_cases(cases, jobs, keep, batch_size=40):
         os.makedirs(d)
         dirs.append(d)
     with cf.ThreadPoolExecutor(max_workers=jobs) as ex:
-        list(ex.map(lambda cd: run_oracle(cd[0], os.path.join(cd[1], "oracle")), zip(cases, dirs)))
+        list(ex.map(lambda cd: run_oracle_all(cd[0], os.path.join(cd[1], "oracle")), zip(cases, dirs)))
         batches = [list(range(i, min(i + batch_size, len(cases)))) for i in range(0, len(cases), batch_size)]
-        list(ex.map(lambda b: run_port_batch([port_line(cases[i], os.path.join(dirs[i], "port")) for i in b], work), batches))
+        list(ex.map(lambda b: run_port_batch(
+            [ln for i in b for ln in port_lines(cases[i], os.path.join(dirs[i], "port"))], work), batches))
     bad = 0
     for c, d in zip(cases, dirs):
-        r = compare(d)
+        r = compare(c, d)
         if r is not None:
             bad += 1
             print(report(c, d, *r), flush=True)
@@ -318,7 +391,7 @@ def run_cases(cases, jobs, keep, batch_size=40):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["one", "fuzz", "corpus", "seeds"])
+    ap.add_argument("mode", choices=["one", "fuzz", "corpus", "seeds", "saves"])
     ap.add_argument("dir", nargs="?")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--keys")
@@ -365,6 +438,23 @@ def main():
             case["keys"] = path
             cases.append(case)
         sys.exit(1 if run_cases(cases, a.jobs, a.keep, batch_size=100) else 0)
+    if a.mode == "saves":
+        # save/restore chains: play, save; restore (-r), play, save; restore, play
+        os.makedirs(OUT, exist_ok=True)
+        kdir = tempfile.mkdtemp(prefix="keys", dir=OUT)
+        cases = []
+        for i in range(a.count):
+            seed = a.first_seed + i
+            rng = random.Random(seed * 7907)
+            case = {"seed": seed, "opts": opts, "master": a.master}
+            save = [32, 27, 32, 27, 27, ord("S"), ord("y")]   # leave any prompt, then save
+            runs = [(a.arg, gen_keys(rng, rng.randint(20, a.len)) + save),
+                    (["-r"], gen_keys(rng, rng.randint(20, a.len)) + save),
+                    (["-r"], gen_keys(rng, rng.randint(20, a.len)))]
+            path = os.path.join(kdir, f"save{seed}.keys")
+            write_chain(path, case, runs)
+            cases.append(read_case(path))
+        sys.exit(1 if run_cases(cases, a.jobs, a.keep, batch_size=30) else 0)
     if a.mode == "corpus":
         d = a.dir or os.path.join(HERE, "corpus")
         cases = [read_case(os.path.join(d, f)) for f in sorted(os.listdir(d)) if f.endswith(".keys")]

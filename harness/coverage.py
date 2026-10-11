@@ -81,10 +81,11 @@ def main():
         files += sorted(glob.glob(os.path.join(p, "*.keys"))) if os.path.isdir(p) else [p]
     cases = [difftest.read_case(os.path.abspath(f)) for f in files]
     for c in cases:
-        c["variant"] = "covmaster" if (a.master or c.get("master")) else "cov"
+        for sub in difftest.runs_of(c):
+            sub["variant"] = "covmaster" if (a.master or sub.get("master")) else "cov"
     work = tempfile.mkdtemp(prefix="cov", dir=os.path.join(HERE, "out")) if cases else None
     with cf.ThreadPoolExecutor(max_workers=a.jobs) as ex:
-        list(ex.map(lambda ic: difftest.run_oracle(ic[1], os.path.join(work, f"r{ic[0]}")),
+        list(ex.map(lambda ic: difftest.run_oracle_all(ic[1], os.path.join(work, f"r{ic[0]}")),
                     enumerate(cases)))
     if work:
         shutil.rmtree(work, ignore_errors=True)
