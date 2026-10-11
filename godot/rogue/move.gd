@@ -13,41 +13,6 @@
 class_name Move
 extends RogueBase
 
-# REQUEST (docs/requests/B.md): init.c's rainbow[] and cNCOLORS (extern in
-# rogue.h) are not reachable from this module yet (init.gd belongs to group A
-# and is a stub at HEAD). Temporary copies, used only by be_trapped (T_MYST),
-# until the lead exposes the real ones.
-const _rainbow: Array[String] = [
-	"amber",
-	"aquamarine",
-	"black",
-	"blue",
-	"brown",
-	"clear",
-	"crimson",
-	"cyan",
-	"ecru",
-	"gold",
-	"green",
-	"grey",
-	"magenta",
-	"orange",
-	"pink",
-	"plaid",
-	"purple",
-	"red",
-	"silver",
-	"tan",
-	"tangerine",
-	"topaz",
-	"turquoise",
-	"vermilion",
-	"violet",
-	"white",
-	"yellow",
-]
-const _cNCOLORS := 27	# REQUEST: init.c `int cNCOLORS = NCOLORS;`
-
 
 ## do_run:
 ##	Start the hero running
@@ -260,16 +225,16 @@ static func be_trapped(tc: Coord) -> int:
 		T_MYST:
 			match rnd(11):
 				0: await Io.msg("you are suddenly in a parallel dimension")
-				1: await Io.msg("the light in here suddenly seems %s", [_rainbow[rnd(_cNCOLORS)]])
+				1: await Io.msg("the light in here suddenly seems %s", [Init.rainbow[rnd(Init.cNCOLORS)]])
 				2: await Io.msg("you feel a sting in the side of your neck")
 				3: await Io.msg("multi-colored lines swirl around you, then fade")
-				4: await Io.msg("a %s light flashes in your eyes", [_rainbow[rnd(_cNCOLORS)]])
+				4: await Io.msg("a %s light flashes in your eyes", [Init.rainbow[rnd(Init.cNCOLORS)]])
 				5: await Io.msg("a spike shoots past your ear!")
-				6: await Io.msg("%s sparks dance across your armor", [_rainbow[rnd(_cNCOLORS)]])
+				6: await Io.msg("%s sparks dance across your armor", [Init.rainbow[rnd(Init.cNCOLORS)]])
 				7: await Io.msg("you suddenly feel very thirsty")
 				8: await Io.msg("you feel time speed up suddenly")
 				9: await Io.msg("time now seems to be going slower")
-				10: await Io.msg("you pack turns %s!", [_rainbow[rnd(_cNCOLORS)]])
+				10: await Io.msg("you pack turns %s!", [Init.rainbow[rnd(Init.cNCOLORS)]])
 		T_SLEEP:
 			no_command += SLEEPTIME()
 			player.t_flags &= ~ISRUN
