@@ -531,7 +531,7 @@ static var _fire_bolt_pos := Coord.new()
 static var _fire_bolt_spotpos: Array[Coord] = []
 ## things.c
 static var _things_lastfmt := ""
-static var _things_lastarg := ""
+static var _things_lastarg: Variant = null	## char *lastarg: String or NULL
 static var _things_line_cnt := 0
 static var _things_newpage := false
 static var _add_line_maxlen := -1
@@ -725,7 +725,7 @@ static func reset() -> void:
 	for i in BOLT_LENGTH:
 		_fire_bolt_spotpos.append(Coord.new())
 	_things_lastfmt = ""
-	_things_lastarg = ""
+	_things_lastarg = null
 	_things_line_cnt = 0
 	_things_newpage = false
 	_add_line_maxlen = -1
@@ -1114,9 +1114,9 @@ static func cat(s: String, i: int) -> int:
 	return s.unicode_at(i) if i >= 0 and i < s.length() else 0
 
 
-## A one-character string from a char code.
+## A one-character string from a char code ("" for NUL, which ends a C string).
 static func chr(c: int) -> String:
-	return char(c & 0xFF)
+	return "" if (c & 0xFF) == 0 else char(c & 0xFF)
 
 
 ## atoi: optional whitespace, optional sign, digits.

@@ -101,10 +101,10 @@ static func inv_name(obj: Thing, drop: bool) -> String:
 			prbuf = sprintf("%d Gold pieces", [obj.o_goldval])
 		_:
 			if MASTER:
-				# C: debug("Picked up something funny %s", ...), a msg();
-				# push_error instead (blocking.json port_nonblocking).
+				# debug() is `if (wizard) msg`: reachable through the wizard's
+				# create_obj() with any type key
 				if wizard:
-					push_error(sprintf("Picked up something funny %s", [unctrl(obj.o_type)]))
+					await Io.msg("Picked up something funny %s", [unctrl(obj.o_type)])
 				prbuf = sprintf("Something bizarre %s", [unctrl(obj.o_type)])
 			# else: no default case, prbuf keeps its old contents
 	if inv_describe:
@@ -148,7 +148,8 @@ static func drop() -> void:
 	obj.o_pos.copy_from(hero)
 	if obj.o_type == AMULET:
 		amulet = false
-	await Io.msg("dropped %s", [inv_name(obj, true)])
+	var nm: String = await inv_name(obj, true)
+	await Io.msg("dropped %s", [nm])
 
 
 ## dropcheck:
@@ -357,7 +358,8 @@ static func print_disc(type_: int) -> void:
 		if info[order[i]].oi_know or info[order[i]].oi_guess != null:
 			_print_disc_obj.o_type = type_
 			_print_disc_obj.o_which = order[i]
-			await add_line("%s", inv_name(_print_disc_obj, false))
+			var nm: String = await inv_name(_print_disc_obj, false)
+			await add_line("%s", nm)
 			num_found += 1
 	if num_found == 0:
 		await add_line(nothing(type_), null)
@@ -458,9 +460,8 @@ static func add_line(fmt: Variant, arg: Variant) -> int:
 			_things_lastfmt = fmt
 			# C keeps the pointers. end_line() only reads them right after
 			# the single add_line() of a list, before prbuf / inv_temp can
-			# change, so the strings' values are equivalent. A NULL arg only
-			# ever comes with a format that has no conversion.
-			_things_lastarg = arg if arg != null else ""	# REQUEST: Variant (C.md)
+			# change, so the strings' values are equivalent.
+			_things_lastarg = arg
 	return ~ESCAPE
 
 

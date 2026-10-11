@@ -25,7 +25,7 @@ static func wear() -> void:
 		return
 	await waste_time()
 	obj.o_flags |= ISKNOW
-	sp = Things.inv_name(obj, true)
+	sp = await Things.inv_name(obj, true)
 	cur_armor = obj
 	if not terse:
 		await Io.addmsg("you are now ")
@@ -52,7 +52,8 @@ static func take_off() -> void:
 		await Io.addmsg("was")
 	else:
 		await Io.addmsg("you used to be")
-	await Io.msg(" wearing %c) %s", [obj.o_packch, Things.inv_name(obj, true)])
+	var nm: String = await Things.inv_name(obj, true)
+	await Io.msg(" wearing %c) %s", [obj.o_packch, nm])
 
 
 ## waste_time:

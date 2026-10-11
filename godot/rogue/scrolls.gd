@@ -89,7 +89,7 @@ static func read_scroll() -> void:
 					ch = winat(y, x)
 					if Io.step_ok(ch):
 						if ch == SCROLL:
-							var sobj := Misc.find_obj(y, x)
+							var sobj: Thing = await Misc.find_obj(y, x)
 							if sobj == null:
 								# UB: a xeroc disguised as a scroll leaves no object
 								# here; C dereferences find_obj()'s NULL and crashes

@@ -59,9 +59,7 @@ REVIEWED = {
 PORT_NONBLOCKING = {
     "new_item": "msg() only when calloc() fails, impossible in GDScript",
     "d_slot": "MASTER debug() when all 20 daemon slots are used; C then dereferences NULL",
-    "inv_name": "MASTER debug() for an object type that does not exist",
     "pick_one": "MASTER debug() when the probability tables are inconsistent (they are fixed)",
-    "find_obj": "MASTER debug('Non-object'); every caller then dereferences NULL",
     "roomin": "msg('in some bizarre place') is followed by a NULL dereference in C",
     "runto": "MASTER msg('couldn't find monster in runto') is followed by a NULL dereference",
     "new_thing": "MASTER debug() + wait_for in a default case that pick_one() never reaches",

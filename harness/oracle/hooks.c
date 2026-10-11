@@ -397,11 +397,48 @@ interactive_key(void)
     return atoi(line);
 }
 
+/*
+ * An object list became circular (list.c _attach, oracle.patch): the original
+ * hangs at the next walk of the list.  The attach was skipped; the game ends
+ * at the next key read, as in the port.
+ */
+static int doomed;
+
+int
+oracle_on_list(THING *list, THING *item)
+{
+    long n;
+
+    for (n = 0; list != NULL && n < 100000; list = next(list), n++)
+	if (list == item)
+	    return 1;
+    return 0;
+}
+
+void
+oracle_doomed(void)
+{
+    doomed = 1;
+}
+
+static void
+end_if_doomed(void)
+{
+    if (!doomed)
+	return;
+    if (!curses_gone)
+	endwin();
+    printf("\nrogue: an object list became circular (a bug in Rogue 5.4.4); the game cannot continue.\n");
+    exit(1);
+}
+
 /* Next scripted key.  Logs the step; ends the run when the script is used up. */
 static int
 scripted_key(void)
 {
     int key;
+
+    end_if_doomed();
 
     if (interactive < 0)
     {

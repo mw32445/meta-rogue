@@ -16,7 +16,7 @@ static func add_pack(obj: Thing, silent: bool) -> void:
 
 	from_floor = false
 	if obj == null:
-		obj = Misc.find_obj(hero.y, hero.x)
+		obj = await Misc.find_obj(hero.y, hero.x)
 		if obj == null:
 			return
 		from_floor = true
@@ -115,7 +115,8 @@ static func add_pack(obj: Thing, silent: bool) -> void:
 	if not silent:
 		if not terse:
 			await Io.addmsg("you now have ")
-		await Io.msg("%s (%c)", [Things.inv_name(obj, not terse), obj.o_packch])
+		var nm: String = await Things.inv_name(obj, not terse)
+		await Io.msg("%s (%c)", [nm, obj.o_packch])
 
 
 ## pack_room:
@@ -205,12 +206,10 @@ static func inventory(list: Thing, type_: int) -> bool:
 		if MASTER and list.o_packch == 0:
 			inv_temp = "%s"
 		else:
-			# REQUEST: "%c" of a NUL o_packch ends the C string right there
-			# (inv_temp == ""); RogueBase.sprintf does not model that yet
-			# (docs/requests/C.md).
-			inv_temp = "" if list.o_packch == 0 else sprintf("%c) %%s", [list.o_packch])
+			inv_temp = sprintf("%c) %%s", [list.o_packch])
 		msg_esc = true
-		if await Things.add_line(inv_temp, Things.inv_name(list, false)) == ESCAPE:
+		var nm: String = await Things.inv_name(list, false)
+		if await Things.add_line(inv_temp, nm) == ESCAPE:
 			msg_esc = false
 			await Io.msg("")
 			return true
@@ -236,7 +235,7 @@ static func pick_up(ch: int) -> void:
 	if on(player, ISLEVIT):
 		return
 
-	obj = Misc.find_obj(hero.y, hero.x)
+	obj = await Misc.find_obj(hero.y, hero.x)
 	if move_on:
 		await move_msg(obj)
 	else:
@@ -262,7 +261,8 @@ static func pick_up(ch: int) -> void:
 static func move_msg(obj: Thing) -> void:
 	if not terse:
 		await Io.addmsg("you ")
-	await Io.msg("moved onto %s", [Things.inv_name(obj, true)])
+	var nm: String = await Things.inv_name(obj, true)
+	await Io.msg("moved onto %s", [nm])
 
 
 ## picky_inven:
@@ -274,7 +274,8 @@ static func picky_inven() -> void:
 	if pack == null:
 		await Io.msg("you aren't carrying anything")
 	elif pack.l_next == null:
-		await Io.msg("a) %s", [Things.inv_name(pack, false)])
+		var nm: String = await Things.inv_name(pack, false)
+		await Io.msg("a) %s", [nm])
 	else:
 		await Io.msg("item: " if terse else "which item do you wish to inventory: ")
 		mpos = 0
@@ -285,7 +286,8 @@ static func picky_inven() -> void:
 		obj = pack
 		while obj != null:
 			if mch == obj.o_packch:
-				await Io.msg("%c) %s", [mch, Things.inv_name(obj, false)])
+				var nm: String = await Things.inv_name(obj, false)
+				await Io.msg("%c) %s", [mch, nm])
 				return
 			obj = obj.l_next
 		await Io.msg("'%s' not in pack", [unctrl(mch)])

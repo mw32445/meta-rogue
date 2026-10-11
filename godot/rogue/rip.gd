@@ -369,7 +369,8 @@ static func total_winner() -> void:
 				worth = 1000
 		if worth < 0:
 			worth = 0
-		printw("%c) %5d  %s\n", [obj.o_packch, worth, Things.inv_name(obj, false)])
+		var nm: String = await Things.inv_name(obj, false)
+		printw("%c) %5d  %s\n", [obj.o_packch, worth, nm])
 		purse += worth
 		obj = obj.l_next
 	printw("   %5d  Gold Pieces          ", [oldpurse])

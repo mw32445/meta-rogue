@@ -378,6 +378,7 @@ def _parse_opts(text, case):
 def read_case(path):
     """A key file. A file with "# run: ..." sections is a chain: each section is
     one run (its options override the header's), all in the same directory."""
+    path = os.path.abspath(path)
     case = {"keys": path, "seed": 1}
     lines = open(path).read().splitlines()
     if lines and lines[0].startswith("# difftest:"):

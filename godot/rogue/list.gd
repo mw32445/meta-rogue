@@ -28,6 +28,18 @@ static func _detach(list: Thing, item: Thing) -> Thing:
 ## _attach:
 ##	add an item to the head of a list
 static func _attach(list: Thing, item: Thing) -> Thing:
+	# Attaching an item that is already on the list makes it circular (the
+	# add_pack() empty-pack bug) and the original hangs at the next walk of
+	# it. The attach is skipped and the game ends at the next key read, as in
+	# the oracle (docs/FIDELITY.md).
+	var t := list
+	var n := 0
+	while t != null and n < 100000:
+		if t == item:
+			cs.doomed = "\nrogue: an object list became circular (a bug in Rogue 5.4.4); the game cannot continue.\n"
+			return list
+		t = t.l_next
+		n += 1
 	if list != null:
 		item.l_next = list
 		list.l_prev = item

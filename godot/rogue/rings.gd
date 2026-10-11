@@ -71,7 +71,8 @@ static func ring_on() -> void:
 
 	if not terse:
 		await Io.addmsg("you are now wearing ")
-	await Io.msg("%s (%c)", [Things.inv_name(obj, true), obj.o_packch])
+	var nm: String = await Things.inv_name(obj, true)
+	await Io.msg("%s (%c)", [nm, obj.o_packch])
 
 
 ## ring_off:
@@ -100,7 +101,8 @@ static func ring_off() -> void:
 		await Io.msg("not wearing such a ring")
 		return
 	if await Things.dropcheck(obj):
-		await Io.msg("was wearing %s(%c)", [Things.inv_name(obj, true), obj.o_packch])
+		var nm: String = await Things.inv_name(obj, true)
+		await Io.msg("was wearing %s(%c)", [nm, obj.o_packch])
 
 
 ## gethand:

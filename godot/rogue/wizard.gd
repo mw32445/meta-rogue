@@ -63,7 +63,8 @@ static func whatis(insist: bool, type_: int) -> void:
 			obj.o_flags |= ISKNOW
 		RING:
 			set_know(obj, ring_info)
-	await Io.msg(Things.inv_name(obj, false))
+	var nm: String = await Things.inv_name(obj, false)
+	await Io.msg(nm)
 
 
 ## set_know:

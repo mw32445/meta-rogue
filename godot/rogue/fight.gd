@@ -249,7 +249,8 @@ static func attack(mp: Thing) -> int:
 						await remove_mon(mp.t_pos, moat(mp.t_pos.y, mp.t_pos.x), false)
 						mp = null
 						Pack.leave_pack(steal, false, false)
-						await Io.msg("she stole %s!", [Things.inv_name(steal, true)])
+						var nm: String = await Things.inv_name(steal, true)
+						await Io.msg("she stole %s!", [nm])
 						List.discard(steal)
 				_:
 					pass

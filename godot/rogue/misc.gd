@@ -197,7 +197,7 @@ static func find_obj(y: int, x: int) -> Thing:
 		obj = obj.l_next
 	if MASTER:
 		prbuf = sprintf("Non-object %d,%d", [y, x])
-		push_error(prbuf)	# C: msg(prbuf);
+		await Io.msg(prbuf)
 		return null
 	else:
 		# NOTREACHED

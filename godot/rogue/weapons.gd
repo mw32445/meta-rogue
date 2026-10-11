@@ -194,7 +194,7 @@ static func wield() -> void:
 		after = false
 		return
 
-	sp = Things.inv_name(obj, true)
+	sp = await Things.inv_name(obj, true)
 	cur_weapon = obj
 	if not terse:
 		await Io.addmsg("you are now ")

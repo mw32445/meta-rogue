@@ -157,6 +157,9 @@ var _halfdelay := false
 var curses_gone := false
 ## Bumped whenever the physical screen or stdout changes (the view redraws).
 var version := 0
+## Set when the game cannot go on (it would hang in the original, see
+## List._attach): the next key read prints it and exits with status 1.
+var doomed := ""
 ## CWindow ids for test tooling; the game uses CWindow references.
 var windows: Dictionary = {}
 
@@ -270,27 +273,31 @@ func wmove(win: CWindow, y: int, x: int) -> int:
 
 
 func getcury(win: CWindow) -> int:
-	return win._cury
+	return win._cury if win != null else ERR
 
 
 func getcurx(win: CWindow) -> int:
-	return win._curx
+	return win._curx if win != null else ERR
 
 
 func getmaxy(win: CWindow) -> int:
-	return win._maxy + 1
+	return win._maxy + 1 if win != null else ERR
 
 
 func getmaxx(win: CWindow) -> int:
-	return win._maxx + 1
+	return win._maxx + 1 if win != null else ERR
 
 
 func leaveok(win: CWindow, bf: bool) -> int:
+	if win == null:
+		return ERR
 	win._leaveok = bf
 	return OK
 
 
 func clearok(win: CWindow, bf: bool) -> int:
+	if win == null:
+		return ERR
 	win._clear = bf
 	return OK
 
@@ -304,6 +311,8 @@ func keypad(_win: CWindow, _bf: bool) -> int:
 
 
 func wattrset(win: CWindow, attrs: int) -> int:
+	if win == null:
+		return ERR
 	win._attrs = attrs
 	return OK
 
@@ -317,6 +326,8 @@ func wstandend(win: CWindow) -> int:
 
 
 func touchwin(win: CWindow) -> int:
+	if win == null:
+		return ERR
 	for y in win._maxy + 1:
 		win.firstchar[y] = 0
 		win.lastchar[y] = win._maxx
@@ -324,6 +335,8 @@ func touchwin(win: CWindow) -> int:
 
 
 func is_wintouched(win: CWindow) -> bool:
+	if win == null:
+		return false
 	for y in win._maxy + 1:
 		if win.firstchar[y] != _NOCHANGE:
 			return true
@@ -505,6 +518,8 @@ func wclear(win: CWindow) -> int:
 
 
 func winch(win: CWindow) -> int:
+	if win == null:
+		return CHTYPE_ERR
 	return win.get_cell(win._cury, win._curx)
 
 
@@ -681,6 +696,11 @@ func _next_key() -> int:
 
 ## Read one scripted/typed key and log the step.
 func _read_key() -> int:
+	if doomed != "":
+		if not curses_gone:
+			endwin()
+		stdout_write(doomed)
+		await exit_program(1)
 	var key: int = await _next_key()
 	if step_hook.is_valid():
 		step_hook.call(key)

@@ -209,3 +209,76 @@
  	distance = abs(spos.x - epos.x) - 1;
  	turn_delta.y = (spos.y < epos.y ? 1 : -1);
  	turn_delta.x = 0;
+--- a/weapons.c	2026-10-11 06:53:45.184291003 +0000
++++ b/weapons.c	2026-10-11 06:53:45.209249930 +0000
+@@ -146,8 +146,14 @@
+ 	    endmsg();
+ 	    has_hit = FALSE;
+ 	}
++	/*
++	 * oracle: any pack object can be thrown; past the end of weap_info[]
++	 * the std/master builds read scr_info[], which follows it in memory
++	 */
+ 	msg("the %s vanishes as it hits the ground",
+-	    weap_info[obj->o_which].oi_name);
++	    obj->o_which <= MAXWEAPONS ? weap_info[obj->o_which].oi_name
++	    : obj->o_which - (MAXWEAPONS + 1) < MAXSCROLLS
++		? scr_info[obj->o_which - (MAXWEAPONS + 1)].oi_name : NULL);
+     }
+     discard(obj);
+ }
+--- a/pack.c	2026-10-11 06:53:45.188236401 +0000
++++ b/pack.c	2026-10-11 06:53:45.209422599 +0000
+@@ -218,7 +218,8 @@
+     else
+     {
+ 	last_pick = NULL;
+-	pack_used[obj->o_packch - 'a'] = FALSE;
++	if ((unsigned) (obj->o_packch - 'a') < 26)	/* oracle: o_packch 0 wrote */
++	    pack_used[obj->o_packch - 'a'] = FALSE;	/* before the array */
+ 	detach(pack, obj);
+     }
+     return nobj;
+@@ -233,9 +234,10 @@
+ {
+     bool *bp;
+ 
+-    for (bp = pack_used; *bp; bp++)
+-	continue;
+-    *bp = TRUE;
++    for (bp = pack_used; bp < &pack_used[26] && *bp; bp++)	/* oracle: */
++	continue;					/* stay inside */
++    if (bp < &pack_used[26])				/* pack_used[] */
++	*bp = TRUE;
+     return (char)((int)(bp - pack_used) + 'a');
+ }
+ 
+--- a/list.c	2026-10-11 06:53:45.191670481 +0000
++++ b/list.c	2026-10-11 06:53:45.210336602 +0000
+@@ -14,6 +14,9 @@
+ #include <curses.h>
+ #include "rogue.h"
+ 
++int oracle_on_list(THING *list, THING *item);	/* oracle: hooks.c */
++void oracle_doomed(void);
++
+ #ifdef MASTER
+ int total = 0;			/* total dynamic memory bytes */
+ #endif
+@@ -44,6 +47,16 @@
+ void
+ _attach(THING **list, THING *item)
+ {
++    /*
++     * oracle: attaching an item that is already on the list makes it circular
++     * (the add_pack() empty-pack bug) and the next walk of the list never
++     * ends.  The attach is skipped and the game ends at the next key read.
++     */
++    if (oracle_on_list(*list, item))
++    {
++	oracle_doomed();
++	return;
++    }
+     if (*list != NULL)
+     {
+ 	item->l_next = *list;

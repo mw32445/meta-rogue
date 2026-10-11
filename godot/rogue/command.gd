@@ -731,7 +731,8 @@ static func current(cur: Thing, how: String, where: Variant) -> void:
 		if not terse:
 			await Io.addmsg("you are %s (", [how])
 		inv_describe = false
-		await Io.addmsg("%c) %s", [cur.o_packch, Things.inv_name(cur, true)])
+		var nm: String = await Things.inv_name(cur, true)
+		await Io.addmsg("%c) %s", [cur.o_packch, nm])
 		inv_describe = true
 		if where != null:
 			await Io.addmsg(" %s", [where])
