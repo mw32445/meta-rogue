@@ -63,8 +63,9 @@ static func md_unlink_open_file(file: String, _inf: Variant = null) -> int:
 
 
 static func md_unlink(file: String) -> int:
-	if FileAccess.file_exists(file):
-		return 0 if DirAccess.remove_absolute(file) == OK else -1
+	var path := cpath(file)
+	if file != "" and FileAccess.file_exists(path):
+		return 0 if DirAccess.remove_absolute(path) == OK else -1
 	return -1
 
 

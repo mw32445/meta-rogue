@@ -326,6 +326,15 @@ static var env_uid := 1000		## md_getuid()
 static var env_seedvar: Variant = null	## getenv("SEED") (MASTER only)
 static var env_scorefile := "rogue.scr"	## SCOREFILE (configure default: relative to the cwd)
 static var env_lockfile := "rogue.lck"	## LOCKFILE
+## The process's current directory: relative file names resolve against it.
+static var env_cwd := ""
+
+
+## A C file name as the port opens it (relative names resolve against env_cwd).
+static func cpath(p: String) -> String:
+	if env_cwd == "" or p.is_absolute_path() or p.begins_with("user://") or p.begins_with("res://"):
+		return p
+	return env_cwd.path_join(p)
 static var argv: PackedStringArray = PackedStringArray()
 
 # =========================================================================
@@ -447,6 +456,8 @@ static var group := 2
 static var allscore := true
 static var numscores := NUMSCORES
 static var Numname := NUMNAME
+## extern.c: FILE *scoreboard, opened by open_score() at startup
+static var scoreboard: FileAccess = null
 
 # ---- file statics and function statics (persist across calls in C) ------
 ## chase.c
@@ -510,6 +521,8 @@ static var _things_line_cnt := 0
 static var _things_newpage := false
 static var _add_line_maxlen := -1
 static var _print_disc_obj := Thing.new()
+## save.c
+static var _save_scoreline := PackedByteArray()	## static char scoreline[100]
 ## weapons.c
 static var _fall_fpos := Coord.new()
 static var _hit_monster_mp := Coord.new()
@@ -641,6 +654,9 @@ static func reset() -> void:
 	allscore = true
 	numscores = NUMSCORES
 	Numname = NUMNAME
+	scoreboard = null
+	_save_scoreline = PackedByteArray()
+	_save_scoreline.resize(100)
 
 	_chase_ch_ret = Coord.new()
 	_cansee_tp = Coord.new()
@@ -1492,7 +1508,16 @@ static func unctrl(c: int) -> String:
 
 
 ## mvcur only moves the physical cursor (before endwin / exit): no-op
-static func mvcur(_oldrow: int, _oldcol: int, _newrow: int, _newcol: int) -> int:
+## mvcur: ncurses writes the cheapest cursor motion for the terminal (xterm)
+## straight to stdout with putchar, so the bytes are part of the output. The
+## only reachable call, (0, COLS-1) -> (LINES-1, 0) in save_file, is CR + VPA.
+static func mvcur(oldrow: int, oldcol: int, newrow: int, newcol: int) -> int:
+	if oldrow == newrow and oldcol == newcol:
+		return OK
+	if newcol == 0 and newrow != oldrow:
+		cs.stdout_write("\r\u001b[%dd" % (newrow + 1))
+	else:
+		cs.stdout_write("\u001b[%d;%dH" % [newrow + 1, newcol + 1])
 	return OK
 
 

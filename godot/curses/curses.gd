@@ -679,7 +679,7 @@ func _read_key() -> int:
 		step_hook.call(key)
 	if key < 0:
 		script_finished.emit()
-		await _key_ready	# never resumed: the run is over
+		await _halt	# never resumed: the run is over
 	return key
 
 

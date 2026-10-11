@@ -74,3 +74,73 @@
  
  	if (food_left < MORETIME && oldfood >= MORETIME)
  	{
+--- a/state.c	2026-10-11 06:04:36.961335168 +0000
++++ b/state.c	2026-10-11 06:04:36.976690659 +0000
+@@ -1050,6 +1050,14 @@
+             func = 8;
+         else if (d_list[i].d_func == sight)
+             func = 9;
++        else if (d_list[i].d_func == land)		/* oracle: the four */
++            func = 10;					/* daemons the save */
++        else if (d_list[i].d_func == come_down)		/* format forgot */
++            func = 11;
++        else if (d_list[i].d_func == visuals)
++            func = 12;
++        else if (d_list[i].d_func == (void (*)()) turn_see)
++            func = 13;
+         else if (d_list[i].d_func == NULL)
+             func = 0;
+         else
+@@ -1108,18 +1116,21 @@
+                     break;
+             case 9: d_list[i].d_func = sight;
+                     break;
++            case 10: d_list[i].d_func = land;
++                    break;
++            case 11: d_list[i].d_func = come_down;
++                    break;
++            case 12: d_list[i].d_func = visuals;
++                    break;
++            case 13: d_list[i].d_func = (void (*)()) turn_see;
++                    break;
+             default:d_list[i].d_func = NULL;
+                     break;
+         }
+     }
+ 
+-    if (d_list[i].d_func == NULL)
+-    {
+-        d_list[i].d_type = 0;
+-        d_list[i].d_arg = 0;
+-        d_list[i].d_time = 0;
+-    }
+-    
++    /* oracle: removed an out-of-bounds write to d_list[count] */
++
+     return(READSTAT);
+ }       
+         
+@@ -1276,6 +1287,9 @@
+     for (i = 0; i < MAXROOMS; i++)
+         if (&rooms[i] == rp)
+             room = i;
++    for (i = 0; i < MAXPASS; i++)		/* oracle: passages were */
++        if (&passages[i] == rp)			/* saved as &rooms[-1] */
++            room = MAXROOMS + i;
+ 
+     rs_write_int(savef, room);
+ 
+@@ -1292,7 +1306,12 @@
+ 
+     rs_read_int(inf, &i);
+ 
+-    *rp = &rooms[i];
++    if (i >= 0 && i < MAXROOMS)
++        *rp = &rooms[i];
++    else if (i >= MAXROOMS && i < MAXROOMS + MAXPASS)
++        *rp = &passages[i - MAXROOMS];
++    else
++        *rp = NULL;
+             
+     return(READSTAT);
+ }
