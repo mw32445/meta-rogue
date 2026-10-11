@@ -94,9 +94,10 @@ def read_step(stream):
 
 
 class Bot:
-    def __init__(self, rng, master=False):
+    def __init__(self, rng, master=False, goal="deep"):
         self.rng = rng
         self.master = master
+        self.goal = goal            # "deep": go down; "win": take the Amulet up and out
         self.plan = collections.deque()   # keys still to send for the current action
         self.level = 0
         self.level_keys = 0
@@ -259,8 +260,11 @@ class Bot:
                 return o(cmd)
         # on the stairs and ready to leave
         explored = self.level_keys > self.budget or self.searches > 20
+        winning = self.goal == "win" and st.vals.get("A") == 1
+        if winning:
+            explored = True
         if explored and rows[pos[0]][pos[1]] == "@" and self.on_stairs(st):
-            return o(">")
+            return o("<" if winning else ">")
         # wizard: skip a level that takes too long
         if self.master and self.level_keys > 2 * self.budget and rng.random() < 0.05:
             return 4                                   # ^D
@@ -303,7 +307,7 @@ class Bot:
                     self.stairs = (st.vals.get("L"), y, x)
 
 
-def play(seed, max_keys, out, opts=None, master=False, args=()):
+def play(seed, max_keys, out, opts=None, master=False, args=(), goal="deep"):
     """Play one game on the oracle; write the key script; return (keys, steps, level)."""
     case = {"seed": seed, "opts": opts, "master": master, "args": list(args)}
     env = {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "TERM": "xterm", "LINES": "24",
@@ -317,9 +321,11 @@ def play(seed, max_keys, out, opts=None, master=False, args=()):
     p = subprocess.Popen([difftest.oracle_bin(master)] + list(args), cwd=rundir, env=env,
                          stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
                          text=True, bufsize=1)
-    bot = Bot(random.Random(seed * 104729 + 7), master)
+    bot = Bot(random.Random(seed * 104729 + 7), master, goal)
     if master and args and args[0] == "":
         bot.plan.append(9)         # wizard ^I: level 10, a +1,+1 two-handed sword, plate mail
+        if goal == "win":          # create the Amulet of Yendor: C , 0
+            bot.plan += [32, 32, ord("C"), ord(","), ord("0"), 32, 32]
     keys = []
     deepest = 1
     try:
@@ -361,6 +367,8 @@ def main():
     ap.add_argument("--opts")
     ap.add_argument("--master", action="store_true")
     ap.add_argument("--jobs", type=int, default=4)
+    ap.add_argument("--goal", choices=["deep", "win"], default="deep",
+                    help="win (with --master): create the Amulet and climb out")
     a = ap.parse_args()
     os.makedirs(a.out_dir, exist_ok=True)
     first = a.first_seed if a.first_seed is not None else a.seed
@@ -368,7 +376,7 @@ def main():
 
     def one(s):
         path = a.out if (a.out and a.count == 1) else os.path.join(a.out_dir, f"bot{s}.keys")
-        n, deepest = play(s, a.max_keys, path, a.opts, a.master, [""] if a.master else [])
+        n, deepest = play(s, a.max_keys, path, a.opts, a.master, [""] if a.master else [], a.goal)
         return s, path, n, deepest
 
     with cf.ThreadPoolExecutor(max_workers=a.jobs) as ex:

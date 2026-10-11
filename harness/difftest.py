@@ -521,7 +521,8 @@ def main():
         sys.exit(1 if run_cases(cases, a.jobs, a.keep, batch_size=30) else 0)
     if a.mode == "corpus":
         d = a.dir or os.path.join(HERE, "corpus")
-        cases = [read_case(os.path.join(d, f)) for f in sorted(os.listdir(d)) if f.endswith(".keys")]
+        cases = [read_case(os.path.join(dp, f)) for dp, _, fs in sorted(os.walk(d))
+                 for f in sorted(fs) if f.endswith(".keys")]
         sys.exit(1 if run_cases(cases, a.jobs, a.keep) else 0)
 
 
