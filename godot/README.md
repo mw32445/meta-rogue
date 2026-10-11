@@ -5,6 +5,11 @@ in GDScript. The port is **1:1**: given the same seed and keystrokes, it shows e
 the same screens and makes exactly the same random choices as the original C program.
 This is verified step by step against the original (see `../docs/ARCHITECTURE.md`).
 
+The playable game adds two things on top, each behind a switch (`../docs/CHANGES.md`):
+fixes for the known bugs of 5.4.4 (`../docs/FIXES.md`), verified against a C build with
+the same fixes, and the Fighters' Guild (`../docs/GUILD.md`). `--classic` plays the
+untouched original.
+
 ## Playing
 - **Run it:** open `godot/project.godot` in Godot 4.7 or later and press **F5** (or
   *Project → Run*). You can also export it like any Godot project.
@@ -13,8 +18,8 @@ This is verified step by step against the original (see `../docs/ARCHITECTURE.md
   - `?` lists all commands and `/` identifies a symbol.
   - Arrow keys, Home/End/PageUp/PageDown and the numeric keypad also move.
     Shift+arrows and Ctrl+arrows run.
-  - Keypad 5 does what it did in 5.4.4 on most terminals: it acts like `u` (a known
-    quirk, kept).
+  - Keypad 5 rests, like `.` (in `--classic` it acts like `u`, as 5.4.4 did on most
+    terminals).
 - **Options:** the `o` command, or the `ROGUEOPTS` environment variable, or
   `--rogueopts=...` on the command line (after `--`). For example:
   `ROGUEOPTS="terse,jump,inven=slow,fruit=kiwi"`.

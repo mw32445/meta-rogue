@@ -5,9 +5,12 @@ to the port's behavior makes the differential tests fail wherever behavior diffe
 each entry should say how the classic behavior is kept testable (see CLAUDE.md:
 "Gameplay changes and the 1:1 baseline").
 
-None yet. At the time of writing, the port is 1:1 with the original. The few
-documented exceptions, such as fixes for undefined behavior and the two save bugs, are
-listed in `FIDELITY.md`.
+With every switch off, the port is 1:1 with the original (the few documented
+exceptions, such as fixes for undefined behavior and the two save bugs, are listed in
+`FIDELITY.md`). The playable game (`godot/ui/main.gd`) turns the switches on;
+`--classic` turns them off.
 
 | Date | Change | Switch / how classic mode stays testable | Files |
 |---|---|---|---|
+| 2026-10-11 | **Bug fixes.** The known bugs of 5.4.4 are fixed: keypad 5, `F` and `kamikaze`, `relocate`/`find_dest`, picking up into an empty pack, `save_game`'s unlink, the `conn()` hang, the "the the" and ring-off messages, `fall()`'s names, Create Monster on a xeroc, raise level at 21, the flytrap's damage, the off-map search, `%` in player text, the wide overwrite inventory, the daemon slots, magic missile without a weapon, the wraith's drain, the `amulet` flag, merge pickups, nymph theft, monsters killed during `runners()`, treasure-room overlaps, stairs after hallucination, scroll-title spaces, wizard-mode bugs and message typos. `docs/FIXES.md` has each bug, its fix and its script, and the bugs kept as they are (#6 dark mazes, #19, ...) with the reason. | `RogueBase.fixes`. The same fixes are in C (`harness/oracle/fixes.patch`, oracle variants `fixed`/`fixedmaster`), so `difftest.py --fixes` verifies the fixed game keystroke by keystroke; `run_all.sh` runs every batch both ways. Per-bug scripts in `harness/corpus/fixes/` carry `# expect-classic/fixed:` lines. | the bug sites in `godot/rogue/*.gd`, `godot/ui/terminal_view.gd` (keypad), `harness/oracle/fixes.patch`, `hooks.c`, `harness/corpus/fixes/`, `godot/tests/fixes_test.gd` |
+| 2026-10-11 | **The Fighters' Guild.** Before every new game a shop spends the Hall of Fame's coffers (`best/2 + sum*(10+n)/400`) on training (strength, hit points), your weapon and armour, spares and enhancements, rings, wands, identifications and known potions and scrolls, food, missiles and a bigger pack (up to 52 slots, letters `A`-`Z` past `z`). The Hall of Fame has 20 entries; a polished ring of adornment sells for more when you win. | `RogueBase.guild` (and `RogueBase.loadout`). Off in every differential test, so the classic game is untouched; its own tests are `godot/tests/guild_test.gd` and replays with `--guild --loadout F.json`. | `godot/guild/`, `godot/ui/main.gd`, `terminal_view.gd` (a taller end-of-game console), `main.gd`, `pack.gd`, `save.gd`, `rip.gd`, `things.gd`, `rogue_base.gd`; `docs/GUILD.md` |
