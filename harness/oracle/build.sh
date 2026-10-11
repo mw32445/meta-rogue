@@ -3,11 +3,14 @@
 # root + oracle.patch (documented fidelity fixes, see docs/FIDELITY.md) +
 # hooks.c (scripted input, step log, pinned environment) via -Wl,--wrap.
 #
-# usage: harness/oracle/build.sh [std|master|cov]   -> harness/oracle/build/<variant>/rogue-oracle
+# usage: harness/oracle/build.sh [VARIANT]   -> harness/oracle/build/<variant>/rogue-oracle
 #   std     the default build (no wizard mode)               -O2
 #   master  wizard mode compiled in (-DMASTER)               -O2
 #   cov     default build with gcov instrumentation          -O0 --coverage
 #   covmaster  wizard mode with gcov instrumentation         -O0 --coverage
+#   fixed, fixedmaster  std/master plus the bug fixes of the port's `fixes` switch:
+#           fixes.patch on top of oracle.patch, and -DORACLE_FIXES for hooks.c
+#           (edit them with harness/oracle/edit_fixes.sh)
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -20,14 +23,19 @@ mkdir -p "$out"
 find "$root" -maxdepth 1 -type f ! -name '.*' -exec cp {} "$out"/ \;
 cd "$out"
 patch -p1 --quiet < "$here/oracle.patch"
+case "$variant" in
+    fixed|fixedmaster)
+        if grep -q '^@@' "$here/fixes.patch"; then patch -p1 --quiet < "$here/fixes.patch"; fi ;;
+esac
 
 conf=()
-case "$variant" in master|covmaster) conf+=(--enable-wizardmode) ;; esac
+case "$variant" in master|covmaster|fixedmaster) conf+=(--enable-wizardmode) ;; esac
 ./configure "${conf[@]}" > configure.log 2>&1
 
 common=(-g -std=gnu17 -fwrapv -ftrivial-auto-var-init=zero -fcommon -DHAVE_CONFIG_H -w)
 case "$variant" in
     std|master) cflags=(-O2 "${common[@]}") ;;
+    fixed|fixedmaster) cflags=(-O2 -DORACLE_FIXES "${common[@]}") ;;
     cov|covmaster) cflags=(-O0 --coverage "${common[@]}") ;;
     *) echo "unknown variant: $variant" >&2; exit 2 ;;
 esac

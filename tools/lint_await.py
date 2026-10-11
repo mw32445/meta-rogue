@@ -9,7 +9,10 @@ Rules
   3. Every call to a coroutine is directly preceded by `await`.
   4. Every `await`ed call targets a coroutine (Godot also reports REDUNDANT_AWAIT).
 
-usage: tools/lint_await.py [files...]   (default: every .gd under godot/rogue)
+Rule 1 applies to the C modules (godot/rogue); the other rules also cover the
+port-only game code in godot/guild (the Fighters' Guild).
+
+usage: tools/lint_await.py [files...]   (default: every .gd under godot/rogue and godot/guild)
 exit status 1 on any violation.
 """
 import json
@@ -84,7 +87,9 @@ def main():
     listed = {RENAME_FUNC.get(f, f) for f in blk["blocking"]}
     # coroutines added by changes to the port itself (gameplay changes), with reasons
     listed |= {RENAME_FUNC.get(f, f) for f in blk.get("port_blocking", {})}
-    files = [os.path.join(dp, f) for dp, _, fs in os.walk(os.path.join(ROOT, "godot", "rogue"))
+    rogue_dir = os.path.join(ROOT, "godot", "rogue")
+    files = [os.path.join(dp, f) for top in ("rogue", "guild")
+             for dp, _, fs in os.walk(os.path.join(ROOT, "godot", top))
              for f in fs if f.endswith(".gd")]
     only = {os.path.realpath(f) for f in sys.argv[1:]}   # report only these (all are parsed)
     modules = {}
@@ -101,9 +106,9 @@ def main():
                 awaits.add((cls, name))
     coro = set(PRIMITIVES) | {(c, f) for (c, f) in awaits}
     errors = []
-    # rule 1
+    # rule 1 (C modules only: guild helpers may share a name with a C function)
     for p, (cls, funcs) in modules.items():
-        if cls == "RogueBase":
+        if cls == "RogueBase" or not os.path.realpath(p).startswith(os.path.realpath(rogue_dir) + os.sep):
             continue
         for name, line, body in funcs:
             if name in c_funcs:

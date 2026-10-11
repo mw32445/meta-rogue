@@ -11,10 +11,17 @@ the report re-runs both with full screens around it.
   difftest.py seeds --count N [--first-seed S]   first screen of many seeds (level generation)
   difftest.py saves --count N [--len L] ...      save/restore chains (play, save, restore, ...)
 
-common options: --opts ROGUEOPTS | --no-opts, --master, --arg A, --keep, --variant V
+common options: --opts ROGUEOPTS | --no-opts, --master, --fixes, --arg A, --keep
+
+--fixes compares the port with RogueBase.fixes on against the "fixed" oracle (C with
+harness/oracle/fixes.patch); with --master/--wizard, "fixedmaster".
 
 Key files: decimal key codes separated by whitespace; '#' starts a comment. A
-header line "# difftest: seed=N opts=... master=1 arg=..." stores the run options.
+header line "# difftest: seed=N opts=... master=1 fixes=1 arg=..." stores the run
+options. Lines "# expect-classic: TEXT" / "# expect-fixed: TEXT" say that TEXT must
+appear on some screen (or in stdout) of the port's run in that mode;
+"# expect-not-classic: TEXT" / "# expect-not-fixed: TEXT" say it must not. They check
+the behavior itself, which the oracle diff cannot (both sides implement the same thing).
 """
 import argparse
 import concurrent.futures as cf
@@ -35,8 +42,8 @@ NAME = "rodney"
 UID = 1000
 
 
-def oracle_bin(master, variant=None):
-    v = variant or ("master" if master else "std")
+def oracle_bin(master, variant=None, fixes=False):
+    v = variant or ("fixed" if fixes else "") + ("master" if master else "") or "std"
     p = os.path.join(HERE, "oracle", "build", v, "rogue-oracle")
     if not os.path.exists(p):
         subprocess.run([os.path.join(HERE, "oracle", "build.sh"), v], check=True, stdout=subprocess.DEVNULL)
@@ -65,7 +72,7 @@ def run_oracle(case, d, full=None, t=""):
         env["ROGUEOPTS"] = case["opts"]
     if full is not None:
         env["ROGUE_FULL"] = str(full)
-    argv = [oracle_bin(case.get("master"), case.get("variant"))] + case.get("args", [])
+    argv = [oracle_bin(case.get("master"), case.get("variant"), case.get("fixes"))] + case.get("args", [])
     with open(os.path.join(d, f"stdout{t}.bin"), "wb") as so:
         try:
             subprocess.run(argv, cwd=d, env=env, stdout=so, stderr=subprocess.DEVNULL, timeout=60)
@@ -88,6 +95,8 @@ def port_line(case, d, full=None, t=""):
         kv["opts"] = case["opts"]
     if case.get("master"):
         kv["master"] = "1"
+    if case.get("fixes"):
+        kv["fixes"] = "1"
     if case.get("args"):
         kv["arg"] = "\x1f".join(case["args"])
     if full is not None:
@@ -177,6 +186,37 @@ def compare(case, d):
     return None
 
 
+def expect_mode(case):
+    return "fixed" if case.get("fixes") else "classic"
+
+
+def check_expect(case, d):
+    """Failed expectations ("# expect-...") of this case's mode, against every screen
+    of the port's full dumps and its stdout."""
+    exp = [(pos, text) for mode, pos, text in case.get("expect", []) if mode == expect_mode(case)]
+    if not exp:
+        return []
+    seen = []
+    for k in range(len(runs_of(case))):
+        t = tag(case, k)
+        try:
+            seen += [l[1:-1] for l in open(os.path.join(d, "port", f"dump{t}.txt")).read().splitlines()
+                     if l.startswith("|")]
+        except FileNotFoundError:
+            pass
+        try:
+            seen += open(os.path.join(d, "port", f"stdout{t}.bin"), "rb").read().decode("latin-1").splitlines()
+        except FileNotFoundError:
+            pass
+    bad = []
+    for pos, text in exp:
+        found = any(text in l for l in seen)
+        if found != pos:
+            bad.append(f"  expect-{'' if pos else 'not-'}{expect_mode(case)}: {text!r} "
+                       f"{'never appeared' if pos else 'appeared'}")
+    return bad
+
+
 def full_dump(path, step):
     """Return (screen rows, extra, digest) for a step from a full-mode log."""
     lines = open(path).read().splitlines()
@@ -191,7 +231,7 @@ def full_dump(path, step):
 
 def report(case, d, run, idx, a, b):
     out = [f"DIVERGENCE seed={case['seed']} keys={case['keys']} opts={case.get('opts')!r} "
-           f"master={bool(case.get('master'))} args={case.get('args', [])}"]
+           f"master={bool(case.get('master'))} fixes={bool(case.get('fixes'))} args={case.get('args', [])}"]
     if case.get("chain"):
         sub = case["chain"][run]
         out.append(f"  in run {run + 1} of {len(case['chain'])} of the chain (args={sub.get('args', [])}, "
@@ -353,6 +393,8 @@ def write_keys(path, keys, case):
         hdr += f" opts={case['opts']}"
     if case.get("master"):
         hdr += " master=1"
+    if case.get("fixes"):
+        hdr += " fixes=1"
     if case.get("args"):
         hdr += " arg=" + "\x1f".join(case["args"])
     with open(path, "w") as f:
@@ -371,6 +413,8 @@ def _parse_opts(text, case):
                 case["opts"] = v
             elif k == "master":
                 case["master"] = v == "1"
+            elif k == "fixes":
+                case["fixes"] = v == "1"
             elif k == "arg":
                 case["args"] = v.split("\x1f")
 
@@ -383,6 +427,11 @@ def read_case(path):
     lines = open(path).read().splitlines()
     if lines and lines[0].startswith("# difftest:"):
         _parse_opts(lines[0][len("# difftest:"):], case)
+    for l in lines:
+        for mode in ("classic", "fixed"):
+            for pos, pre in ((True, f"# expect-{mode}:"), (False, f"# expect-not-{mode}:")):
+                if l.startswith(pre):
+                    case.setdefault("expect", []).append((mode, pos, l[len(pre):].strip()))
     if not any(l.startswith("# run:") for l in lines):
         return case
     os.makedirs(OUT, exist_ok=True)
@@ -410,6 +459,8 @@ def write_chain(path, case, runs):
         hdr += f" opts={case['opts']}"
     if case.get("master"):
         hdr += " master=1"
+    if case.get("fixes"):
+        hdr += " fixes=1"
     with open(path, "w") as f:
         f.write(hdr + "\n")
         for args, keys in runs:
@@ -420,6 +471,19 @@ def write_chain(path, case, runs):
 
 
 # ------------------------------------------------------------------ driver
+
+def _expects(case):
+    return any(m == expect_mode(case) for m, _, _ in case.get("expect", []))
+
+
+def set_fixes(case, on):
+    """Turn the fixes on for a case and every run of its chain."""
+    if on:
+        case["fixes"] = True
+        for sub in case.get("chain") or []:
+            sub["fixes"] = True
+    return case
+
 
 def run_cases(cases, jobs, keep, batch_size=40):
     os.makedirs(OUT, exist_ok=True)
@@ -433,14 +497,22 @@ def run_cases(cases, jobs, keep, batch_size=40):
         list(ex.map(lambda cd: run_oracle_all(cd[0], os.path.join(cd[1], "oracle")), zip(cases, dirs)))
         batches = [list(range(i, min(i + batch_size, len(cases)))) for i in range(0, len(cases), batch_size)]
         list(ex.map(lambda b: run_port_batch(
-            [ln for i in b for ln in port_lines(cases[i], os.path.join(dirs[i], "port"))], work), batches))
-    bad = 0
+            [ln for i in b for ln in port_lines(cases[i], os.path.join(dirs[i], "port"),
+                                                full=1 if _expects(cases[i]) else None)], work), batches))
+    bad = unexpected = 0
     for c, d in zip(cases, dirs):
         r = compare(c, d)
         if r is not None:
             bad += 1
             print(report(c, d, *r), flush=True)
-    print(f"difftest: {len(cases) - bad}/{len(cases)} runs identical  ({work})")
+            continue
+        e = check_expect(c, d)
+        if e:
+            unexpected += 1
+            print(f"EXPECTATION FAILED keys={c['keys']} mode={expect_mode(c)}\n" + "\n".join(e), flush=True)
+    print(f"difftest: {len(cases) - bad}/{len(cases)} runs identical"
+          + (f", {unexpected} with failed expectations" if unexpected else "") + f"  ({work})")
+    bad += unexpected
     if not keep and bad == 0:
         shutil.rmtree(work, ignore_errors=True)
     return bad
@@ -455,6 +527,8 @@ def main():
     ap.add_argument("--opts")
     ap.add_argument("--no-opts", action="store_true")
     ap.add_argument("--master", action="store_true")
+    ap.add_argument("--fixes", action="store_true",
+                    help="RogueBase.fixes on, against the fixed oracle (harness/oracle/fixes.patch)")
     ap.add_argument("--arg", action="append", default=[])
     ap.add_argument("--count", type=int, default=100)
     ap.add_argument("--len", type=int, default=600)
@@ -469,6 +543,7 @@ def main():
     if a.mode == "one":
         case = read_case(a.keys) if not a.seed else {"keys": os.path.abspath(a.keys), "seed": a.seed}
         case.update({"opts": opts, "master": a.master, "args": a.arg})
+        set_fixes(case, a.fixes)
         sys.exit(1 if run_cases([case], 1, a.keep) else 0)
     if a.mode == "fuzz":
         os.makedirs(OUT, exist_ok=True)
@@ -483,6 +558,7 @@ def main():
             else:
                 case = {"seed": seed, "opts": opts, "master": a.master, "args": a.arg}
                 keys = gen_keys(rng, a.len)
+            set_fixes(case, a.fixes)
             path = os.path.join(kdir, f"fuzz{seed}.keys")
             write_keys(path, keys, case)
             case["keys"] = path
@@ -496,7 +572,7 @@ def main():
         cases = []
         for i in range(a.count):
             seed = a.first_seed + i
-            case = {"seed": seed, "opts": opts, "master": a.master, "args": a.arg}
+            case = set_fixes({"seed": seed, "opts": opts, "master": a.master, "args": a.arg}, a.fixes)
             path = os.path.join(kdir, f"seed{seed}.keys")
             write_keys(path, [27], case)
             case["keys"] = path
@@ -517,7 +593,7 @@ def main():
                 # wizard mode: quaff one kind of potion first (each one starts
                 # a different daemon or fuse), go deeper and let monsters close
                 # in (some chase objects or gold), then save
-                case = {"seed": seed, "opts": opts, "master": True}
+                case = set_fixes({"seed": seed, "opts": opts, "master": True}, a.fixes)
                 o = ord
                 potion = i % 14
                 first = ([o("C"), o("!"), o("0123456789abcd"[potion]), 32, 32, o("q"), o("f"), 32, 32]
@@ -526,7 +602,7 @@ def main():
                         (["-r"], [o("s")] * rng.randint(0, 20) + gen_keys_wizard(rng, rng.randint(10, a.len)) + save),
                         (["-r"], gen_keys_wizard(rng, rng.randint(10, a.len)))]
             else:
-                case = {"seed": seed, "opts": opts, "master": a.master}
+                case = set_fixes({"seed": seed, "opts": opts, "master": a.master}, a.fixes)
                 runs = [(a.arg, gen_keys(rng, rng.randint(20, a.len)) + save),
                         (["-r"], gen_keys(rng, rng.randint(20, a.len)) + save),
                         (["-r"], gen_keys(rng, rng.randint(20, a.len)))]
@@ -536,7 +612,7 @@ def main():
         sys.exit(1 if run_cases(cases, a.jobs, a.keep, batch_size=30) else 0)
     if a.mode == "corpus":
         d = a.dir or os.path.join(HERE, "corpus")
-        cases = [read_case(os.path.join(dp, f)) for dp, _, fs in sorted(os.walk(d))
+        cases = [set_fixes(read_case(os.path.join(dp, f)), a.fixes) for dp, _, fs in sorted(os.walk(d))
                  for f in sorted(fs) if f.endswith(".keys")]
         sys.exit(1 if run_cases(cases, a.jobs, a.keep) else 0)
 

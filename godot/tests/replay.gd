@@ -5,7 +5,7 @@
 ##   godot --headless --path godot --script res://tests/replay.gd -- \
 ##       --keys K.txt --dump D.txt [--stdout O.bin] [--seed N] [--time T] [--name S]
 ##       [--home H] [--uid U] [--opts ROGUEOPTS | --no-opts] [--cwd DIR] [--full N]
-##       [--master] [--arg A]...
+##       [--master] [--fixes] [--guild] [--loadout FILE.json] [--arg A]...
 ## Batch: --batch FILE, one run per line, each line holding the options above
 ## (tab separated "key=value" pairs; see harness/difftest.py).
 extends SceneTree
@@ -39,8 +39,8 @@ func _initialize() -> void:
 		var i := 0
 		while i < args.size():
 			var a := args[i]
-			if a == "--master":
-				opts["master"] = "1"
+			if a == "--master" or a == "--fixes" or a == "--guild":
+				opts[a.substr(2)] = "1"
 			elif a == "--no-opts":
 				opts["no-opts"] = "1"
 			elif a == "--arg":
@@ -78,6 +78,10 @@ func _run(o: Dictionary) -> void:
 	RogueBase.env_sandbox = true
 	RogueBase.env_rogueopts = null if o.has("no-opts") or not o.has("opts") else o["opts"]
 	RogueBase.MASTER = o.has("master")
+	# Gameplay switches: off unless this run asks (each run of a batch sets them).
+	RogueBase.fixes = o.has("fixes")
+	RogueBase.guild = o.has("guild")
+	RogueBase.loadout = _load_loadout(o.get("loadout", ""))
 	var argv := PackedStringArray(["rogue"])
 	if o.has("arg"):
 		argv.append_array(String(o["arg"]).split("\u001f"))
@@ -107,6 +111,18 @@ func _run(o: Dictionary) -> void:
 		so.close()
 	cs.abandon()
 	RogueBase.cs = null
+
+
+## A Guild loadout (JSON, see godot/guild/loadout.gd), or null.
+func _load_loadout(path: String) -> Variant:
+	if path == "":
+		return null
+	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		push_error("replay: cannot read loadout %s" % path)
+		return null
+	var v: Variant = JSON.parse_string(f.get_as_text())
+	return v if v is Dictionary else null
 
 
 func _load_keys(path: String) -> PackedInt32Array:

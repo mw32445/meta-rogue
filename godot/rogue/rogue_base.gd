@@ -316,6 +316,19 @@ const tr_name: Array[String] = ["a trapdoor", "an arrow trap", "a sleeping gas t
 static var cs: Curses
 ## MASTER: wizard mode compiled in (a build-time #define in C).
 static var MASTER := false
+## Gameplay switches (docs/CHANGES.md). Like MASTER they are set by the host before
+## Main.main() and reset() leaves them alone. The playable game turns them on;
+## godot/tests/replay.gd keeps them off unless a test asks, so the classic game stays
+## differential-tested against the stock C.
+## fixes: fixes for the original's bugs. The same fixes are in
+## harness/oracle/fixes.patch (oracle variants "fixed" and "fixedmaster").
+static var fixes := false
+## guild: the Fighters' Guild (godot/guild): the shop before each new game and a
+## 20-entry Hall of Fame.
+static var guild := false
+## The Guild purchases for the next new game (a Dictionary, see godot/guild/loadout.gd),
+## or null. Main.main() applies it once, in guild mode.
+static var loadout: Variant = null
 ## Values the C program gets from its environment (pinned in test mode).
 static var env_rogueopts: Variant = null	## getenv("ROGUEOPTS"): String or null
 static var env_name := "rodney"		## md_getusername()

@@ -7,7 +7,10 @@
 #     generation, random key scripts (standard and wizard mode) and
 #     save/restore chains, each diffed step by step against the oracle.
 #     Every batch runs many games in one Godot process, so it also checks
-#     that RogueBase.reset() starts each game from a clean state.
+#     that RogueBase.reset() starts each game from a clean state;
+#   - the same batches with the port's bug fixes on (RogueBase.fixes) against
+#     the "fixed" oracle (C + harness/oracle/fixes.patch), plus the
+#     expectations ("# expect-...") of the per-bug scripts in harness/corpus/fixes.
 # Exit status 0 only if everything is identical.
 #
 # usage: harness/run_all.sh [--quick]     (--quick: smaller sweeps)
@@ -23,7 +26,8 @@ fail=0
 step() { echo; echo "=== $*"; }
 
 step "oracle builds"
-for v in std master; do "$root/harness/oracle/build.sh" "$v" || fail=1; done
+# all of them first: difftest's lazy build would race between parallel runs
+for v in std master fixed fixedmaster; do "$root/harness/oracle/build.sh" "$v" || fail=1; done
 
 step "GDScript compile + await lint"
 "$root/tools/check.sh" || fail=1
@@ -47,6 +51,24 @@ python3 "$root/harness/difftest.py" fuzz --wizard --count "$wiz" --len 1500 --fi
 
 step "save/restore chains, $saves runs"
 python3 "$root/harness/difftest.py" saves --count "$saves" --len 500 --first-seed 300000 || fail=1
+
+# The bug fixes (RogueBase.fixes) against the fixed C.
+if [ -d "$root/harness/corpus" ]; then
+    step "fixed: regression corpus"
+    python3 "$root/harness/difftest.py" corpus --fixes || fail=1
+fi
+
+step "fixed: level generation, $seeds seeds"
+python3 "$root/harness/difftest.py" seeds --fixes --count "$seeds" || fail=1
+
+step "fixed: random key scripts, $fuzz runs"
+python3 "$root/harness/difftest.py" fuzz --fixes --count "$fuzz" --len 1000 --first-seed 400000 || fail=1
+
+step "fixed: wizard-mode random key scripts, $wiz runs"
+python3 "$root/harness/difftest.py" fuzz --fixes --wizard --count "$wiz" --len 1500 --first-seed 500000 || fail=1
+
+step "fixed: save/restore chains, $saves runs"
+python3 "$root/harness/difftest.py" saves --fixes --count "$saves" --len 500 --first-seed 600000 || fail=1
 
 echo
 if [ $fail -eq 0 ]; then echo "run_all: ALL OK"; else echo "run_all: FAILURES (see above)"; fi
