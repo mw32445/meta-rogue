@@ -31,7 +31,8 @@ SRCS = ["vers", "extern", "armor", "chase", "command", "daemon", "daemons", "fig
 PLATFORM_FILES = {"mdport.c", "state.c", "xcrypt.c", "mach_dep.c"}
 
 # Library primitives that wait for keyboard input.
-INPUT_PRIMITIVES = {"wgetch", "wgetnstr", "fgets", "getchar", "md_getpass"}
+# exit/abort end the program: in the port they suspend forever, so their callers are coroutines too.
+INPUT_PRIMITIVES = {"wgetch", "wgetnstr", "fgets", "getchar", "md_getpass", "exit", "abort"}
 RNG_GLOBAL = "seed"
 
 # Function-pointer call sites -> possible targets (verified by hand, see docs/AUDIT.md).
@@ -52,6 +53,19 @@ REVIEWED = {
                            "same total and the same final seed",
     "ring_eat(LEFT) + ring_eat(RIGHT)": "pinned: stock gcc -O0/-O2 calls LEFT first; oracle.patch "
                                         "makes it explicit; the port calls LEFT then RIGHT",
+}
+# Functions whose only blocking paths are unreachable or end in a crash. In the port
+# they are plain functions; the message goes to push_error (docs/FIDELITY.md).
+PORT_NONBLOCKING = {
+    "new_item": "msg() only when calloc() fails, impossible in GDScript",
+    "d_slot": "MASTER debug() when all 20 daemon slots are used; C then dereferences NULL",
+    "inv_name": "MASTER debug() for an object type that does not exist",
+    "pick_one": "MASTER debug() when the probability tables are inconsistent (they are fixed)",
+    "find_obj": "MASTER debug('Non-object'); every caller then dereferences NULL",
+    "roomin": "msg('in some bizarre place') is followed by a NULL dereference in C",
+    "runto": "MASTER msg('couldn't find monster in runto') is followed by a NULL dereference",
+    "new_thing": "MASTER debug() + wait_for in a default case that pick_one() never reaches",
+    "badcheck": "MASTER check that a fixed probability table sums to 100; it always does",
 }
 # Functions that return a pointer to a static buffer, and which buffer.
 STATIC_BUFFER_FUNCS = {
@@ -248,7 +262,7 @@ def main():
     unknown_indirect = [(i["file"], f, i["indirect"]) for f, i in funcs.items()
                         if i["indirect"] and (i["file"], f) not in INDIRECT_TARGETS]
 
-    blocking = fixpoint(funcs, INPUT_PRIMITIVES, edges)
+    blocking = fixpoint(funcs, INPUT_PRIMITIVES, {f: e for f, e in edges.items() if f not in PORT_NONBLOCKING})
     rng = fixpoint(funcs, {f for f, i in funcs.items() if i["uses_seed"]} | {"rnd", "roll"}, edges)
     blocking_game = sorted(f for f in blocking if f in funcs)
     rng_game = sorted(f for f in rng if f in funcs)
@@ -321,6 +335,7 @@ def main():
                 "coroutine and every call to it must be awaited (tools/lint_await.py).",
         "input_primitives": sorted(INPUT_PRIMITIVES),
         "indirect_targets": {f"{k[0]}:{k[1]}": v for k, v in INDIRECT_TARGETS.items()},
+        "port_nonblocking": PORT_NONBLOCKING,
         "blocking": blocking_game,
         "rng": rng_game,
     }
