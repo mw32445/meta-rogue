@@ -1,0 +1,7 @@
+# difftest: seed=1201 master=1 arg=
+# FIX N2: throwing the Amulet (or a nymph stealing it) left the amulet flag set; only drop() cleared it (weapons.c:56, fight.c:301-312): the hero throws it away, walks to the level-1 stairs and climbs out a winner without it
+# expect-classic: Worth  Item
+# expect-not-classic: Your way is magically blocked
+# expect-fixed: Your way is magically blocked
+# expect-not-fixed: Worth  Item
+67 44 48 32 107 116 121 102 6 32 108 108 60 32 32 32

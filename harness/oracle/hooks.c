@@ -836,7 +836,11 @@ oracle_place(int y, int x)
     if (idx >= 0 && idx < MAXLINES * MAXCOLS)
 	return &places[idx];
     dummy.p_ch = ' ';
+#ifdef ORACLE_FIXES
+    dummy.p_flags = F_REAL;	/* FIX 27: off the map is solid rock (nothing to find) */
+#else
     dummy.p_flags = 0;
+#endif
     dummy.p_monst = NULL;
     return &dummy;
 }

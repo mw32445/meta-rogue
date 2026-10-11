@@ -41,6 +41,10 @@ static func runners(_arg: int = 0) -> void:
 			if wastarget and not ce(_runners_orig_pos, tp.t_pos):
 				tp.t_flags &= ~ISTARGET
 				to_death = false
+		if fixes and next != null and not _on_mlist(next):
+			# FIX N5: a dragon's flame killed the monster that was next:
+			# go on with the one now after tp
+			next = tp.l_next
 		tp = next
 	if has_hit:
 		await Io.endmsg()
@@ -68,13 +72,16 @@ static func relocate(th: Thing, new_loc: Coord) -> void:
 
 	if not ce(new_loc, th.t_pos):
 		mvaddch(th.t_pos.y, th.t_pos.x, th.t_oldch)
+		if fixes:	# FIX 3: the room it leaves, so a change of room is seen
+			oroom = th.t_room
 		th.t_room = roomin(new_loc)
 		set_oldch(th, new_loc)
-		oroom = th.t_room
+		if not fixes:
+			oroom = th.t_room
 		INDEX(th.t_pos.y, th.t_pos.x).p_monst = null
 
 		# (oroom was taken after t_room changed: find_dest() is never
-		# called here. Kept: docs/FIDELITY.md)
+		# called here. Kept: docs/FIDELITY.md; fixed by FIX 3)
 		if oroom != th.t_room:
 			th.t_dest = find_dest(th)
 		th.t_pos.copy_from(new_loc)
@@ -381,6 +388,16 @@ static func find_dest(tp: Thing) -> Coord:
 			obj = obj.l_next
 			continue
 		if roomin(obj.o_pos) == tp.t_room and rnd(100) < prob:
+			if fixes:	# FIX 4: a loop variable of its own; tp stays the monster
+				var mp := mlist
+				while mp != null:
+					if mp.t_dest == obj.o_pos:
+						break
+					mp = mp.l_next
+				if mp == null:
+					return obj.o_pos
+				obj = obj.l_next
+				continue
 			tp = mlist
 			while tp != null:
 				if tp.t_dest == obj.o_pos:
@@ -404,3 +421,14 @@ static func dist(y1: int, x1: int, y2: int, x2: int) -> int:
 ##	Call dist() with appropriate arguments for coord pointers
 static func dist_cp(c1: Coord, c2: Coord) -> int:
 	return dist(c1.y, c1.x, c2.y, c2.x)
+
+
+## (port, FIX N5) Is the monster still on mlist? (A monster that was killed
+## has been detached from it.)
+static func _on_mlist(tp: Thing) -> bool:
+	var mp := mlist
+	while mp != null:
+		if mp == tp:
+			return true
+		mp = mp.l_next
+	return false

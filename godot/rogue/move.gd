@@ -234,7 +234,8 @@ static func be_trapped(tc: Coord) -> int:
 				7: await Io.msg("you suddenly feel very thirsty")
 				8: await Io.msg("you feel time speed up suddenly")
 				9: await Io.msg("time now seems to be going slower")
-				10: await Io.msg("you pack turns %s!", [Init.rainbow[rnd(Init.cNCOLORS)]])
+				10: await Io.msg("your pack turns %s!" if fixes else "you pack turns %s!",	# FIX typo
+					[Init.rainbow[rnd(Init.cNCOLORS)]])
 		T_SLEEP:
 			no_command += SLEEPTIME()
 			player.t_flags &= ~ISRUN

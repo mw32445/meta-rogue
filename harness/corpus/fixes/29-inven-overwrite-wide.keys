@@ -1,0 +1,9 @@
+# difftest: seed=2904 opts=inven=overwrite master=1 arg=
+# FIX 29: inven=overwrite with a line ending at column 78 or 79 (here a long call name): newwin() at COLS - maxlen - 3 < 0 fails, nothing is drawn and the game waits for space (things.c:503-525); fixed: the list is shown a page at a time
+# expect-fixed: f) A ring called the ring found on the first level of the dung(stibotantalite)
+# expect-fixed: --Press space to continue--
+# expect-not-classic: A ring called the ring found
+# expect-not-classic: --Press space to continue--
+67 61 50 32 99 102 116 104 101 32 114 105 110 103 32 102 111 117 110 100
+32 111 110 32 116 104 101 32 102 105 114 115 116 32 108 101 118 101 108 32
+111 102 32 116 104 101 32 100 117 110 103 13 105 32

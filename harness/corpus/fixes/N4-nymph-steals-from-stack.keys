@@ -1,0 +1,16 @@
+# difftest: seed=4402 master=1 arg=
+# FIX N4: a nymph stealing from a stack of 3 potions took one but named the stack left in the pack ("she stole 2 blue potions"), then discarded it while it was still in the pack (fight.c:310-312); fixed: leave_pack(steal, TRUE, FALSE) and the one potion taken is named (wizard: ^I, the other magic items thrown away, level 13, monsters created until a nymph comes, aggravate monsters)
+# expect-classic: She stole 2 blue potions!
+# expect-not-fixed: She stole 2 blue potions
+# expect-fixed: She stole a blue potion!
+9 32 32 32 32 32 32 32 32 116 107 98 116 107 99 116 107 100 67 33
+48 32 67 33 48 32 67 33 48 32 4 4 4 4 4 4 4 4 4 4
+4 4 67 63 101 32 114 99 27 70 121 67 63 101 32 114 99 27 70 104
+32 70 104 67 63 101 32 114 99 27 70 121 67 63 101 32 114 99 27 67
+63 101 32 114 99 27 70 121 32 70 121 67 63 101 32 114 99 27 70 104
+32 70 104 67 63 101 32 114 99 27 70 108 67 63 101 32 114 99 27 70
+108 67 63 101 32 114 99 27 67 63 103 32 114 99 32 27 115 32 115 115
+32 115 32 115 32 115 32 115 32 32 115 32 32 32 115 32 115 32 115 32
+115 32 32 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115
+115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115
+115 115 115 115 115 115 115 115 115 115 115

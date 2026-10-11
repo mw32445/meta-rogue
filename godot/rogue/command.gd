@@ -184,7 +184,9 @@ static func command() -> void:
 							_command_direction = ch
 						continue	# C: goto over
 					ord("F"), ord("f"):
-						if ch == ord("F"):
+						if fixes:	# FIX 2: f clears the kamikaze an earlier F left set
+							kamikaze = ch == ord("F")
+						elif ch == ord("F"):
 							kamikaze = true
 							# FALLTHROUGH
 						if not await Misc.get_dir():
@@ -277,7 +279,10 @@ static func command() -> void:
 						await Things.discovered()
 					CTRL_P:
 						after = false
-						await Io.msg(huh)
+						if fixes:	# FIX 28: the last message is text, not a format
+							await Io.msg("%s", [huh])
+						else:
+							await Io.msg(huh)
 					CTRL_R:
 						after = false
 						clearok(curscr, true)
@@ -398,7 +403,8 @@ static func command() -> void:
 									obj.o_hplus = 1
 									obj.o_dplus = 1
 									await Pack.add_pack(obj, true)
-									cur_weapon = obj
+									if not fixes or _in_pack(obj):	# FIX N13: not if the pack was full
+										cur_weapon = obj
 									# And his suit of armor
 									obj = List.new_item()
 									obj.o_type = ARMOR
@@ -407,8 +413,13 @@ static func command() -> void:
 									obj.o_flags |= ISKNOW
 									obj.o_count = 1
 									obj.o_group = 0
-									cur_armor = obj
-									await Pack.add_pack(obj, true)
+									if fixes:	# FIX N13: wear it only if it fit in the pack
+										await Pack.add_pack(obj, true)
+										if _in_pack(obj):
+											cur_armor = obj
+									else:
+										cur_armor = obj
+										await Pack.add_pack(obj, true)
 								ord("*"):
 									await Things.pr_list()
 								_:
@@ -744,3 +755,13 @@ static func current(cur: Thing, how: String, where: Variant) -> void:
 		if where != null:
 			await Io.addmsg(" %s", [where])
 		await Io.endmsg()
+
+
+## (port, FIX N13) Is obj in the pack? add_pack() does not say whether it fit.
+static func _in_pack(obj: Thing) -> bool:
+	var op := pack
+	while op != null:
+		if op == obj:
+			return true
+		op = op.l_next
+	return false

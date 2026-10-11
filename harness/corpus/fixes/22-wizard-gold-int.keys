@@ -1,0 +1,6 @@
+# difftest: seed=2201 master=1 arg=
+# FIX 22 (wizard): get_num() stored the amount of wizard-created gold through a short *: 100000 became 34464 (options.c:381,386; wizard.c:188)
+# expect-classic: f) 34464 Gold pieces
+# expect-fixed: f) 100000 Gold pieces
+# expect-not-fixed: 34464
+67 42 48 49 48 48 48 48 48 13 32 105 32

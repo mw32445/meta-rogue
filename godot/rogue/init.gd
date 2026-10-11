@@ -268,6 +268,13 @@ static func init_names() -> void:
 				cp += sp	# while (*sp) *cp++ = *sp++;
 			cp += " "	# *cp++ = ' ';
 		cp = cp.substr(0, cp.length() - 1)	# *--cp = '\0';
+		if fixes:
+			# FIX N11: a word the length limit left empty still got its
+			# space: drop doubled and trailing spaces (same RNG calls)
+			while cp.contains("  "):
+				cp = cp.replace("  ", " ")
+			while cp.ends_with(" "):
+				cp = cp.substr(0, cp.length() - 1)
 		prbuf = cp
 		s_names[i] = prbuf	# malloc + strcpy(s_names[i], prbuf)
 
@@ -313,6 +320,8 @@ static func init_materials() -> void:
 				if not _init_used[j]:
 					ws_type[i] = "staff"
 					str_ = wood[j]
+					if fixes and str_ == "cinnibar":	# FIX typo (init.c wood[])
+						str_ = "cinnabar"
 					_init_used[j] = true
 					break
 		ws_made[i] = str_

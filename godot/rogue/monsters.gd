@@ -135,6 +135,12 @@ static func wake_monster(y: int, x: int) -> Thing:
 		tp = moat(y, x)
 		if tp == null:
 			await Io.msg("can't find monster in wake_monster")
+			if fixes:	# FIX N14: nothing to wake (a monster letter is an object)
+				return null
+			# C dereferences the NULL monster and crashes (docs/FIDELITY.md:
+			# exit status 139, as the oracle reports it)
+			await exit(139)
+			return null
 	else:
 		tp = moat(y, x)
 		if tp == null:

@@ -1,0 +1,6 @@
+# difftest: seed=4
+# FIX 5: add_pack() into an empty pack skipped pack_room(), so the object stayed on lvl_obj: drop everything, pick the last item up again, and the inventory lists the floor objects too (pack.c:53-58)
+# expect-classic: d) A +1,+0 short bow
+# expect-fixed: a) 35 +0,+0 arrows
+# expect-not-fixed: d) A +1,+0 short bow
+100 97 108 100 98 108 100 99 108 100 100 108 100 101 108 104 107 105 32

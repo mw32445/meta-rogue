@@ -32,11 +32,17 @@ static func add_pack(obj: Thing, silent: bool) -> void:
 			return
 
 	if pack == null:
-		# The original does not detach obj from lvl_obj here (kept on
-		# purpose, docs/FIDELITY.md).
-		pack = obj
-		obj.o_packch = pack_char()
-		inpack += 1
+		if fixes:	# FIX 5: pack_room() takes it off the floor (and counts it)
+			if not await pack_room(from_floor, obj):
+				return
+			pack = obj
+			obj.o_packch = pack_char()
+		else:
+			# The original does not detach obj from lvl_obj here (kept on
+			# purpose, docs/FIDELITY.md).
+			pack = obj
+			obj.o_packch = pack_char()
+			inpack += 1
 	else:
 		lp = null
 		op = pack
@@ -56,6 +62,12 @@ static func add_pack(obj: Thing, silent: bool) -> void:
 							return
 						op.o_count += 1
 						# dump_it:
+						if fixes:	# FIX N3: redirect its pursuers before obj is gone
+							var mp := mlist
+							while mp != null:
+								if mp.t_dest == obj.o_pos:
+									mp.t_dest = hero
+								mp = mp.l_next
 						List.discard(obj)
 						obj = op
 						lp = null
@@ -78,6 +90,12 @@ static func add_pack(obj: Thing, silent: bool) -> void:
 							if not await pack_room(from_floor, obj):
 								return
 							# C: goto dump_it
+							if fixes:	# FIX N3 (dump_it)
+								var mp := mlist
+								while mp != null:
+									if mp.t_dest == obj.o_pos:
+										mp.t_dest = hero
+									mp = mp.l_next
 							List.discard(obj)
 							obj = op
 							lp = null
@@ -171,6 +189,8 @@ static func leave_pack(obj: Thing, newobj: bool, all: bool) -> Thing:
 		if used >= 0 and used < pack_used.size():
 			pack_used[used] = false
 		pack = List._detach(pack, obj)
+		if fixes and obj.o_type == AMULET:	# FIX N2: thrown or stolen, it is gone
+			amulet = false
 	return nobj
 
 

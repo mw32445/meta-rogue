@@ -1,0 +1,10 @@
+# difftest: seed=4404 master=1 arg=
+# FIX N3: picking up an object that merges into a pack stack discards it without redirecting the monsters that wanted it (pack.c:83-87 vs 143-145): they keep a dangling target and stop running when they reach its square. Wizard, level 13: a food ration dropped inside a door, the hero steps out, aggravate monsters (the nymph goes for the food), the hero takes it back (it merges with the other ration) and steps out: classic nymph stops by the door, fixed nymph comes for the hero
+# expect-fixed: The nymph
+# expect-not-classic: The nymph
+9 32 32 32 32 32 32 32 32 67 58 48 32 4 4 4 4 4 4 4
+4 4 4 4 4 67 63 101 32 114 104 27 70 106 32 70 106 67 63 101
+32 114 104 27 70 108 32 70 108 67 63 101 32 114 104 27 6 32 108 108
+108 108 108 108 108 108 108 108 108 108 108 108 117 100 97 108 108 67 63 103
+32 114 104 32 27 104 104 108 108 115 115 115 115 115 115 115 115 115 115 115
+115 115 115 115 115

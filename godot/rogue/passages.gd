@@ -172,6 +172,8 @@ static func conn(r1: int, r2: int) -> void:
 		epos.x = rpt.r_pos.x			# end of move
 		epos.y = rpt.r_pos.y
 		if (rpf.r_flags & ISGONE) == 0:		# if not gone pick door pos
+			if fixes:	# FIX 8
+				_maze_door(rpf, rpf.r_pos.y + rpf.r_max.y - 1, rpf.r_pos.x, 0, 1, rpf.r_max.x - 2)
 			var tries := 0
 			while true:
 				tries += 1
@@ -183,6 +185,8 @@ static func conn(r1: int, r2: int) -> void:
 				if not ((rpf.r_flags & ISMAZE) != 0 and (flat(spos.y, spos.x) & F_PASS) == 0):
 					break
 		if (rpt.r_flags & ISGONE) == 0:
+			if fixes:	# FIX 8
+				_maze_door(rpt, epos.y, rpt.r_pos.x, 0, 1, rpt.r_max.x - 2)
 			var tries := 0
 			while true:
 				tries += 1
@@ -206,6 +210,8 @@ static func conn(r1: int, r2: int) -> void:
 		epos.x = rpt.r_pos.x
 		epos.y = rpt.r_pos.y
 		if (rpf.r_flags & ISGONE) == 0:
+			if fixes:	# FIX 8
+				_maze_door(rpf, rpf.r_pos.y, rpf.r_pos.x + rpf.r_max.x - 1, 1, 0, rpf.r_max.y - 2)
 			var tries := 0
 			while true:
 				tries += 1
@@ -217,6 +223,8 @@ static func conn(r1: int, r2: int) -> void:
 				if not ((rpf.r_flags & ISMAZE) != 0 and (flat(spos.y, spos.x) & F_PASS) == 0):
 					break
 		if (rpt.r_flags & ISGONE) == 0:
+			if fixes:	# FIX 8
+				_maze_door(rpt, rpt.r_pos.y, epos.x, 1, 0, rpt.r_max.y - 2)
 			var tries := 0
 			while true:
 				tries += 1
@@ -379,6 +387,27 @@ static func numpass(y: int, x: int) -> void:
 	numpass(y - 1, x)
 	numpass(y, x + 1)
 	numpass(y, x - 1)
+
+
+## (port, FIX 8) conn() picks a door among squares 1..n of a row (dy 0, dx 1)
+## or column (dy 1, dx 0) of a room starting at (y, x), and for a maze it waits
+## for a passage square there. A maze's cells are at even offsets from its
+## corner; a row or column between two rows or columns of cells has a passage
+## square only where the maze links them, and may have none in range: the loop
+## never ended. Then dig one at an even offset, which links two cells.
+static func _maze_door(rp: Room, y: int, x: int, dy: int, dx: int, n: int) -> void:
+	var k: int
+	var c := Coord.new()
+
+	if (rp.r_flags & ISMAZE) == 0:
+		return
+	for i in range(1, n + 1):
+		if (flat(y + i * dy, x + i * dx) & F_PASS) != 0:
+			return
+	k = 2 * (rnd(n / 2) + 1)
+	c.y = y + k * dy
+	c.x = x + k * dx
+	putpass(c)
 
 
 ## The level generator is stuck (see STUCK_TRIES): end the game.

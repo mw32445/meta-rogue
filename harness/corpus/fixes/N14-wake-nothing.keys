@@ -1,0 +1,6 @@
+# difftest: seed=1301 master=1 arg=
+# FIX N14 (wizard): leaving a lit room calls door_open(), which calls wake_monster() for every monster letter in the room; on an object of type F (created with C F 0) there is no monster: MASTER message, then a NULL dereference (monsters.c:157-165); fixed: nothing to wake, the game goes on
+# expect-fixed: Can't find monster in wake_monster
+# expect-fixed: mctesq was here
+# expect-not-classic: mctesq was here
+67 70 48 32 32 100 102 32 32 104 107 107 118 32

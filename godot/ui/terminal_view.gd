@@ -209,6 +209,8 @@ static func key_code(e: InputEventKey) -> int:
 		KEY_PAGEDOWN, KEY_KP_3:
 			return Curses.KEY_SNEXT if mod else Curses.KEY_NPAGE
 		KEY_KP_5:
+			if RogueBase.fixes:	# FIX 1: rest; md_readchar() would make KEY_B2 'u'
+				return ord(".")
 			return Curses.KEY_B2
 		KEY_ENTER, KEY_KP_ENTER:
 			return 13

@@ -385,9 +385,12 @@ static func get_num(vp: int, win: Curses.CWindow) -> Array:
 	_get_num_buf = r[1]
 	i = r[0]
 	if i == NORM:
-		# UB: *opt = (short) atoi(buf) stores 16 bits into the low half of
-		# the int it points at (little-endian x86); the high half is kept.
-		opt = (opt & ~0xFFFF) | (atoi(_get_num_buf) & 0xFFFF)
+		if fixes:	# FIX 22: store the whole int (C: int *opt = (int *) vp)
+			opt = _to_int32(atoi(_get_num_buf))
+		else:
+			# UB: *opt = (short) atoi(buf) stores 16 bits into the low half of
+			# the int it points at (little-endian x86); the high half is kept.
+			opt = (opt & ~0xFFFF) | (atoi(_get_num_buf) & 0xFFFF)
 	return [i, opt]
 
 

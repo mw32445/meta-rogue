@@ -97,9 +97,34 @@ static func fall(obj: Thing, pr: bool) -> void:
 		if has_hit:
 			await Io.endmsg()
 			has_hit = false
-		await Io.msg("the %s vanishes as it hits the ground",
-			[_weap_info_name(obj.o_which)])
+		if fixes:	# FIX 11: any pack object can be thrown: name it by its type
+			await Io.msg("the %s vanishes as it hits the ground", [_fall_name(obj)])
+		else:
+			await Io.msg("the %s vanishes as it hits the ground",
+				[_weap_info_name(obj.o_which)])
 	List.discard(obj)
+
+
+## (port, FIX 11) fall()'s name for a thrown object of any type.
+static func _fall_name(obj: Thing) -> Variant:
+	match obj.o_type:
+		WEAPON:
+			return weap_info[obj.o_which].oi_name
+		ARMOR:
+			return arm_info[obj.o_which].oi_name
+		POTION:
+			return "potion"
+		SCROLL:
+			return "scroll"
+		RING:
+			return "ring"
+		STICK:
+			return ws_type[obj.o_which]
+		FOOD:
+			return fruit if obj.o_which == 1 else "food"
+		AMULET:
+			return "Amulet of Yendor"
+	return "object"
 
 
 ## weap_info[which].oi_name for fall()'s message.

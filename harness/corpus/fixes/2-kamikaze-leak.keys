@@ -1,0 +1,7 @@
+# difftest: seed=2216 master=1 arg=
+# FIX 2: F sets kamikaze and nothing clears it after "no monster there" (command.c:214-233): a later f (fight till death or NEAR death) then fights to the death; level 5, a hobgoblin from a create-monster scroll, F at an empty square, then f at the hobgoblin. Fixed: f stops when the hero is near death
+# expect-classic: You have defeated the hobgoblin
+# expect-not-fixed: You have defeated the hobgoblin
+# expect-fixed: The hobgoblin scored an excellent hit on you
+# expect-not-classic: The hobgoblin scored an excellent hit on you
+4 4 4 4 67 63 101 32 114 102 27 70 107 102 108 115
