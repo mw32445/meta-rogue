@@ -22,8 +22,8 @@ The stores:
 - **Gold.** The coffers (section 2) are the student's to spend. The screen shows what
   is spent and what is left. Unspent gold is not kept: the next student gets the coffers
   afresh.
-- **No backing out.** There is no Escape and no cancel; the only way out is down (`>`
-  or Enter, then `y`).
+- **No backing out.** There is no Escape and no cancel; the only way out is down (`e`,
+  then `y`).
 - **Returns.** Until the descent, anything bought can be returned for its full price,
   except an identification.
 - **Identifications.** Identifying a potion or a scroll names one random unknown kind
@@ -36,11 +36,11 @@ The stores:
 | Key | Action |
 |---|---|
 | `j` `k`, up/down | choose a line (PgUp/PgDn, Home/End, space pages down) |
-| `+` or `l` | buy one |
-| `-` or `h` | return one |
+| Enter (or `+`, `l`) | buy one more |
+| Backspace (or `-`, `h`) | return one |
 | `1`-`8`, left/right, Tab | section |
 | `?` | the coffers formula with its numbers, and the keys |
-| `>` or Enter | descend (asks `[y/n]`) |
+| `e` | enter the dungeon (asks `[y/n]`) |
 
 The screen has no explanatory text and no flavor lines: only the lists, their short
 headings and prices. The bottom line stays empty unless a key was refused; it then

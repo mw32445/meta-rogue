@@ -78,9 +78,9 @@ func key(code: int) -> void:
 			_cursor[section] = _next_offer(lines, -1, 1)
 		Curses.KEY_END:
 			_cursor[section] = _next_offer(lines, lines.size(), -1)
-		ord("+"), ord("l"), ord("="):
+		13, 10, ord("+"), ord("l"), ord("="):	# Enter: buy one more
 			_act(lines, true)
-		ord("-"), ord("h"), ord("_"):
+		8, 127, Curses.KEY_BACKSPACE, ord("-"), ord("h"), ord("_"):	# Backspace: return one
 			_act(lines, false)
 		Curses.KEY_RIGHT, 9:	# Tab
 			_open((section + 1) % GuildShop.SECTIONS.size())
@@ -88,7 +88,7 @@ func key(code: int) -> void:
 			_open((section + GuildShop.SECTIONS.size() - 1) % GuildShop.SECTIONS.size())
 		ord("?"):
 			_mode = HELP
-		ord(">"), 13, 10:
+		ord("e"), ord("E"):	# enter the dungeon (asks first)
 			_mode = CONFIRM
 		_:	# no Escape: the only way out is down
 			if code >= ord("1") and code < ord("1") + GuildShop.SECTIONS.size():
@@ -224,9 +224,9 @@ func _draw_shop() -> void:
 			break
 		_line(LIST_TOP + r, lines[i], i == cur)
 	_rule(LIST_TOP + LIST_ROWS, "more below" if top + LIST_ROWS < lines.size() else "")
-	_put(22, 1, "j/k choose  +/- buy/return  1-8 section  ? help  > descend")
+	_put(22, 1, "Enter buy  Backspace return  j/k choose  1-8 section  ? help  e enter dungeon")
 	if _mode == CONFIRM:
-		_put(23, 1, "Descend into the Dungeons of Doom? (%d gold unspent) [y/n]" % shop.left())
+		_put(23, 1, "Enter the Dungeons of Doom? (%d gold unspent) [y/n]" % shop.left())
 	else:
 		_put(23, 1, _say)
 
@@ -269,8 +269,8 @@ func _draw_help() -> void:
 			shop.coffers],
 		"",
 		"  j k, up down    choose a line        1-8, left right   change section",
-		"  + l             buy one              - h               return one",
-		"  ?               this page            > Enter           descend",
+		"  Enter           buy one more         Backspace         return one",
+		"  ?               this page            e                 enter the dungeon",
 	]
 	for i in rows.size():
 		_put(1 + i, 1, rows[i])
