@@ -423,6 +423,9 @@ static var n_objs := 0
 static var ntraps := 0
 static var hungry_state := 0
 static var inpack := 0
+## Guild mode: the pack's size (Rogue's MAXPACK, more with slots bought from the
+## Guild, see godot/guild/loadout.gd); pack_room() uses it instead of MAXPACK.
+static var maxpack := MAXPACK
 static var inv_type := 0
 static var level := 1
 static var max_hit := 0
@@ -624,6 +627,7 @@ static func reset() -> void:
 	ntraps = 0
 	hungry_state = 0
 	inpack = 0
+	maxpack = MAXPACK
 	inv_type = 0
 	level = 1
 	max_hit = 0

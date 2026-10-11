@@ -38,6 +38,8 @@ static func inv_name(obj: Thing, drop: bool) -> String:
 			nameit(obj, "potion", p_colors[which], pot_info[which], PRF_NULLSTR)
 		RING:
 			nameit(obj, "ring", r_stones[which], ring_info[which], PRF_RING_NUM)
+			if guild and which == R_NOP and obj.o_arm > 11:	# polished by the Guild
+				prbuf += sprintf(" [worth %d]", [10 << (obj.o_arm - 11)])
 		STICK:
 			nameit(obj, ws_type[which], ws_made[which], ws_info[which], PRF_CHARGE_STR)
 		SCROLL:

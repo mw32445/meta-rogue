@@ -308,7 +308,11 @@ static func rd_score(top_ten: Array) -> void:
 
 	scoreboard.seek(0)
 
-	for i in numscores:
+	var n := numscores
+	if guild:	# the Guild's 20 entries: a file may hold fewer (an older 10-entry one); the
+				# rest keep score()'s zero scores instead of copies of the last line read
+		n = mini(numscores, scoreboard.get_length() / (MAXSTR + 100))
+	for i in n:
 		var sc = top_ten[i]
 		var name := encread(_cbytes(sc.sc_name, MAXSTR), MAXSTR, scoreboard)
 		sc.sc_name = _cstr(name)
@@ -744,6 +748,8 @@ static func _save_state() -> Dictionary:
 		for col in width:
 			win.append(mvwinch(stdscr, row, col))
 	st["window"] = [height, width, win]
+	if guild:	# the pack size the Guild sold (optional on restore)
+		st["maxpack"] = maxpack
 	return st
 
 
@@ -787,7 +793,7 @@ static func _restore_state(st: Dictionary) -> bool:
 	tombstone = f[26]
 	if MASTER:
 		wizard = f[27] != 0
-	for i in 26:
+	for i in mini(pack_used.size(), st["pack_used"].size()):	# 52 in guild mode
 		pack_used[i] = st["pack_used"][i]
 	var ch: Array = st["chars"]
 	dir_ch = ch[0]
@@ -915,4 +921,5 @@ static func _restore_state(st: Dictionary) -> bool:
 			if row < height and col < width:
 				mvwaddch(stdscr, row, col, cells[k])
 			k += 1
+	maxpack = int(st.get("maxpack", MAXPACK))
 	return true
