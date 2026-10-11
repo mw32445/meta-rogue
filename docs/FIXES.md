@@ -267,7 +267,7 @@ sources at the repository root.
 
 ## 27. Off-map squares searched as hidden passages
 - **Player saw:** at x = 0 (left-column mazes), a counted search could stop early.
-- **Cause:** `rogue.h:72-75`: `INDEX(y, -1)` (oracle and port: a dummy square, flags 0,
+- **Cause:** `rogue.h:74-77`: `INDEX(y, -1)` (oracle and port: a dummy square, flags 0,
   docs/FIDELITY.md); `search()` (`command.c:492-527`) takes a square without `F_REAL`
   for a hidden passage and rolls `rnd()` on it.
 - **Port:** `RogueBase.INDEX()`: the dummy has `F_REAL` with the fixes.

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Work on harness/oracle/fixes.patch, the C side of the port's bug fixes
-# (RogueBase.fixes; docs/CHANGES.md lists them).
+# (RogueBase.fixes; docs/FIXES.md lists them).
 #
 #   harness/oracle/edit_fixes.sh DIR          DIR/a: the C sources + oracle.patch
 #                                             DIR/b: the same + fixes.patch; edit DIR/b
