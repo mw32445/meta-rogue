@@ -25,21 +25,28 @@ This is verified step by step against the original (see `../docs/ARCHITECTURE.md
     `rogue -r`.
   - Closing the window during a game saves it, as the original does when its terminal
     hangs up.
-- **End of game:** when a game ends, you see the top-ten list. Enter starts a new
-  game; Esc quits.
+- **The Fighters' Guild:** before every new game the Guild's Quartermaster spends the
+  coffers of the Hall of Fame (now 20 entries) on your training and gear
+  (`../docs/GUILD.md`).
+- **End of game:** when a game ends, you see the Hall of Fame and how much the Guild's
+  coffers now hold. Enter opens the Guild for a new game; Esc quits.
 - **Command line** (after `--`): `--rogueopts=OPTS`, `--master` (enables the wizard-mode
-  code; the original's `MASTER` build), and the original arguments: `-s` (scores),
+  code; the original's `MASTER` build), `--no-guild` (new games start without the
+  Guild), `--classic` (the original 5.4.4: no Guild and no fixes, with its own save and
+  score files in the `classic` folder), and the original arguments: `-s` (scores),
   `-d` (a death screen), or a save file name.
 
 ## For developers
 - `rogue/`: the game, one GDScript module per C file. `rogue_base.gd` holds the
   constants, macros and all game state.
 - `curses/curses.gd`: an exact emulation of the ncurses subset Rogue uses.
+- `guild/`: the Fighters' Guild (`RogueBase.guild`, `../docs/GUILD.md`).
 - `ui/`: the terminal view and the scene controller. `main.tscn` is the main scene.
 - `tests/`:
   - `replay.gd`: replays key scripts and writes step logs for the differential tests;
   - `check_all.gd`: compiles every script;
   - `curses_fuzz.gd`: the curses emulation side of the fuzzer;
+  - `guild_test.gd`: the Guild's tests;
   - `ui_screenshot.gd`: a UI smoke test.
 
 See `../CLAUDE.md` for commands and rules, and `../docs/` for the design, the
