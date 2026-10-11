@@ -5,7 +5,7 @@
 ##   godot --headless --path godot --script res://tests/replay.gd -- \
 ##       --keys K.txt --dump D.txt [--stdout O.bin] [--seed N] [--time T] [--name S]
 ##       [--home H] [--uid U] [--opts ROGUEOPTS | --no-opts] [--cwd DIR] [--full N]
-##       [--master] [--fixes] [--guild] [--loadout FILE.json] [--arg A]...
+##       [--master] [--fixes] [--guild] [--menus] [--loadout FILE.json] [--arg A]...
 ## Batch: --batch FILE, one run per line, each line holding the options above
 ## (tab separated "key=value" pairs; see harness/difftest.py).
 extends SceneTree
@@ -39,7 +39,7 @@ func _initialize() -> void:
 		var i := 0
 		while i < args.size():
 			var a := args[i]
-			if a == "--master" or a == "--fixes" or a == "--guild":
+			if a == "--master" or a == "--fixes" or a == "--guild" or a == "--menus":
 				opts[a.substr(2)] = "1"
 			elif a == "--no-opts":
 				opts["no-opts"] = "1"
@@ -81,6 +81,7 @@ func _run(o: Dictionary) -> void:
 	# Gameplay switches: off unless this run asks (each run of a batch sets them).
 	RogueBase.fixes = o.has("fixes")
 	RogueBase.guild = o.has("guild")
+	RogueBase.menus = o.has("menus")
 	RogueBase.loadout = _load_loadout(o.get("loadout", ""))
 	var argv := PackedStringArray(["rogue"])
 	if o.has("arg"):

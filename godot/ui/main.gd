@@ -7,10 +7,10 @@
 ## save file is deleted). Closing the window during a game saves it, as the
 ## original does on SIGHUP.
 ##
-## The playable game turns the gameplay switches on (RogueBase.fixes and
-## RogueBase.guild, docs/CHANGES.md): before every new game the Fighters' Guild
-## (godot/guild, docs/GUILD.md) outfits the hero from the Hall of Fame's
-## coffers, and the Hall of Fame has 20 entries.
+## The playable game turns the gameplay switches on (RogueBase.fixes, .guild and
+## .menus, docs/CHANGES.md): the known bugs are fixed, item commands list their
+## items at once, and before every new game the Fighters' Guild (godot/guild,
+## docs/GUILD.md) outfits the hero from the Hall of Fame's coffers (20 entries).
 ##
 ## Command line (after --): --rogueopts=OPTS, --master (wizard-capable build),
 ## --classic (the original game: no fixes, no Guild, and its own save and score
@@ -86,6 +86,7 @@ func _setup_env() -> void:
 			_no_guild = true
 	RogueBase.fixes = not classic
 	RogueBase.guild = not classic
+	RogueBase.menus = not classic
 	_data = OS.get_user_data_dir()
 	if classic:
 		_data = _data.path_join("classic")

@@ -326,6 +326,8 @@ static func get_item(purpose: String, type_: int) -> Thing:
 			return last_pick
 		else:
 			await Io.msg("you ran out")
+	elif menus:	# PC Rogue-style: the items that fit, at once (docs/CHANGES.md)
+		return await _menu_item(purpose, type_)
 	else:
 		while true:
 			if not terse:
@@ -360,6 +362,92 @@ static func get_item(purpose: String, type_: int) -> Thing:
 			else:
 				return obj
 	return null
+
+
+## The menus switch: get_item() as PC Rogue does it. The question goes on the
+## message line and the items that fit the command are listed at once in a window
+## under it, as the overwrite-style inventory draws them. Any pack letter picks
+## an item (listed or not, as the original allows), Escape cancels, space shows
+## the next page of a long list, '*' switches to the whole pack. n_objs is set as
+## the '*' list sets it, so whatis()'s "you must identify something" loop ends
+## when nothing fits.
+static func _menu_item(purpose: String, type_: int) -> Thing:
+	var kind := type_
+	var page := 0
+	while true:
+		var items: Array[Thing] = []
+		var op := pack
+		while op != null:
+			if _menu_fits(op, kind):
+				items.append(op)
+			op = op.l_next
+		n_objs = items.size()
+		if items.is_empty():
+			if terse:
+				await Io.msg("empty handed" if kind == 0 else "nothing appropriate")
+			else:
+				await Io.msg("you are empty handed" if kind == 0 else
+						"you don't have anything appropriate")
+			after = false
+			return null
+		if not terse:
+			await Io.addmsg("which object do you want to ")
+		await Io.addmsg(purpose)
+		if terse:
+			await Io.addmsg(" what")
+		await Io.msg("?")
+		# the list: rows 1 to LINES - 2 (the status line stays)
+		var rows := LINES - 2
+		var per_page := rows if items.size() <= rows else rows - 1
+		var pages := (items.size() + per_page - 1) / per_page
+		page = page % pages
+		var text: Array[String] = []
+		var maxlen := 0
+		for i in range(page * per_page, mini(items.size(), (page + 1) * per_page)):
+			var nm: String = await Things.inv_name(items[i], false)
+			var line := nm if items[i].o_packch == 0 else "%c) %s" % [items[i].o_packch, nm]
+			text.append(line)
+			maxlen = maxi(maxlen, line.length())
+		if pages > 1:
+			text.append("--More--")
+			maxlen = maxi(maxlen, 8)
+		var width := mini(COLS, maxlen + 2)
+		var win := newwin(text.size(), width, 1, maxi(0, COLS - width - 1))
+		for i in text.size():
+			mvwaddstr(win, i, 1, text[i].substr(0, width - 1))
+		wrefresh(win)
+		move(0, mpos)	# the cursor back after the question
+		var ch: int = await Io.readchar()
+		delwin(win)
+		touchwin(stdscr)
+		mpos = 0
+		if ch == ESCAPE:
+			reset_last()
+			after = false
+			await Io.msg("")
+			return null
+		if ch == ord(" "):
+			page += 1
+			continue
+		if ch == ord("*"):
+			kind = 0 if kind != 0 else type_
+			page = 0
+			continue
+		var obj := pack
+		while obj != null and obj.o_packch != ch:
+			obj = obj.l_next
+		if obj != null:
+			n_objs = 1
+			return obj
+		await Io.msg("'%s' is not a valid item", [unctrl(ch)])
+	return null
+
+
+## Whether an object belongs in a list of type_ (as inventory() decides).
+static func _menu_fits(obj: Thing, type_: int) -> bool:
+	return type_ == 0 or type_ == obj.o_type \
+		or (type_ == CALLABLE and obj.o_type != FOOD and obj.o_type != AMULET) \
+		or (type_ == R_OR_S and (obj.o_type == RING or obj.o_type == STICK))
 
 
 ## money:
