@@ -45,15 +45,12 @@
 class_name Loadout
 extends RogueBase
 
-## Pack letters a-z and A-Z.
-const MAXPACK_GUILD := 52
-
 
 static func apply(l: Dictionary) -> void:
 	var obj: Thing
 
-	# The pack's size first: everything below must fit
-	maxpack = clampi(_int(l, "maxpack", MAXPACK), MAXPACK, MAXPACK_GUILD)
+	# The pack's size first: everything below must fit (52: pack letters a-z, A-Z)
+	maxpack = clampi(_int(l, "maxpack", MAXPACK), MAXPACK, GuildCatalog.PACK_MAX)
 
 	# Training
 	var n := _int(l, "str", 0)
