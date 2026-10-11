@@ -27,6 +27,8 @@ func _initialize() -> void:
 	await _test_loadout()
 	_test_shop_loadout()
 	_test_letters()
+	_test_polish_win()
+	_test_big_pack()
 	_clean()
 	print("guild_test: %d passed, %d failed" % [_passes, _fails])
 	quit(1 if _fails > 0 else 0)
@@ -643,3 +645,129 @@ func _test_letters() -> void:
 	R.guild = false
 	_check("letters: classic mode is untouched", Pack._pack_index(ord("C")) == ord("C") - ord("a")
 		and Pack._pack_letter(26) == ord("{"))
+
+
+# ---- whole games from key scripts --------------------------------------------
+
+var _screens: Array[String] = []
+
+
+## Play a key script in guild mode (as godot/tests/replay.gd does) and keep the
+## text of every screen at a key read; returns the stdout text. args: Rogue's
+## arguments (wizard mode: MASTER and [""]).
+func _play(lo: Variant, keys: PackedInt32Array, seed_: int, args: Array, cwd: String) -> String:
+	RogueBase.reset()
+	var cs := Curses.new()
+	cs.replay = true
+	cs.script_keys = keys
+	RogueBase.cs = cs
+	RogueBase.env_time = 1000000000
+	RogueBase.env_pid = seed_ - 1000000000
+	RogueBase.env_name = "rodney"
+	RogueBase.env_home = "./"
+	RogueBase.env_uid = 1000
+	RogueBase.env_cwd = cwd
+	RogueBase.env_sandbox = true
+	RogueBase.env_rogueopts = null
+	RogueBase.MASTER = not args.is_empty()
+	RogueBase.guild = true
+	RogueBase.loadout = lo
+	RogueBase.argv = PackedStringArray(["rogue"] + args)
+	_screens = []
+	_done = false
+	cs.step_hook = func(_key: int) -> void:
+		if not cs.curses_gone:
+			var t := ""
+			for y in RogueBase.NUMLINES:
+				for x in RogueBase.NUMCOLS:
+					var c: int = cs.curscr.get_cell(y, x) & 0xFF
+					t += char(c) if c >= 32 and c < 127 else "?"
+				t += "\n"
+			_screens.append(t)
+	cs.script_finished.connect(func() -> void: _done = true)
+	cs.program_exited.connect(func(_st: int) -> void: _done = true)
+	var game := func() -> void:
+		await Main.main()
+		_done = true
+	game.call()
+	var guard := keys.size() + 2
+	while not _done and guard > 0:
+		cs.feed()
+		guard -= 1
+	var out := cs.stdout_bytes.get_string_from_ascii()
+	_stop_game(cs)
+	RogueBase.MASTER = false
+	return out
+
+
+func _seen(text: String) -> bool:
+	for s in _screens:
+		if s.contains(text):
+			return true
+	return false
+
+
+static func _keys_of(path: String) -> PackedInt32Array:
+	var keys := PackedInt32Array()
+	for line in FileAccess.get_file_as_string(path).split("\n"):
+		for tok in line.get_slice("#", 0).split(" ", false):
+			keys.append(int(tok))
+	return keys
+
+
+## A ring of adornment polished 3 times sells for 80 when the hero wins (the
+## corpus' wizard-mode win, which uses no pack letters, with the ring added).
+func _test_polish_win() -> void:
+	var keys := _keys_of(ProjectSettings.globalize_path("res://").path_join(
+		"../harness/corpus/scenarios/win-100.keys"))
+	var lo := {"rings": [{"which": 5, "enh": 3}, {"which": 5, "enh": 0}]}
+	var out := _play(lo, keys, 100, [""], _dir)
+	_check("polish: a total winner sells the polished ring for 80",
+		_seen("   Worth  Item") and _seen(")    80  A ring of adornment(")
+		and _seen(") [worth 80]"), out.right(200))
+	_check("polish: an unpolished one as before (10 + its stone)",
+		_seen(")    15  A ring of adornment(granite)\n") or _seen(")    15  A ring of adornment(granite) "))
+	_check("polish: the Hall of Fame has twenty places", out.contains("Top Twenty Scores:"))
+
+
+## 30 slots in a wizard game: letters past z, both inventory pages, drop and pick
+## up, save and restore.
+func _test_big_pack() -> void:
+	var o := func(s: String) -> int: return s.unicode_at(0)
+	var k := PackedInt32Array()
+	for w in "0123456789abcd":	# 14 potions
+		k.append_array([o.call("C"), o.call("!"), o.call(w), 32])
+	for w in "0123456789a":		# 11 scrolls: 30 items
+		k.append_array([o.call("C"), o.call("?"), o.call(w), 32])
+	k.append_array([o.call("C"), o.call("?"), o.call("b"), 32])	# no room
+	k.append_array([o.call("i"), 32, 32])
+	k.append_array([o.call("d"), o.call("C"), 32, o.call(","), 32, o.call("d"), o.call("D"), 32])
+	k.append_array([32, 27, 32, 27, 27, o.call("S"), o.call("y"), o.call("y")])
+	var dir := _dir.path_join("big")
+	DirAccess.make_dir_recursive_absolute(dir)
+	_play({"maxpack": 30}, k, 11, [""], dir)
+	_check("big pack: letters past z", _seen("A) A scroll titled") and _seen("D) A scroll titled"))
+	_check("big pack: the 31st does not fit", _seen("There's no room in your pack"))
+	var page2 := false
+	for s in _screens:
+		page2 = page2 or (s.begins_with("x) ") and s.contains("--Press space to continue--"))
+	_check("big pack: the inventory's second page is shown", page2)
+	var as_c := 0	# "You now have ... (C)": when it was made, and when picked up again
+	for s in _screens:
+		if s.get_slice("\n", 0).strip_edges().ends_with("' (C)"):
+			as_c += 1
+	_check("big pack: a dropped C comes back as C", _seen("Dropped a scroll titled") and as_c == 2,
+		as_c)
+	_check("big pack: saved", FileAccess.file_exists(dir.path_join("rogue.save")))
+	k = PackedInt32Array([o.call("i"), 32, 32, o.call("C"), o.call("!"), o.call("0"), 32,
+		o.call("C"), o.call("!"), o.call("1"), 32, 27])
+	_play(null, k, 11, ["-r"], dir)
+	var c_kept := false
+	for s in _screens:
+		c_kept = c_kept or (s.begins_with("x) ") and s.contains("\nC) A scroll") and not s.contains("\nD) "))
+	_check("big pack: restored with its letters", c_kept)
+	_check("big pack: restored with its 30 slots (the 30th fits, then no room)",
+		_seen("You now have 2 ") and _seen("There's no room in your pack"))
+	for f in DirAccess.get_files_at(dir):
+		DirAccess.remove_absolute(dir.path_join(f))
+	DirAccess.remove_absolute(dir)

@@ -448,7 +448,11 @@ static func add_line(fmt: Variant, arg: Variant) -> int:
 				await Io.wait_for(ord(" "))
 				clearok(curscr, true)
 				wclear(hw)
-				touchwin(stdscr)
+				# guild mode (inventories past 23 lines): stdscr is touched after the
+				# last page only; touched sooner, the getch() that waits on the next
+				# page repaints stdscr over it (in C too)
+				if not guild or fmt == null:
+					touchwin(stdscr)
 			_things_newpage = true
 			_things_line_cnt = 0
 			_add_line_maxlen = prompt.length()
