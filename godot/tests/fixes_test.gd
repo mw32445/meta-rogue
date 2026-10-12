@@ -28,6 +28,10 @@ func _initialize() -> void:
 	_test_keypad()
 	_test_connected()
 	_test_show_map()
+	var dir := ProjectSettings.globalize_path("user://fixes_test")	# the games' folder
+	for f in DirAccess.get_files_at(dir):
+		DirAccess.remove_absolute(dir.path_join(f))
+	DirAccess.remove_absolute(dir)
 	print("fixes_test: %d checks, %s" % [_checks, "OK" if _failed == 0 else "%d FAILED" % _failed])
 	quit(1 if _failed else 0)
 

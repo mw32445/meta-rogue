@@ -315,7 +315,14 @@ func _draw_help() -> void:
 			_put(22, 1, "  ...")
 			break
 		_put(1 + i, 1, rows[i])
+	_put(23, 1, version_name())
 	_put(23, WIDTH - 29, "--Press any key to continue--")
+
+
+## The game's name and version, from project.godot: "Meta-Rogue 1.0.0".
+static func version_name() -> String:
+	return ("%s %s" % [ProjectSettings.get_setting("application/config/name", ""),
+		ProjectSettings.get_setting("application/config/version", "")]).strip_edges()
 
 
 ## s in lines of at most n characters, broken at spaces where it can be (a path

@@ -14,8 +14,11 @@
 #   - the tests of what the oracle cannot judge: the Fighters' Guild
 #     (godot/tests/guild_test.gd), the item menus and the status line's next-level
 #     experience (godot/tests/menus_test.gd), the
-#     fixes' UI checks (godot/tests/fixes_test.gd), and smoke runs of random games
-#     with every switch on (difftest.py smoke: no script error, no hang).
+#     fixes' UI checks (godot/tests/fixes_test.gd), the user data folder
+#     (godot/tests/user_data_test.gd), and smoke runs of random games
+#     with every switch on (difftest.py smoke: no script error, no hang);
+#   - the downloads, when Godot's export templates are installed: tools/export.sh,
+#     then tools/check_export.py (with --run under Xvfb).
 # Exit status 0 only if everything is identical.
 #
 # usage: harness/run_all.sh [--quick]     (--quick: smaller sweeps)
@@ -60,6 +63,10 @@ if command -v Xvfb > /dev/null && command -v xvfb-run > /dev/null; then
         --script res://tests/ui_video.gd 2>&1 | grep -E "FAIL|ui_video|PASS.*total" | tail -3
     [ "${PIPESTATUS[0]}" -eq 0 ] || fail=1
 fi
+
+step "the user data folder and its migration (godot/tests/user_data_test.gd)"
+out="$("$GODOT" --headless --path "$root/godot" --script res://tests/user_data_test.gd 2>&1)" || fail=1
+echo "$out" | grep -E "^(FAIL|user_data_test:)"
 
 step "the fixes' UI checks (godot/tests/fixes_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/fixes_test.gd 2>&1)" || fail=1
@@ -107,6 +114,20 @@ python3 "$root/harness/difftest.py" saves --fixes --count "$saves" --len 500 --f
 step "smoke: the playable game's switches, $fuzz runs"
 python3 "$root/harness/difftest.py" smoke --fixes --guild --menus --expnext --count "$fuzz" --len 1000 --first-seed 800000 || fail=1
 python3 "$root/harness/difftest.py" smoke --fixes --guild --menus --expnext --wizard --count "$wiz" --len 1500 --first-seed 900000 || fail=1
+
+# The downloads (Windows, macOS, Linux), when Godot's export templates are installed
+# (tools/export.sh --templates): built and checked, the Linux one played in a window.
+tv="$("$GODOT" --headless --version 2>/dev/null | tail -1 | sed -E 's/^([0-9.]+)\.([a-z]+[0-9]*).*/\1.\2/')"
+if [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/godot/export_templates/$tv/macos.zip" ]; then
+    step "the downloads (tools/export.sh, tools/check_export.py)"
+    "$root/tools/export.sh" > "$root/harness/out/export.log" 2>&1 || { tail -20 "$root/harness/out/export.log"; fail=1; }
+    run=""
+    command -v xvfb-run > /dev/null && run="--run"
+    python3 "$root/tools/check_export.py" $run --shots="$root/harness/out/export_shots" 2>&1 | tail -3
+    [ "${PIPESTATUS[0]}" -eq 0 ] || fail=1
+else
+    step "the downloads: skipped (no export templates; tools/export.sh --templates installs them)"
+fi
 
 echo
 if [ $fail -eq 0 ]; then echo "run_all: ALL OK"; else echo "run_all: FAILURES (see above)"; fi

@@ -10,9 +10,13 @@ config_version=5
 
 [application]
 
-config/name="Rogue"
-config/description="Rogue 5.4.4 (Michael Toy, Ken Arnold, Glenn Wichman), ported 1:1 to Godot."
-config/features=PackedStringArray("4.7")
+config/name="Meta-Rogue"
+config/description="Meta-Rogue: Rogue 5.4.4 (Michael Toy, Ken Arnold, Glenn Wichman), ported 1:1 to Godot, with the Fighters' Guild between games."
+config/version="1.0.0"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Meta-Rogue"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.png"
 run/main_scene="res://main.tscn"
 run/low_processor_mode=true
 
@@ -20,6 +24,12 @@ run/low_processor_mode=true
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 
 [debug]
 

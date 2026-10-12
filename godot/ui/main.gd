@@ -2,8 +2,10 @@
 ##
 ## The environment is the real one: user name, time and pid (the dungeon
 ## seed), ROGUEOPTS (from the environment or --rogueopts=...). The "home"
-## directory, where saved games and the score file live, is Godot's user data
-## folder. Like `rogue -r`, a saved game there is restored at startup (and the
+## directory, where saved games and the score file live, is the user data folder
+## (UserData: Meta-Rogue's own; the first start copies the player's files from the
+## folder of the game's earlier name, "Rogue"). Like `rogue -r`, a saved game there is
+## restored at startup (and the
 ## save file is deleted). Closing the window during a game saves it, as the
 ## original does on SIGHUP.
 ##
@@ -48,6 +50,7 @@ var _covered: Curses = null
 
 
 func _ready() -> void:
+	UserData.migrate(UserData.old_dirs(), OS.get_user_data_dir())
 	get_tree().set_auto_accept_quit(false)
 	view.key_pressed.connect(_on_key)
 	view.settings_requested.connect(_on_settings_key)

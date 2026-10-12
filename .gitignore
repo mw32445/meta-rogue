@@ -5,4 +5,5 @@ __pycache__/
 *.pyc
 # Godot
 /godot/.godot/
-/godot/export_presets.cfg
+# the downloads tools/export.sh makes
+/dist/

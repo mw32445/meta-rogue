@@ -20,11 +20,13 @@
 ## built-in value is used whenever it fails.
 ##
 ## read() is the game's: the first file found of
-##   1. the folder of the game's executable (an exported game, on a desktop);
+##   1. the folder of the game's executable (an exported game on Windows or Linux);
 ##   2. the user data folder (user://guild_prices.txt);
 ##   3. the project (res://guild_prices.txt: godot/ in a source download).
 ## An exported game that finds neither 1 nor 2 writes the default list to 1, or if
-## it can't, to 2, for the player to edit. defaults(), from_text(), from_file() and
+## it can't, to 2, for the player to edit. On macOS it is always 2: next to the .app
+## would litter /Applications, and an app opened from Downloads runs from a read-only
+## copy in a random place (App Translocation). defaults(), from_text(), from_file() and
 ## read_from() touch no file of the player's (the tests use them).
 class_name GuildPrices
 extends RefCounted
@@ -86,17 +88,17 @@ class Entry:
 
 ## The game's price list (see above).
 static func read() -> GuildPrices:
-	var at := places_of(not OS.has_feature("editor"), OS.has_feature("pc"))
+	var at := places_of(not OS.has_feature("editor"), OS.has_feature("pc"), OS.has_feature("macos"))
 	return read_from(at[0], at[1], "res://" + FILE_NAME)
 
 
 ## Where a game looks for the file, in order, and where it may write the default
-## one: [places, write_to]. An exported game on a desktop looks next to its
-## executable first; only an exported game writes.
-static func places_of(exported: bool, desktop: bool) -> Array:
+## one: [places, write_to]. An exported game on a desktop other than macOS looks next
+## to its executable first; only an exported game writes.
+static func places_of(exported: bool, desktop: bool, macos := false) -> Array:
 	var places: Array[String] = []
-	if exported and desktop:
-		places.append(_exe_dir().path_join(FILE_NAME))
+	if exported and desktop and not macos:
+		places.append(OS.get_executable_path().get_base_dir().path_join(FILE_NAME))
 	places.append("user://" + FILE_NAME)
 	var write_to: Array[String] = []
 	if exported:
@@ -163,14 +165,6 @@ static func from_file(file_path: String) -> GuildPrices:
 	var text := f.get_as_text()
 	f.close()
 	return from_text(text, file_path)
-
-
-## The folder of the game's executable (on macOS, the one holding the .app).
-static func _exe_dir() -> String:
-	var d := OS.get_executable_path().get_base_dir()
-	if d.ends_with(".app/Contents/MacOS"):
-		d = d.get_base_dir().get_base_dir().get_base_dir()
-	return d
 
 
 # ---- the values ---------------------------------------------------------------------

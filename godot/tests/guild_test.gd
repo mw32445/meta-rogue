@@ -827,6 +827,9 @@ func _test_screen() -> void:
 	_check("screen: ? shows the formula, with the numbers", _row(g, 2).contains(
 		"coffers = best / 2 + (sum / 20) * lerp(0.5, 1.5, n / 20)") and _row(g, 3).contains(
 		"= 2400 / 2 + (9400 / 20) * lerp(0.5, 1.5, 17 / 20)") and _row(g, 4).contains("= 1834 gold"))
+	var ver := "Meta-Rogue " + str(ProjectSettings.get_setting("application/config/version"))
+	_check("screen: ? shows the game's name and version", ver.length() > 11
+		and _row(g, 23).begins_with(" " + ver + " ") and GuildScreen.version_name() == ver, _row(g, 23))
 	g.key(ord(" "))
 	g.key(ord("1"))
 	g.key(8)

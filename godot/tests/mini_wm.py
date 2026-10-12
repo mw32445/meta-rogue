@@ -58,10 +58,14 @@ class XClientMessageEvent(ctypes.Structure):
                      ("l", c_long * 5))
 
 
+class XDestroyWindowEvent(ctypes.Structure):
+    _fields_ = _head(("event", c_ulong), ("window", c_ulong))
+
+
 class XEvent(ctypes.Union):
     _fields_ = [("type", c_int), ("xmaprequest", XMapRequestEvent),
                 ("xconfigurerequest", XConfigureRequestEvent), ("xclient", XClientMessageEvent),
-                ("pad", c_long * 24)]
+                ("xdestroywindow", XDestroyWindowEvent), ("pad", c_long * 24)]
 
 
 class XWindowChanges(ctypes.Structure):
@@ -80,7 +84,7 @@ class XRRMonitorInfo(ctypes.Structure):
                 ("mwidth", c_int), ("mheight", c_int), ("outputs", ctypes.POINTER(c_ulong))]
 
 
-MAP_REQUEST, CONFIGURE_REQUEST, CLIENT_MESSAGE = 20, 23, 33
+DESTROY_NOTIFY, MAP_REQUEST, CONFIGURE_REQUEST, CLIENT_MESSAGE = 17, 20, 23, 33
 SUBSTRUCTURE_NOTIFY, SUBSTRUCTURE_REDIRECT = 1 << 19, 1 << 20
 CW_X, CW_Y, CW_WIDTH, CW_HEIGHT = 1, 2, 4, 8
 XA_ATOM, XA_CARDINAL = 4, 6
@@ -252,6 +256,10 @@ class WindowManager:
             elif ev.type == CLIENT_MESSAGE and ev.xclient.message_type == self.wm_state:
                 c = ev.xclient
                 self.change_state(c.window, c.l[0], [c.l[1], c.l[2]])
+            elif ev.type == DESTROY_NOTIFY:
+                # forget it: the server may give its id to a later window
+                self.states.pop(ev.xdestroywindow.window, None)
+                self.normal.pop(ev.xdestroywindow.window, None)
             X.XFlush(self.d)
 
 

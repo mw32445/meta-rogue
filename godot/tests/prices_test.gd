@@ -570,6 +570,9 @@ func _test_places() -> void:
 		and Array(exported[1]) == [exe, mine], exported)
 	_check("places: an exported game elsewhere: the user data folder", Array(phone[0]) == [mine]
 		and Array(phone[1]) == [mine], phone)
+	var mac := GuildPrices.places_of(true, true, true)
+	_check("places: an exported game on macOS: the user data folder only, not next to the .app",
+		Array(mac[0]) == [mine] and Array(mac[1]) == [mine], mac)
 	# the game's read(): from source (this editor binary) it only reads: the user data
 	# folder's file if there is one (the player's: its values are not checked), else
 	# the shipped one
