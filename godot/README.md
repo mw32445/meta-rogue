@@ -42,7 +42,7 @@ untouched original.
     and VSync. `j`/`k` or the arrows choose, `h`/`l`, the arrows or Enter change. A
     change applies at once and is saved. Esc or F10 closes it.
   - **Alt+Enter** switches between windowed and fullscreen, and is saved too.
-  - The settings live in `video.cfg` in the user data folder (see *Save* below);
+  - The settings live in `video.cfg` in the user data folder (see *Save* above);
     delete it to detect the screen again. A new windowed size is the largest that
     fits in 90% of the screen (1600 x 900 on 1920 x 1080).
   - `--windowed` or `--fullscreen` on the command line (after `--`) choose the mode
