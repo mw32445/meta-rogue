@@ -22,6 +22,7 @@ func _initialize() -> void:
 
 func _start() -> void:
 	load("res://ui/main.gd").skip_guild = true	# a new game starts at once
+	load("res://ui/main.gd").video_path = ""	# the window as it is: no video settings
 	_main = load("res://main.tscn").instantiate()
 	root.add_child(_main)
 

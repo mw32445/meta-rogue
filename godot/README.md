@@ -36,6 +36,22 @@ untouched original.
     `rogue -r`.
   - Closing the window during a game saves it, as the original does when its terminal
     hangs up.
+- **Video:** the first launch detects the screen and goes borderless fullscreen at
+  its own resolution (1920 x 1080 on a full HD screen).
+  - **F10** opens *OPTIONS - VIDEO* over whatever is on screen (the game waits):
+    display mode (windowed, fullscreen, exclusive fullscreen), window size (windowed;
+    1280 x 720 to 3840 x 2160, as far as the screen holds), monitor (with several),
+    and VSync. `j`/`k` or the arrows choose, `h`/`l`, the arrows or Enter change. A
+    change applies at once and is saved. Esc or F10 closes it.
+  - **Alt+Enter** switches between windowed and fullscreen, and is saved too.
+  - The settings live in `video.cfg` in the user data folder (see *Save* above);
+    delete it to detect the screen again. A new windowed size is the largest that
+    fits in 90% of the screen (1600 x 900 on 1920 x 1080).
+  - `--windowed` or `--fullscreen` on the command line (after `--`) choose the mode
+    for one run, without saving it.
+  - Run from the editor, the game is embedded in its Game view by default, and the
+    editor sizes it: the settings are saved but not applied. Turn off *Embed Game on
+    Next Play* in the Game view's menu to play in a window of its own.
 - **The Fighters' Guild:** before every new game the Guild's Quartermaster spends the
   coffers of the Hall of Fame (now 20 entries) on your training and gear
   (`../docs/GUILD.md`).
@@ -44,8 +60,9 @@ untouched original.
 - **Command line** (after `--`): `--rogueopts=OPTS`, `--master` (enables the wizard-mode
   code; the original's `MASTER` build), `--no-guild` (new games start without the
   Guild), `--classic` (the original 5.4.4: no Guild and no fixes, with its own save and
-  score files in the `classic` folder), and the original arguments: `-s` (scores),
-  `-d` (a death screen), or a save file name.
+  score files in the `classic` folder), `--windowed` / `--fullscreen` (the display mode
+  for this run), and the original arguments: `-s` (scores), `-d` (a death screen), or
+  a save file name.
 
 ## For developers
 - `rogue/`: the game, one GDScript module per C file. `rogue_base.gd` holds the
@@ -53,12 +70,23 @@ untouched original.
 - `curses/curses.gd`: an exact emulation of the ncurses subset Rogue uses.
 - `guild/`: the Fighters' Guild (`RogueBase.guild`, `../docs/GUILD.md`).
 - `ui/`: the terminal view and the scene controller. `main.tscn` is the main scene.
+  `video_settings.gd` (detection, `video.cfg`, applying them to the window) and
+  `settings_screen.gd` (*OPTIONS - VIDEO*) are the video settings.
 - `tests/`:
   - `replay.gd`: replays key scripts and writes step logs for the differential tests;
   - `check_all.gd`: compiles every script;
   - `curses_fuzz.gd`: the curses emulation side of the fuzzer;
   - `guild_test.gd`: the Guild's tests;
-  - `ui_screenshot.gd`: a UI smoke test.
+  - `settings_test.gd`: the video settings (made-up screens, the file, the menu's
+    keys, F10 and Alt+Enter in the main scene), headless;
+  - `ui_screenshot.gd`: a UI smoke test (`--video-cfg=FILE` applies video settings;
+    `\f` in `--keys` is F10, `\a` Alt+Enter);
+  - `ui_video.gd`: the video settings in a real window (first launch, the menu,
+    windowed and fullscreen, monitors);
+  - `with_display.sh`: runs a UI test on a virtual display (Xvfb) with a small window
+    manager that does fullscreen (`mini_wm.py`), one or more monitors, and an empty
+    user data folder, e.g.
+    `tests/with_display.sh --screen=1920x1080 -- godot --path . --script res://tests/ui_video.gd`.
 
 See `../CLAUDE.md` for commands and rules, and `../docs/` for the design, the
 translation conventions and the fidelity policy.

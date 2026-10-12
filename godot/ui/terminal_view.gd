@@ -5,12 +5,18 @@
 ##
 ## Key presses become the codes a curses program reads with keypad() on:
 ## characters, control characters and KEY_* codes for the arrow, Home/End and
-## Page keys. The ported md_readchar() turns those into Rogue commands.
+## Page keys. The ported md_readchar() turns those into Rogue commands. Two keys
+## are the window's, never the program's: F10 (the video settings) and Alt+Enter
+## (fullscreen on and off).
 class_name TerminalView
 extends Control
 
 ## A key, as the code a curses program reads (see key_code()).
 signal key_pressed(code: int)
+## F10: open (or close) the video settings.
+signal settings_requested
+## Alt+Enter: switch between windowed and fullscreen.
+signal fullscreen_toggled
 
 const COLS := 80
 const ROWS := 24
@@ -179,9 +185,17 @@ func _console_lines() -> Array:
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
-		var code := key_code(event)
-		if code >= 0:
-			key_pressed.emit(code)
+		var k := event as InputEventKey
+		if k.keycode == KEY_F10:
+			if not k.echo:
+				settings_requested.emit()
+		elif (k.keycode == KEY_ENTER or k.keycode == KEY_KP_ENTER) and k.alt_pressed:
+			if not k.echo:
+				fullscreen_toggled.emit()
+		else:
+			var code := key_code(k)
+			if code >= 0:
+				key_pressed.emit(code)
 		accept_event()
 
 
