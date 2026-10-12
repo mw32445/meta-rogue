@@ -4,6 +4,10 @@
 ## and refund(); godot/tests/guild_test.gd tests the rules. The loadout() it
 ## produces is what Loadout.apply() puts into the hero's starting pack.
 ##
+## Every price and amount comes from the GuildPrices it is given (the price list,
+## godot/guild_prices.txt): a line's price for k = how many of it were bought
+## already. The shops of the tests take the built-in list.
+##
 ## Rules:
 ## - Everything is paid from the coffers (HallOfFame.coffers()); spent() never
 ##   exceeds them. What is not spent is not kept.
@@ -41,6 +45,7 @@ const SECTIONS: Array[String] = ["Training", "Arms", "Armour", "Rings", "Wands",
 	"Scrolls", "Stores"]
 
 var hall: HallOfFame
+var prices: GuildPrices
 var coffers := 0
 
 ## Purchases.
@@ -62,7 +67,7 @@ var scr_known: Array[bool] = []
 var scr_ids := 0
 var scr_count: Array[int] = []
 var food := 0			## rations
-var missiles: Array[int] = []	## purchases per row of GuildCatalog.MISSILES
+var missiles: Array[int] = []	## purchases per line of GuildCatalog.MISSILES
 var slots := 0			## pack slots
 ## The kind the last identification named (-1: none yet).
 var last_named := -1
@@ -71,9 +76,12 @@ var _pot_rng := RandomNumberGenerator.new()
 var _scr_rng := RandomNumberGenerator.new()
 
 
-func _init(h: HallOfFame = null) -> void:
+## A shop for a Hall of Fame (none: an empty one) with a price list (none: the
+## built-in one).
+func _init(h: HallOfFame = null, p: GuildPrices = null) -> void:
 	hall = h if h != null else HallOfFame.new()
-	coffers = hall.coffers()
+	prices = p if p != null else GuildPrices.defaults()
+	coffers = hall.coffers(prices)
 	pot_known.resize(C.POTIONS.size())
 	pot_count.resize(C.POTIONS.size())
 	scr_known.resize(C.SCROLLS.size())
@@ -85,38 +93,59 @@ func _init(h: HallOfFame = null) -> void:
 
 # ---- the ledger ---------------------------------------------------------------
 
-## Gold spent so far: every purchase at its price, as if bought in order.
+## Gold spent so far: every purchase at its price, as if bought in order (so a
+## return gives back exactly what the purchase cost).
 func spent() -> int:
-	var t := C.grow_total(C.STR_PRICE, 2, 1, strength)
-	t += C.grow_total(C.HP_PRICE, 2, 1, hit_points)
-	t += C.WEAPONS[weapon][2] + C.grow_total(C.WEAPON_ENH_PRICE, 2, 1, weapon_enh)
-	t += C.grow_total(C.WEAPON_ENH_PRICE, 2, 1, bow_enh)
+	var t := _total("training", "strength", strength)
+	t += _total("training", "hit points", hit_points)
+	t += _swap("your weapon", C.WEAPONS, weapon, C.WEAPON_ISSUED)
+	t += _total("enhancing", "weapon", weapon_enh) + _total("enhancing", "weapon", bow_enh)
+	for w in C.WEAPON_SPARE_ORDER:
+		t += _total("spare weapons", C.WEAPONS[w][0], _owned(spare_weapons, w))
 	for w in spare_weapons:
-		t += C.WEAPONS[w.which][3] + C.grow_total(C.WEAPON_ENH_PRICE, 2, 1, w.enh)
-	t += C.ARMORS[armor][2] + C.grow_total(C.ARMOR_ENH_PRICE, 2, 1, armor_enh)
+		t += _total("enhancing", "weapon", w.enh)
+	t += _swap("your armour", C.ARMORS, armor, C.ARMOR_ISSUED)
+	t += _total("enhancing", "armour", armor_enh)
+	for a in C.ARMOR_ORDER:
+		t += _total("spare armour", C.ARMORS[a][0], _owned(spare_armors, a))
 	for a in spare_armors:
-		t += C.ARMORS[a.which][3] + C.grow_total(C.ARMOR_ENH_PRICE, 2, 1, a.enh)
+		t += _total("enhancing", "armour", a.enh)
 	for which in C.RINGS.size():
-		t += C.grow_total(C.RINGS[which][2], C.RING_COPY_FACTOR, 1, _owned(rings, which))
+		t += _total("rings", C.RINGS[which][0], _owned(rings, which))
 	for r in rings:
-		if r.which == C.RING_ADORNMENT:
-			t += C.grow_total(C.POLISH_PRICE, 2, 1, r.enh)
-		else:
-			t += C.grow_total(C.RING_ENH_PRICE, 2, 1, r.enh)
+		t += _total("enhancing", "polish" if r.which == C.RING_ADORNMENT else "ring", r.enh)
 	for which in C.STICKS.size():
-		t += C.grow_total(C.STICKS[which][2], C.STICK_COPY_FACTOR, 1, _owned(sticks, which))
-	for s in sticks:
-		t += C.grow_total(C.CHARGE_PRICE, 2, 1, s.enh)
-	t += C.IDENTIFY_PRICE * (pot_ids + scr_ids)
+		t += _total("wands", C.STICKS[which][0], _owned(sticks, which))
+	for st in sticks:
+		t += _total("enhancing", "wand charges", st.enh)
+	t += _total("potions", "identify", pot_ids) + _total("scrolls", "identify", scr_ids)
 	for i in C.POTIONS.size():
-		t += C.grow_total(C.POTIONS[i][2], 2, 1, pot_count[i])
+		t += _total("potions", C.POTIONS[i][0], pot_count[i])
 	for i in C.SCROLLS.size():
-		t += C.grow_total(C.SCROLLS[i][2], 2, 1, scr_count[i])
-	t += C.grow_total(C.FOOD_PRICE, C.FOOD_NUM, C.FOOD_DEN, food)
+		t += _total("scrolls", C.SCROLLS[i][0], scr_count[i])
+	t += _total("stores", "food", food)
 	for i in C.MISSILES.size():
-		t += C.MISSILES[i][2] * missiles[i]
-	t += C.grow_total(C.PACK_PRICE, C.PACK_NUM, C.PACK_DEN, slots)
+		t += _total("stores", C.MISSILES[i][1], missiles[i])
+	t += _total("stores", "pack slot", slots)
 	return t
+
+
+## What the first n of a line cost: its prices for k = 0 to n - 1.
+func _total(section: String, name: String, n: int) -> int:
+	var t := 0
+	for k in n:
+		t += prices.price(section, name, k)
+	return t
+
+
+## The student's weapon (or armour) costs its price less the issued one's.
+func _swap(section: String, table: Array, which: int, issued: int) -> int:
+	return prices.price(section, table[which][0]) - prices.price(section, table[issued][0])
+
+
+## The next spare of a kind: k is how many of it the list holds.
+func _spare_price(section: String, table: Array, list: Array, which: int) -> int:
+	return prices.price(section, table[which][0], _owned(list, which))
 
 
 ## Gold left in the coffers.
@@ -149,7 +178,12 @@ func strength_now() -> int:
 
 
 func hp_now() -> int:
-	return C.HP_START + C.HP_STEP * hit_points
+	return C.HP_START + hp_step() * hit_points
+
+
+## Max hit points per purchase.
+func hp_step() -> int:
+	return prices.amount("training", "hit points per purchase")
 
 
 # ---- buying and returning -----------------------------------------------------
@@ -163,77 +197,77 @@ func buy(id: String) -> String:
 		"str":
 			if strength_now() >= C.STR_MAX:
 				return AT_MAX
-			return _pay(C.grow(C.STR_PRICE, 2, 1, strength), 0, "strength")
+			return _pay(prices.price("training", "strength", strength), 0, "strength")
 		"hp":
-			return _pay(C.grow(C.HP_PRICE, 2, 1, hit_points), 0, "hit_points")
+			return _pay(prices.price("training", "hit points", hit_points), 0, "hit_points")
 		"sw":
 			if not C.WEAPON_START_ORDER.has(n):
 				return NO_SUCH
 			if n == weapon:
 				return ALREADY
-			if C.WEAPONS[n][2] - C.WEAPONS[weapon][2] > left():
+			if _swap("your weapon", C.WEAPONS, n, weapon) > left():
 				return NO_GOLD
 			weapon = n
 			return DONE
 		"xw":
 			if not C.WEAPON_SPARE_ORDER.has(n):
 				return NO_SUCH
-			var why := _check(C.WEAPONS[n][3], 1)
+			var why := _check(_spare_price("spare weapons", C.WEAPONS, spare_weapons, n), 1)
 			if why == DONE:
 				spare_weapons.append({"which": n, "enh": 0})
 			return why
 		"ew":
 			if arg == "you":
-				return _pay(C.grow(C.WEAPON_ENH_PRICE, 2, 1, weapon_enh), 0, "weapon_enh")
+				return _pay(prices.price("enhancing", "weapon", weapon_enh), 0, "weapon_enh")
 			if arg == "bow":
-				return _pay(C.grow(C.WEAPON_ENH_PRICE, 2, 1, bow_enh), 0, "bow_enh")
-			return _enhance(spare_weapons, n, C.WEAPON_ENH_PRICE)
+				return _pay(prices.price("enhancing", "weapon", bow_enh), 0, "bow_enh")
+			return _enhance(spare_weapons, n, "weapon")
 		"sa":
 			if not C.ARMOR_ORDER.has(n):
 				return NO_SUCH
 			if n == armor:
 				return ALREADY
-			if C.ARMORS[n][2] - C.ARMORS[armor][2] > left():
+			if _swap("your armour", C.ARMORS, n, armor) > left():
 				return NO_GOLD
 			armor = n
 			return DONE
 		"xa":
 			if not C.ARMOR_ORDER.has(n):
 				return NO_SUCH
-			var why := _check(C.ARMORS[n][3], 1)
+			var why := _check(_spare_price("spare armour", C.ARMORS, spare_armors, n), 1)
 			if why == DONE:
 				spare_armors.append({"which": n, "enh": 0})
 			return why
 		"ea":
 			if arg == "you":
-				return _pay(C.grow(C.ARMOR_ENH_PRICE, 2, 1, armor_enh), 0, "armor_enh")
-			return _enhance(spare_armors, n, C.ARMOR_ENH_PRICE)
+				return _pay(prices.price("enhancing", "armour", armor_enh), 0, "armor_enh")
+			return _enhance(spare_armors, n, "armour")
 		"rg":
 			if n < 0 or n >= C.RINGS.size():
 				return NO_SUCH
-			var why := _check(C.grow(C.RINGS[n][2], C.RING_COPY_FACTOR, 1, _owned(rings, n)), 1)
+			var why := _check(prices.price("rings", C.RINGS[n][0], _owned(rings, n)), 1)
 			if why == DONE:
 				rings.append({"which": n, "enh": 0})
 			return why
 		"er":
 			if n < 0 or n >= rings.size() or not C.is_bonus_ring(rings[n].which):
 				return NO_SUCH
-			return _enhance(rings, n, C.RING_ENH_PRICE)
+			return _enhance(rings, n, "ring")
 		"pr":
 			if n < 0 or n >= rings.size() or rings[n].which != C.RING_ADORNMENT:
 				return NO_SUCH
-			if rings[n].enh >= C.POLISH_MAX:
+			if rings[n].enh >= polish_max():
 				return AT_MAX
-			return _enhance(rings, n, C.POLISH_PRICE)
+			return _enhance(rings, n, "polish")
 		"wd":
 			if n < 0 or n >= C.STICKS.size():
 				return NO_SUCH
-			var why := _check(C.grow(C.STICKS[n][2], C.STICK_COPY_FACTOR, 1, _owned(sticks, n)), 1)
+			var why := _check(prices.price("wands", C.STICKS[n][0], _owned(sticks, n)), 1)
 			if why == DONE:
 				sticks.append({"which": n, "enh": 0})
 			return why
 		"ec":
-			return _enhance(sticks, n, C.CHARGE_PRICE)
+			return _enhance(sticks, n, "wand charges")
 		"ip":
 			return _identify(true)
 		"is":
@@ -241,31 +275,31 @@ func buy(id: String) -> String:
 		"bp":
 			if n < 0 or n >= C.POTIONS.size() or not pot_known[n]:
 				return NO_SUCH
-			var why := _check(C.grow(C.POTIONS[n][2], 2, 1, pot_count[n]), 1)
+			var why := _check(prices.price("potions", C.POTIONS[n][0], pot_count[n]), 1)
 			if why == DONE:
 				pot_count[n] += 1
 			return why
 		"bs":
 			if n < 0 or n >= C.SCROLLS.size() or not scr_known[n]:
 				return NO_SUCH
-			var why := _check(C.grow(C.SCROLLS[n][2], 2, 1, scr_count[n]), 1)
+			var why := _check(prices.price("scrolls", C.SCROLLS[n][0], scr_count[n]), 1)
 			if why == DONE:
 				scr_count[n] += 1
 			return why
 		"fd":
-			return _pay(C.grow(C.FOOD_PRICE, C.FOOD_NUM, C.FOOD_DEN, food), 1, "food")
+			return _pay(prices.price("stores", "food", food), 1, "food")
 		"ms":
 			if n < 0 or n >= C.MISSILES.size():
 				return NO_SUCH
 			var room := 1 if missiles[n] == 0 and C.MISSILES[n][0] != C.ARROW else 0
-			var why := _check(C.MISSILES[n][2], room)
+			var why := _check(prices.price("stores", C.MISSILES[n][1], missiles[n]), room)
 			if why == DONE:
 				missiles[n] += 1
 			return why
 		"pk":
 			if pack_size() >= C.PACK_MAX:
 				return AT_MAX
-			return _pay(C.grow(C.PACK_PRICE, C.PACK_NUM, C.PACK_DEN, slots), 0, "slots")
+			return _pay(prices.price("stores", "pack slot", slots), 0, "slots")
 	return NO_SUCH
 
 
@@ -284,6 +318,8 @@ func refund(id: String) -> String:
 				return NONE
 			if n == C.WEAPON_ISSUED:
 				return ISSUED
+			if _swap("your weapon", C.WEAPONS, C.WEAPON_ISSUED, n) > left():
+				return NO_GOLD	# a price list where the issued one is dearer
 			weapon = C.WEAPON_ISSUED
 			return DONE
 		"xw":
@@ -299,6 +335,8 @@ func refund(id: String) -> String:
 				return NONE
 			if n == C.ARMOR_ISSUED:
 				return ISSUED
+			if _swap("your armour", C.ARMORS, C.ARMOR_ISSUED, n) > left():
+				return NO_GOLD
 			armor = C.ARMOR_ISSUED
 			return DONE
 		"xa":
@@ -368,11 +406,12 @@ func _undo(counter: String) -> String:
 	return DONE
 
 
-## +1 enhancement of item i of a list ({"which", "enh"}): base * 2^enh.
-func _enhance(list: Array, i: int, base: int) -> String:
+## +1 enhancement of item i of a list ({"which", "enh"}), at the price of line
+## name of [enhancing] with k = its enhancements.
+func _enhance(list: Array, i: int, name: String) -> String:
 	if i < 0 or i >= list.size():
 		return NO_SUCH
-	var why := _check(C.grow(base, 2, 1, list[i].enh), 0)
+	var why := _check(prices.price("enhancing", name, list[i].enh), 0)
 	if why == DONE:
 		list[i].enh += 1
 	return why
@@ -415,7 +454,8 @@ func _identify(potions: bool) -> String:
 			weight += table[i][1]
 	if weight == 0:
 		return ALL_KNOWN
-	if C.IDENTIFY_PRICE > left():
+	var ids := pot_ids if potions else scr_ids
+	if prices.price("potions" if potions else "scrolls", "identify", ids) > left():
 		return NO_GOLD
 	var r := (_pot_rng if potions else _scr_rng).randi_range(0, weight - 1)
 	for i in table.size():
@@ -442,23 +482,26 @@ func _identify(potions: bool) -> String:
 ## - a heading: "head".
 func offers(section: int) -> Array:
 	var out: Array = []
+	var p := prices
 	match section:
 		0:
 			out.append(_offer("str", "Strength", _change(C.STR_START, strength_now()), "next +1",
-				C.grow(C.STR_PRICE, 2, 1, strength), "max" if strength_now() >= C.STR_MAX else ""))
+				p.price("training", "strength", strength),
+				"max" if strength_now() >= C.STR_MAX else ""))
 			out.append(_offer("hp", "Hit points", _change(C.HP_START, hp_now()),
-				"next +%d" % C.HP_STEP, C.grow(C.HP_PRICE, 2, 1, hit_points), ""))
+				"next +%d" % hp_step(), p.price("training", "hit points", hit_points), ""))
 		1:
 			out.append({"head": "Your weapon"})
 			for w in C.WEAPON_START_ORDER:
-				var o := _offer("sw:%d" % w, C.title(C.WEAPONS[w][0]), "damage " + C.WEAPONS[w][4],
-					"", C.WEAPONS[w][2], "yours" if w == weapon else "")
+				var o := _offer("sw:%d" % w, C.title(C.WEAPONS[w][0]), "damage " + C.WEAPONS[w][2],
+					"", p.price("your weapon", C.WEAPONS[w][0]), "yours" if w == weapon else "")
 				o.mark = "*" if w == weapon else ""
 				out.append(o)
 			out.append({"head": "Spare weapons"})
 			for w in C.WEAPON_SPARE_ORDER:
-				out.append(_offer("xw:%d" % w, C.title(C.WEAPONS[w][0]), "damage " + C.WEAPONS[w][4],
-					_have(_owned(spare_weapons, w)), C.WEAPONS[w][3], ""))
+				out.append(_offer("xw:%d" % w, C.title(C.WEAPONS[w][0]), "damage " + C.WEAPONS[w][2],
+					_have(_owned(spare_weapons, w)),
+					_spare_price("spare weapons", C.WEAPONS, spare_weapons, w), ""))
 			out.append({"head": "Enhance"})
 			out.append(_weapon_enh("ew:you", C.title(C.WEAPONS[weapon][0]) + " (yours)", 1, 1,
 				weapon_enh))
@@ -470,14 +513,15 @@ func offers(section: int) -> Array:
 			out.append({"head": "Your armour"})
 			for a in C.ARMOR_ORDER:
 				var o := _offer("sa:%d" % a, C.title(C.ARMORS[a][0]),
-					"protection %d" % (11 - C.A_CLASS[a]), "", C.ARMORS[a][2], "yours" if a == armor else "")
+					"protection %d" % (11 - C.A_CLASS[a]), "",
+					p.price("your armour", C.ARMORS[a][0]), "yours" if a == armor else "")
 				o.mark = "*" if a == armor else ""
 				out.append(o)
 			out.append({"head": "Spare armour"})
 			for a in C.ARMOR_ORDER:
 				out.append(_offer("xa:%d" % a, C.title(C.ARMORS[a][0]),
 					"protection %d" % (10 - C.A_CLASS[a]), _have(_owned(spare_armors, a)),
-					C.ARMORS[a][3], ""))
+					_spare_price("spare armour", C.ARMORS, spare_armors, a), ""))
 			out.append({"head": "Enhance"})
 			out.append(_armor_enh("ea:you", C.title(C.ARMORS[armor][0]) + " (yours)", 1, armor_enh))
 			for i in spare_armors.size():
@@ -485,9 +529,9 @@ func offers(section: int) -> Array:
 					+ " (spare)", 0, spare_armors[i].enh))
 		3:
 			out.append({"head": "Rings"})
-			for r in _by_price(C.RINGS):
+			for r in _by_price("rings", C.RINGS):
 				var o := _offer("rg:%d" % r, C.title(C.RINGS[r][0]), _have(_owned(rings, r)), "",
-					C.grow(C.RINGS[r][2], C.RING_COPY_FACTOR, 1, _owned(rings, r)), "")
+					p.price("rings", C.RINGS[r][0], _owned(rings, r)), "")
 				if C.is_cursed_ring(r):
 					o.note = "cursed"
 				elif C.is_bonus_ring(r):
@@ -501,7 +545,7 @@ func offers(section: int) -> Array:
 						head = true
 					out.append(_offer("er:%d" % i, C.title(C.RINGS[rings[i].which][0]),
 						_change_s("+%d" % 1, "+%d" % (1 + rings[i].enh)), "next +1",
-						C.grow(C.RING_ENH_PRICE, 2, 1, rings[i].enh), ""))
+						p.price("enhancing", "ring", rings[i].enh), ""))
 			head = false
 			for i in rings.size():
 				if rings[i].which == C.RING_ADORNMENT:
@@ -511,53 +555,72 @@ func offers(section: int) -> Array:
 					var e: int = rings[i].enh
 					out.append(_offer("pr:%d" % i, "Adornment",
 						_change_s("worth x1", "x%d" % (1 << e)), "next x2",
-						C.grow(C.POLISH_PRICE, 2, 1, e), "max" if e >= C.POLISH_MAX else ""))
+						p.price("enhancing", "polish", e), "max" if e >= polish_max() else ""))
 		4:
 			out.append({"head": "Wands and staves"})
-			for s in _by_price(C.STICKS):
-				out.append(_offer("wd:%d" % s, C.title(C.STICKS[s][0]), _have(_owned(sticks, s)), "",
-					C.grow(C.STICKS[s][2], C.STICK_COPY_FACTOR, 1, _owned(sticks, s)), ""))
+			for st in _by_price("wands", C.STICKS):
+				out.append(_offer("wd:%d" % st, C.title(C.STICKS[st][0]), _have(_owned(sticks, st)),
+					"", p.price("wands", C.STICKS[st][0], _owned(sticks, st)), ""))
 			if not sticks.is_empty():
 				out.append({"head": "Recharge"})
 			for i in sticks.size():
-				var base := charges_of(sticks[i].which, 0)
+				var base := charges_of(sticks[i].which, 0, p)
 				out.append(_offer("ec:%d" % i, C.title(C.STICKS[sticks[i].which][0]),
-					_change(base, charges_of(sticks[i].which, sticks[i].enh)) + " charges",
-					"next +%d" % C.CHARGE_STEP, C.grow(C.CHARGE_PRICE, 2, 1, sticks[i].enh), ""))
+					_change(base, charges_of(sticks[i].which, sticks[i].enh, p)) + " charges",
+					"next +%d" % p.amount("enhancing", "charges per purchase"),
+					p.price("enhancing", "wand charges", sticks[i].enh), ""))
 		5, 6:
 			var potions := section == 5
+			var list := "potions" if potions else "scrolls"
 			var table: Array = C.POTIONS if potions else C.SCROLLS
 			var known: Array[bool] = pot_known if potions else scr_known
 			var count: Array[int] = pot_count if potions else scr_count
 			var nk := known.count(true)
-			out.append(_offer("ip" if potions else "is", "Identify a %s" % ("potion" if potions else "scroll"),
-				"%d of %d known" % [nk, table.size()], "final", C.IDENTIFY_PRICE,
+			out.append(_offer("ip" if potions else "is",
+				"Identify a %s" % ("potion" if potions else "scroll"),
+				"%d of %d known" % [nk, table.size()], "final",
+				p.price(list, "identify", pot_ids if potions else scr_ids),
 				"all known" if nk == table.size() else ""))
 			if nk > 0:
-				out.append({"head": "Known %s" % ("potions" if potions else "scrolls")})
-			for k in _by_price(table):
+				out.append({"head": "Known %s" % list})
+			for k in _by_price(list, table):
 				if known[k]:
 					out.append(_offer(("bp:%d" if potions else "bs:%d") % k, C.title(table[k][0]),
-						_have(count[k]), "", C.grow(table[k][2], 2, 1, count[k]), ""))
+						_have(count[k]), "", p.price(list, table[k][0], count[k]), ""))
 		7:
 			out.append(_offer("fd", "Food ration", "have " + _change(1, 1 + food), "next +1",
-				C.grow(C.FOOD_PRICE, C.FOOD_NUM, C.FOOD_DEN, food), ""))
+				p.price("stores", "food", food), ""))
 			for i in C.MISSILES.size():
 				var m: Array = C.MISSILES[i]
+				var each := missile_count(i)
 				var info := ""
 				if missiles[i] > 0:
-					info = ("+%d" if m[0] == C.ARROW else "have %d") % (m[1] * missiles[i])
-				out.append(_offer("ms:%d" % i, m[3], info, "", m[2], ""))
+					info = ("+%d" if m[0] == C.ARROW else "have %d") % (each * missiles[i])
+				out.append(_offer("ms:%d" % i, "%d %s" % [each, m[1]], info, "",
+					p.price("stores", m[1], missiles[i]), ""))
 			out.append(_offer("pk", "A bigger pack", _change(C.PACK_START, pack_size()) + " slots",
-				"next +1", C.grow(C.PACK_PRICE, C.PACK_NUM, C.PACK_DEN, slots),
+				"next +1", p.price("stores", "pack slot", slots),
 				"max" if pack_size() >= C.PACK_MAX else ""))
 	return out
 
 
-## Charges of a wand or staff the Guild sells.
-static func charges_of(which: int, enh: int) -> int:
-	var base := C.STICK_LIGHT_CHARGES if which == C.STICK_LIGHT else C.STICK_CHARGES
-	return base + C.CHARGE_STEP * enh
+## Charges of a wand or staff the Guild sells, recharged enh times, by a price
+## list (none: the built-in one).
+static func charges_of(which: int, enh: int, p: GuildPrices = null) -> int:
+	if p == null:
+		p = GuildPrices.defaults()
+	var base := p.amount("wands", "light charges" if which == C.STICK_LIGHT else "charges")
+	return base + p.amount("enhancing", "charges per purchase") * enh
+
+
+## How many missiles of a line (GuildCatalog.MISSILES) one purchase gives.
+func missile_count(i: int) -> int:
+	return prices.amount("stores", C.MISSILES[i][1] + " per purchase")
+
+
+## How many times a ring of adornment can be polished.
+func polish_max() -> int:
+	return prices.amount("enhancing", "polish max")
 
 
 func _offer(id: String, label: String, info: String, note: String, price: int,
@@ -570,12 +633,13 @@ func _weapon_enh(id: String, label: String, hplus: int, dplus: int, enh: int) ->
 	var now := C.enhanced(hplus, dplus, enh)
 	var nxt := C.enhanced(now.x, now.y, 1)
 	return _offer(id, label, _change_s(C.plus_str(hplus, dplus), C.plus_str(now.x, now.y)),
-		"next +1 " + ("dmg" if nxt.y > now.y else "hit"), C.grow(C.WEAPON_ENH_PRICE, 2, 1, enh), "")
+		"next +1 " + ("dmg" if nxt.y > now.y else "hit"), prices.price("enhancing", "weapon", enh),
+		"")
 
 
 func _armor_enh(id: String, label: String, plus: int, enh: int) -> Dictionary:
 	return _offer(id, label, _change_s("+%d" % plus, "+%d" % (plus + enh)), "next +1",
-		C.grow(C.ARMOR_ENH_PRICE, 2, 1, enh), "")
+		prices.price("enhancing", "armour", enh), "")
 
 
 ## "16" or "16 -> 18"
@@ -591,13 +655,16 @@ static func _have(n: int) -> String:
 	return "have %d" % n if n > 0 else ""
 
 
-## The kinds of a table, dearest first (ties in table order).
-static func _by_price(table: Array) -> Array[int]:
+## The kinds of a table, dearest first (by the price of a first one; ties in
+## table order).
+func _by_price(list: String, table: Array) -> Array[int]:
+	var first: Array[int] = []
 	var order: Array[int] = []
 	for i in table.size():
+		first.append(prices.price(list, table[i][0], 0))
 		order.append(i)
 	order.sort_custom(func(a: int, b: int) -> bool:
-		return table[a][2] > table[b][2] or (table[a][2] == table[b][2] and a < b))
+		return first[a] > first[b] or (first[a] == first[b] and a < b))
 	return order
 
 
@@ -608,7 +675,7 @@ func loadout() -> Dictionary:
 	var l := {}
 	l["maxpack"] = pack_size()
 	l["str"] = strength
-	l["hp"] = C.HP_STEP * hit_points
+	l["hp"] = hp_step() * hit_points
 	if weapon != C.WEAPON_ISSUED or weapon_enh > 0:
 		l["weapon"] = {"which": weapon, "enh": weapon_enh}
 	if bow_enh > 0:
@@ -618,7 +685,10 @@ func loadout() -> Dictionary:
 	l["weapons"] = spare_weapons.duplicate(true)
 	l["armors"] = spare_armors.duplicate(true)
 	l["rings"] = rings.duplicate(true)
-	l["sticks"] = sticks.duplicate(true)
+	l["sticks"] = []
+	for st in sticks:
+		l["sticks"].append({"which": st.which, "enh": st.enh,
+			"charges": charges_of(st.which, st.enh, prices)})
 	l["arrows"] = 0
 	var ms: Array = []
 	for i in C.MISSILES.size():
@@ -626,9 +696,9 @@ func loadout() -> Dictionary:
 		if missiles[i] == 0:
 			continue
 		if m[0] == C.ARROW:
-			l["arrows"] = m[1] * missiles[i]
+			l["arrows"] = missile_count(i) * missiles[i]
 		else:
-			ms.append({"which": m[0], "count": m[1] * missiles[i]})
+			ms.append({"which": m[0], "count": missile_count(i) * missiles[i]})
 	l["missiles"] = ms
 	l["potions"] = _counted(pot_count)
 	l["scrolls"] = _counted(scr_count)

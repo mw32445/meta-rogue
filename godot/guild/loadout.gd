@@ -30,18 +30,20 @@
 ##   "rings": [{"which": r, "enh": k}, ...]
 ##                           protection, add strength, dexterity and increase
 ##                           damage come +1+k; adornment is polished k times (at
-##                           most 7: a winner sells it for 10 * 2^k, see
-##                           Rip.total_winner); teleportation and aggravate monster
-##                           are cursed
-##   "sticks": [{"which": s, "enh": k}, ...]
-##                           5 charges (light 15) plus 2 per k
+##                           most GuildCatalog.POLISH_LIMIT, 20: a winner sells it
+##                           for its worth * 2^k, see Rip.total_winner);
+##                           teleportation and aggravate monster are cursed
+##   "sticks": [{"which": s, "enh": k, "charges": c}, ...]
+##                           c charges; without "charges", as the built-in price
+##                           list gives them: 5 (light 15) plus 2 per k
 ##   "potions", "scrolls": [{"which": p, "count": n}, ...]
 ##   "food": n               rations added
 ##   "know_potions", "know_scrolls": [p, ...]   kinds identified for the run
-## Every weapon, armour, ring and stick is known (ISKNOW), and every kind bought
-## or identified is known for the run (oi_know). All of it must fit in the pack:
-## apply() never lets add_pack() refuse (it would stop for a message), so a
-## purchase that does not fit is left out with an error.
+## The counts (hit points, arrows, missiles, charges) are in the loadout: applying
+## one needs no price list. Every weapon, armour, ring and stick is known
+## (ISKNOW), and every kind bought or identified is known for the run (oi_know).
+## All of it must fit in the pack: apply() never lets add_pack() refuse (it would
+## stop for a message), so a purchase that does not fit is left out with an error.
 class_name Loadout
 extends RogueBase
 
@@ -135,7 +137,7 @@ static func apply(l: Dictionary) -> void:
 			R_AGGR, R_TELEPORT:
 				obj.o_flags |= ISCURSED
 			R_NOP:
-				obj.o_arm += clampi(_int(e, "enh", 0), 0, GuildCatalog.POLISH_MAX)	# polished
+				obj.o_arm += clampi(_int(e, "enh", 0), 0, GuildCatalog.POLISH_LIMIT)	# polished
 		obj.o_flags |= ISKNOW
 		ring_info[which].oi_know = true
 		await _add(obj)
@@ -147,7 +149,8 @@ static func apply(l: Dictionary) -> void:
 		obj.o_type = STICK
 		obj.o_which = which
 		Sticks.fix_stick(obj)
-		obj.o_charges = GuildShop.charges_of(which, maxi(0, _int(e, "enh", 0)))
+		var enh := maxi(0, _int(e, "enh", 0))
+		obj.o_charges = maxi(0, _int(e, "charges", GuildShop.charges_of(which, enh)))
 		obj.o_flags |= ISKNOW
 		ws_info[which].oi_know = true
 		await _add(obj)

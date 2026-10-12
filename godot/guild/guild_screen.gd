@@ -9,6 +9,11 @@
 ## running) and shown on the game's TerminalView. ui/main.gd feeds it the keys
 ## (key()) until the student descends: it then emits `descended` with the shop's
 ## loadout. There is no other way out: no Escape, no cancel.
+##
+## The prices come from guild_prices.txt, read each time the screen opens (so an
+## edit counts from the next new game). A line of it that can't be used is told
+## on the bottom line until a key is pressed (and every one on the ? page, with
+## the file's path).
 class_name GuildScreen
 extends RefCounted
 
@@ -26,17 +31,23 @@ const CONFIRM := 2
 
 var cs: Curses
 var shop: GuildShop
+var prices: GuildPrices
 var section := 0
 var _mode := SHOP
 var _cursor: Array[int] = []
 var _top: Array[int] = []
-## The message line: why the last key did nothing ("" if it did something).
+## The message line: why the last key did nothing ("" if it did something), or a
+## line of the price list that can't be used.
 var _say := ""
+## The price list's errors told so far.
+var _told := 0
 
 
-## A screen for the Hall of Fame in the score file at score_path.
-func _init(score_path: String) -> void:
-	shop = GuildShop.new(HallOfFame.read_file(score_path))
+## A screen for the Hall of Fame in the score file at score_path, with a price
+## list (none: GuildPrices.read(), the player's).
+func _init(score_path: String, p: GuildPrices = null) -> void:
+	prices = p if p != null else GuildPrices.read()
+	shop = GuildShop.new(HallOfFame.read_file(score_path), prices)
 	cs = Curses.new()
 	cs.leaveok(cs.stdscr, true)
 	_cursor.resize(GuildShop.SECTIONS.size())
@@ -227,8 +238,24 @@ func _draw_shop() -> void:
 	_put(22, 1, "Enter buy  Backspace return  j/k choose  1-8 section  ? help  e enter dungeon")
 	if _mode == CONFIRM:
 		_put(23, 1, "Enter the Dungeons of Doom? (%d gold unspent) [y/n]" % shop.left())
-	else:
-		_put(23, 1, _say)
+		return
+	if _say == "" and _told < prices.errors.size():
+		_say = prices.errors[_told]
+		if prices.errors.size() - _told > 1:
+			_say += " (? shows all %d)" % (prices.errors.size() - _told)
+		_told = prices.errors.size()
+	_message(_say)
+
+
+## The bottom line; a message too long for it takes the line above it too.
+func _message(s: String) -> void:
+	if s.length() <= WIDTH - 1:
+		_put(23, 1, s)
+		return
+	var rows := _wrap(s, WIDTH - 1)
+	_put(22, 1, " ".repeat(WIDTH - 1))
+	_put(22, 1, rows[0])
+	_put(23, 1, rows[1] if rows.size() == 2 else rows[1].substr(0, WIDTH - 5) + " ...")
 
 
 ## One line of the list.
@@ -262,19 +289,56 @@ func _rule(y: int, note: String) -> void:
 func _draw_help() -> void:
 	_title("THE FIGHTERS' GUILD  -  COFFERS AND KEYS")
 	var h := shop.hall
-	var rows: Array[String] = [
-		"",
-		"    coffers = best / 2  +  sum * (10 + n) / 400",
-		"            = %d / 2  +  %d * (10 + %d) / 400  =  %d gold" % [h.best, h.total, h.heroes,
-			shop.coffers],
-		"",
+	var vars := {"best": h.best, "sum": h.total, "n": h.heroes}
+	var f := prices.formula_of("coffers", "coffers", vars)
+	var rows: Array[String] = [""]
+	rows.append_array(_indent(_wrap(f.text, WIDTH - 15), "    coffers = ", 14))
+	rows.append_array(_indent(_wrap(f.with_values(vars), WIDTH - 15), "            = ", 14))
+	rows.append_array(["            = %d gold" % shop.coffers, "",
 		"  j k, up down    choose a line        1-8, left right   change section",
 		"  Enter           buy one more         Backspace         return one",
 		"  ?               this page            e                 enter the dungeon",
-	]
+		""])
+	if prices.path == "":
+		rows.append("  The prices are the built-in ones%s." % (": no guild_prices.txt was found"
+			if prices.errors.is_empty() else ""))
+	else:
+		rows.append("  The prices are in this file (any text editor; read when the Guild opens):")
+		rows.append_array(_indent(_wrap(prices.where(), WIDTH - 5), "    ", 4))
+	if not prices.errors.is_empty():
+		rows.append_array(["", "  Not used (the original values are used instead):"])
+		for e in prices.errors:
+			rows.append_array(_indent(_wrap(e, WIDTH - 7), "    ", 6))
 	for i in rows.size():
+		if 1 + i >= 22:
+			_put(22, 1, "  ...")
+			break
 		_put(1 + i, 1, rows[i])
 	_put(23, WIDTH - 29, "--Press any key to continue--")
+
+
+## s in lines of at most n characters, broken at spaces where it can be (a path
+## after a /).
+static func _wrap(s: String, n: int) -> Array[String]:
+	var out: Array[String] = []
+	while s.length() > n:
+		var cut := s.rfind(" ", n)
+		if cut <= 0:
+			cut = s.rfind("/", n - 1) + 1
+		if cut <= 0:
+			cut = n
+		out.append(s.substr(0, cut))
+		s = s.substr(cut).strip_edges(true, false)
+	out.append(s)
+	return out
+
+
+## rows, the first after first and the others after n spaces.
+static func _indent(rows: Array[String], first: String, n: int) -> Array[String]:
+	var out: Array[String] = []
+	for i in rows.size():
+		out.append((first if i == 0 else " ".repeat(n)) + rows[i])
+	return out
 
 
 ## Write s at (y, x), clipped to the screen (never the last cell: it would scroll).

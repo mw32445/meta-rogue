@@ -182,7 +182,7 @@ func _on_exit(_status: int) -> void:
 	if not cs.curses_gone and not cs.isendwin():
 		cs.endwin()
 	if _guild_next():
-		var gold := HallOfFame.read_file(RogueBase.env_scorefile).coffers()
+		var gold := HallOfFame.read_file(RogueBase.env_scorefile).coffers(GuildPrices.read())
 		cs.stdout_write("\n\nThe Guild's coffers now hold %d gold. [Enter: the Guild, Esc: quit]" % gold)
 	else:
 		cs.stdout_write("\n\n[Press Enter for a new game, Esc to quit]")

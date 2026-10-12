@@ -1,6 +1,9 @@
 ## Unit tests of the Fighters' Guild (godot/guild, docs/GUILD.md): the coffers,
 ## the prices, the shop's rules, the random identifications, the 20-entry Hall of
-## Fame, the catalog against the game's tables, and loadouts applied to new games.
+## Fame, the catalog against the game's tables, loadouts applied to new games, and
+## a shop with an edited price list. The shops use the built-in price list
+## (GuildPrices.defaults()), never the player's guild_prices.txt; the price list
+## itself is tested by godot/tests/prices_test.gd.
 ##   godot --headless --path godot --script res://tests/guild_test.gd
 ## Prints PASS or FAIL for each check; exit status 1 if any check fails. Works in
 ## (and removes) the folder "guild_test" of the project's user data folder.
@@ -30,6 +33,7 @@ func _initialize() -> void:
 	_test_polish_win()
 	_test_big_pack()
 	_test_screen()
+	_test_edited_prices()
 	_clean()
 	print("guild_test: %d passed, %d failed" % [_passes, _fails])
 	quit(1 if _fails > 0 else 0)
@@ -112,9 +116,11 @@ func _test_coffers() -> void:
 			h.coffers(), h.heroes, h.total, h.best])
 		_check("coffers: %s matches best/2 + sum/20 * lerp(0.5, 1.5, n/20) = %.2f" % [c[0], exact],
 			h.coffers() == int(floor(exact)), h.coffers())
-	# odd best scores: each term is floored, the float formula's floor may be 1 more
-	_check("coffers: integer formula within 1 of the float one",
-		absf(HallOfFame.coffers_of(2401, 9401, 17) - _float_coffers(2401, 9401, 17)) < 1.5)
+	# odd scores: the old integer formula, best / 2 + sum * (10 + n) / 400, floored each
+	# term; the price list's floors the sum, so it may be 1 more
+	var odd := GuildPrices.defaults().coffers(2401, 9401, 17)
+	_check("coffers: odd scores, 1 more than the old integer formula (1835, was %d)" % (2401 / 2
+		+ 9401 * 27 / 400), odd == 1835 and odd == int(floor(_float_coffers(2401, 9401, 17))), odd)
 	# the shop starts with the coffers
 	_write_hall(_dir.path_join("hall.scr"), [2400, 1500, 1000, 800, 700, 600, 500, 400, 350, 300,
 		250, 200, 150, 100, 80, 50, 20], 20)
@@ -141,17 +147,19 @@ func _test_prices() -> void:
 		s.buy("hp")
 		seq.append(s.spent() - before)
 	_check("prices: hit points 60 * 2^k, +2 each", seq == [60, 120, 240] and s.hp_now() == 18, seq)
+	var p := GuildPrices.defaults()
 	var food := []
+	var rations := 0
 	for i in 13:
-		food.append(C.grow(C.FOOD_PRICE, C.FOOD_NUM, C.FOOD_DEN, i))
+		food.append(p.price("stores", "food", i))
+		rations += food[i]
 	_check("prices: food 30 * 1.3^k", food.slice(0, 6) == [30, 39, 50, 65, 85, 111], food)
-	var rations := C.grow_total(C.FOOD_PRICE, C.FOOD_NUM, C.FOOD_DEN, 13)
-	var rings := C.grow_total(C.RINGS[10][2], C.RING_COPY_FACTOR, 1, 2)
+	var rings: int = p.price("rings", C.RINGS[10][0], 0) + p.price("rings", C.RINGS[10][0], 1)
 	_check("prices: 13 rations (%d) cost less than two rings of slow digestion (%d)" % [rations, rings],
 		rations < rings and rings == 3500 and rations > 2500)
 	var pk := []
 	for i in 5:
-		pk.append(C.grow(C.PACK_PRICE, C.PACK_NUM, C.PACK_DEN, i))
+		pk.append(p.price("stores", "pack slot", i))
 	_check("prices: pack slots 50 * 1.5^k", pk == [50, 75, 112, 168, 253], pk)
 	seq = []
 	for i in 3:
@@ -184,7 +192,8 @@ func _test_prices() -> void:
 	before_id = s.spent()
 	s.buy("bs:%d" % k)
 	s.buy("bs:%d" % k)
-	_check("prices: a known scroll costs base * 2^k", s.spent() - before_id == 3 * C.SCROLLS[k][2])
+	_check("prices: a known scroll costs base * 2^k", s.spent() - before_id
+		== 3 * p.price("scrolls", C.SCROLLS[k][0]))
 	var w := GuildShop.new()
 	w.coffers = 10000
 	w.buy("sw:1")
@@ -423,7 +432,7 @@ func _test_catalog() -> void:
 	_check("catalog: armour classes", C.A_CLASS == R.a_class)
 	var dmg_ok := true
 	for i in C.WEAPONS.size():
-		dmg_ok = dmg_ok and C.WEAPONS[i][4] == Weapons.init_dam[i].iw_dam
+		dmg_ok = dmg_ok and C.WEAPONS[i][2] == Weapons.init_dam[i].iw_dam
 	_check("catalog: weapon damage", dmg_ok)
 	_check("catalog: the issued strength, hit points and pack", C.STR_START == R.max_stats.s_str
 		and C.HP_START == R.max_stats.s_maxhp and C.PACK_START == R.MAXPACK
@@ -791,7 +800,7 @@ func _test_screen() -> void:
 	var path := _dir.path_join("screen.scr")
 	_write_hall(path, [2400, 1500, 1000, 800, 700, 600, 500, 400, 350, 300, 250, 200, 150, 100,
 		80, 50, 20], 20)
-	var g := GuildScreen.new(path)
+	var g := GuildScreen.new(path, GuildPrices.defaults())
 	var got: Array = []
 	g.descended.connect(func(lo: Dictionary) -> void: got.append(lo))
 	_check("screen: the title and the coffers", _row(g, 0).contains("THE FIGHTERS' GUILD")
@@ -815,8 +824,9 @@ func _test_screen() -> void:
 	_check("screen: an identification is final (Backspace can't return it)", g.shop.pot_ids == 1
 		and _row(g, 23).contains("an identification can't be returned"))
 	g.key(ord("?"))
-	_check("screen: ? shows the formula", _row(g, 2).contains("coffers = best / 2")
-		and _row(g, 3).contains("1834 gold"))
+	_check("screen: ? shows the formula, with the numbers", _row(g, 2).contains(
+		"coffers = best / 2 + (sum / 20) * lerp(0.5, 1.5, n / 20)") and _row(g, 3).contains(
+		"= 2400 / 2 + (9400 / 20) * lerp(0.5, 1.5, 17 / 20)") and _row(g, 4).contains("= 1834 gold"))
 	g.key(ord(" "))
 	g.key(ord("1"))
 	g.key(8)
@@ -829,3 +839,70 @@ func _test_screen() -> void:
 	g.key(ord("y"))
 	_check("screen: y descends with the loadout", got.size() == 1 and got[0].str == 1
 		and got[0].weapon.which == 1 and got[0].know_potions.size() == 1)
+
+
+# ---- an edited price list -----------------------------------------------------
+
+## A shop with an edited price list charges its prices, and the built-in ones for
+## the lines it does not set; its loadout carries its counts.
+func _test_edited_prices() -> void:
+	var p := GuildPrices.from_text("\n".join([
+		"[coffers]", "coffers = 1000 + n * 10",
+		"[training]", "strength = 50 + 10 * k", "hit points per purchase = 5",
+		"[your weapon]", "mace = 100   # the issued one dearer: a lighter one gives gold back",
+		"[spare weapons]", "spear = 40 * 2^k",
+		"[enhancing]", "polish max = 2", "charges per purchase = 3",
+		"[rings]", "price = base * 2^k", "protection = 300",
+		"[wands]", "light charges = 20",
+		"[potions]", "identify = 10 + 5 * k",
+		"[stores]", "food = 25", "darts = 6", "darts per purchase = 4",
+	]))
+	_check("edited prices: the list reads without an error", p.errors.is_empty(), p.errors)
+	_write_hall(_dir.path_join("edited.scr"), [900, 400, 120], 20)
+	var s := GuildShop.new(HallOfFame.read_file(_dir.path_join("edited.scr")), p)
+	_check("edited prices: the coffers by its formula (1000 + 3 * 10)", s.coffers == 1030, s.coffers)
+	s.coffers = 1 << 40
+	var seq := []
+	for id in ["str", "str", "str", "hp", "xw:8", "xw:8", "xw:8", "rg:0", "rg:0", "rg:9", "rg:9",
+			"fd", "fd", "ip", "ip", "ms:1"]:
+		var before := s.spent()
+		s.buy(id)
+		seq.append(s.spent() - before)
+	_check("edited prices: its prices (strength 50 + 10k, spears 40 * 2^k, rings base * 2^k, food 25, "
+		+ "identifications 10 + 5k, darts 6), the built-in ones elsewhere (hit points 60, "
+		+ "regeneration 900)", seq == [50, 60, 70, 60, 40, 80, 160, 300, 600, 900, 1800, 25, 25, 10,
+		15, 6], seq)
+	_check("edited prices: its amounts (+5 hit points, 4 darts a purchase)", s.hp_now() == 17
+		and _offer(s, 7, "ms:1").label == "4 darts" and _offer(s, 7, "ms:1").info == "have 4")
+	var before := s.spent()
+	s.buy("sw:1")
+	var sword := s.spent() - before
+	s.buy("sw:4")
+	_check("edited prices: your weapon costs its price less the issued one's (long sword 90, the "
+		+ "dagger gives 100 back)", sword == 90 and s.spent() - before == -100, [sword, s.spent() - before])
+	s.coffers = s.spent() + 50
+	_check("edited prices: going back to a dearer issued weapon is paid for",
+		s.refund("sw:4") == GuildShop.NO_GOLD and s.weapon == 4)
+	s.coffers = 1 << 40
+	_check("edited prices: and refunded in full", s.refund("sw:4") == GuildShop.DONE
+		and s.spent() == before)
+	s.buy("rg:5")
+	var adorn := s.rings.size() - 1
+	var polish := []
+	for i in 3:
+		polish.append(s.buy("pr:%d" % adorn))
+	_check("edited prices: polish max 2", polish == [GuildShop.DONE, GuildShop.DONE, GuildShop.AT_MAX],
+		polish)
+	s.buy("wd:0")
+	s.buy("ec:0")
+	var lo: Dictionary = s.loadout()
+	_check("edited prices: the loadout carries the counts (hit points, darts, wand charges)",
+		lo.hp == 5 and lo.missiles == [{"which": 6, "count": 4}] and lo.sticks.size() == 1
+		and lo.sticks[0].charges == 23, lo)
+	var ids := ["ec:0", "wd:0", "pr:%d" % adorn, "pr:%d" % adorn, "rg:5", "ms:1", "fd", "fd",
+		"rg:9", "rg:9", "rg:0", "rg:0", "xw:8", "xw:8", "xw:8", "hp", "str", "str", "str"]
+	var ok := true
+	for id in ids:
+		ok = ok and s.refund(id) == GuildShop.DONE
+	_check("edited prices: every purchase returned in full (the identifications stay)", ok
+		and s.spent() == 25, s.spent())
