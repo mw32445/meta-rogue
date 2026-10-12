@@ -8,10 +8,9 @@
 ## games. It reads as many entries as the file holds, at most 20, so an older
 ## 10-entry file yields 10 entries.
 ##
-## The coffers: best / 2 + sum * (10 + n) / 400 (integer arithmetic), where n is
-## the number of entries with a score above 0 and sum their total. This is the
-## formula best/2 + (sum/20) * lerp(0.5, 1.5, n/20), since lerp(0.5, 1.5, n/20) =
-## (10 + n) / 20.
+## The coffers: the formula of the price list ([coffers] in guild_prices.txt;
+## built in: best / 2 + (sum / 20) * lerp(0.5, 1.5, n / 20)), where best is the
+## best score, n the number of entries with a score above 0, and sum their total.
 class_name HallOfFame
 extends RefCounted
 
@@ -53,13 +52,11 @@ static func read_file(path: String) -> HallOfFame:
 	return h
 
 
-## The Guild's coffers for a Hall of Fame with these numbers.
-static func coffers_of(best_score: int, sum: int, n: int) -> int:
-	return best_score / 2 + sum * (10 + n) / 400
-
-
-func coffers() -> int:
-	return coffers_of(best, total, heroes)
+## The Guild's coffers, by a price list (none: the built-in one).
+func coffers(prices: GuildPrices = null) -> int:
+	if prices == null:
+		prices = GuildPrices.defaults()
+	return prices.coffers(best, total, heroes)
 
 
 ## FNV-1a (32 bits) of some bytes, continued from h.
