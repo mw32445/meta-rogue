@@ -332,6 +332,9 @@ static var loadout: Variant = null
 ## menus: PC Rogue-style item menus. A command that asks for an item lists the
 ## items that fit at once (Pack.get_item), instead of "(* for list)".
 static var menus := false
+## exp_next: the status line also shows the experience at which the next level
+## starts: "Exp: 2/15/20" (Io.status).
+static var exp_next := false
 ## Values the C program gets from its environment (pinned in test mode).
 static var env_rogueopts: Variant = null	## getenv("ROGUEOPTS"): String or null
 static var env_name := "rodney"		## md_getusername()

@@ -87,6 +87,7 @@ func _setup_env() -> void:
 	RogueBase.fixes = not classic
 	RogueBase.guild = not classic
 	RogueBase.menus = not classic
+	RogueBase.exp_next = not classic
 	_data = OS.get_user_data_dir()
 	if classic:
 		_data = _data.path_join("classic")

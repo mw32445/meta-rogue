@@ -24,6 +24,8 @@ untouched original.
     drop, ...) lists the items that fit at once, as PC Rogue does: type the item's
     letter, Escape cancels, space turns the page, `*` shows the whole pack (in
     `--classic` you press `*` for the list, as in 5.4.4).
+- **Status line:** `Exp: 2/15/20` reads level 2, 15 experience, level 3 at 20 (in
+  `--classic`, `Exp: 2/15` as in 5.4.4).
 - **Options:** the `o` command, or the `ROGUEOPTS` environment variable, or
   `--rogueopts=...` on the command line (after `--`). For example:
   `ROGUEOPTS="terse,jump,inven=slow,fruit=kiwi"`.

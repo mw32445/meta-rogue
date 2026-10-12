@@ -10,7 +10,7 @@ the report re-runs both with full screens around it.
   difftest.py corpus [DIR]          replay every *.keys file (seed/options in its header)
   difftest.py seeds --count N [--first-seed S]   first screen of many seeds (level generation)
   difftest.py saves --count N [--len L] ...      save/restore chains (play, save, restore, ...)
-  difftest.py smoke --count N [--wizard] [--fixes] [--guild] [--menus]
+  difftest.py smoke --count N [--wizard] [--fixes] [--guild] [--menus] [--expnext]
                                     the port alone on random scripts, for the switches the
                                     oracle cannot judge: every run must end with no script
                                     error (--guild gives each run a random Guild loadout)
@@ -101,7 +101,7 @@ def port_line(case, d, full=None, t=""):
         kv["master"] = "1"
     if case.get("fixes"):
         kv["fixes"] = "1"
-    for sw in ("guild", "menus"):
+    for sw in ("guild", "menus", "expnext"):
         if case.get(sw):
             kv[sw] = "1"
     if case.get("loadout"):
@@ -612,6 +612,8 @@ def main():
                     help="RogueBase.fixes on, against the fixed oracle (harness/oracle/fixes.patch)")
     ap.add_argument("--guild", action="store_true", help="smoke only: the Fighters' Guild on")
     ap.add_argument("--menus", action="store_true", help="smoke only: the item menus on")
+    ap.add_argument("--expnext", action="store_true",
+                    help="smoke only: the status line shows the next level's experience")
     ap.add_argument("--arg", action="append", default=[])
     ap.add_argument("--count", type=int, default=100)
     ap.add_argument("--len", type=int, default=600)
@@ -623,8 +625,9 @@ def main():
                     help="fuzz in wizard mode: MASTER oracle, args [\"\"], wizard commands")
     a = ap.parse_args()
     opts = None if a.no_opts else a.opts
-    if (a.guild or a.menus) and a.mode != "smoke":
-        sys.exit("--guild and --menus change the game in ways the oracle cannot judge: use them with smoke")
+    if (a.guild or a.menus or a.expnext) and a.mode != "smoke":
+        sys.exit("--guild, --menus and --expnext change the game in ways the oracle cannot judge: "
+                 "use them with smoke")
     if a.mode == "smoke":
         os.makedirs(OUT, exist_ok=True)
         kdir = tempfile.mkdtemp(prefix="keys", dir=OUT)
@@ -639,7 +642,7 @@ def main():
                 case = {"seed": seed, "opts": opts, "master": a.master, "args": a.arg}
                 keys = gen_keys(rng, a.len)
             set_fixes(case, a.fixes)
-            case["guild"], case["menus"] = a.guild, a.menus
+            case["guild"], case["menus"], case["expnext"] = a.guild, a.menus, a.expnext
             if a.menus:
                 keys = with_menu_keys(rng, keys)
             if a.guild:

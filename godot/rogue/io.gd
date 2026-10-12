@@ -134,7 +134,14 @@ static func status() -> void:
 	_status_s_exp = pstats.s_exp
 	_status_s_hungry = hungry_state
 
-	if stat_msg:
+	if exp_next:	# the experience the next level starts at (docs/CHANGES.md)
+		if stat_msg:
+			move(0, 0)
+			await msg("%s", [_status_line_next()])
+		else:
+			move(STATLINE, 0)
+			printw("%s", [_status_line_next()])
+	elif stat_msg:
 		move(0, 0)
 		await msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%d  %s",
 			[level, purse, _status_hpwidth, pstats.s_hpt, _status_hpwidth, max_hp,
@@ -149,6 +156,27 @@ static func status() -> void:
 
 	clrtoeol()
 	move(oy, ox)
+
+
+## The exp_next status line: "Exp: level/experience/next", where next is the
+## experience the next level starts at (e_levels[level - 1]; the last level has
+## none, so "Exp: 21/8000001"). While the line would reach the last column, its
+## double spaces shrink to single ones, from the right.
+static func _status_line_next() -> String:
+	var lvl := pstats.s_lvl
+	var nxt := e_levels[lvl - 1] if lvl >= 1 and lvl <= e_levels.size() else 0
+	var xp := "%d/%d" % [lvl, pstats.s_exp]
+	if nxt != 0:
+		xp += "/%d" % nxt
+	var line := sprintf("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %s  %s",
+		[level, purse, _status_hpwidth, pstats.s_hpt, _status_hpwidth, max_hp,
+		pstats.s_str, max_stats.s_str, 10 - _status_s_arm, xp, STATE_NAME[hungry_state]])
+	while line.length() > COLS - 1:
+		var i := line.rfind("  ")
+		if i < 0:
+			break
+		line = line.substr(0, i) + line.substr(i + 1)
+	return line
 
 
 ## wait_for

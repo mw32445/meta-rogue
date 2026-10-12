@@ -123,6 +123,8 @@ turns one on only when a test asks (`fixes=1`, `guild=1`), so the classic game s
   `godot/tests/guild_test.gd` and replays with `--guild --loadout FILE`.
 - **`menus`** makes item commands list the items that fit at once, as PC Rogue does
   (`Pack.get_item`); tested by `godot/tests/menus_test.gd`.
+- **`exp_next`** adds the experience at which the next level starts to the status
+  line (`Io.status`): `Exp: 2/15/20`; tested by `godot/tests/menus_test.gd`.
 - Switches the oracle cannot judge also get smoke runs: `difftest.py smoke` plays
   random games on the port alone with any switches on and fails on a script error or a
   run that does not end.

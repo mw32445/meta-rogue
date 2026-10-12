@@ -1,5 +1,7 @@
-## Tests of the PC Rogue-style item menus (RogueBase.menus, Pack.get_item). The C
-## oracle cannot judge them, so these play short games and check the screens.
+## Tests of the playable game's interface switches that the C oracle cannot judge:
+## the PC Rogue-style item menus (RogueBase.menus, Pack.get_item) and the status
+## line's next-level experience (RogueBase.exp_next, Io.status). They play short
+## games and check the screens.
 ##   godot --headless --path godot --script res://tests/menus_test.gd
 ## Prints one line per failed check and a summary; exit status 1 on any failure.
 extends SceneTree
@@ -23,6 +25,7 @@ func _initialize() -> void:
 	_test_pages()
 	_test_identify_nothing()
 	_test_classic_unchanged()
+	_test_exp_next()
 	for f in DirAccess.get_files_at(_dir):
 		DirAccess.remove_absolute(_dir.path_join(f))
 	DirAccess.remove_absolute(_dir)
@@ -40,7 +43,8 @@ func _check(what: String, ok: bool, detail: Variant = "") -> void:
 
 ## Play keys in a new game (seed 1) with the menus on; returns stdout. _screens
 ## gets the screen at every key read.
-func _play(keys: Array, menus := true, lo: Variant = null) -> String:
+func _play(keys: Array, menus := true, lo: Variant = null, exp_next := false, wizard := false,
+		fixes := false) -> String:
 	R.reset()
 	var cs := Curses.new()
 	cs.replay = true
@@ -57,12 +61,13 @@ func _play(keys: Array, menus := true, lo: Variant = null) -> String:
 	R.env_cwd = _dir
 	R.env_sandbox = true
 	R.env_rogueopts = null
-	R.MASTER = false
-	R.fixes = false
+	R.MASTER = wizard
+	R.fixes = fixes
 	R.guild = lo != null
 	R.loadout = lo
 	R.menus = menus
-	R.argv = PackedStringArray(["rogue"])
+	R.exp_next = exp_next
+	R.argv = PackedStringArray(["rogue", ""] if wizard else ["rogue"])
 	_screens = []
 	_done = false
 	cs.step_hook = func(_key: int) -> void:
@@ -88,6 +93,9 @@ func _play(keys: Array, menus := true, lo: Variant = null) -> String:
 	cs.abandon()
 	R.cs = null
 	R.menus = false
+	R.exp_next = false
+	R.MASTER = false
+	R.fixes = false
 	R.guild = false
 	R.loadout = null
 	return out
@@ -161,3 +169,43 @@ func _test_classic_unchanged() -> void:
 	_play(["w", " "], false)
 	_check("menus off: the original question", _screen(2).contains("Which object do you want to wield? (* for list)")
 		and not _screen(2).contains("c) A +1,+1 mace"), _screen(2))
+
+
+## The status line (row 23) of a screen.
+func _status(screen: String) -> String:
+	var rows := screen.split("\n")
+	return rows[23] if rows.size() > 23 else ""
+
+
+func _test_exp_next() -> void:
+	_play([" ", "i", " "], false, null, true)
+	_check("exp: level 1 shows the next level at 10", _status(_screen(1)).contains("Exp: 1/0/10"),
+		_status(_screen(1)))
+	# wizard ^I: nine raise_level()s, to level 10 with e_levels[8] + 1 = 2601; level 11 at 5200
+	var keys := [9]
+	for i in 30:
+		keys.append(32)
+	_play(keys, false, null, true, true)
+	var seen := false
+	var fits := true
+	for sc in _screens:
+		var st := _status(sc)
+		seen = seen or st.contains("Exp: 10/2601/5200")
+		fits = fits and (st.length() < 80 or st[79] == " ")
+	_check("exp: wizard ^I to level 10 shows 10/2601/5200", seen, _status(_screens[-1]))
+	_check("exp: the status line never reaches the last column", fits)
+	# three ^I with the fixes on: level 21, the last, has no next level
+	keys = []
+	for j in 3:
+		keys.append(9)
+		for i in 30:
+			keys.append(32)
+	_play(keys, false, null, true, true, true)
+	var last := _status(_screens[-1])
+	var i21 := last.find("Exp: 21/")
+	_check("exp: level 21 shows two numbers", i21 >= 0
+		and not last.substr(i21 + 8).get_slice(" ", 0).contains("/"), last)
+	_play([" ", " "], false, null, false)
+	var classic := _status(_screen(1))
+	_check("exp: off, the original Exp: 1/0", classic.contains("Exp: 1/0 ") and not classic.contains("Exp: 1/0/"),
+		classic)
