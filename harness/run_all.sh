@@ -41,6 +41,10 @@ step "the Fighters' Guild (godot/tests/guild_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/guild_test.gd 2>&1)" || fail=1
 echo "$out" | grep -E "^(FAIL|guild_test:)"
 
+step "the Guild's price file (godot/tests/prices_test.gd)"
+out="$("$GODOT" --headless --path "$root/godot" --script res://tests/prices_test.gd 2>&1)" || fail=1
+echo "$out" | grep -E "^(FAIL|prices_test:)"
+
 step "the item menus (godot/tests/menus_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/menus_test.gd 2>&1)" || fail=1
 echo "$out" | grep -E "^(FAIL|menus_test:)"

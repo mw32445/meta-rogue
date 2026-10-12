@@ -298,6 +298,7 @@ func _draw_help() -> void:
 		"  j k, up down    choose a line        1-8, left right   change section",
 		"  Enter           buy one more         Backspace         return one",
 		"  ?               this page            e                 enter the dungeon",
+		"  F10             video settings       Alt+Enter         fullscreen",
 		""])
 	if prices.path == "":
 		rows.append("  The prices are the built-in ones%s." % (": no guild_prices.txt was found"

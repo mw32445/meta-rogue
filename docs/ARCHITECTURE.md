@@ -134,8 +134,10 @@ turns one on only when a test asks (`fixes=1`, `guild=1`), so the classic game s
   which check the behavior itself on the port's screens.
 - **`guild`** turns on the Fighters' Guild (`docs/GUILD.md`): a 20-entry Hall of
   Fame, the shop before each new game, and the loadout it buys (`RogueBase.loadout`,
-  applied by `Main.main()`). The oracle cannot judge it; its own tests are
-  `godot/tests/guild_test.gd` and replays with `--guild --loadout FILE`.
+  applied by `Main.main()`). Its prices and the coffers formula are read from
+  `godot/guild_prices.txt` (`GuildPrices`, `GuildFormula`), which players may edit.
+  The oracle cannot judge it; its own tests are `godot/tests/guild_test.gd`,
+  `prices_test.gd` and replays with `--guild --loadout FILE`.
 - **`menus`** makes item commands list the items that fit at once, as PC Rogue does
   (`Pack.get_item`); tested by `godot/tests/menus_test.gd`.
 - **`exp_next`** adds the experience at which the next level starts to the status
