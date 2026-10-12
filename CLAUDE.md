@@ -25,6 +25,7 @@ then `godot` on PATH, then `/root/bin/godot`.
 | Random games vs the C | `python3 harness/difftest.py fuzz --count 50 [--len 800] [--opts ROGUEOPTS] [--wizard]` |
 | The same with the bug fixes on, vs the fixed C | add `--fixes` to any difftest mode |
 | Random games with the playable game's switches, port only (crash/hang check) | `python3 harness/difftest.py smoke --fixes --guild --menus --expnext --count 50` |
+| Video settings: headless / in a real window (Xvfb + a test window manager) | `godot --headless --path godot --script res://tests/settings_test.gd` / `godot/tests/with_display.sh -- godot --path godot --script res://tests/ui_video.gd` |
 | Level generation, save/restore, regression scripts | `python3 harness/difftest.py seeds --count 200` / `saves --count 50` / `corpus` |
 | Look at a divergence | `python3 harness/show.py KEYFILE --step N --port [--digest]` |
 | Which C lines the tests reach | `python3 harness/coverage.py --reset DIR...` |

@@ -45,6 +45,18 @@ step "the item menus (godot/tests/menus_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/menus_test.gd 2>&1)" || fail=1
 echo "$out" | grep -E "^(FAIL|menus_test:)"
 
+step "the video settings (godot/tests/settings_test.gd)"
+out="$("$GODOT" --headless --path "$root/godot" --script res://tests/settings_test.gd 2>&1)" || fail=1
+echo "$out" | grep -E "^(FAIL|settings_test:)"
+
+# The video settings in a real window (fullscreen, F10, Alt+Enter), when Xvfb is there.
+if command -v Xvfb > /dev/null && command -v xvfb-run > /dev/null; then
+    step "the video settings in a window (godot/tests/ui_video.gd, 1920x1080)"
+    "$root/godot/tests/with_display.sh" --workarea=0,0,1920,1040 -- "$GODOT" --path "$root/godot" \
+        --script res://tests/ui_video.gd 2>&1 | grep -E "FAIL|ui_video|PASS.*total" | tail -3
+    [ "${PIPESTATUS[0]}" -eq 0 ] || fail=1
+fi
+
 step "the fixes' UI checks (godot/tests/fixes_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/fixes_test.gd 2>&1)" || fail=1
 echo "$out" | grep -E "FAIL|fixes_test"

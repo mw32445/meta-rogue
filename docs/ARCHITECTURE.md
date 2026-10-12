@@ -14,7 +14,7 @@ every keyboard read.
 | `godot/rogue/rogue_base.gd` | `RogueBase`: rogue.h/extern.h constants, macros, **all** mutable state, C helpers, curses wrappers, the RNG. Every module `extends RogueBase`. |
 | `godot/rogue/types/*.gd` | `Thing`, `Coord`, `Room`, `Stats`, `Place`, `ObjInfo`, `Monster`, `DelayedAction`, ... (C structs as reference types). |
 | `godot/curses/curses.gd` | `Curses`: an exact emulation of the ncurses 6.4 subset Rogue uses, plus the key queue and the stdout byte stream. |
-| `godot/ui/` | `TerminalView` (draws the screen, maps keys) and `main.gd` (runs games). |
+| `godot/ui/` | `TerminalView` (draws the screen, maps keys), `main.gd` (runs games), `video_settings.gd` and `settings_screen.gd` (the video settings, F10). |
 | `godot/guild/` | The Fighters' Guild, behind the switch `guild` (section 7): the shop before each new game, its catalog, and the loadout it applies (`docs/GUILD.md`). |
 | `godot/tests/` | `replay.gd` (the step-log runner), `check_all.gd`, `curses_fuzz.gd`, `ui_screenshot.gd`, Phase 0 spikes. |
 | `harness/oracle/` | Builds the original C with `oracle.patch` (fidelity fixes) and `hooks.c` (scripted input, step log, pinned environment); the `fixed` variants add `fixes.patch`, the bug fixes of the switch `fixes` (section 7). |
@@ -103,6 +103,21 @@ has C's layout and encryption.
   - A saved game is restored at startup, like `rogue -r`.
   - Closing the window auto-saves, as SIGHUP does in C.
   - When a game ends, Enter starts a new one.
+- **Video settings** (`video_settings.gd`, `user://video.cfg`):
+  - The first launch detects the screen and goes borderless fullscreen at its native
+    resolution; the windowed size defaults to the largest preset in 90% of the usable
+    area (1600x900 on 1920x1080).
+  - F10 opens the OPTIONS - VIDEO screen (`settings_screen.gd`: display mode, window
+    size, monitor, VSync) over whatever is shown; the game is simply not fed keys
+    meanwhile. Alt+Enter toggles fullscreen. `--windowed`/`--fullscreen` override the
+    mode for one run.
+  - Changing monitor goes through windowed mode (Godot 4.7 on Linux ignores a screen
+    change in exclusive fullscreen). Nothing is applied when the game runs embedded in
+    the editor's Game view.
+  - The project runs in low-processor mode: the screen is redrawn only when it changes.
+  - Tests: `godot/tests/settings_test.gd` (headless) and `ui_video.gd` in a real window,
+    run through `godot/tests/with_display.sh` (Xvfb with a minimal window manager,
+    `mini_wm.py`, which grants fullscreen and can fake a taskbar or several monitors).
 
 ## 7. Gameplay switches
 The port is the baseline for gameplay changes, and each change sits behind a switch:
