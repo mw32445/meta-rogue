@@ -1,7 +1,7 @@
-# Rogue for Godot
+# Meta-Rogue
 
-Rogue 5.4.4 (Michael Toy, Ken Arnold and Glenn Wichman, 1980–1999), ported to Godot 4.7
-in GDScript. The port is **1:1**: given the same seed and keystrokes, it shows exactly
+Meta-Rogue is Rogue 5.4.4 (Michael Toy, Ken Arnold and Glenn Wichman, 1980–1999), ported
+to Godot 4.7 in GDScript. The port is **1:1**: given the same seed and keystrokes, it shows exactly
 the same screens and makes exactly the same random choices as the original C program.
 This is verified step by step against the original (see `../docs/ARCHITECTURE.md`).
 
@@ -11,8 +11,10 @@ the same fixes, and the Fighters' Guild (`../docs/GUILD.md`). `--classic` plays 
 untouched original.
 
 ## Playing
-- **Run it:** open `godot/project.godot` in Godot 4.7 or later and press **F5** (or
-  *Project → Run*). You can also export it like any Godot project.
+- **Run it:** download it for Windows, macOS or Linux from the
+  [releases](https://github.com/mw32445/rogue/releases/latest)
+  ([install instructions](../INSTALL.md)), or open `godot/project.godot` in Godot 4.7 or
+  later and press **F5** (or *Project → Run*).
 - **Keys:** the original commands, as on a terminal.
   - `h j k l y u b n` move; Shift+direction runs.
   - `?` lists all commands and `/` identifies a symbol.
@@ -30,8 +32,12 @@ untouched original.
   `--rogueopts=...` on the command line (after `--`). For example:
   `ROGUEOPTS="terse,jump,inven=slow,fruit=kiwi"`.
 - **Save:** `S` saves and exits.
-  - Saved games and the score file live in Godot's user data folder (the game's "home"),
-    e.g. `~/.local/share/godot/app_userdata/Rogue/` on Linux.
+  - Saved games and the score file live in the game's user data folder (its "home"):
+    `%APPDATA%\Meta-Rogue` on Windows, `~/Library/Application Support/Meta-Rogue` on
+    macOS, `~/.local/share/Meta-Rogue` on Linux (`application/config/use_custom_user_dir`).
+    The first start copies the files of the folder the game used when it was a project
+    named "Rogue" (`.../godot/app_userdata/Rogue`), and leaves that folder as it was
+    (`ui/user_data.gd`).
   - The next start restores a saved game automatically and deletes the save, like
     `rogue -r`.
   - Closing the window during a game saves it, as the original does when its terminal
@@ -59,10 +65,11 @@ untouched original.
   `guild_prices.txt`, a plain text file that explains itself. Edit it with any text
   editor: the Guild reads it each time it opens, and shows any line it can't use. In a
   source download it is `godot/guild_prices.txt`, next to `project.godot`. An exported
-  game reads it from next to its executable and writes it there on its first run (in the
-  user data folder if it can't). To ship your own edited file in an export, add `*.txt`
-  to the export's non-resource filter; without it the game uses its built-in copy (the
-  same text as the file here) and writes that.
+  game on Windows or Linux reads it from next to its executable (the downloads ship it
+  there) and writes it there if it is missing (in the user data folder if it can't); on
+  macOS it lives in the user data folder. The export presets pack this file
+  (`guild_prices.txt` in their non-resource filter) as the default; without it the game
+  uses its built-in copy, the same text.
 - **End of game:** when a game ends, you see the Hall of Fame and how much the Guild's
   coffers now hold. Enter opens the Guild for a new game; Esc quits.
 - **Command line** (after `--`): `--rogueopts=OPTS`, `--master` (enables the wizard-mode
@@ -72,6 +79,29 @@ untouched original.
   for this run), and the original arguments: `-s` (scores), `-d` (a death screen), or
   a save file name.
 
+## Exporting and releasing
+- **The presets** (`export_presets.cfg`): Windows (x86_64), macOS (universal: Intel and
+  Apple Silicon, signed ad hoc by Godot, not notarized) and Linux (x86_64), each
+  `Meta-Rogue` with its data embedded (in the `.app` on macOS), the icon (`icon.png`,
+  drawn by `../tools/make_icon.py`) and `guild_prices.txt`; the tests are left out.
+- **`../tools/export.sh --templates`** installs Godot's official export templates for
+  its version (downloaded once, checksum checked) and makes the downloads in `../dist/`:
+  `Meta-Rogue-VERSION-windows.zip`, `-macos.zip`, `-linux.zip` and `SHA256SUMS.txt`.
+  Each zip holds the game, `README.txt` (`../INSTALL.md`), `LICENSES.txt` (Rogue's, the
+  font's, and Godot's with its third-party notices) and, on Windows and Linux,
+  `guild_prices.txt` next to the executable. Without `--templates` it uses the templates
+  already installed.
+- **`../tools/check_export.py [--run]`** checks them: the files, the executables'
+  formats, the macOS bundle and signature, and each platform's game data (loaded by
+  Godot: name, version, every script compiling, no tests). `--run` also plays the Linux
+  build in a window on a virtual display: first launch, the Guild, the dungeon, save and
+  restore, and the move of an old "Rogue" data folder.
+- **A release:** raise `application/config/version` in `project.godot` and push.
+  `../.github/workflows/release.yml` builds the downloads with the same script and, when
+  the tag `vVERSION` doesn't exist yet, publishes them as the GitHub release `vVERSION`,
+  with `../docs/RELEASE_NOTES.md` as its text (`@VERSION@` becomes the version). Pushes
+  that keep the version only build.
+
 ## For developers
 - `rogue/`: the game, one GDScript module per C file. `rogue_base.gd` holds the
   constants, macros and all game state.
@@ -79,7 +109,8 @@ untouched original.
 - `guild/`: the Fighters' Guild (`RogueBase.guild`, `../docs/GUILD.md`).
 - `ui/`: the terminal view and the scene controller. `main.tscn` is the main scene.
   `video_settings.gd` (detection, `video.cfg`, applying them to the window) and
-  `settings_screen.gd` (*OPTIONS - VIDEO*) are the video settings.
+  `settings_screen.gd` (*OPTIONS - VIDEO*) are the video settings; `user_data.gd` moves
+  the files of the game's earlier name.
 - `tests/`:
   - `replay.gd`: replays key scripts and writes step logs for the differential tests;
   - `check_all.gd`: compiles every script;
@@ -87,6 +118,7 @@ untouched original.
   - `guild_test.gd`: the Guild's tests; `prices_test.gd`: its price file's;
   - `settings_test.gd`: the video settings (made-up screens, the file, the menu's
     keys, F10 and Alt+Enter in the main scene), headless;
+  - `user_data_test.gd`: the user data folder and the move of the old one;
   - `ui_screenshot.gd`: a UI smoke test (`--video-cfg=FILE` applies video settings;
     `\f` in `--keys` is F10, `\a` Alt+Enter);
   - `ui_video.gd`: the video settings in a real window (first launch, the menu,

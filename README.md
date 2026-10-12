@@ -1,3 +1,44 @@
+# Meta-Rogue
+
+**Rogue 5.4.4, the 1980 dungeon crawler that named the roguelike genre, ported 1:1 to
+Godot, with a meta-progression layer on top: the Fighters' Guild spends the gold of your
+Hall of Fame to outfit each new hero.**
+
+### [Download Meta-Rogue for Windows, macOS or Linux](https://github.com/mw32445/rogue/releases/latest)
+
+No installer: unzip it and play. See the [install instructions](INSTALL.md).
+
+- **The original, 1:1.** It has the same dungeons, monsters and rules, verified keystroke
+  by keystroke against the C program in this repository. `--classic` plays it untouched.
+- **The Fighters' Guild** between games ([docs/GUILD.md](docs/GUILD.md)), with its prices
+  and formulas in a text file you can edit.
+- **The known bugs of 5.4.4, fixed** ([docs/FIXES.md](docs/FIXES.md)).
+- **Item menus as in PC Rogue**, and the next level's experience on the status line.
+- **Any screen:** fullscreen at your resolution, with video settings (F10).
+
+## How it is made
+
+`godot/` holds a **1:1 port of Rogue 5.4.4 to Godot 4.7 (GDScript)**. Given the same seed
+and keystrokes it shows exactly the same screens and makes the same random choices as the
+C game in this repository, which is verified step by step against the original built as a
+test oracle (`harness/`). The C sources here are unchanged.
+
+- Play from the source: open `godot/project.godot` in Godot 4.7 and press F5. See
+  [godot/README.md](godot/README.md).
+- Make the downloads: `tools/export.sh --templates` (godot/README.md, *Exporting and
+  releasing*). Pushing a new version makes the GitHub release
+  (`.github/workflows/release.yml`).
+- How it works and how it is verified: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+- Every deliberate difference from the stock C build: [docs/FIDELITY.md](docs/FIDELITY.md).
+- What the playable game adds on top, each behind a switch (the bug fixes, the Fighters'
+  Guild, the item menus, the experience display): [docs/CHANGES.md](docs/CHANGES.md).
+- Working on it: [CLAUDE.md](CLAUDE.md) (commands, rules, tests).
+
+---
+
+*The rest of this file is the README of the original repository: Rogue 5.4.4 in C, kept
+here unchanged as the port's reference.*
+
 # Rogue: Exploring the Dungeons of Doom
 
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE.TXT)
@@ -25,21 +66,6 @@ Thank you for your interest in preserving and improving this classic game! ‚ù§Ô∏
 
 ---
 
-## Godot port (this branch)
-
-This branch adds a **1:1 port of Rogue 5.4.4 to Godot 4.7 (GDScript)** in `godot/`. Given
-the same seed and keystrokes it shows exactly the same screens and makes the same random
-choices as the C game in this repository, which is verified step by step against the
-original built as a test oracle (`harness/`). The C sources here are unchanged.
-
-- Play: open `godot/project.godot` in Godot 4.7 and press F5. See [godot/README.md](godot/README.md).
-- How it works and how it is verified: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-- Every deliberate difference from the stock C build: [docs/FIDELITY.md](docs/FIDELITY.md).
-- What the playable game adds on top, each behind a switch (the bug fixes, the Fighters'
-  Guild): [docs/CHANGES.md](docs/CHANGES.md).
-- Working on it: [CLAUDE.md](CLAUDE.md) (commands, rules, tests).
-
----
 
 ## Table of Contents
 

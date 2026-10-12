@@ -207,17 +207,20 @@ it opens (so an edit counts from the next new game), and so does the end-of-game
 coffers line.
 
 **Where.** The game reads the first of:
-1. `guild_prices.txt` next to the game's executable: an exported game on a desktop
-   (on macOS, next to the `.app`);
-2. `guild_prices.txt` in the user data folder (`user://`, e.g.
-   `~/.local/share/godot/app_userdata/Rogue/` on Linux);
+1. `guild_prices.txt` next to the game's executable: an exported game on Windows or
+   Linux (the downloads ship it there);
+2. `guild_prices.txt` in the user data folder (`user://`: `%APPDATA%\Meta-Rogue`,
+   `~/Library/Application Support/Meta-Rogue`, `~/.local/share/Meta-Rogue`);
 3. `godot/guild_prices.txt` in the project, next to `project.godot`: what a source
    download shows first, and what the editor reads.
 
 An exported game that finds neither 1 nor 2 writes the default file to 1 (to 2 if the
-executable's folder is not writable), for the player to edit. It writes the shipped
-file if the export holds it (`*.txt` in the export's non-resource filter), else the
-built-in copy, `GuildCatalog.PRICES`, which is the same text. The `?` page shows the
+executable's folder is not writable), for the player to edit. On macOS it skips 1 and
+writes 2: next to the `.app` would litter /Applications, and an app opened from
+Downloads runs from a read-only copy in a random place (App Translocation). It writes
+the shipped file if the export holds it (the presets put `guild_prices.txt` in their
+non-resource filter), else the built-in copy, `GuildCatalog.PRICES`, which is the same
+text. The `?` page shows the
 file's full path.
 
 **Syntax.**

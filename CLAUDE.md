@@ -1,8 +1,9 @@
-# Rogue 5.4.4 → Godot 4.7 (GDScript), a verified 1:1 port
+# Meta-Rogue: Rogue 5.4.4 → Godot 4.7 (GDScript), a verified 1:1 port
 
 - **Repository root:** the original C game (Rogue 5.4.4). It is not modified; it is
   built as the test oracle.
-- **`godot/`:** the port and the playable game.
+- **`godot/`:** the port and the playable game, Meta-Rogue (`INSTALL.md`: its downloads and install
+  instructions).
 - **`harness/`:** differential testing against the C.
 - **`tools/`:** checks.
 
@@ -30,6 +31,8 @@ then `godot` on PATH, then `/root/bin/godot`.
 | Look at a divergence | `python3 harness/show.py KEYFILE --step N --port [--digest]` |
 | Which C lines the tests reach | `python3 harness/coverage.py --reset DIR...` |
 | Play | Open `godot/project.godot` in Godot 4.7 and press F5 (`--classic` after `--` on the command line plays the untouched original). Headless replay: `godot --headless --path godot --script res://tests/replay.gd -- --keys K --dump D [--fixes] [--guild --loadout F.json]` |
+| Make the downloads (Windows, macOS, Linux zips in `dist/`) and check them | `tools/export.sh [--templates]`, then `python3 tools/check_export.py [--run]` |
+| Release | Raise `application/config/version` in `godot/project.godot` and push: `.github/workflows/release.yml` builds and publishes the release `vVERSION` |
 
 A divergence report gives the first differing keystroke, both screens, and the digest
 fields that differ (`harness/DUMP_FORMAT.md`). Add a script that reproduced a fixed bug

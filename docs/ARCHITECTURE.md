@@ -100,6 +100,11 @@ has C's layout and encryption.
   into Rogue commands.
 - **`main.gd`** sets up the real environment: user name, time and pid (the seed),
   `ROGUEOPTS`, and the user data folder as home.
+  - The game is Meta-Rogue, with a data folder of its own (`project.godot`'s custom user
+    dir: `%APPDATA%\Meta-Rogue`, `~/Library/Application Support/Meta-Rogue`,
+    `~/.local/share/Meta-Rogue`). At startup `user_data.gd` copies the player's files
+    from the folder of its earlier name (`.../godot/app_userdata/Rogue`) into a folder
+    that has none yet.
   - A saved game is restored at startup, like `rogue -r`.
   - Closing the window auto-saves, as SIGHUP does in C.
   - When a game ends, Enter starts a new one.
@@ -114,7 +119,12 @@ has C's layout and encryption.
   - Changing monitor goes through windowed mode (Godot 4.7 on Linux ignores a screen
     change in exclusive fullscreen). Nothing is applied when the game runs embedded in
     the editor's Game view.
-  - The project runs in low-processor mode: the screen is redrawn only when it changes.
+  - The project runs in low-processor mode: the screen is redrawn only when it changes,
+    with the Compatibility renderer (OpenGL 3.3), which old and integrated graphics run.
+- **Downloads:** `godot/export_presets.cfg` (Windows, universal macOS, Linux) and
+  `tools/export.sh`, checked by `tools/check_export.py`; `.github/workflows/release.yml`
+  publishes them as a GitHub release when the version changes (`godot/README.md`,
+  "Exporting and releasing"; `INSTALL.md` for players).
   - Tests: `godot/tests/settings_test.gd` (headless) and `ui_video.gd` in a real window,
     run through `godot/tests/with_display.sh` (Xvfb with a minimal window manager,
     `mini_wm.py`, which grants fullscreen and can fake a taskbar or several monitors).
