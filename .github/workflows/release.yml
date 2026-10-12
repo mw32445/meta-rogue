@@ -33,18 +33,20 @@ jobs:
     timeout-minutes: 45
     env:
       GODOT_VERSION: 4.7.2-stable
-      GODOT: ${{ github.workspace }}/../godot-bin/godot
     steps:
       - uses: actions/checkout@v4
+
+      - name: Where Godot goes
+        run: echo "GODOT=$HOME/godot-bin/godot" >> "$GITHUB_ENV"
 
       - name: Godot and its export templates (cached)
         id: cache
         uses: actions/cache@v4
         with:
           path: |
-            ${{ github.workspace }}/../godot-bin
+            ~/godot-bin
             ~/.local/share/godot/export_templates
-          key: godot-${{ env.GODOT_VERSION }}-1
+          key: godot-${{ env.GODOT_VERSION }}-2
 
       - name: Download Godot
         if: steps.cache.outputs.cache-hit != 'true'
