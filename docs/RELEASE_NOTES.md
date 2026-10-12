@@ -22,4 +22,4 @@ Meta-Rogue is **Rogue 5.4.4**, the 1980 dungeon crawler that named the roguelike
 
 Your saves, Hall of Fame and settings are kept in `%APPDATA%\Meta-Rogue`, `~/Library/Application Support/Meta-Rogue` or `~/.local/share/Meta-Rogue`.
 
-The full instructions are in `README.txt` in each zip, and in [INSTALL.md](https://github.com/mw32445/rogue/blob/v@VERSION@/INSTALL.md).
+The full instructions are in `README.txt` in each zip, and in [INSTALL.md](https://github.com/mw32445/meta-rogue/blob/v@VERSION@/INSTALL.md).

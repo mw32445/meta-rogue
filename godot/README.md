@@ -12,7 +12,7 @@ untouched original.
 
 ## Playing
 - **Run it:** download it for Windows, macOS or Linux from the
-  [releases](https://github.com/mw32445/rogue/releases/latest)
+  [releases](https://github.com/mw32445/meta-rogue/releases/latest)
   ([install instructions](../INSTALL.md)), or open `godot/project.godot` in Godot 4.7 or
   later and press **F5** (or *Project → Run*).
 - **Keys:** the original commands, as on a terminal.

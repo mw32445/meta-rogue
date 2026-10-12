@@ -4,7 +4,7 @@
 Godot, with a meta-progression layer on top: the Fighters' Guild spends the gold of your
 Hall of Fame to outfit each new hero.**
 
-### [Download Meta-Rogue for Windows, macOS or Linux](https://github.com/mw32445/rogue/releases/latest)
+### [Download Meta-Rogue for Windows, macOS or Linux](https://github.com/mw32445/meta-rogue/releases/latest)
 
 No installer: unzip it and play. See the [install instructions](INSTALL.md).
 

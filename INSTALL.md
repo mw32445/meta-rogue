@@ -12,7 +12,7 @@ It needs no installer and no other software: unzip it and run it.
 
 Get the zip for your computer from the Releases page:
 
-    https://github.com/mw32445/rogue/releases/latest
+    https://github.com/mw32445/meta-rogue/releases/latest
 
     Windows 10 or 11, 64-bit              Meta-Rogue-VERSION-windows.zip
     macOS 11 or later on Intel,           Meta-Rogue-VERSION-macos.zip
@@ -149,8 +149,8 @@ Delete it to get the original prices back: the game writes a fresh copy.
 
 ## 8. From the source
 
-Meta-Rogue is open source: https://github.com/mw32445/rogue (the releases have
-the source code as zips too). To play from the source, open godot/project.godot
-in Godot 4.7 and press F5. To make these downloads yourself, run
-tools/export.sh --templates (godot/README.md, "Exporting and releasing").
+Meta-Rogue is open source: https://github.com/mw32445/meta-rogue (the releases
+have the source code as zips too). To play from the source, open
+godot/project.godot in Godot 4.7 and press F5. To make these downloads yourself,
+run tools/export.sh --templates (godot/README.md, "Exporting and releasing").
 LICENSES.txt, next to the game, has the licences of Rogue, its font and Godot.
