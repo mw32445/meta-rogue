@@ -1,0 +1,92 @@
+# Meta-Rogue's downloads. On every push that touches the game or its packaging, build
+# the Windows, macOS and Linux zips with tools/export.sh and check them with
+# tools/check_export.py. When the version in godot/project.godot
+# (application/config/version) has no release yet, publish them as the GitHub release
+# v<version>, with docs/RELEASE_NOTES.md as its text. Pushes that keep the version only
+# build (the zips are then the run's artifacts).
+name: Release
+
+on:
+  push:
+    paths:
+      - "godot/**"
+      - "tools/export.sh"
+      - "tools/check_export.py"
+      - "tools/check_pck.gd"
+      - "tools/godot_licenses.gd"
+      - "INSTALL.md"
+      - "LICENSE.TXT"
+      - "docs/RELEASE_NOTES.md"
+      - ".github/workflows/release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GODOT_VERSION: 4.7.2-stable
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Where Godot goes
+        run: echo "GODOT=$HOME/godot-bin/godot" >> "$GITHUB_ENV"
+
+      - name: Godot and its export templates (cached)
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot-bin
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-2
+
+      - name: Download Godot
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          bin="$(dirname "$GODOT")"
+          mkdir -p "$bin" && cd "$bin"
+          f="Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          url="https://github.com/godotengine/godot/releases/download/$GODOT_VERSION"
+          curl -fsSL --retry 3 -O "$url/$f" -O "$url/SHA512-SUMS.txt"
+          grep " $f\$" SHA512-SUMS.txt | sha512sum -c
+          unzip -q "$f"
+          mv "Godot_v${GODOT_VERSION}_linux.x86_64" godot
+          rm "$f" SHA512-SUMS.txt
+          ./godot --headless --version
+
+      - name: Export
+        run: tools/export.sh --templates
+
+      - name: Check
+        run: python3 tools/check_export.py
+
+      - name: The zips, as the run's artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Meta-Rogue
+          path: dist/
+          retention-days: 14
+
+      - name: Publish the release (when the version is new)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(sed -n 's/^config\/version="\(.*\)"$/\1/p' godot/project.godot)"
+          tag="v$version"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "Release $tag exists: nothing to publish (raise application/config/version for a new one)."
+            exit 0
+          fi
+          sed "s/@VERSION@/$version/g" docs/RELEASE_NOTES.md > "$RUNNER_TEMP/notes.md"
+          gh release create "$tag" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Meta-Rogue $version" --notes-file "$RUNNER_TEMP/notes.md" \
+            dist/Meta-Rogue-"$version"-*.zip dist/SHA256SUMS.txt
+          echo "Published $tag: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$tag"

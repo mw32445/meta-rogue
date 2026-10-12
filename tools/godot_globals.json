@@ -1,0 +1,5758 @@
+{
+"classes": {
+"AABB": {
+"inherits": null,
+"members": []
+},
+"AESContext": {
+"inherits": "RefCounted",
+"members": []
+},
+"AStar2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"AStar3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"AStarGrid2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"AcceptDialog": {
+"inherits": "Window",
+"members": []
+},
+"AccessibilityServer": {
+"inherits": "Object",
+"members": []
+},
+"AimModifier3D": {
+"inherits": "BoneConstraint3D",
+"members": []
+},
+"AnimatableBody2D": {
+"inherits": "StaticBody2D",
+"members": []
+},
+"AnimatableBody3D": {
+"inherits": "StaticBody3D",
+"members": []
+},
+"AnimatedSprite2D": {
+"inherits": "Node2D",
+"members": []
+},
+"AnimatedSprite3D": {
+"inherits": "SpriteBase3D",
+"members": []
+},
+"AnimatedTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"Animation": {
+"inherits": "Resource",
+"members": []
+},
+"AnimationLibrary": {
+"inherits": "Resource",
+"members": []
+},
+"AnimationMixer": {
+"inherits": "Node",
+"members": []
+},
+"AnimationNode": {
+"inherits": "Resource",
+"members": []
+},
+"AnimationNodeAdd2": {
+"inherits": "AnimationNodeSync",
+"members": []
+},
+"AnimationNodeAdd3": {
+"inherits": "AnimationNodeSync",
+"members": []
+},
+"AnimationNodeAnimation": {
+"inherits": "AnimationRootNode",
+"members": []
+},
+"AnimationNodeBlend2": {
+"inherits": "AnimationNodeSync",
+"members": []
+},
+"AnimationNodeBlend3": {
+"inherits": "AnimationNodeSync",
+"members": []
+},
+"AnimationNodeBlendSpace1D": {
+"inherits": "AnimationRootNode",
+"members": []
+},
+"AnimationNodeBlendSpace2D": {
+"inherits": "AnimationRootNode",
+"members": []
+},
+"AnimationNodeBlendTree": {
+"inherits": "AnimationRootNode",
+"members": []
+},
+"AnimationNodeExtension": {
+"inherits": "AnimationNode",
+"members": []
+},
+"AnimationNodeOneShot": {
+"inherits": "AnimationNodeSync",
+"members": []
+},
+"AnimationNodeOutput": {
+"inherits": "AnimationNode",
+"members": []
+},
+"AnimationNodeStateMachine": {
+"inherits": "AnimationRootNode",
+"members": []
+},
+"AnimationNodeStateMachinePlayback": {
+"inherits": "Resource",
+"members": []
+},
+"AnimationNodeStateMachineTransition": {
+"inherits": "Resource",
+"members": []
+},
+"AnimationNodeSub2": {
+"inherits": "AnimationNodeSync",
+"members": []
+},
+"AnimationNodeSync": {
+"inherits": "AnimationNode",
+"members": []
+},
+"AnimationNodeTimeScale": {
+"inherits": "AnimationNode",
+"members": []
+},
+"AnimationNodeTimeSeek": {
+"inherits": "AnimationNode",
+"members": []
+},
+"AnimationNodeTransition": {
+"inherits": "AnimationNodeSync",
+"members": []
+},
+"AnimationPlayer": {
+"inherits": "AnimationMixer",
+"members": []
+},
+"AnimationRootNode": {
+"inherits": "AnimationNode",
+"members": []
+},
+"AnimationTree": {
+"inherits": "AnimationMixer",
+"members": []
+},
+"Area2D": {
+"inherits": "CollisionObject2D",
+"members": []
+},
+"Area3D": {
+"inherits": "CollisionObject3D",
+"members": []
+},
+"AreaLight3D": {
+"inherits": "Light3D",
+"members": []
+},
+"Array": {
+"inherits": null,
+"members": []
+},
+"ArrayMesh": {
+"inherits": "Mesh",
+"members": []
+},
+"ArrayOccluder3D": {
+"inherits": "Occluder3D",
+"members": []
+},
+"AspectRatioContainer": {
+"inherits": "Container",
+"members": []
+},
+"AtlasTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"AudioBusLayout": {
+"inherits": "Resource",
+"members": []
+},
+"AudioEffect": {
+"inherits": "Resource",
+"members": []
+},
+"AudioEffectAmplify": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectBandLimitFilter": {
+"inherits": "AudioEffectFilter",
+"members": []
+},
+"AudioEffectBandPassFilter": {
+"inherits": "AudioEffectFilter",
+"members": []
+},
+"AudioEffectCapture": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectChorus": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectCompressor": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectDelay": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectDistortion": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectEQ": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectEQ10": {
+"inherits": "AudioEffectEQ",
+"members": []
+},
+"AudioEffectEQ21": {
+"inherits": "AudioEffectEQ",
+"members": []
+},
+"AudioEffectEQ6": {
+"inherits": "AudioEffectEQ",
+"members": []
+},
+"AudioEffectFilter": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectHardLimiter": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectHighPassFilter": {
+"inherits": "AudioEffectFilter",
+"members": []
+},
+"AudioEffectHighShelfFilter": {
+"inherits": "AudioEffectFilter",
+"members": []
+},
+"AudioEffectInstance": {
+"inherits": "RefCounted",
+"members": []
+},
+"AudioEffectLimiter": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectLowPassFilter": {
+"inherits": "AudioEffectFilter",
+"members": []
+},
+"AudioEffectLowShelfFilter": {
+"inherits": "AudioEffectFilter",
+"members": []
+},
+"AudioEffectNotchFilter": {
+"inherits": "AudioEffectFilter",
+"members": []
+},
+"AudioEffectPanner": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectPhaser": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectPitchShift": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectRecord": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectReverb": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectSpectrumAnalyzer": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioEffectSpectrumAnalyzerInstance": {
+"inherits": "AudioEffectInstance",
+"members": []
+},
+"AudioEffectStereoEnhance": {
+"inherits": "AudioEffect",
+"members": []
+},
+"AudioListener2D": {
+"inherits": "Node2D",
+"members": []
+},
+"AudioListener3D": {
+"inherits": "Node3D",
+"members": []
+},
+"AudioSample": {
+"inherits": "RefCounted",
+"members": []
+},
+"AudioSamplePlayback": {
+"inherits": "RefCounted",
+"members": []
+},
+"AudioServer": {
+"inherits": "Object",
+"members": []
+},
+"AudioStream": {
+"inherits": "Resource",
+"members": []
+},
+"AudioStreamGenerator": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamGeneratorPlayback": {
+"inherits": "AudioStreamPlaybackResampled",
+"members": []
+},
+"AudioStreamInteractive": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamMP3": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamMicrophone": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamOggVorbis": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamPlayback": {
+"inherits": "RefCounted",
+"members": []
+},
+"AudioStreamPlaybackInteractive": {
+"inherits": "AudioStreamPlayback",
+"members": []
+},
+"AudioStreamPlaybackOggVorbis": {
+"inherits": "AudioStreamPlaybackResampled",
+"members": []
+},
+"AudioStreamPlaybackPlaylist": {
+"inherits": "AudioStreamPlayback",
+"members": []
+},
+"AudioStreamPlaybackPolyphonic": {
+"inherits": "AudioStreamPlayback",
+"members": []
+},
+"AudioStreamPlaybackResampled": {
+"inherits": "AudioStreamPlayback",
+"members": []
+},
+"AudioStreamPlaybackSynchronized": {
+"inherits": "AudioStreamPlayback",
+"members": []
+},
+"AudioStreamPlayer": {
+"inherits": "Node",
+"members": []
+},
+"AudioStreamPlayer2D": {
+"inherits": "Node2D",
+"members": []
+},
+"AudioStreamPlayer3D": {
+"inherits": "Node3D",
+"members": []
+},
+"AudioStreamPlaylist": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamPolyphonic": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamRandomizer": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamSynchronized": {
+"inherits": "AudioStream",
+"members": []
+},
+"AudioStreamWAV": {
+"inherits": "AudioStream",
+"members": []
+},
+"AwaitTweener": {
+"inherits": "Tweener",
+"members": []
+},
+"BackBufferCopy": {
+"inherits": "Node2D",
+"members": []
+},
+"BaseButton": {
+"inherits": "Control",
+"members": []
+},
+"BaseMaterial3D": {
+"inherits": "Material",
+"members": []
+},
+"Basis": {
+"inherits": null,
+"members": []
+},
+"BitMap": {
+"inherits": "Resource",
+"members": []
+},
+"BlitMaterial": {
+"inherits": "Material",
+"members": []
+},
+"Bone2D": {
+"inherits": "Node2D",
+"members": []
+},
+"BoneAttachment3D": {
+"inherits": "Node3D",
+"members": []
+},
+"BoneConstraint3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"BoneMap": {
+"inherits": "Resource",
+"members": []
+},
+"BoneTwistDisperser3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"BoxContainer": {
+"inherits": "Container",
+"members": []
+},
+"BoxMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"BoxOccluder3D": {
+"inherits": "Occluder3D",
+"members": []
+},
+"BoxShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"Button": {
+"inherits": "BaseButton",
+"members": []
+},
+"ButtonGroup": {
+"inherits": "Resource",
+"members": []
+},
+"CCDIK3D": {
+"inherits": "IterateIK3D",
+"members": []
+},
+"CPUParticles2D": {
+"inherits": "Node2D",
+"members": []
+},
+"CPUParticles3D": {
+"inherits": "GeometryInstance3D",
+"members": []
+},
+"CSGBox3D": {
+"inherits": "CSGPrimitive3D",
+"members": []
+},
+"CSGCombiner3D": {
+"inherits": "CSGShape3D",
+"members": []
+},
+"CSGCylinder3D": {
+"inherits": "CSGPrimitive3D",
+"members": []
+},
+"CSGMesh3D": {
+"inherits": "CSGPrimitive3D",
+"members": []
+},
+"CSGPolygon3D": {
+"inherits": "CSGPrimitive3D",
+"members": []
+},
+"CSGPrimitive3D": {
+"inherits": "CSGShape3D",
+"members": []
+},
+"CSGShape3D": {
+"inherits": "GeometryInstance3D",
+"members": []
+},
+"CSGSphere3D": {
+"inherits": "CSGPrimitive3D",
+"members": []
+},
+"CSGTorus3D": {
+"inherits": "CSGPrimitive3D",
+"members": []
+},
+"Callable": {
+"inherits": null,
+"members": []
+},
+"CallbackTweener": {
+"inherits": "Tweener",
+"members": []
+},
+"Camera2D": {
+"inherits": "Node2D",
+"members": []
+},
+"Camera3D": {
+"inherits": "Node3D",
+"members": []
+},
+"CameraAttributes": {
+"inherits": "Resource",
+"members": []
+},
+"CameraAttributesPhysical": {
+"inherits": "CameraAttributes",
+"members": []
+},
+"CameraAttributesPractical": {
+"inherits": "CameraAttributes",
+"members": []
+},
+"CameraFeed": {
+"inherits": "RefCounted",
+"members": []
+},
+"CameraServer": {
+"inherits": "Object",
+"members": []
+},
+"CameraTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"CanvasGroup": {
+"inherits": "Node2D",
+"members": []
+},
+"CanvasItem": {
+"inherits": "Node",
+"members": [
+"CLIP_CHILDREN_AND_DRAW",
+"CLIP_CHILDREN_DISABLED",
+"CLIP_CHILDREN_MAX",
+"CLIP_CHILDREN_ONLY",
+"NOTIFICATION_DRAW",
+"NOTIFICATION_ENTER_CANVAS",
+"NOTIFICATION_EXIT_CANVAS",
+"NOTIFICATION_LOCAL_TRANSFORM_CHANGED",
+"NOTIFICATION_TRANSFORM_CHANGED",
+"NOTIFICATION_VISIBILITY_CHANGED",
+"NOTIFICATION_WORLD_2D_CHANGED",
+"OVERSAMPLING_WITH_SCALE_DISABLED",
+"OVERSAMPLING_WITH_SCALE_ENABLED",
+"OVERSAMPLING_WITH_SCALE_MAX",
+"OVERSAMPLING_WITH_SCALE_PARENT_NODE",
+"TEXTURE_FILTER_LINEAR",
+"TEXTURE_FILTER_LINEAR_WITH_MIPMAPS",
+"TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC",
+"TEXTURE_FILTER_MAX",
+"TEXTURE_FILTER_NEAREST",
+"TEXTURE_FILTER_NEAREST_WITH_MIPMAPS",
+"TEXTURE_FILTER_NEAREST_WITH_MIPMAPS_ANISOTROPIC",
+"TEXTURE_FILTER_PARENT_NODE",
+"TEXTURE_REPEAT_DISABLED",
+"TEXTURE_REPEAT_ENABLED",
+"TEXTURE_REPEAT_MAX",
+"TEXTURE_REPEAT_MIRROR",
+"TEXTURE_REPEAT_PARENT_NODE",
+"_draw",
+"clip_children",
+"draw",
+"draw_animation_slice",
+"draw_arc",
+"draw_char",
+"draw_char_outline",
+"draw_circle",
+"draw_colored_polygon",
+"draw_dashed_line",
+"draw_ellipse",
+"draw_ellipse_arc",
+"draw_end_animation",
+"draw_lcd_texture_rect_region",
+"draw_line",
+"draw_mesh",
+"draw_msdf_texture_rect_region",
+"draw_multiline",
+"draw_multiline_colors",
+"draw_multiline_string",
+"draw_multiline_string_outline",
+"draw_multimesh",
+"draw_polygon",
+"draw_polyline",
+"draw_polyline_colors",
+"draw_primitive",
+"draw_rect",
+"draw_set_transform",
+"draw_set_transform_matrix",
+"draw_string",
+"draw_string_outline",
+"draw_style_box",
+"draw_texture",
+"draw_texture_rect",
+"draw_texture_rect_region",
+"force_update_transform",
+"get_canvas",
+"get_canvas_item",
+"get_canvas_layer_node",
+"get_canvas_transform",
+"get_global_mouse_position",
+"get_global_transform",
+"get_global_transform_with_canvas",
+"get_instance_shader_parameter",
+"get_local_mouse_position",
+"get_screen_transform",
+"get_transform",
+"get_viewport_rect",
+"get_viewport_transform",
+"get_visibility_layer_bit",
+"get_world_2d",
+"hidden",
+"hide",
+"is_local_transform_notification_enabled",
+"is_transform_notification_enabled",
+"is_visible_in_tree",
+"item_rect_changed",
+"light_mask",
+"make_canvas_position_local",
+"make_input_local",
+"material",
+"modulate",
+"move_to_front",
+"oversampling_with_scale",
+"queue_redraw",
+"self_modulate",
+"set_instance_shader_parameter",
+"set_notify_local_transform",
+"set_notify_transform",
+"set_visibility_layer_bit",
+"show",
+"show_behind_parent",
+"texture_filter",
+"texture_repeat",
+"top_level",
+"use_parent_material",
+"visibility_changed",
+"visibility_layer",
+"visible",
+"y_sort_enabled",
+"z_as_relative",
+"z_index"
+]
+},
+"CanvasItemMaterial": {
+"inherits": "Material",
+"members": []
+},
+"CanvasLayer": {
+"inherits": "Node",
+"members": []
+},
+"CanvasModulate": {
+"inherits": "Node2D",
+"members": []
+},
+"CanvasTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"CapsuleMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"CapsuleShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"CapsuleShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"CenterContainer": {
+"inherits": "Container",
+"members": []
+},
+"ChainIK3D": {
+"inherits": "IKModifier3D",
+"members": []
+},
+"CharFXTransform": {
+"inherits": "RefCounted",
+"members": []
+},
+"CharacterBody2D": {
+"inherits": "PhysicsBody2D",
+"members": []
+},
+"CharacterBody3D": {
+"inherits": "PhysicsBody3D",
+"members": []
+},
+"CheckBox": {
+"inherits": "Button",
+"members": []
+},
+"CheckButton": {
+"inherits": "Button",
+"members": []
+},
+"CircleShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"ClassDB": {
+"inherits": "Object",
+"members": []
+},
+"CodeEdit": {
+"inherits": "TextEdit",
+"members": []
+},
+"CodeHighlighter": {
+"inherits": "SyntaxHighlighter",
+"members": []
+},
+"CollisionObject2D": {
+"inherits": "Node2D",
+"members": []
+},
+"CollisionObject3D": {
+"inherits": "Node3D",
+"members": []
+},
+"CollisionPolygon2D": {
+"inherits": "Node2D",
+"members": []
+},
+"CollisionPolygon3D": {
+"inherits": "Node3D",
+"members": []
+},
+"CollisionShape2D": {
+"inherits": "Node2D",
+"members": []
+},
+"CollisionShape3D": {
+"inherits": "Node3D",
+"members": []
+},
+"Color": {
+"inherits": null,
+"members": []
+},
+"ColorPalette": {
+"inherits": "Resource",
+"members": []
+},
+"ColorPicker": {
+"inherits": "VBoxContainer",
+"members": []
+},
+"ColorPickerButton": {
+"inherits": "Button",
+"members": []
+},
+"ColorRect": {
+"inherits": "Control",
+"members": []
+},
+"Compositor": {
+"inherits": "Resource",
+"members": []
+},
+"CompositorEffect": {
+"inherits": "Resource",
+"members": []
+},
+"CompressedCubemap": {
+"inherits": "CompressedTextureLayered",
+"members": []
+},
+"CompressedCubemapArray": {
+"inherits": "CompressedTextureLayered",
+"members": []
+},
+"CompressedTexture2D": {
+"inherits": "Texture2D",
+"members": []
+},
+"CompressedTexture2DArray": {
+"inherits": "CompressedTextureLayered",
+"members": []
+},
+"CompressedTexture3D": {
+"inherits": "Texture3D",
+"members": []
+},
+"CompressedTextureLayered": {
+"inherits": "TextureLayered",
+"members": []
+},
+"ConcavePolygonShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"ConcavePolygonShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"ConeTwistJoint3D": {
+"inherits": "Joint3D",
+"members": []
+},
+"ConfigFile": {
+"inherits": "RefCounted",
+"members": []
+},
+"ConfirmationDialog": {
+"inherits": "AcceptDialog",
+"members": []
+},
+"Container": {
+"inherits": "Control",
+"members": []
+},
+"Control": {
+"inherits": "CanvasItem",
+"members": [
+"ANCHOR_BEGIN",
+"ANCHOR_END",
+"CURSOR_ARROW",
+"CURSOR_BDIAGSIZE",
+"CURSOR_BUSY",
+"CURSOR_CAN_DROP",
+"CURSOR_CROSS",
+"CURSOR_DRAG",
+"CURSOR_FDIAGSIZE",
+"CURSOR_FORBIDDEN",
+"CURSOR_HELP",
+"CURSOR_HSIZE",
+"CURSOR_HSPLIT",
+"CURSOR_IBEAM",
+"CURSOR_MOVE",
+"CURSOR_POINTING_HAND",
+"CURSOR_VSIZE",
+"CURSOR_VSPLIT",
+"CURSOR_WAIT",
+"FOCUS_ACCESSIBILITY",
+"FOCUS_ALL",
+"FOCUS_BEHAVIOR_DISABLED",
+"FOCUS_BEHAVIOR_ENABLED",
+"FOCUS_BEHAVIOR_INHERITED",
+"FOCUS_CLICK",
+"FOCUS_NONE",
+"GROW_DIRECTION_BEGIN",
+"GROW_DIRECTION_BOTH",
+"GROW_DIRECTION_END",
+"LAYOUT_DIRECTION_APPLICATION_LOCALE",
+"LAYOUT_DIRECTION_INHERITED",
+"LAYOUT_DIRECTION_LOCALE",
+"LAYOUT_DIRECTION_LTR",
+"LAYOUT_DIRECTION_MAX",
+"LAYOUT_DIRECTION_RTL",
+"LAYOUT_DIRECTION_SYSTEM_LOCALE",
+"MOUSE_BEHAVIOR_DISABLED",
+"MOUSE_BEHAVIOR_ENABLED",
+"MOUSE_BEHAVIOR_INHERITED",
+"MOUSE_FILTER_IGNORE",
+"MOUSE_FILTER_PASS",
+"MOUSE_FILTER_STOP",
+"NOTIFICATION_FOCUS_ENTER",
+"NOTIFICATION_FOCUS_EXIT",
+"NOTIFICATION_LAYOUT_DIRECTION_CHANGED",
+"NOTIFICATION_MOUSE_ENTER",
+"NOTIFICATION_MOUSE_ENTER_SELF",
+"NOTIFICATION_MOUSE_EXIT",
+"NOTIFICATION_MOUSE_EXIT_SELF",
+"NOTIFICATION_RESIZED",
+"NOTIFICATION_SCROLL_BEGIN",
+"NOTIFICATION_SCROLL_END",
+"NOTIFICATION_THEME_CHANGED",
+"PRESET_BOTTOM_LEFT",
+"PRESET_BOTTOM_RIGHT",
+"PRESET_BOTTOM_WIDE",
+"PRESET_CENTER",
+"PRESET_CENTER_BOTTOM",
+"PRESET_CENTER_LEFT",
+"PRESET_CENTER_RIGHT",
+"PRESET_CENTER_TOP",
+"PRESET_FULL_RECT",
+"PRESET_HCENTER_WIDE",
+"PRESET_LEFT_WIDE",
+"PRESET_MODE_KEEP_HEIGHT",
+"PRESET_MODE_KEEP_SIZE",
+"PRESET_MODE_KEEP_WIDTH",
+"PRESET_MODE_MINSIZE",
+"PRESET_RIGHT_WIDE",
+"PRESET_TOP_LEFT",
+"PRESET_TOP_RIGHT",
+"PRESET_TOP_WIDE",
+"PRESET_VCENTER_WIDE",
+"SIZE_EXPAND",
+"SIZE_EXPAND_FILL",
+"SIZE_FILL",
+"SIZE_SHRINK_BEGIN",
+"SIZE_SHRINK_CENTER",
+"SIZE_SHRINK_END",
+"TEXT_DIRECTION_AUTO",
+"TEXT_DIRECTION_INHERITED",
+"TEXT_DIRECTION_LTR",
+"TEXT_DIRECTION_RTL",
+"_accessibility_get_contextual_info",
+"_can_drop_data",
+"_drop_data",
+"_get_accessibility_container_name",
+"_get_cursor_shape",
+"_get_drag_data",
+"_get_maximum_size",
+"_get_minimum_size",
+"_get_tooltip",
+"_get_tooltip_auto_translate_mode_at",
+"_gui_input",
+"_has_point",
+"_make_custom_tooltip",
+"_structured_text_parser",
+"accept_event",
+"accessibility_controls_nodes",
+"accessibility_described_by_nodes",
+"accessibility_description",
+"accessibility_drag",
+"accessibility_drop",
+"accessibility_flow_to_nodes",
+"accessibility_labeled_by_nodes",
+"accessibility_live",
+"accessibility_name",
+"add_theme_color_override",
+"add_theme_constant_override",
+"add_theme_font_override",
+"add_theme_font_size_override",
+"add_theme_icon_override",
+"add_theme_stylebox_override",
+"anchor_bottom",
+"anchor_left",
+"anchor_right",
+"anchor_top",
+"auto_translate",
+"begin_bulk_theme_override",
+"clip_contents",
+"custom_maximum_size",
+"custom_minimum_size",
+"end_bulk_theme_override",
+"find_next_valid_focus",
+"find_prev_valid_focus",
+"find_valid_focus_neighbor",
+"focus_behavior_recursive",
+"focus_entered",
+"focus_exited",
+"focus_mode",
+"focus_neighbor_bottom",
+"focus_neighbor_left",
+"focus_neighbor_right",
+"focus_neighbor_top",
+"focus_next",
+"focus_previous",
+"force_drag",
+"get_anchor",
+"get_begin",
+"get_bound_minimum_size",
+"get_combined_maximum_size",
+"get_combined_minimum_size",
+"get_combined_pivot_offset",
+"get_cursor_shape",
+"get_end",
+"get_focus_mode_with_override",
+"get_focus_neighbor",
+"get_global_rect",
+"get_maximum_size",
+"get_minimum_size",
+"get_mouse_filter_with_override",
+"get_offset",
+"get_parent_area_size",
+"get_parent_control",
+"get_rect",
+"get_screen_position",
+"get_theme_color",
+"get_theme_constant",
+"get_theme_default_base_scale",
+"get_theme_default_font",
+"get_theme_default_font_size",
+"get_theme_font",
+"get_theme_font_size",
+"get_theme_icon",
+"get_theme_stylebox",
+"get_tooltip",
+"global_position",
+"grab_click_focus",
+"grab_focus",
+"grow_horizontal",
+"grow_vertical",
+"gui_input",
+"has_focus",
+"has_theme_color",
+"has_theme_color_override",
+"has_theme_constant",
+"has_theme_constant_override",
+"has_theme_font",
+"has_theme_font_override",
+"has_theme_font_size",
+"has_theme_font_size_override",
+"has_theme_icon",
+"has_theme_icon_override",
+"has_theme_stylebox",
+"has_theme_stylebox_override",
+"is_drag_successful",
+"is_layout_rtl",
+"layout_direction",
+"localize_numeral_system",
+"maximum_size_changed",
+"minimum_size_changed",
+"mouse_behavior_recursive",
+"mouse_default_cursor_shape",
+"mouse_entered",
+"mouse_exited",
+"mouse_filter",
+"mouse_force_pass_scroll_events",
+"offset_bottom",
+"offset_left",
+"offset_right",
+"offset_top",
+"offset_transform_enabled",
+"offset_transform_pivot",
+"offset_transform_pivot_ratio",
+"offset_transform_position",
+"offset_transform_position_ratio",
+"offset_transform_rotation",
+"offset_transform_scale",
+"offset_transform_visual_only",
+"physics_interpolation_mode",
+"pivot_offset",
+"pivot_offset_ratio",
+"position",
+"propagate_maximum_size",
+"release_focus",
+"remove_theme_color_override",
+"remove_theme_constant_override",
+"remove_theme_font_override",
+"remove_theme_font_size_override",
+"remove_theme_icon_override",
+"remove_theme_stylebox_override",
+"reset_size",
+"resized",
+"rotation",
+"rotation_degrees",
+"scale",
+"set_anchor",
+"set_anchor_and_offset",
+"set_anchors_and_offsets_preset",
+"set_anchors_preset",
+"set_begin",
+"set_drag_forwarding",
+"set_drag_preview",
+"set_end",
+"set_focus_neighbor",
+"set_global_position",
+"set_offset",
+"set_offsets_preset",
+"set_position",
+"set_size",
+"shortcut_context",
+"size",
+"size_flags_changed",
+"size_flags_horizontal",
+"size_flags_stretch_ratio",
+"size_flags_vertical",
+"theme",
+"theme_changed",
+"theme_type_variation",
+"tooltip_auto_translate_mode",
+"tooltip_text",
+"translation_context",
+"update_maximum_size",
+"update_minimum_size",
+"warp_mouse"
+]
+},
+"ConvertTransformModifier3D": {
+"inherits": "BoneConstraint3D",
+"members": []
+},
+"ConvexPolygonShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"ConvexPolygonShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"CopyTransformModifier3D": {
+"inherits": "BoneConstraint3D",
+"members": []
+},
+"Crypto": {
+"inherits": "RefCounted",
+"members": []
+},
+"CryptoKey": {
+"inherits": "Resource",
+"members": []
+},
+"Cubemap": {
+"inherits": "ImageTextureLayered",
+"members": []
+},
+"CubemapArray": {
+"inherits": "ImageTextureLayered",
+"members": []
+},
+"Curve": {
+"inherits": "Resource",
+"members": []
+},
+"Curve2D": {
+"inherits": "Resource",
+"members": []
+},
+"Curve3D": {
+"inherits": "Resource",
+"members": []
+},
+"CurveTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"CurveXYZTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"CylinderMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"CylinderShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"DPITexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"DTLSServer": {
+"inherits": "RefCounted",
+"members": []
+},
+"DampedSpringJoint2D": {
+"inherits": "Joint2D",
+"members": []
+},
+"Decal": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"Dictionary": {
+"inherits": null,
+"members": []
+},
+"DirAccess": {
+"inherits": "RefCounted",
+"members": []
+},
+"DirectionalLight2D": {
+"inherits": "Light2D",
+"members": []
+},
+"DirectionalLight3D": {
+"inherits": "Light3D",
+"members": []
+},
+"DisplayServer": {
+"inherits": "Object",
+"members": []
+},
+"DrawableTexture2D": {
+"inherits": "Texture2D",
+"members": []
+},
+"ENetConnection": {
+"inherits": "RefCounted",
+"members": []
+},
+"ENetMultiplayerPeer": {
+"inherits": "MultiplayerPeer",
+"members": []
+},
+"ENetPacketPeer": {
+"inherits": "PacketPeer",
+"members": []
+},
+"EditorCommandPalette": {
+"inherits": "ConfirmationDialog",
+"members": []
+},
+"EditorContextMenuPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorDebuggerPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorDebuggerSession": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorDock": {
+"inherits": "MarginContainer",
+"members": []
+},
+"EditorExportPlatform": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorExportPlatformAndroid": {
+"inherits": "EditorExportPlatform",
+"members": []
+},
+"EditorExportPlatformAppleEmbedded": {
+"inherits": "EditorExportPlatform",
+"members": []
+},
+"EditorExportPlatformExtension": {
+"inherits": "EditorExportPlatform",
+"members": []
+},
+"EditorExportPlatformIOS": {
+"inherits": "EditorExportPlatformAppleEmbedded",
+"members": []
+},
+"EditorExportPlatformLinuxBSD": {
+"inherits": "EditorExportPlatformPC",
+"members": []
+},
+"EditorExportPlatformMacOS": {
+"inherits": "EditorExportPlatform",
+"members": []
+},
+"EditorExportPlatformPC": {
+"inherits": "EditorExportPlatform",
+"members": []
+},
+"EditorExportPlatformVisionOS": {
+"inherits": "EditorExportPlatformAppleEmbedded",
+"members": []
+},
+"EditorExportPlatformWeb": {
+"inherits": "EditorExportPlatform",
+"members": []
+},
+"EditorExportPlatformWindows": {
+"inherits": "EditorExportPlatformPC",
+"members": []
+},
+"EditorExportPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorExportPreset": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorFeatureProfile": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorFileDialog": {
+"inherits": "FileDialog",
+"members": []
+},
+"EditorFileSystem": {
+"inherits": "Node",
+"members": []
+},
+"EditorFileSystemDirectory": {
+"inherits": "Object",
+"members": []
+},
+"EditorFileSystemImportFormatSupportQuery": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorImportPlugin": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"EditorInspector": {
+"inherits": "ScrollContainer",
+"members": []
+},
+"EditorInspectorPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorInterface": {
+"inherits": "Object",
+"members": []
+},
+"EditorNode3DGizmo": {
+"inherits": "Node3DGizmo",
+"members": []
+},
+"EditorNode3DGizmoPlugin": {
+"inherits": "Resource",
+"members": []
+},
+"EditorPaths": {
+"inherits": "Object",
+"members": []
+},
+"EditorPlugin": {
+"inherits": "Node",
+"members": []
+},
+"EditorProperty": {
+"inherits": "Container",
+"members": []
+},
+"EditorResourceConversionPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorResourcePicker": {
+"inherits": "HBoxContainer",
+"members": []
+},
+"EditorResourcePreview": {
+"inherits": "Node",
+"members": []
+},
+"EditorResourcePreviewGenerator": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorResourceTooltipPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorSceneFormatImporter": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorSceneFormatImporterBlend": {
+"inherits": "EditorSceneFormatImporter",
+"members": []
+},
+"EditorSceneFormatImporterFBX2GLTF": {
+"inherits": "EditorSceneFormatImporter",
+"members": []
+},
+"EditorSceneFormatImporterGLTF": {
+"inherits": "EditorSceneFormatImporter",
+"members": []
+},
+"EditorSceneFormatImporterUFBX": {
+"inherits": "EditorSceneFormatImporter",
+"members": []
+},
+"EditorScenePostImport": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorScenePostImportPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorScript": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorScriptPicker": {
+"inherits": "EditorResourcePicker",
+"members": []
+},
+"EditorSelection": {
+"inherits": "Object",
+"members": []
+},
+"EditorSettings": {
+"inherits": "Resource",
+"members": []
+},
+"EditorSpinSlider": {
+"inherits": "Range",
+"members": []
+},
+"EditorSyntaxHighlighter": {
+"inherits": "SyntaxHighlighter",
+"members": []
+},
+"EditorToaster": {
+"inherits": "HBoxContainer",
+"members": []
+},
+"EditorTranslationParserPlugin": {
+"inherits": "RefCounted",
+"members": []
+},
+"EditorUndoRedoManager": {
+"inherits": "Object",
+"members": []
+},
+"EditorVCSInterface": {
+"inherits": "Object",
+"members": []
+},
+"EncodedObjectAsID": {
+"inherits": "RefCounted",
+"members": []
+},
+"Engine": {
+"inherits": "Object",
+"members": []
+},
+"EngineDebugger": {
+"inherits": "Object",
+"members": []
+},
+"EngineProfiler": {
+"inherits": "RefCounted",
+"members": []
+},
+"Environment": {
+"inherits": "Resource",
+"members": []
+},
+"Expression": {
+"inherits": "RefCounted",
+"members": []
+},
+"ExternalTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"FABRIK3D": {
+"inherits": "IterateIK3D",
+"members": []
+},
+"FBXDocument": {
+"inherits": "GLTFDocument",
+"members": []
+},
+"FBXState": {
+"inherits": "GLTFState",
+"members": []
+},
+"FastNoiseLite": {
+"inherits": "Noise",
+"members": []
+},
+"FileAccess": {
+"inherits": "RefCounted",
+"members": []
+},
+"FileDialog": {
+"inherits": "ConfirmationDialog",
+"members": []
+},
+"FileSystemDock": {
+"inherits": "EditorDock",
+"members": []
+},
+"FlowContainer": {
+"inherits": "Container",
+"members": []
+},
+"FogMaterial": {
+"inherits": "Material",
+"members": []
+},
+"FogVolume": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"FoldableContainer": {
+"inherits": "Container",
+"members": []
+},
+"FoldableGroup": {
+"inherits": "Resource",
+"members": []
+},
+"Font": {
+"inherits": "Resource",
+"members": []
+},
+"FontFile": {
+"inherits": "Font",
+"members": []
+},
+"FontVariation": {
+"inherits": "Font",
+"members": []
+},
+"FramebufferCacheRD": {
+"inherits": "Object",
+"members": []
+},
+"GDExtension": {
+"inherits": "Resource",
+"members": []
+},
+"GDExtensionManager": {
+"inherits": "Object",
+"members": []
+},
+"GDScript": {
+"inherits": "Script",
+"members": []
+},
+"GDScriptLanguageProtocol": {
+"inherits": "JSONRPC",
+"members": []
+},
+"GDScriptSyntaxHighlighter": {
+"inherits": "EditorSyntaxHighlighter",
+"members": []
+},
+"GDScriptTextDocument": {
+"inherits": "RefCounted",
+"members": []
+},
+"GDScriptWorkspace": {
+"inherits": "RefCounted",
+"members": []
+},
+"GLTFAccessor": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFAnimation": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFBufferView": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFCamera": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFDocument": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFDocumentExtension": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFDocumentExtensionConvertImporterMesh": {
+"inherits": "GLTFDocumentExtension",
+"members": []
+},
+"GLTFLight": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFMesh": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFNode": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFObjectModelProperty": {
+"inherits": "RefCounted",
+"members": []
+},
+"GLTFPhysicsBody": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFPhysicsShape": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFSkeleton": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFSkin": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFSpecGloss": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFState": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFTexture": {
+"inherits": "Resource",
+"members": []
+},
+"GLTFTextureSampler": {
+"inherits": "Resource",
+"members": []
+},
+"GPUParticles2D": {
+"inherits": "Node2D",
+"members": []
+},
+"GPUParticles3D": {
+"inherits": "GeometryInstance3D",
+"members": []
+},
+"GPUParticlesAttractor3D": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"GPUParticlesAttractorBox3D": {
+"inherits": "GPUParticlesAttractor3D",
+"members": []
+},
+"GPUParticlesAttractorSphere3D": {
+"inherits": "GPUParticlesAttractor3D",
+"members": []
+},
+"GPUParticlesAttractorVectorField3D": {
+"inherits": "GPUParticlesAttractor3D",
+"members": []
+},
+"GPUParticlesCollision3D": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"GPUParticlesCollisionBox3D": {
+"inherits": "GPUParticlesCollision3D",
+"members": []
+},
+"GPUParticlesCollisionHeightField3D": {
+"inherits": "GPUParticlesCollision3D",
+"members": []
+},
+"GPUParticlesCollisionSDF3D": {
+"inherits": "GPUParticlesCollision3D",
+"members": []
+},
+"GPUParticlesCollisionSphere3D": {
+"inherits": "GPUParticlesCollision3D",
+"members": []
+},
+"Generic6DOFJoint3D": {
+"inherits": "Joint3D",
+"members": []
+},
+"Geometry2D": {
+"inherits": "Object",
+"members": []
+},
+"Geometry3D": {
+"inherits": "Object",
+"members": []
+},
+"GeometryInstance3D": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"GodotInstance": {
+"inherits": "Object",
+"members": []
+},
+"Gradient": {
+"inherits": "Resource",
+"members": []
+},
+"GradientTexture1D": {
+"inherits": "Texture2D",
+"members": []
+},
+"GradientTexture2D": {
+"inherits": "Texture2D",
+"members": []
+},
+"GraphEdit": {
+"inherits": "Control",
+"members": []
+},
+"GraphElement": {
+"inherits": "Container",
+"members": []
+},
+"GraphFrame": {
+"inherits": "GraphElement",
+"members": []
+},
+"GraphNode": {
+"inherits": "GraphElement",
+"members": []
+},
+"GridContainer": {
+"inherits": "Container",
+"members": []
+},
+"GridMap": {
+"inherits": "Node3D",
+"members": []
+},
+"GridMapEditorPlugin": {
+"inherits": "EditorPlugin",
+"members": []
+},
+"GrooveJoint2D": {
+"inherits": "Joint2D",
+"members": []
+},
+"HBoxContainer": {
+"inherits": "BoxContainer",
+"members": []
+},
+"HFlowContainer": {
+"inherits": "FlowContainer",
+"members": []
+},
+"HMACContext": {
+"inherits": "RefCounted",
+"members": []
+},
+"HScrollBar": {
+"inherits": "ScrollBar",
+"members": []
+},
+"HSeparator": {
+"inherits": "Separator",
+"members": []
+},
+"HSlider": {
+"inherits": "Slider",
+"members": []
+},
+"HSplitContainer": {
+"inherits": "SplitContainer",
+"members": []
+},
+"HTTPClient": {
+"inherits": "RefCounted",
+"members": []
+},
+"HTTPRequest": {
+"inherits": "Node",
+"members": []
+},
+"HashingContext": {
+"inherits": "RefCounted",
+"members": []
+},
+"HeightMapShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"HingeJoint3D": {
+"inherits": "Joint3D",
+"members": []
+},
+"IKModifier3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"IP": {
+"inherits": "Object",
+"members": []
+},
+"Image": {
+"inherits": "Resource",
+"members": []
+},
+"ImageFormatLoader": {
+"inherits": "RefCounted",
+"members": []
+},
+"ImageFormatLoaderExtension": {
+"inherits": "ImageFormatLoader",
+"members": []
+},
+"ImageTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"ImageTexture3D": {
+"inherits": "Texture3D",
+"members": []
+},
+"ImageTextureLayered": {
+"inherits": "TextureLayered",
+"members": []
+},
+"ImmediateMesh": {
+"inherits": "Mesh",
+"members": []
+},
+"ImporterMesh": {
+"inherits": "Resource",
+"members": []
+},
+"ImporterMeshInstance3D": {
+"inherits": "Node3D",
+"members": []
+},
+"Input": {
+"inherits": "Object",
+"members": []
+},
+"InputEvent": {
+"inherits": "Resource",
+"members": []
+},
+"InputEventAction": {
+"inherits": "InputEvent",
+"members": []
+},
+"InputEventFromWindow": {
+"inherits": "InputEvent",
+"members": []
+},
+"InputEventGesture": {
+"inherits": "InputEventWithModifiers",
+"members": []
+},
+"InputEventJoypadButton": {
+"inherits": "InputEvent",
+"members": []
+},
+"InputEventJoypadMotion": {
+"inherits": "InputEvent",
+"members": []
+},
+"InputEventKey": {
+"inherits": "InputEventWithModifiers",
+"members": []
+},
+"InputEventMIDI": {
+"inherits": "InputEvent",
+"members": []
+},
+"InputEventMagnifyGesture": {
+"inherits": "InputEventGesture",
+"members": []
+},
+"InputEventMouse": {
+"inherits": "InputEventWithModifiers",
+"members": []
+},
+"InputEventMouseButton": {
+"inherits": "InputEventMouse",
+"members": []
+},
+"InputEventMouseMotion": {
+"inherits": "InputEventMouse",
+"members": []
+},
+"InputEventPanGesture": {
+"inherits": "InputEventGesture",
+"members": []
+},
+"InputEventScreenDrag": {
+"inherits": "InputEventFromWindow",
+"members": []
+},
+"InputEventScreenTouch": {
+"inherits": "InputEventFromWindow",
+"members": []
+},
+"InputEventShortcut": {
+"inherits": "InputEvent",
+"members": []
+},
+"InputEventWithModifiers": {
+"inherits": "InputEventFromWindow",
+"members": []
+},
+"InputMap": {
+"inherits": "Object",
+"members": []
+},
+"InstancePlaceholder": {
+"inherits": "Node",
+"members": []
+},
+"IntervalTweener": {
+"inherits": "Tweener",
+"members": []
+},
+"ItemList": {
+"inherits": "Control",
+"members": []
+},
+"IterateIK3D": {
+"inherits": "ChainIK3D",
+"members": []
+},
+"JNISingleton": {
+"inherits": "Object",
+"members": []
+},
+"JSON": {
+"inherits": "Resource",
+"members": []
+},
+"JSONRPC": {
+"inherits": "Object",
+"members": []
+},
+"JacobianIK3D": {
+"inherits": "IterateIK3D",
+"members": []
+},
+"JavaClass": {
+"inherits": "RefCounted",
+"members": []
+},
+"JavaClassWrapper": {
+"inherits": "Object",
+"members": []
+},
+"JavaObject": {
+"inherits": "RefCounted",
+"members": []
+},
+"JavaScriptBridge": {
+"inherits": "Object",
+"members": []
+},
+"JavaScriptObject": {
+"inherits": "RefCounted",
+"members": []
+},
+"Joint2D": {
+"inherits": "Node2D",
+"members": []
+},
+"Joint3D": {
+"inherits": "Node3D",
+"members": []
+},
+"JointLimitation3D": {
+"inherits": "Resource",
+"members": []
+},
+"JointLimitationCone3D": {
+"inherits": "JointLimitation3D",
+"members": []
+},
+"KinematicCollision2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"KinematicCollision3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"Label": {
+"inherits": "Control",
+"members": []
+},
+"Label3D": {
+"inherits": "GeometryInstance3D",
+"members": []
+},
+"LabelSettings": {
+"inherits": "Resource",
+"members": []
+},
+"Light2D": {
+"inherits": "Node2D",
+"members": []
+},
+"Light3D": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"LightOccluder2D": {
+"inherits": "Node2D",
+"members": []
+},
+"LightmapGI": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"LightmapGIData": {
+"inherits": "Resource",
+"members": []
+},
+"LightmapProbe": {
+"inherits": "Node3D",
+"members": []
+},
+"Lightmapper": {
+"inherits": "RefCounted",
+"members": []
+},
+"LightmapperRD": {
+"inherits": "Lightmapper",
+"members": []
+},
+"LimitAngularVelocityModifier3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"Line2D": {
+"inherits": "Node2D",
+"members": []
+},
+"LineEdit": {
+"inherits": "Control",
+"members": []
+},
+"LinkButton": {
+"inherits": "BaseButton",
+"members": []
+},
+"Logger": {
+"inherits": "RefCounted",
+"members": []
+},
+"LookAtModifier3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"MainLoop": {
+"inherits": "Object",
+"members": [
+"NOTIFICATION_APPLICATION_FOCUS_IN",
+"NOTIFICATION_APPLICATION_FOCUS_OUT",
+"NOTIFICATION_APPLICATION_PAUSED",
+"NOTIFICATION_APPLICATION_PIP_MODE_ENTERED",
+"NOTIFICATION_APPLICATION_PIP_MODE_EXITED",
+"NOTIFICATION_APPLICATION_RESUMED",
+"NOTIFICATION_CRASH",
+"NOTIFICATION_OS_IME_UPDATE",
+"NOTIFICATION_OS_MEMORY_WARNING",
+"NOTIFICATION_TEXT_SERVER_CHANGED",
+"NOTIFICATION_TRANSLATION_CHANGED",
+"NOTIFICATION_WM_ABOUT",
+"_finalize",
+"_initialize",
+"_physics_process",
+"_process",
+"on_request_permissions_result"
+]
+},
+"MarginContainer": {
+"inherits": "Container",
+"members": []
+},
+"Marker2D": {
+"inherits": "Node2D",
+"members": []
+},
+"Marker3D": {
+"inherits": "Node3D",
+"members": []
+},
+"Marshalls": {
+"inherits": "Object",
+"members": []
+},
+"Material": {
+"inherits": "Resource",
+"members": []
+},
+"MenuBar": {
+"inherits": "Control",
+"members": []
+},
+"MenuButton": {
+"inherits": "Button",
+"members": []
+},
+"Mesh": {
+"inherits": "Resource",
+"members": []
+},
+"MeshConvexDecompositionSettings": {
+"inherits": "RefCounted",
+"members": []
+},
+"MeshDataTool": {
+"inherits": "RefCounted",
+"members": []
+},
+"MeshInstance2D": {
+"inherits": "Node2D",
+"members": []
+},
+"MeshInstance3D": {
+"inherits": "GeometryInstance3D",
+"members": []
+},
+"MeshLibrary": {
+"inherits": "Resource",
+"members": []
+},
+"MeshTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"MethodTweener": {
+"inherits": "Tweener",
+"members": []
+},
+"MissingNode": {
+"inherits": "Node",
+"members": []
+},
+"MissingResource": {
+"inherits": "Resource",
+"members": []
+},
+"MobileVRInterface": {
+"inherits": "XRInterface",
+"members": []
+},
+"ModifierBoneTarget3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"MovieWriter": {
+"inherits": "Object",
+"members": []
+},
+"MultiMesh": {
+"inherits": "Resource",
+"members": []
+},
+"MultiMeshInstance2D": {
+"inherits": "Node2D",
+"members": []
+},
+"MultiMeshInstance3D": {
+"inherits": "GeometryInstance3D",
+"members": []
+},
+"MultiplayerAPI": {
+"inherits": "RefCounted",
+"members": []
+},
+"MultiplayerAPIExtension": {
+"inherits": "MultiplayerAPI",
+"members": []
+},
+"MultiplayerPeer": {
+"inherits": "PacketPeer",
+"members": []
+},
+"MultiplayerPeerExtension": {
+"inherits": "MultiplayerPeer",
+"members": []
+},
+"MultiplayerSpawner": {
+"inherits": "Node",
+"members": []
+},
+"MultiplayerSynchronizer": {
+"inherits": "Node",
+"members": []
+},
+"Mutex": {
+"inherits": "RefCounted",
+"members": []
+},
+"NativeMenu": {
+"inherits": "Object",
+"members": []
+},
+"NavigationAgent2D": {
+"inherits": "Node",
+"members": []
+},
+"NavigationAgent3D": {
+"inherits": "Node",
+"members": []
+},
+"NavigationLink2D": {
+"inherits": "Node2D",
+"members": []
+},
+"NavigationLink3D": {
+"inherits": "Node3D",
+"members": []
+},
+"NavigationMesh": {
+"inherits": "Resource",
+"members": []
+},
+"NavigationMeshGenerator": {
+"inherits": "Object",
+"members": []
+},
+"NavigationMeshSourceGeometryData2D": {
+"inherits": "Resource",
+"members": []
+},
+"NavigationMeshSourceGeometryData3D": {
+"inherits": "Resource",
+"members": []
+},
+"NavigationObstacle2D": {
+"inherits": "Node2D",
+"members": []
+},
+"NavigationObstacle3D": {
+"inherits": "Node3D",
+"members": []
+},
+"NavigationPathQueryParameters2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"NavigationPathQueryParameters3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"NavigationPathQueryResult2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"NavigationPathQueryResult3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"NavigationPolygon": {
+"inherits": "Resource",
+"members": []
+},
+"NavigationRegion2D": {
+"inherits": "Node2D",
+"members": []
+},
+"NavigationRegion3D": {
+"inherits": "Node3D",
+"members": []
+},
+"NavigationServer2D": {
+"inherits": "Object",
+"members": []
+},
+"NavigationServer2DManager": {
+"inherits": "Object",
+"members": []
+},
+"NavigationServer3D": {
+"inherits": "Object",
+"members": []
+},
+"NavigationServer3DManager": {
+"inherits": "Object",
+"members": []
+},
+"NinePatchRect": {
+"inherits": "Control",
+"members": []
+},
+"Node": {
+"inherits": "Object",
+"members": [
+"AUTO_TRANSLATE_MODE_ALWAYS",
+"AUTO_TRANSLATE_MODE_DISABLED",
+"AUTO_TRANSLATE_MODE_INHERIT",
+"DUPLICATE_DEFAULT",
+"DUPLICATE_GROUPS",
+"DUPLICATE_INTERNAL_STATE",
+"DUPLICATE_SCRIPTS",
+"DUPLICATE_SIGNALS",
+"DUPLICATE_USE_INSTANTIATION",
+"FLAG_PROCESS_THREAD_MESSAGES",
+"FLAG_PROCESS_THREAD_MESSAGES_ALL",
+"FLAG_PROCESS_THREAD_MESSAGES_PHYSICS",
+"INTERNAL_MODE_BACK",
+"INTERNAL_MODE_DISABLED",
+"INTERNAL_MODE_FRONT",
+"NOTIFICATION_ACCESSIBILITY_INVALIDATE",
+"NOTIFICATION_ACCESSIBILITY_UPDATE",
+"NOTIFICATION_APPLICATION_FOCUS_IN",
+"NOTIFICATION_APPLICATION_FOCUS_OUT",
+"NOTIFICATION_APPLICATION_PAUSED",
+"NOTIFICATION_APPLICATION_PIP_MODE_ENTERED",
+"NOTIFICATION_APPLICATION_PIP_MODE_EXITED",
+"NOTIFICATION_APPLICATION_RESUMED",
+"NOTIFICATION_CHILD_ORDER_CHANGED",
+"NOTIFICATION_CRASH",
+"NOTIFICATION_DISABLED",
+"NOTIFICATION_DRAG_BEGIN",
+"NOTIFICATION_DRAG_END",
+"NOTIFICATION_EDITOR_POST_SAVE",
+"NOTIFICATION_EDITOR_PRE_SAVE",
+"NOTIFICATION_ENABLED",
+"NOTIFICATION_ENTER_TREE",
+"NOTIFICATION_EXIT_TREE",
+"NOTIFICATION_INTERNAL_PHYSICS_PROCESS",
+"NOTIFICATION_INTERNAL_PROCESS",
+"NOTIFICATION_MOVED_IN_PARENT",
+"NOTIFICATION_OS_IME_UPDATE",
+"NOTIFICATION_OS_MEMORY_WARNING",
+"NOTIFICATION_PARENTED",
+"NOTIFICATION_PATH_RENAMED",
+"NOTIFICATION_PAUSED",
+"NOTIFICATION_PHYSICS_PROCESS",
+"NOTIFICATION_POST_ENTER_TREE",
+"NOTIFICATION_PROCESS",
+"NOTIFICATION_READY",
+"NOTIFICATION_RESET_PHYSICS_INTERPOLATION",
+"NOTIFICATION_SCENE_INSTANTIATED",
+"NOTIFICATION_TEXT_SERVER_CHANGED",
+"NOTIFICATION_TRANSLATION_CHANGED",
+"NOTIFICATION_UNPARENTED",
+"NOTIFICATION_UNPAUSED",
+"NOTIFICATION_VP_MOUSE_ENTER",
+"NOTIFICATION_VP_MOUSE_EXIT",
+"NOTIFICATION_WM_ABOUT",
+"NOTIFICATION_WM_CLOSE_REQUEST",
+"NOTIFICATION_WM_DPI_CHANGE",
+"NOTIFICATION_WM_GO_BACK_REQUEST",
+"NOTIFICATION_WM_MOUSE_ENTER",
+"NOTIFICATION_WM_MOUSE_EXIT",
+"NOTIFICATION_WM_OUTPUT_MAX_LINEAR_VALUE_CHANGED",
+"NOTIFICATION_WM_POSITION_CHANGED",
+"NOTIFICATION_WM_SIZE_CHANGED",
+"NOTIFICATION_WM_WINDOW_FOCUS_IN",
+"NOTIFICATION_WM_WINDOW_FOCUS_OUT",
+"PHYSICS_INTERPOLATION_MODE_INHERIT",
+"PHYSICS_INTERPOLATION_MODE_OFF",
+"PHYSICS_INTERPOLATION_MODE_ON",
+"PROCESS_MODE_ALWAYS",
+"PROCESS_MODE_DISABLED",
+"PROCESS_MODE_INHERIT",
+"PROCESS_MODE_PAUSABLE",
+"PROCESS_MODE_WHEN_PAUSED",
+"PROCESS_THREAD_GROUP_INHERIT",
+"PROCESS_THREAD_GROUP_MAIN_THREAD",
+"PROCESS_THREAD_GROUP_SUB_THREAD",
+"_enter_tree",
+"_exit_tree",
+"_get_accessibility_configuration_warnings",
+"_get_configuration_warnings",
+"_get_focused_accessibility_element",
+"_input",
+"_physics_process",
+"_process",
+"_ready",
+"_shortcut_input",
+"_unhandled_input",
+"_unhandled_key_input",
+"add_child",
+"add_sibling",
+"add_to_group",
+"atr",
+"atr_n",
+"auto_translate_mode",
+"call_deferred_thread_group",
+"call_thread_safe",
+"can_auto_translate",
+"can_process",
+"child_entered_tree",
+"child_exiting_tree",
+"child_order_changed",
+"create_tween",
+"duplicate",
+"editor_description",
+"editor_description_changed",
+"editor_state_changed",
+"find_child",
+"find_children",
+"find_parent",
+"get_accessibility_element",
+"get_child",
+"get_child_count",
+"get_children",
+"get_groups",
+"get_index",
+"get_last_exclusive_window",
+"get_multiplayer_authority",
+"get_node",
+"get_node_and_resource",
+"get_node_or_null",
+"get_node_rpc_config",
+"get_orphan_node_ids",
+"get_parent",
+"get_path",
+"get_path_to",
+"get_physics_process_delta_time",
+"get_process_delta_time",
+"get_scene_instance_load_placeholder",
+"get_tree",
+"get_tree_string",
+"get_tree_string_pretty",
+"get_viewport",
+"get_window",
+"has_node",
+"has_node_and_resource",
+"is_ancestor_of",
+"is_displayed_folded",
+"is_editable_instance",
+"is_greater_than",
+"is_in_group",
+"is_inside_tree",
+"is_multiplayer_authority",
+"is_node_ready",
+"is_part_of_edited_scene",
+"is_physics_interpolated",
+"is_physics_interpolated_and_enabled",
+"is_physics_processing",
+"is_physics_processing_internal",
+"is_processing",
+"is_processing_input",
+"is_processing_internal",
+"is_processing_shortcut_input",
+"is_processing_unhandled_input",
+"is_processing_unhandled_key_input",
+"move_child",
+"multiplayer",
+"name",
+"notify_deferred_thread_group",
+"notify_thread_safe",
+"owner",
+"physics_interpolation_mode",
+"print_orphan_nodes",
+"print_tree",
+"print_tree_pretty",
+"process_mode",
+"process_physics_priority",
+"process_priority",
+"process_thread_group",
+"process_thread_group_order",
+"process_thread_messages",
+"propagate_call",
+"propagate_notification",
+"queue_accessibility_update",
+"queue_free",
+"ready",
+"remove_child",
+"remove_from_group",
+"renamed",
+"reparent",
+"replace_by",
+"replacing_by",
+"request_ready",
+"reset_physics_interpolation",
+"rpc",
+"rpc_config",
+"rpc_id",
+"scene_file_path",
+"set_deferred_thread_group",
+"set_display_folded",
+"set_editable_instance",
+"set_multiplayer_authority",
+"set_physics_process",
+"set_physics_process_internal",
+"set_process",
+"set_process_input",
+"set_process_internal",
+"set_process_shortcut_input",
+"set_process_unhandled_input",
+"set_process_unhandled_key_input",
+"set_scene_instance_load_placeholder",
+"set_thread_safe",
+"set_translation_domain_inherited",
+"tree_entered",
+"tree_exited",
+"tree_exiting",
+"unique_name_in_owner",
+"update_configuration_warnings"
+]
+},
+"Node2D": {
+"inherits": "CanvasItem",
+"members": []
+},
+"Node3D": {
+"inherits": "Node",
+"members": []
+},
+"Node3DGizmo": {
+"inherits": "RefCounted",
+"members": []
+},
+"NodePath": {
+"inherits": null,
+"members": []
+},
+"Noise": {
+"inherits": "Resource",
+"members": []
+},
+"NoiseTexture2D": {
+"inherits": "Texture2D",
+"members": []
+},
+"NoiseTexture3D": {
+"inherits": "Texture3D",
+"members": []
+},
+"ORMMaterial3D": {
+"inherits": "BaseMaterial3D",
+"members": []
+},
+"OS": {
+"inherits": "Object",
+"members": []
+},
+"Object": {
+"inherits": null,
+"members": [
+"CONNECT_APPEND_SOURCE_OBJECT",
+"CONNECT_DEFERRED",
+"CONNECT_ONE_SHOT",
+"CONNECT_PERSIST",
+"CONNECT_REFERENCE_COUNTED",
+"NOTIFICATION_EXTENSION_RELOADED",
+"NOTIFICATION_POSTINITIALIZE",
+"NOTIFICATION_PREDELETE",
+"_get",
+"_get_property_list",
+"_init",
+"_iter_get",
+"_iter_init",
+"_iter_next",
+"_notification",
+"_property_can_revert",
+"_property_get_revert",
+"_set",
+"_to_string",
+"_validate_property",
+"add_user_signal",
+"call",
+"call_deferred",
+"callv",
+"can_translate_messages",
+"cancel_free",
+"connect",
+"disconnect",
+"emit_signal",
+"free",
+"get",
+"get_class",
+"get_incoming_connections",
+"get_indexed",
+"get_instance_id",
+"get_meta",
+"get_meta_list",
+"get_method_argument_count",
+"get_method_list",
+"get_property_list",
+"get_script",
+"get_signal_connection_list",
+"get_signal_list",
+"get_translation_domain",
+"has_connections",
+"has_meta",
+"has_method",
+"has_signal",
+"has_user_signal",
+"is_blocking_signals",
+"is_class",
+"is_connected",
+"is_queued_for_deletion",
+"notification",
+"notify_property_list_changed",
+"property_can_revert",
+"property_get_revert",
+"property_list_changed",
+"remove_meta",
+"remove_user_signal",
+"script_changed",
+"set",
+"set_block_signals",
+"set_deferred",
+"set_indexed",
+"set_message_translation",
+"set_meta",
+"set_script",
+"set_translation_domain",
+"to_string",
+"tr",
+"tr_n"
+]
+},
+"Occluder3D": {
+"inherits": "Resource",
+"members": []
+},
+"OccluderInstance3D": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"OccluderPolygon2D": {
+"inherits": "Resource",
+"members": []
+},
+"OfflineMultiplayerPeer": {
+"inherits": "MultiplayerPeer",
+"members": []
+},
+"OggPacketSequence": {
+"inherits": "Resource",
+"members": []
+},
+"OggPacketSequencePlayback": {
+"inherits": "RefCounted",
+"members": []
+},
+"OmniLight3D": {
+"inherits": "Light3D",
+"members": []
+},
+"OpenXRAPIExtension": {
+"inherits": "RefCounted",
+"members": []
+},
+"OpenXRAction": {
+"inherits": "Resource",
+"members": []
+},
+"OpenXRActionBindingModifier": {
+"inherits": "OpenXRBindingModifier",
+"members": []
+},
+"OpenXRActionMap": {
+"inherits": "Resource",
+"members": []
+},
+"OpenXRActionSet": {
+"inherits": "Resource",
+"members": []
+},
+"OpenXRAnalogThresholdModifier": {
+"inherits": "OpenXRActionBindingModifier",
+"members": []
+},
+"OpenXRAnchorTracker": {
+"inherits": "OpenXRSpatialEntityTracker",
+"members": []
+},
+"OpenXRAndroidThreadSettingsExtension": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRBindingModifier": {
+"inherits": "Resource",
+"members": []
+},
+"OpenXRBindingModifierEditor": {
+"inherits": "PanelContainer",
+"members": []
+},
+"OpenXRCompositionLayer": {
+"inherits": "Node3D",
+"members": []
+},
+"OpenXRCompositionLayerCylinder": {
+"inherits": "OpenXRCompositionLayer",
+"members": []
+},
+"OpenXRCompositionLayerEquirect": {
+"inherits": "OpenXRCompositionLayer",
+"members": []
+},
+"OpenXRCompositionLayerQuad": {
+"inherits": "OpenXRCompositionLayer",
+"members": []
+},
+"OpenXRDpadBindingModifier": {
+"inherits": "OpenXRIPBindingModifier",
+"members": []
+},
+"OpenXRExtensionWrapper": {
+"inherits": "Object",
+"members": []
+},
+"OpenXRExtensionWrapperExtension": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRFrameSynthesisExtension": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRFutureExtension": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRFutureResult": {
+"inherits": "RefCounted",
+"members": []
+},
+"OpenXRHand": {
+"inherits": "Node3D",
+"members": []
+},
+"OpenXRHapticBase": {
+"inherits": "Resource",
+"members": []
+},
+"OpenXRHapticVibration": {
+"inherits": "OpenXRHapticBase",
+"members": []
+},
+"OpenXRIPBinding": {
+"inherits": "Resource",
+"members": []
+},
+"OpenXRIPBindingModifier": {
+"inherits": "OpenXRBindingModifier",
+"members": []
+},
+"OpenXRInteractionProfile": {
+"inherits": "Resource",
+"members": []
+},
+"OpenXRInteractionProfileEditor": {
+"inherits": "OpenXRInteractionProfileEditorBase",
+"members": []
+},
+"OpenXRInteractionProfileEditorBase": {
+"inherits": "HBoxContainer",
+"members": []
+},
+"OpenXRInteractionProfileMetadata": {
+"inherits": "Object",
+"members": []
+},
+"OpenXRInterface": {
+"inherits": "XRInterface",
+"members": []
+},
+"OpenXRMarkerTracker": {
+"inherits": "OpenXRSpatialEntityTracker",
+"members": []
+},
+"OpenXRPlaneTracker": {
+"inherits": "OpenXRSpatialEntityTracker",
+"members": []
+},
+"OpenXRRenderModel": {
+"inherits": "Node3D",
+"members": []
+},
+"OpenXRRenderModelExtension": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRRenderModelManager": {
+"inherits": "Node3D",
+"members": []
+},
+"OpenXRSpatialAnchorCapability": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRSpatialCapabilityConfigurationAnchor": {
+"inherits": "OpenXRSpatialCapabilityConfigurationBaseHeader",
+"members": []
+},
+"OpenXRSpatialCapabilityConfigurationAprilTag": {
+"inherits": "OpenXRSpatialCapabilityConfigurationBaseHeader",
+"members": []
+},
+"OpenXRSpatialCapabilityConfigurationAruco": {
+"inherits": "OpenXRSpatialCapabilityConfigurationBaseHeader",
+"members": []
+},
+"OpenXRSpatialCapabilityConfigurationBaseHeader": {
+"inherits": "RefCounted",
+"members": []
+},
+"OpenXRSpatialCapabilityConfigurationMicroQrCode": {
+"inherits": "OpenXRSpatialCapabilityConfigurationBaseHeader",
+"members": []
+},
+"OpenXRSpatialCapabilityConfigurationPlaneTracking": {
+"inherits": "OpenXRSpatialCapabilityConfigurationBaseHeader",
+"members": []
+},
+"OpenXRSpatialCapabilityConfigurationQrCode": {
+"inherits": "OpenXRSpatialCapabilityConfigurationBaseHeader",
+"members": []
+},
+"OpenXRSpatialComponentAnchorList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentBounded2DList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentBounded3DList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentData": {
+"inherits": "RefCounted",
+"members": []
+},
+"OpenXRSpatialComponentMarkerList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentMesh2DList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentMesh3DList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentParentList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentPersistenceList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentPlaneAlignmentList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentPlaneSemanticLabelList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialComponentPolygon2DList": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRSpatialContextPersistenceConfig": {
+"inherits": "OpenXRStructureBase",
+"members": []
+},
+"OpenXRSpatialEntityExtension": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRSpatialEntityTracker": {
+"inherits": "XRPositionalTracker",
+"members": []
+},
+"OpenXRSpatialMarkerTrackingCapability": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRSpatialPlaneTrackingCapability": {
+"inherits": "OpenXRExtensionWrapper",
+"members": []
+},
+"OpenXRSpatialQueryResultData": {
+"inherits": "OpenXRSpatialComponentData",
+"members": []
+},
+"OpenXRStructureBase": {
+"inherits": "RefCounted",
+"members": []
+},
+"OpenXRVisibilityMask": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"OptimizedTranslation": {
+"inherits": "Translation",
+"members": []
+},
+"OptionButton": {
+"inherits": "Button",
+"members": []
+},
+"PCKPacker": {
+"inherits": "RefCounted",
+"members": []
+},
+"PackedByteArray": {
+"inherits": null,
+"members": []
+},
+"PackedColorArray": {
+"inherits": null,
+"members": []
+},
+"PackedDataContainer": {
+"inherits": "Resource",
+"members": []
+},
+"PackedDataContainerRef": {
+"inherits": "RefCounted",
+"members": []
+},
+"PackedFloat32Array": {
+"inherits": null,
+"members": []
+},
+"PackedFloat64Array": {
+"inherits": null,
+"members": []
+},
+"PackedInt32Array": {
+"inherits": null,
+"members": []
+},
+"PackedInt64Array": {
+"inherits": null,
+"members": []
+},
+"PackedScene": {
+"inherits": "Resource",
+"members": []
+},
+"PackedStringArray": {
+"inherits": null,
+"members": []
+},
+"PackedVector2Array": {
+"inherits": null,
+"members": []
+},
+"PackedVector3Array": {
+"inherits": null,
+"members": []
+},
+"PackedVector4Array": {
+"inherits": null,
+"members": []
+},
+"PacketPeer": {
+"inherits": "RefCounted",
+"members": []
+},
+"PacketPeerDTLS": {
+"inherits": "PacketPeer",
+"members": []
+},
+"PacketPeerExtension": {
+"inherits": "PacketPeer",
+"members": []
+},
+"PacketPeerStream": {
+"inherits": "PacketPeer",
+"members": []
+},
+"PacketPeerUDP": {
+"inherits": "PacketPeer",
+"members": []
+},
+"Panel": {
+"inherits": "Control",
+"members": []
+},
+"PanelContainer": {
+"inherits": "Container",
+"members": []
+},
+"PanoramaSkyMaterial": {
+"inherits": "Material",
+"members": []
+},
+"Parallax2D": {
+"inherits": "Node2D",
+"members": []
+},
+"ParallaxBackground": {
+"inherits": "CanvasLayer",
+"members": []
+},
+"ParallaxLayer": {
+"inherits": "Node2D",
+"members": []
+},
+"ParticleProcessMaterial": {
+"inherits": "Material",
+"members": []
+},
+"Path2D": {
+"inherits": "Node2D",
+"members": []
+},
+"Path3D": {
+"inherits": "Node3D",
+"members": []
+},
+"PathFollow2D": {
+"inherits": "Node2D",
+"members": []
+},
+"PathFollow3D": {
+"inherits": "Node3D",
+"members": []
+},
+"Performance": {
+"inherits": "Object",
+"members": []
+},
+"PhysicalBone2D": {
+"inherits": "RigidBody2D",
+"members": []
+},
+"PhysicalBone3D": {
+"inherits": "PhysicsBody3D",
+"members": []
+},
+"PhysicalBoneSimulator3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"PhysicalSkyMaterial": {
+"inherits": "Material",
+"members": []
+},
+"PhysicsBody2D": {
+"inherits": "CollisionObject2D",
+"members": []
+},
+"PhysicsBody3D": {
+"inherits": "CollisionObject3D",
+"members": []
+},
+"PhysicsDirectBodyState2D": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsDirectBodyState2DExtension": {
+"inherits": "PhysicsDirectBodyState2D",
+"members": []
+},
+"PhysicsDirectBodyState3D": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsDirectBodyState3DExtension": {
+"inherits": "PhysicsDirectBodyState3D",
+"members": []
+},
+"PhysicsDirectSpaceState2D": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsDirectSpaceState2DExtension": {
+"inherits": "PhysicsDirectSpaceState2D",
+"members": []
+},
+"PhysicsDirectSpaceState3D": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsDirectSpaceState3DExtension": {
+"inherits": "PhysicsDirectSpaceState3D",
+"members": []
+},
+"PhysicsMaterial": {
+"inherits": "Resource",
+"members": []
+},
+"PhysicsPointQueryParameters2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsPointQueryParameters3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsRayQueryParameters2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsRayQueryParameters3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsServer2D": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsServer2DExtension": {
+"inherits": "PhysicsServer2D",
+"members": []
+},
+"PhysicsServer2DManager": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsServer3D": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsServer3DExtension": {
+"inherits": "PhysicsServer3D",
+"members": []
+},
+"PhysicsServer3DManager": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsServer3DRenderingServerHandler": {
+"inherits": "Object",
+"members": []
+},
+"PhysicsShapeQueryParameters2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsShapeQueryParameters3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsTestMotionParameters2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsTestMotionParameters3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsTestMotionResult2D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PhysicsTestMotionResult3D": {
+"inherits": "RefCounted",
+"members": []
+},
+"PinJoint2D": {
+"inherits": "Joint2D",
+"members": []
+},
+"PinJoint3D": {
+"inherits": "Joint3D",
+"members": []
+},
+"PlaceholderCubemap": {
+"inherits": "PlaceholderTextureLayered",
+"members": []
+},
+"PlaceholderCubemapArray": {
+"inherits": "PlaceholderTextureLayered",
+"members": []
+},
+"PlaceholderMaterial": {
+"inherits": "Material",
+"members": []
+},
+"PlaceholderMesh": {
+"inherits": "Mesh",
+"members": []
+},
+"PlaceholderTexture2D": {
+"inherits": "Texture2D",
+"members": []
+},
+"PlaceholderTexture2DArray": {
+"inherits": "PlaceholderTextureLayered",
+"members": []
+},
+"PlaceholderTexture3D": {
+"inherits": "Texture3D",
+"members": []
+},
+"PlaceholderTextureLayered": {
+"inherits": "TextureLayered",
+"members": []
+},
+"Plane": {
+"inherits": null,
+"members": []
+},
+"PlaneMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"PointLight2D": {
+"inherits": "Light2D",
+"members": []
+},
+"PointMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"Polygon2D": {
+"inherits": "Node2D",
+"members": []
+},
+"PolygonOccluder3D": {
+"inherits": "Occluder3D",
+"members": []
+},
+"PolygonPathFinder": {
+"inherits": "Resource",
+"members": []
+},
+"Popup": {
+"inherits": "Window",
+"members": []
+},
+"PopupMenu": {
+"inherits": "Popup",
+"members": []
+},
+"PopupPanel": {
+"inherits": "Popup",
+"members": []
+},
+"PortableCompressedTexture2D": {
+"inherits": "Texture2D",
+"members": []
+},
+"PrimitiveMesh": {
+"inherits": "Mesh",
+"members": []
+},
+"PrismMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"ProceduralSkyMaterial": {
+"inherits": "Material",
+"members": []
+},
+"ProgressBar": {
+"inherits": "Range",
+"members": []
+},
+"ProjectSettings": {
+"inherits": "Object",
+"members": []
+},
+"Projection": {
+"inherits": null,
+"members": []
+},
+"PropertyTweener": {
+"inherits": "Tweener",
+"members": []
+},
+"QuadMesh": {
+"inherits": "PlaneMesh",
+"members": []
+},
+"QuadOccluder3D": {
+"inherits": "Occluder3D",
+"members": []
+},
+"Quaternion": {
+"inherits": null,
+"members": []
+},
+"RDAccelerationStructureGeometry": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDAccelerationStructureInstance": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDAttachmentFormat": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDFramebufferPass": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDHitGroup": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDPipelineColorBlendState": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDPipelineColorBlendStateAttachment": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDPipelineDepthStencilState": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDPipelineMultisampleState": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDPipelineRasterizationState": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDPipelineShader": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDPipelineSpecializationConstant": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDSamplerState": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDShaderFile": {
+"inherits": "Resource",
+"members": []
+},
+"RDShaderSPIRV": {
+"inherits": "Resource",
+"members": []
+},
+"RDShaderSource": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDTextureFormat": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDTextureView": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDUniform": {
+"inherits": "RefCounted",
+"members": []
+},
+"RDVertexAttribute": {
+"inherits": "RefCounted",
+"members": []
+},
+"RID": {
+"inherits": null,
+"members": []
+},
+"RandomNumberGenerator": {
+"inherits": "RefCounted",
+"members": []
+},
+"Range": {
+"inherits": "Control",
+"members": []
+},
+"RayCast2D": {
+"inherits": "Node2D",
+"members": []
+},
+"RayCast3D": {
+"inherits": "Node3D",
+"members": []
+},
+"Rect2": {
+"inherits": null,
+"members": []
+},
+"Rect2i": {
+"inherits": null,
+"members": []
+},
+"RectangleShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"RefCounted": {
+"inherits": "Object",
+"members": [
+"get_reference_count",
+"init_ref",
+"reference",
+"unreference"
+]
+},
+"ReferenceRect": {
+"inherits": "Control",
+"members": []
+},
+"ReflectionProbe": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"RegEx": {
+"inherits": "RefCounted",
+"members": []
+},
+"RegExMatch": {
+"inherits": "RefCounted",
+"members": []
+},
+"RemoteTransform2D": {
+"inherits": "Node2D",
+"members": []
+},
+"RemoteTransform3D": {
+"inherits": "Node3D",
+"members": []
+},
+"RenderData": {
+"inherits": "Object",
+"members": []
+},
+"RenderDataExtension": {
+"inherits": "RenderData",
+"members": []
+},
+"RenderDataRD": {
+"inherits": "RenderData",
+"members": []
+},
+"RenderSceneBuffers": {
+"inherits": "RefCounted",
+"members": []
+},
+"RenderSceneBuffersConfiguration": {
+"inherits": "RefCounted",
+"members": []
+},
+"RenderSceneBuffersExtension": {
+"inherits": "RenderSceneBuffers",
+"members": []
+},
+"RenderSceneBuffersRD": {
+"inherits": "RenderSceneBuffers",
+"members": []
+},
+"RenderSceneData": {
+"inherits": "Object",
+"members": []
+},
+"RenderSceneDataExtension": {
+"inherits": "RenderSceneData",
+"members": []
+},
+"RenderSceneDataRD": {
+"inherits": "RenderSceneData",
+"members": []
+},
+"RenderingDevice": {
+"inherits": "Object",
+"members": []
+},
+"RenderingServer": {
+"inherits": "Object",
+"members": []
+},
+"Resource": {
+"inherits": "RefCounted",
+"members": [
+"DEEP_DUPLICATE_ALL",
+"DEEP_DUPLICATE_INTERNAL",
+"DEEP_DUPLICATE_NONE",
+"_get_rid",
+"_reset_state",
+"_set_path_cache",
+"_setup_local_to_scene",
+"changed",
+"copy_from_resource",
+"duplicate",
+"duplicate_deep",
+"emit_changed",
+"generate_scene_unique_id",
+"get_id_for_path",
+"get_local_scene",
+"get_rid",
+"is_built_in",
+"reset_state",
+"resource_local_to_scene",
+"resource_name",
+"resource_path",
+"resource_scene_unique_id",
+"set_id_for_path",
+"set_path_cache",
+"setup_local_to_scene",
+"setup_local_to_scene_requested",
+"take_over_path"
+]
+},
+"ResourceFormatLoader": {
+"inherits": "RefCounted",
+"members": []
+},
+"ResourceFormatSaver": {
+"inherits": "RefCounted",
+"members": []
+},
+"ResourceImporter": {
+"inherits": "RefCounted",
+"members": []
+},
+"ResourceImporterBMFont": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterBitMap": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterCSVTranslation": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterDynamicFont": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterImage": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterImageFont": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterLayeredTexture": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterMP3": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterOBJ": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterOggVorbis": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterSVG": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterScene": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterShaderFile": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterTexture": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterTextureAtlas": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceImporterWAV": {
+"inherits": "ResourceImporter",
+"members": []
+},
+"ResourceLoader": {
+"inherits": "Object",
+"members": []
+},
+"ResourcePreloader": {
+"inherits": "Node",
+"members": []
+},
+"ResourceSaver": {
+"inherits": "Object",
+"members": []
+},
+"ResourceUID": {
+"inherits": "Object",
+"members": []
+},
+"RetargetModifier3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"RibbonTrailMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"RichTextEffect": {
+"inherits": "Resource",
+"members": []
+},
+"RichTextLabel": {
+"inherits": "Control",
+"members": []
+},
+"RigidBody2D": {
+"inherits": "PhysicsBody2D",
+"members": []
+},
+"RigidBody3D": {
+"inherits": "PhysicsBody3D",
+"members": []
+},
+"RootMotionView": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"SceneMultiplayer": {
+"inherits": "MultiplayerAPI",
+"members": []
+},
+"SceneReplicationConfig": {
+"inherits": "Resource",
+"members": []
+},
+"SceneState": {
+"inherits": "RefCounted",
+"members": []
+},
+"SceneTree": {
+"inherits": "MainLoop",
+"members": [
+"GROUP_CALL_DEFAULT",
+"GROUP_CALL_DEFERRED",
+"GROUP_CALL_REVERSE",
+"GROUP_CALL_UNIQUE",
+"auto_accept_quit",
+"call_group",
+"call_group_flags",
+"change_scene_to_file",
+"change_scene_to_node",
+"change_scene_to_packed",
+"create_timer",
+"create_tween",
+"current_scene",
+"debug_collisions_hint",
+"debug_navigation_hint",
+"debug_paths_hint",
+"edited_scene_root",
+"get_first_node_in_group",
+"get_frame",
+"get_multiplayer",
+"get_node_count",
+"get_node_count_in_group",
+"get_nodes_in_group",
+"get_processed_tweens",
+"has_group",
+"is_accessibility_enabled",
+"is_accessibility_supported",
+"multiplayer_poll",
+"node_added",
+"node_configuration_warning_changed",
+"node_removed",
+"node_renamed",
+"notify_group",
+"notify_group_flags",
+"paused",
+"physics_frame",
+"physics_interpolation",
+"process_frame",
+"queue_delete",
+"quit",
+"quit_on_go_back",
+"reload_current_scene",
+"root",
+"scene_changed",
+"set_group",
+"set_group_flags",
+"set_multiplayer",
+"tree_changed",
+"tree_process_mode_changed",
+"unload_current_scene"
+]
+},
+"SceneTreeTimer": {
+"inherits": "RefCounted",
+"members": []
+},
+"Script": {
+"inherits": "Resource",
+"members": []
+},
+"ScriptBacktrace": {
+"inherits": "RefCounted",
+"members": []
+},
+"ScriptCreateDialog": {
+"inherits": "ConfirmationDialog",
+"members": []
+},
+"ScriptEditor": {
+"inherits": "PanelContainer",
+"members": []
+},
+"ScriptEditorBase": {
+"inherits": "VBoxContainer",
+"members": []
+},
+"ScriptExtension": {
+"inherits": "Script",
+"members": []
+},
+"ScriptLanguage": {
+"inherits": "Object",
+"members": []
+},
+"ScriptLanguageExtension": {
+"inherits": "ScriptLanguage",
+"members": []
+},
+"ScrollBar": {
+"inherits": "Range",
+"members": []
+},
+"ScrollContainer": {
+"inherits": "Container",
+"members": []
+},
+"SegmentShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"Semaphore": {
+"inherits": "RefCounted",
+"members": []
+},
+"SeparationRayShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"SeparationRayShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"Separator": {
+"inherits": "Control",
+"members": []
+},
+"Shader": {
+"inherits": "Resource",
+"members": []
+},
+"ShaderGlobalsOverride": {
+"inherits": "Node",
+"members": []
+},
+"ShaderInclude": {
+"inherits": "Resource",
+"members": []
+},
+"ShaderIncludeDB": {
+"inherits": "Object",
+"members": []
+},
+"ShaderMaterial": {
+"inherits": "Material",
+"members": []
+},
+"Shape2D": {
+"inherits": "Resource",
+"members": []
+},
+"Shape3D": {
+"inherits": "Resource",
+"members": []
+},
+"ShapeCast2D": {
+"inherits": "Node2D",
+"members": []
+},
+"ShapeCast3D": {
+"inherits": "Node3D",
+"members": []
+},
+"Shortcut": {
+"inherits": "Resource",
+"members": []
+},
+"Signal": {
+"inherits": null,
+"members": []
+},
+"Skeleton2D": {
+"inherits": "Node2D",
+"members": []
+},
+"Skeleton3D": {
+"inherits": "Node3D",
+"members": []
+},
+"SkeletonIK3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"SkeletonModification2D": {
+"inherits": "Resource",
+"members": []
+},
+"SkeletonModification2DCCDIK": {
+"inherits": "SkeletonModification2D",
+"members": []
+},
+"SkeletonModification2DFABRIK": {
+"inherits": "SkeletonModification2D",
+"members": []
+},
+"SkeletonModification2DJiggle": {
+"inherits": "SkeletonModification2D",
+"members": []
+},
+"SkeletonModification2DLookAt": {
+"inherits": "SkeletonModification2D",
+"members": []
+},
+"SkeletonModification2DPhysicalBones": {
+"inherits": "SkeletonModification2D",
+"members": []
+},
+"SkeletonModification2DStackHolder": {
+"inherits": "SkeletonModification2D",
+"members": []
+},
+"SkeletonModification2DTwoBoneIK": {
+"inherits": "SkeletonModification2D",
+"members": []
+},
+"SkeletonModificationStack2D": {
+"inherits": "Resource",
+"members": []
+},
+"SkeletonModifier3D": {
+"inherits": "Node3D",
+"members": []
+},
+"SkeletonProfile": {
+"inherits": "Resource",
+"members": []
+},
+"SkeletonProfileHumanoid": {
+"inherits": "SkeletonProfile",
+"members": []
+},
+"Skin": {
+"inherits": "Resource",
+"members": []
+},
+"SkinReference": {
+"inherits": "RefCounted",
+"members": []
+},
+"Sky": {
+"inherits": "Resource",
+"members": []
+},
+"Slider": {
+"inherits": "Range",
+"members": []
+},
+"SliderJoint3D": {
+"inherits": "Joint3D",
+"members": []
+},
+"SocketServer": {
+"inherits": "RefCounted",
+"members": []
+},
+"SoftBody3D": {
+"inherits": "MeshInstance3D",
+"members": []
+},
+"SphereMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"SphereOccluder3D": {
+"inherits": "Occluder3D",
+"members": []
+},
+"SphereShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"SpinBox": {
+"inherits": "Range",
+"members": []
+},
+"SplineIK3D": {
+"inherits": "ChainIK3D",
+"members": []
+},
+"SplitContainer": {
+"inherits": "Container",
+"members": []
+},
+"SpotLight3D": {
+"inherits": "Light3D",
+"members": []
+},
+"SpringArm3D": {
+"inherits": "Node3D",
+"members": []
+},
+"SpringBoneCollision3D": {
+"inherits": "Node3D",
+"members": []
+},
+"SpringBoneCollisionCapsule3D": {
+"inherits": "SpringBoneCollision3D",
+"members": []
+},
+"SpringBoneCollisionPlane3D": {
+"inherits": "SpringBoneCollision3D",
+"members": []
+},
+"SpringBoneCollisionSphere3D": {
+"inherits": "SpringBoneCollision3D",
+"members": []
+},
+"SpringBoneSimulator3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"Sprite2D": {
+"inherits": "Node2D",
+"members": []
+},
+"Sprite3D": {
+"inherits": "SpriteBase3D",
+"members": []
+},
+"SpriteBase3D": {
+"inherits": "GeometryInstance3D",
+"members": []
+},
+"SpriteFrames": {
+"inherits": "Resource",
+"members": []
+},
+"StandardMaterial3D": {
+"inherits": "BaseMaterial3D",
+"members": []
+},
+"StaticBody2D": {
+"inherits": "PhysicsBody2D",
+"members": []
+},
+"StaticBody3D": {
+"inherits": "PhysicsBody3D",
+"members": []
+},
+"StatusIndicator": {
+"inherits": "Node",
+"members": []
+},
+"StreamPeer": {
+"inherits": "RefCounted",
+"members": []
+},
+"StreamPeerBuffer": {
+"inherits": "StreamPeer",
+"members": []
+},
+"StreamPeerExtension": {
+"inherits": "StreamPeer",
+"members": []
+},
+"StreamPeerGZIP": {
+"inherits": "StreamPeer",
+"members": []
+},
+"StreamPeerSocket": {
+"inherits": "StreamPeer",
+"members": []
+},
+"StreamPeerTCP": {
+"inherits": "StreamPeerSocket",
+"members": []
+},
+"StreamPeerTLS": {
+"inherits": "StreamPeer",
+"members": []
+},
+"StreamPeerUDS": {
+"inherits": "StreamPeerSocket",
+"members": []
+},
+"String": {
+"inherits": null,
+"members": []
+},
+"StringName": {
+"inherits": null,
+"members": []
+},
+"StyleBox": {
+"inherits": "Resource",
+"members": []
+},
+"StyleBoxEmpty": {
+"inherits": "StyleBox",
+"members": []
+},
+"StyleBoxFlat": {
+"inherits": "StyleBox",
+"members": []
+},
+"StyleBoxLine": {
+"inherits": "StyleBox",
+"members": []
+},
+"StyleBoxTexture": {
+"inherits": "StyleBox",
+"members": []
+},
+"SubViewport": {
+"inherits": "Viewport",
+"members": []
+},
+"SubViewportContainer": {
+"inherits": "Container",
+"members": []
+},
+"SubtweenTweener": {
+"inherits": "Tweener",
+"members": []
+},
+"SurfaceTool": {
+"inherits": "RefCounted",
+"members": []
+},
+"SyntaxHighlighter": {
+"inherits": "Resource",
+"members": []
+},
+"SystemFont": {
+"inherits": "Font",
+"members": []
+},
+"TCPServer": {
+"inherits": "SocketServer",
+"members": []
+},
+"TLSOptions": {
+"inherits": "RefCounted",
+"members": []
+},
+"TabBar": {
+"inherits": "Control",
+"members": []
+},
+"TabContainer": {
+"inherits": "Container",
+"members": []
+},
+"TextEdit": {
+"inherits": "Control",
+"members": []
+},
+"TextLine": {
+"inherits": "RefCounted",
+"members": []
+},
+"TextMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"TextParagraph": {
+"inherits": "RefCounted",
+"members": []
+},
+"TextServer": {
+"inherits": "RefCounted",
+"members": []
+},
+"TextServerAdvanced": {
+"inherits": "TextServerExtension",
+"members": []
+},
+"TextServerDummy": {
+"inherits": "TextServerExtension",
+"members": []
+},
+"TextServerExtension": {
+"inherits": "TextServer",
+"members": []
+},
+"TextServerManager": {
+"inherits": "Object",
+"members": []
+},
+"Texture": {
+"inherits": "Resource",
+"members": []
+},
+"Texture2D": {
+"inherits": "Texture",
+"members": []
+},
+"Texture2DArray": {
+"inherits": "ImageTextureLayered",
+"members": []
+},
+"Texture2DArrayRD": {
+"inherits": "TextureLayeredRD",
+"members": []
+},
+"Texture2DRD": {
+"inherits": "Texture2D",
+"members": []
+},
+"Texture3D": {
+"inherits": "Texture",
+"members": []
+},
+"Texture3DRD": {
+"inherits": "Texture3D",
+"members": []
+},
+"TextureButton": {
+"inherits": "BaseButton",
+"members": []
+},
+"TextureCubemapArrayRD": {
+"inherits": "TextureLayeredRD",
+"members": []
+},
+"TextureCubemapRD": {
+"inherits": "TextureLayeredRD",
+"members": []
+},
+"TextureLayered": {
+"inherits": "Texture",
+"members": []
+},
+"TextureLayeredRD": {
+"inherits": "TextureLayered",
+"members": []
+},
+"TextureProgressBar": {
+"inherits": "Range",
+"members": []
+},
+"TextureRect": {
+"inherits": "Control",
+"members": []
+},
+"Theme": {
+"inherits": "Resource",
+"members": []
+},
+"ThemeDB": {
+"inherits": "Object",
+"members": []
+},
+"Thread": {
+"inherits": "RefCounted",
+"members": []
+},
+"TileData": {
+"inherits": "Object",
+"members": []
+},
+"TileMap": {
+"inherits": "Node2D",
+"members": []
+},
+"TileMapLayer": {
+"inherits": "Node2D",
+"members": []
+},
+"TileMapPattern": {
+"inherits": "Resource",
+"members": []
+},
+"TileSet": {
+"inherits": "Resource",
+"members": []
+},
+"TileSetAtlasSource": {
+"inherits": "TileSetSource",
+"members": []
+},
+"TileSetScenesCollectionSource": {
+"inherits": "TileSetSource",
+"members": []
+},
+"TileSetSource": {
+"inherits": "Resource",
+"members": []
+},
+"Time": {
+"inherits": "Object",
+"members": []
+},
+"Timer": {
+"inherits": "Node",
+"members": []
+},
+"TorusMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"TouchScreenButton": {
+"inherits": "Node2D",
+"members": []
+},
+"Transform2D": {
+"inherits": null,
+"members": []
+},
+"Transform3D": {
+"inherits": null,
+"members": []
+},
+"Translation": {
+"inherits": "Resource",
+"members": []
+},
+"TranslationDomain": {
+"inherits": "RefCounted",
+"members": []
+},
+"TranslationServer": {
+"inherits": "Object",
+"members": []
+},
+"Tree": {
+"inherits": "Control",
+"members": []
+},
+"TreeItem": {
+"inherits": "Object",
+"members": []
+},
+"TriangleMesh": {
+"inherits": "RefCounted",
+"members": []
+},
+"TubeTrailMesh": {
+"inherits": "PrimitiveMesh",
+"members": []
+},
+"Tween": {
+"inherits": "RefCounted",
+"members": []
+},
+"Tweener": {
+"inherits": "RefCounted",
+"members": []
+},
+"TwoBoneIK3D": {
+"inherits": "IKModifier3D",
+"members": []
+},
+"UDPServer": {
+"inherits": "RefCounted",
+"members": []
+},
+"UDSServer": {
+"inherits": "SocketServer",
+"members": []
+},
+"UPNP": {
+"inherits": "RefCounted",
+"members": []
+},
+"UPNPDevice": {
+"inherits": "RefCounted",
+"members": []
+},
+"UndoRedo": {
+"inherits": "Object",
+"members": []
+},
+"UniformSetCacheRD": {
+"inherits": "Object",
+"members": []
+},
+"VBoxContainer": {
+"inherits": "BoxContainer",
+"members": []
+},
+"VFlowContainer": {
+"inherits": "FlowContainer",
+"members": []
+},
+"VScrollBar": {
+"inherits": "ScrollBar",
+"members": []
+},
+"VSeparator": {
+"inherits": "Separator",
+"members": []
+},
+"VSlider": {
+"inherits": "Slider",
+"members": []
+},
+"VSplitContainer": {
+"inherits": "SplitContainer",
+"members": []
+},
+"Variant": {
+"inherits": null,
+"members": []
+},
+"Vector2": {
+"inherits": null,
+"members": []
+},
+"Vector2i": {
+"inherits": null,
+"members": []
+},
+"Vector3": {
+"inherits": null,
+"members": []
+},
+"Vector3i": {
+"inherits": null,
+"members": []
+},
+"Vector4": {
+"inherits": null,
+"members": []
+},
+"Vector4i": {
+"inherits": null,
+"members": []
+},
+"VehicleBody3D": {
+"inherits": "RigidBody3D",
+"members": []
+},
+"VehicleWheel3D": {
+"inherits": "Node3D",
+"members": []
+},
+"VideoStream": {
+"inherits": "Resource",
+"members": []
+},
+"VideoStreamPlayback": {
+"inherits": "Resource",
+"members": []
+},
+"VideoStreamPlayer": {
+"inherits": "Control",
+"members": []
+},
+"VideoStreamTheora": {
+"inherits": "VideoStream",
+"members": []
+},
+"Viewport": {
+"inherits": "Node",
+"members": []
+},
+"ViewportTexture": {
+"inherits": "Texture2D",
+"members": []
+},
+"VirtualJoystick": {
+"inherits": "Control",
+"members": []
+},
+"VisibleOnScreenEnabler2D": {
+"inherits": "VisibleOnScreenNotifier2D",
+"members": []
+},
+"VisibleOnScreenEnabler3D": {
+"inherits": "VisibleOnScreenNotifier3D",
+"members": []
+},
+"VisibleOnScreenNotifier2D": {
+"inherits": "Node2D",
+"members": []
+},
+"VisibleOnScreenNotifier3D": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"VisualInstance3D": {
+"inherits": "Node3D",
+"members": []
+},
+"VisualShader": {
+"inherits": "Shader",
+"members": []
+},
+"VisualShaderNode": {
+"inherits": "Resource",
+"members": []
+},
+"VisualShaderNodeBillboard": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeBooleanConstant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeBooleanParameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeClamp": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeColorConstant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeColorFunc": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeColorOp": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeColorParameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeComment": {
+"inherits": "VisualShaderNodeFrame",
+"members": []
+},
+"VisualShaderNodeCompare": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeConstant": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeCubemap": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeCubemapParameter": {
+"inherits": "VisualShaderNodeTextureParameter",
+"members": []
+},
+"VisualShaderNodeCurveTexture": {
+"inherits": "VisualShaderNodeResizableBase",
+"members": []
+},
+"VisualShaderNodeCurveXYZTexture": {
+"inherits": "VisualShaderNodeResizableBase",
+"members": []
+},
+"VisualShaderNodeCustom": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeDerivativeFunc": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeDeterminant": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeDistanceFade": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeDotProduct": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeExpression": {
+"inherits": "VisualShaderNodeGroupBase",
+"members": []
+},
+"VisualShaderNodeFaceForward": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeFloatConstant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeFloatFunc": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeFloatOp": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeFloatParameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeFrame": {
+"inherits": "VisualShaderNodeResizableBase",
+"members": []
+},
+"VisualShaderNodeFresnel": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeGlobalExpression": {
+"inherits": "VisualShaderNodeExpression",
+"members": []
+},
+"VisualShaderNodeGroupBase": {
+"inherits": "VisualShaderNodeResizableBase",
+"members": []
+},
+"VisualShaderNodeIf": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeInput": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeIntConstant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeIntFunc": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeIntOp": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeIntParameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeIs": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeLinearSceneDepth": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeMix": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeMultiplyAdd": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeOuterProduct": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeOutput": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParameter": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParameterRef": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParticleAccelerator": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParticleBoxEmitter": {
+"inherits": "VisualShaderNodeParticleEmitter",
+"members": []
+},
+"VisualShaderNodeParticleConeVelocity": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParticleEmit": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParticleEmitter": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParticleMeshEmitter": {
+"inherits": "VisualShaderNodeParticleEmitter",
+"members": []
+},
+"VisualShaderNodeParticleMultiplyByAxisAngle": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParticleOutput": {
+"inherits": "VisualShaderNodeOutput",
+"members": []
+},
+"VisualShaderNodeParticleRandomness": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeParticleRingEmitter": {
+"inherits": "VisualShaderNodeParticleEmitter",
+"members": []
+},
+"VisualShaderNodeParticleSphereEmitter": {
+"inherits": "VisualShaderNodeParticleEmitter",
+"members": []
+},
+"VisualShaderNodeProximityFade": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeRandomRange": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeRemap": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeReroute": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeResizableBase": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeRotationByAxis": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeSDFRaymarch": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeSDFToScreenUV": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeSample3D": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeScreenNormalWorldSpace": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeScreenUVToSDF": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeSmoothStep": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeStep": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeSwitch": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTexture": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTexture2DArray": {
+"inherits": "VisualShaderNodeSample3D",
+"members": []
+},
+"VisualShaderNodeTexture2DArrayParameter": {
+"inherits": "VisualShaderNodeTextureParameter",
+"members": []
+},
+"VisualShaderNodeTexture2DParameter": {
+"inherits": "VisualShaderNodeTextureParameter",
+"members": []
+},
+"VisualShaderNodeTexture3D": {
+"inherits": "VisualShaderNodeSample3D",
+"members": []
+},
+"VisualShaderNodeTexture3DParameter": {
+"inherits": "VisualShaderNodeTextureParameter",
+"members": []
+},
+"VisualShaderNodeTextureParameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeTextureParameterTriplanar": {
+"inherits": "VisualShaderNodeTextureParameter",
+"members": []
+},
+"VisualShaderNodeTextureSDF": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTextureSDFNormal": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTransformCompose": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTransformConstant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeTransformDecompose": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTransformFunc": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTransformOp": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeTransformParameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeTransformVecMult": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeUIntConstant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeUIntFunc": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeUIntOp": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeUIntParameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeUVFunc": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeUVPolarCoord": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeVarying": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeVaryingGetter": {
+"inherits": "VisualShaderNodeVarying",
+"members": []
+},
+"VisualShaderNodeVaryingSetter": {
+"inherits": "VisualShaderNodeVarying",
+"members": []
+},
+"VisualShaderNodeVec2Constant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeVec2Parameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeVec3Constant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeVec3Parameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeVec4Constant": {
+"inherits": "VisualShaderNodeConstant",
+"members": []
+},
+"VisualShaderNodeVec4Parameter": {
+"inherits": "VisualShaderNodeParameter",
+"members": []
+},
+"VisualShaderNodeVectorBase": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VisualShaderNodeVectorCompose": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeVectorDecompose": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeVectorDistance": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeVectorFunc": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeVectorLen": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeVectorOp": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeVectorRefract": {
+"inherits": "VisualShaderNodeVectorBase",
+"members": []
+},
+"VisualShaderNodeWorldPositionFromDepth": {
+"inherits": "VisualShaderNode",
+"members": []
+},
+"VoxelGI": {
+"inherits": "VisualInstance3D",
+"members": []
+},
+"VoxelGIData": {
+"inherits": "Resource",
+"members": []
+},
+"WeakRef": {
+"inherits": "RefCounted",
+"members": []
+},
+"WebRTCDataChannel": {
+"inherits": "PacketPeer",
+"members": []
+},
+"WebRTCDataChannelExtension": {
+"inherits": "WebRTCDataChannel",
+"members": []
+},
+"WebRTCMultiplayerPeer": {
+"inherits": "MultiplayerPeer",
+"members": []
+},
+"WebRTCPeerConnection": {
+"inherits": "RefCounted",
+"members": []
+},
+"WebRTCPeerConnectionExtension": {
+"inherits": "WebRTCPeerConnection",
+"members": []
+},
+"WebSocketMultiplayerPeer": {
+"inherits": "MultiplayerPeer",
+"members": []
+},
+"WebSocketPeer": {
+"inherits": "PacketPeer",
+"members": []
+},
+"WebXRInterface": {
+"inherits": "XRInterface",
+"members": []
+},
+"Window": {
+"inherits": "Viewport",
+"members": []
+},
+"WorkerThreadPool": {
+"inherits": "Object",
+"members": []
+},
+"World2D": {
+"inherits": "Resource",
+"members": []
+},
+"World3D": {
+"inherits": "Resource",
+"members": []
+},
+"WorldBoundaryShape2D": {
+"inherits": "Shape2D",
+"members": []
+},
+"WorldBoundaryShape3D": {
+"inherits": "Shape3D",
+"members": []
+},
+"WorldEnvironment": {
+"inherits": "Node",
+"members": []
+},
+"X509Certificate": {
+"inherits": "Resource",
+"members": []
+},
+"XMLParser": {
+"inherits": "RefCounted",
+"members": []
+},
+"XRAnchor3D": {
+"inherits": "XRNode3D",
+"members": []
+},
+"XRBodyModifier3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"XRBodyTracker": {
+"inherits": "XRPositionalTracker",
+"members": []
+},
+"XRCamera3D": {
+"inherits": "Camera3D",
+"members": []
+},
+"XRController3D": {
+"inherits": "XRNode3D",
+"members": []
+},
+"XRControllerTracker": {
+"inherits": "XRPositionalTracker",
+"members": []
+},
+"XRFaceModifier3D": {
+"inherits": "Node3D",
+"members": []
+},
+"XRFaceTracker": {
+"inherits": "XRTracker",
+"members": []
+},
+"XRHandModifier3D": {
+"inherits": "SkeletonModifier3D",
+"members": []
+},
+"XRHandTracker": {
+"inherits": "XRPositionalTracker",
+"members": []
+},
+"XRInterface": {
+"inherits": "RefCounted",
+"members": []
+},
+"XRInterfaceExtension": {
+"inherits": "XRInterface",
+"members": []
+},
+"XRNode3D": {
+"inherits": "Node3D",
+"members": []
+},
+"XROrigin3D": {
+"inherits": "Node3D",
+"members": []
+},
+"XRPose": {
+"inherits": "RefCounted",
+"members": []
+},
+"XRPositionalTracker": {
+"inherits": "XRTracker",
+"members": []
+},
+"XRServer": {
+"inherits": "Object",
+"members": []
+},
+"XRTracker": {
+"inherits": "RefCounted",
+"members": []
+},
+"XRVRS": {
+"inherits": "Object",
+"members": []
+},
+"ZIPPacker": {
+"inherits": "RefCounted",
+"members": []
+},
+"ZIPReader": {
+"inherits": "RefCounted",
+"members": []
+},
+"bool": {
+"inherits": null,
+"members": []
+},
+"float": {
+"inherits": null,
+"members": []
+},
+"int": {
+"inherits": null,
+"members": []
+}
+},
+"constants": [
+"CLOCKWISE",
+"CORNER_BOTTOM_LEFT",
+"CORNER_BOTTOM_RIGHT",
+"CORNER_TOP_LEFT",
+"CORNER_TOP_RIGHT",
+"COUNTERCLOCKWISE",
+"ERR_ALREADY_EXISTS",
+"ERR_ALREADY_IN_USE",
+"ERR_BUG",
+"ERR_BUSY",
+"ERR_CANT_ACQUIRE_RESOURCE",
+"ERR_CANT_CONNECT",
+"ERR_CANT_CREATE",
+"ERR_CANT_FORK",
+"ERR_CANT_OPEN",
+"ERR_CANT_RESOLVE",
+"ERR_COMPILATION_FAILED",
+"ERR_CONNECTION_ERROR",
+"ERR_CYCLIC_LINK",
+"ERR_DATABASE_CANT_READ",
+"ERR_DATABASE_CANT_WRITE",
+"ERR_DOES_NOT_EXIST",
+"ERR_DUPLICATE_SYMBOL",
+"ERR_FILE_ALREADY_IN_USE",
+"ERR_FILE_BAD_DRIVE",
+"ERR_FILE_BAD_PATH",
+"ERR_FILE_CANT_OPEN",
+"ERR_FILE_CANT_READ",
+"ERR_FILE_CANT_WRITE",
+"ERR_FILE_CORRUPT",
+"ERR_FILE_EOF",
+"ERR_FILE_MISSING_DEPENDENCIES",
+"ERR_FILE_NOT_FOUND",
+"ERR_FILE_NO_PERMISSION",
+"ERR_FILE_UNRECOGNIZED",
+"ERR_HELP",
+"ERR_INVALID_DATA",
+"ERR_INVALID_DECLARATION",
+"ERR_INVALID_PARAMETER",
+"ERR_LINK_FAILED",
+"ERR_LOCKED",
+"ERR_METHOD_NOT_FOUND",
+"ERR_OUT_OF_MEMORY",
+"ERR_PARAMETER_RANGE_ERROR",
+"ERR_PARSE_ERROR",
+"ERR_PRINTER_ON_FIRE",
+"ERR_QUERY_FAILED",
+"ERR_SCRIPT_FAILED",
+"ERR_SKIP",
+"ERR_TIMEOUT",
+"ERR_UNAUTHORIZED",
+"ERR_UNAVAILABLE",
+"ERR_UNCONFIGURED",
+"EULER_ORDER_XYZ",
+"EULER_ORDER_XZY",
+"EULER_ORDER_YXZ",
+"EULER_ORDER_YZX",
+"EULER_ORDER_ZXY",
+"EULER_ORDER_ZYX",
+"FAILED",
+"HORIZONTAL",
+"HORIZONTAL_ALIGNMENT_CENTER",
+"HORIZONTAL_ALIGNMENT_FILL",
+"HORIZONTAL_ALIGNMENT_LEFT",
+"HORIZONTAL_ALIGNMENT_RIGHT",
+"INF",
+"INLINE_ALIGNMENT_BASELINE_TO",
+"INLINE_ALIGNMENT_BOTTOM",
+"INLINE_ALIGNMENT_BOTTOM_TO",
+"INLINE_ALIGNMENT_CENTER",
+"INLINE_ALIGNMENT_CENTER_TO",
+"INLINE_ALIGNMENT_IMAGE_MASK",
+"INLINE_ALIGNMENT_TEXT_MASK",
+"INLINE_ALIGNMENT_TOP",
+"INLINE_ALIGNMENT_TOP_TO",
+"INLINE_ALIGNMENT_TO_BASELINE",
+"INLINE_ALIGNMENT_TO_BOTTOM",
+"INLINE_ALIGNMENT_TO_CENTER",
+"INLINE_ALIGNMENT_TO_TOP",
+"INT16_MAX",
+"INT16_MIN",
+"INT32_MAX",
+"INT32_MIN",
+"INT64_MAX",
+"INT64_MIN",
+"INT8_MAX",
+"INT8_MIN",
+"JOY_AXIS_INVALID",
+"JOY_AXIS_LEFT_X",
+"JOY_AXIS_LEFT_Y",
+"JOY_AXIS_MAX",
+"JOY_AXIS_RIGHT_X",
+"JOY_AXIS_RIGHT_Y",
+"JOY_AXIS_SDL_MAX",
+"JOY_AXIS_TRIGGER_LEFT",
+"JOY_AXIS_TRIGGER_RIGHT",
+"JOY_BUTTON_A",
+"JOY_BUTTON_B",
+"JOY_BUTTON_BACK",
+"JOY_BUTTON_DPAD_DOWN",
+"JOY_BUTTON_DPAD_LEFT",
+"JOY_BUTTON_DPAD_RIGHT",
+"JOY_BUTTON_DPAD_UP",
+"JOY_BUTTON_GUIDE",
+"JOY_BUTTON_INVALID",
+"JOY_BUTTON_LEFT_SHOULDER",
+"JOY_BUTTON_LEFT_STICK",
+"JOY_BUTTON_MAX",
+"JOY_BUTTON_MISC1",
+"JOY_BUTTON_MISC2",
+"JOY_BUTTON_MISC3",
+"JOY_BUTTON_MISC4",
+"JOY_BUTTON_MISC5",
+"JOY_BUTTON_MISC6",
+"JOY_BUTTON_PADDLE1",
+"JOY_BUTTON_PADDLE2",
+"JOY_BUTTON_PADDLE3",
+"JOY_BUTTON_PADDLE4",
+"JOY_BUTTON_RIGHT_SHOULDER",
+"JOY_BUTTON_RIGHT_STICK",
+"JOY_BUTTON_SDL_MAX",
+"JOY_BUTTON_START",
+"JOY_BUTTON_TOUCHPAD",
+"JOY_BUTTON_X",
+"JOY_BUTTON_Y",
+"KEY_0",
+"KEY_1",
+"KEY_2",
+"KEY_3",
+"KEY_4",
+"KEY_5",
+"KEY_6",
+"KEY_7",
+"KEY_8",
+"KEY_9",
+"KEY_A",
+"KEY_ALT",
+"KEY_AMPERSAND",
+"KEY_APOSTROPHE",
+"KEY_ASCIICIRCUM",
+"KEY_ASCIITILDE",
+"KEY_ASTERISK",
+"KEY_AT",
+"KEY_B",
+"KEY_BACK",
+"KEY_BACKSLASH",
+"KEY_BACKSPACE",
+"KEY_BACKTAB",
+"KEY_BAR",
+"KEY_BRACELEFT",
+"KEY_BRACERIGHT",
+"KEY_BRACKETLEFT",
+"KEY_BRACKETRIGHT",
+"KEY_C",
+"KEY_CAPSLOCK",
+"KEY_CLEAR",
+"KEY_CODE_MASK",
+"KEY_COLON",
+"KEY_COMMA",
+"KEY_CTRL",
+"KEY_D",
+"KEY_DELETE",
+"KEY_DOLLAR",
+"KEY_DOWN",
+"KEY_E",
+"KEY_END",
+"KEY_ENTER",
+"KEY_EQUAL",
+"KEY_ESCAPE",
+"KEY_EXCLAM",
+"KEY_F",
+"KEY_F1",
+"KEY_F10",
+"KEY_F11",
+"KEY_F12",
+"KEY_F13",
+"KEY_F14",
+"KEY_F15",
+"KEY_F16",
+"KEY_F17",
+"KEY_F18",
+"KEY_F19",
+"KEY_F2",
+"KEY_F20",
+"KEY_F21",
+"KEY_F22",
+"KEY_F23",
+"KEY_F24",
+"KEY_F25",
+"KEY_F26",
+"KEY_F27",
+"KEY_F28",
+"KEY_F29",
+"KEY_F3",
+"KEY_F30",
+"KEY_F31",
+"KEY_F32",
+"KEY_F33",
+"KEY_F34",
+"KEY_F35",
+"KEY_F4",
+"KEY_F5",
+"KEY_F6",
+"KEY_F7",
+"KEY_F8",
+"KEY_F9",
+"KEY_FAVORITES",
+"KEY_FORWARD",
+"KEY_G",
+"KEY_GLOBE",
+"KEY_GREATER",
+"KEY_H",
+"KEY_HELP",
+"KEY_HOME",
+"KEY_HOMEPAGE",
+"KEY_HYPER",
+"KEY_I",
+"KEY_INSERT",
+"KEY_J",
+"KEY_JIS_EISU",
+"KEY_JIS_KANA",
+"KEY_K",
+"KEY_KEYBOARD",
+"KEY_KP_0",
+"KEY_KP_1",
+"KEY_KP_2",
+"KEY_KP_3",
+"KEY_KP_4",
+"KEY_KP_5",
+"KEY_KP_6",
+"KEY_KP_7",
+"KEY_KP_8",
+"KEY_KP_9",
+"KEY_KP_ADD",
+"KEY_KP_DIVIDE",
+"KEY_KP_ENTER",
+"KEY_KP_MULTIPLY",
+"KEY_KP_PERIOD",
+"KEY_KP_SUBTRACT",
+"KEY_L",
+"KEY_LAUNCH0",
+"KEY_LAUNCH1",
+"KEY_LAUNCH2",
+"KEY_LAUNCH3",
+"KEY_LAUNCH4",
+"KEY_LAUNCH5",
+"KEY_LAUNCH6",
+"KEY_LAUNCH7",
+"KEY_LAUNCH8",
+"KEY_LAUNCH9",
+"KEY_LAUNCHA",
+"KEY_LAUNCHB",
+"KEY_LAUNCHC",
+"KEY_LAUNCHD",
+"KEY_LAUNCHE",
+"KEY_LAUNCHF",
+"KEY_LAUNCHMAIL",
+"KEY_LAUNCHMEDIA",
+"KEY_LEFT",
+"KEY_LESS",
+"KEY_LOCATION_LEFT",
+"KEY_LOCATION_RIGHT",
+"KEY_LOCATION_UNSPECIFIED",
+"KEY_M",
+"KEY_MASK_ALT",
+"KEY_MASK_CMD_OR_CTRL",
+"KEY_MASK_CTRL",
+"KEY_MASK_GROUP_SWITCH",
+"KEY_MASK_KPAD",
+"KEY_MASK_META",
+"KEY_MASK_SHIFT",
+"KEY_MEDIANEXT",
+"KEY_MEDIAPLAY",
+"KEY_MEDIAPREVIOUS",
+"KEY_MEDIARECORD",
+"KEY_MEDIASTOP",
+"KEY_MENU",
+"KEY_META",
+"KEY_MINUS",
+"KEY_MODIFIER_MASK",
+"KEY_N",
+"KEY_NONE",
+"KEY_NUMBERSIGN",
+"KEY_NUMLOCK",
+"KEY_O",
+"KEY_OPENURL",
+"KEY_P",
+"KEY_PAGEDOWN",
+"KEY_PAGEUP",
+"KEY_PARENLEFT",
+"KEY_PARENRIGHT",
+"KEY_PAUSE",
+"KEY_PERCENT",
+"KEY_PERIOD",
+"KEY_PLUS",
+"KEY_PRINT",
+"KEY_Q",
+"KEY_QUESTION",
+"KEY_QUOTEDBL",
+"KEY_QUOTELEFT",
+"KEY_R",
+"KEY_REFRESH",
+"KEY_RIGHT",
+"KEY_S",
+"KEY_SCROLLLOCK",
+"KEY_SEARCH",
+"KEY_SECTION",
+"KEY_SEMICOLON",
+"KEY_SHIFT",
+"KEY_SLASH",
+"KEY_SPACE",
+"KEY_SPECIAL",
+"KEY_STANDBY",
+"KEY_STOP",
+"KEY_SYSREQ",
+"KEY_T",
+"KEY_TAB",
+"KEY_U",
+"KEY_UNDERSCORE",
+"KEY_UNKNOWN",
+"KEY_UP",
+"KEY_V",
+"KEY_VOLUMEDOWN",
+"KEY_VOLUMEMUTE",
+"KEY_VOLUMEUP",
+"KEY_W",
+"KEY_X",
+"KEY_Y",
+"KEY_YEN",
+"KEY_Z",
+"METHOD_FLAGS_DEFAULT",
+"METHOD_FLAG_CONST",
+"METHOD_FLAG_EDITOR",
+"METHOD_FLAG_NORMAL",
+"METHOD_FLAG_OBJECT_CORE",
+"METHOD_FLAG_STATIC",
+"METHOD_FLAG_VARARG",
+"METHOD_FLAG_VIRTUAL",
+"METHOD_FLAG_VIRTUAL_REQUIRED",
+"MIDI_MESSAGE_ACTIVE_SENSING",
+"MIDI_MESSAGE_AFTERTOUCH",
+"MIDI_MESSAGE_CHANNEL_PRESSURE",
+"MIDI_MESSAGE_CONTINUE",
+"MIDI_MESSAGE_CONTROL_CHANGE",
+"MIDI_MESSAGE_NONE",
+"MIDI_MESSAGE_NOTE_OFF",
+"MIDI_MESSAGE_NOTE_ON",
+"MIDI_MESSAGE_PITCH_BEND",
+"MIDI_MESSAGE_PROGRAM_CHANGE",
+"MIDI_MESSAGE_QUARTER_FRAME",
+"MIDI_MESSAGE_SONG_POSITION_POINTER",
+"MIDI_MESSAGE_SONG_SELECT",
+"MIDI_MESSAGE_START",
+"MIDI_MESSAGE_STOP",
+"MIDI_MESSAGE_SYSTEM_EXCLUSIVE",
+"MIDI_MESSAGE_SYSTEM_RESET",
+"MIDI_MESSAGE_TIMING_CLOCK",
+"MIDI_MESSAGE_TUNE_REQUEST",
+"MOUSE_BUTTON_LEFT",
+"MOUSE_BUTTON_MASK_LEFT",
+"MOUSE_BUTTON_MASK_MB_XBUTTON1",
+"MOUSE_BUTTON_MASK_MB_XBUTTON2",
+"MOUSE_BUTTON_MASK_MIDDLE",
+"MOUSE_BUTTON_MASK_RIGHT",
+"MOUSE_BUTTON_MIDDLE",
+"MOUSE_BUTTON_NONE",
+"MOUSE_BUTTON_RIGHT",
+"MOUSE_BUTTON_WHEEL_DOWN",
+"MOUSE_BUTTON_WHEEL_LEFT",
+"MOUSE_BUTTON_WHEEL_RIGHT",
+"MOUSE_BUTTON_WHEEL_UP",
+"MOUSE_BUTTON_XBUTTON1",
+"MOUSE_BUTTON_XBUTTON2",
+"NAN",
+"OK",
+"OP_ADD",
+"OP_AND",
+"OP_BIT_AND",
+"OP_BIT_NEGATE",
+"OP_BIT_OR",
+"OP_BIT_XOR",
+"OP_DIVIDE",
+"OP_EQUAL",
+"OP_GREATER",
+"OP_GREATER_EQUAL",
+"OP_IN",
+"OP_LESS",
+"OP_LESS_EQUAL",
+"OP_MAX",
+"OP_MODULE",
+"OP_MULTIPLY",
+"OP_NEGATE",
+"OP_NOT",
+"OP_NOT_EQUAL",
+"OP_OR",
+"OP_POSITIVE",
+"OP_POWER",
+"OP_SHIFT_LEFT",
+"OP_SHIFT_RIGHT",
+"OP_SUBTRACT",
+"OP_XOR",
+"PI",
+"PROPERTY_HINT_ARRAY_TYPE",
+"PROPERTY_HINT_COLOR_NO_ALPHA",
+"PROPERTY_HINT_DICTIONARY_TYPE",
+"PROPERTY_HINT_DIR",
+"PROPERTY_HINT_ENUM",
+"PROPERTY_HINT_ENUM_SUGGESTION",
+"PROPERTY_HINT_EXPRESSION",
+"PROPERTY_HINT_EXP_EASING",
+"PROPERTY_HINT_FILE",
+"PROPERTY_HINT_FILE_PATH",
+"PROPERTY_HINT_FLAGS",
+"PROPERTY_HINT_GLOBAL_DIR",
+"PROPERTY_HINT_GLOBAL_FILE",
+"PROPERTY_HINT_GLOBAL_SAVE_FILE",
+"PROPERTY_HINT_GROUP_ENABLE",
+"PROPERTY_HINT_HIDE_QUATERNION_EDIT",
+"PROPERTY_HINT_INPUT_NAME",
+"PROPERTY_HINT_INT_IS_OBJECTID",
+"PROPERTY_HINT_INT_IS_POINTER",
+"PROPERTY_HINT_LAYERS_2D_NAVIGATION",
+"PROPERTY_HINT_LAYERS_2D_PHYSICS",
+"PROPERTY_HINT_LAYERS_2D_RENDER",
+"PROPERTY_HINT_LAYERS_3D_NAVIGATION",
+"PROPERTY_HINT_LAYERS_3D_PHYSICS",
+"PROPERTY_HINT_LAYERS_3D_RENDER",
+"PROPERTY_HINT_LAYERS_AVOIDANCE",
+"PROPERTY_HINT_LINK",
+"PROPERTY_HINT_LOCALE_ID",
+"PROPERTY_HINT_LOCALIZABLE_STRING",
+"PROPERTY_HINT_MAX",
+"PROPERTY_HINT_MULTILINE_TEXT",
+"PROPERTY_HINT_NODE_PATH_TO_EDITED_NODE",
+"PROPERTY_HINT_NODE_PATH_VALID_TYPES",
+"PROPERTY_HINT_NODE_TYPE",
+"PROPERTY_HINT_NONE",
+"PROPERTY_HINT_OBJECT_ID",
+"PROPERTY_HINT_OBJECT_TOO_BIG",
+"PROPERTY_HINT_ONESHOT",
+"PROPERTY_HINT_PASSWORD",
+"PROPERTY_HINT_PLACEHOLDER_TEXT",
+"PROPERTY_HINT_RANGE",
+"PROPERTY_HINT_RESOURCE_TYPE",
+"PROPERTY_HINT_SAVE_FILE",
+"PROPERTY_HINT_TOOL_BUTTON",
+"PROPERTY_HINT_TYPE_STRING",
+"PROPERTY_USAGE_ALWAYS_DUPLICATE",
+"PROPERTY_USAGE_ARRAY",
+"PROPERTY_USAGE_CATEGORY",
+"PROPERTY_USAGE_CHECKABLE",
+"PROPERTY_USAGE_CHECKED",
+"PROPERTY_USAGE_CLASS_IS_BITFIELD",
+"PROPERTY_USAGE_CLASS_IS_ENUM",
+"PROPERTY_USAGE_DEFAULT",
+"PROPERTY_USAGE_DEFERRED_SET_RESOURCE",
+"PROPERTY_USAGE_EDITOR",
+"PROPERTY_USAGE_EDITOR_BASIC_SETTING",
+"PROPERTY_USAGE_EDITOR_INSTANTIATE_OBJECT",
+"PROPERTY_USAGE_GROUP",
+"PROPERTY_USAGE_HIGH_END_GFX",
+"PROPERTY_USAGE_INTERNAL",
+"PROPERTY_USAGE_KEYING_INCREMENTS",
+"PROPERTY_USAGE_NEVER_DUPLICATE",
+"PROPERTY_USAGE_NIL_IS_VARIANT",
+"PROPERTY_USAGE_NODE_PATH_FROM_SCENE_ROOT",
+"PROPERTY_USAGE_NONE",
+"PROPERTY_USAGE_NO_EDITOR",
+"PROPERTY_USAGE_NO_INSTANCE_STATE",
+"PROPERTY_USAGE_READ_ONLY",
+"PROPERTY_USAGE_RESOURCE_NOT_PERSISTENT",
+"PROPERTY_USAGE_RESTART_IF_CHANGED",
+"PROPERTY_USAGE_SCRIPT_DEFAULT_VALUE",
+"PROPERTY_USAGE_SCRIPT_VARIABLE",
+"PROPERTY_USAGE_SECRET",
+"PROPERTY_USAGE_STORAGE",
+"PROPERTY_USAGE_STORE_IF_NULL",
+"PROPERTY_USAGE_SUBGROUP",
+"PROPERTY_USAGE_UPDATE_ALL_IF_MODIFIED",
+"SIDE_BOTTOM",
+"SIDE_LEFT",
+"SIDE_RIGHT",
+"SIDE_TOP",
+"TAU",
+"TYPE_AABB",
+"TYPE_ARRAY",
+"TYPE_BASIS",
+"TYPE_BOOL",
+"TYPE_CALLABLE",
+"TYPE_COLOR",
+"TYPE_DICTIONARY",
+"TYPE_FLOAT",
+"TYPE_INT",
+"TYPE_MAX",
+"TYPE_NIL",
+"TYPE_NODE_PATH",
+"TYPE_OBJECT",
+"TYPE_PACKED_BYTE_ARRAY",
+"TYPE_PACKED_COLOR_ARRAY",
+"TYPE_PACKED_FLOAT32_ARRAY",
+"TYPE_PACKED_FLOAT64_ARRAY",
+"TYPE_PACKED_INT32_ARRAY",
+"TYPE_PACKED_INT64_ARRAY",
+"TYPE_PACKED_STRING_ARRAY",
+"TYPE_PACKED_VECTOR2_ARRAY",
+"TYPE_PACKED_VECTOR3_ARRAY",
+"TYPE_PACKED_VECTOR4_ARRAY",
+"TYPE_PLANE",
+"TYPE_PROJECTION",
+"TYPE_QUATERNION",
+"TYPE_RECT2",
+"TYPE_RECT2I",
+"TYPE_RID",
+"TYPE_SIGNAL",
+"TYPE_STRING",
+"TYPE_STRING_NAME",
+"TYPE_TRANSFORM2D",
+"TYPE_TRANSFORM3D",
+"TYPE_VECTOR2",
+"TYPE_VECTOR2I",
+"TYPE_VECTOR3",
+"TYPE_VECTOR3I",
+"TYPE_VECTOR4",
+"TYPE_VECTOR4I",
+"UINT16_MAX",
+"UINT32_MAX",
+"UINT8_MAX",
+"VERTICAL",
+"VERTICAL_ALIGNMENT_BOTTOM",
+"VERTICAL_ALIGNMENT_CENTER",
+"VERTICAL_ALIGNMENT_FILL",
+"VERTICAL_ALIGNMENT_TOP"
+],
+"functions": [
+"Color8",
+"abs",
+"absf",
+"absi",
+"acos",
+"acosh",
+"angle_difference",
+"asin",
+"asinh",
+"assert",
+"atan",
+"atan2",
+"atanh",
+"bezier_derivative",
+"bezier_interpolate",
+"bytes_to_var",
+"bytes_to_var_with_objects",
+"ceil",
+"ceilf",
+"ceili",
+"char",
+"clamp",
+"clampf",
+"clampi",
+"convert",
+"cos",
+"cosh",
+"cubic_interpolate",
+"cubic_interpolate_angle",
+"cubic_interpolate_angle_in_time",
+"cubic_interpolate_in_time",
+"db_to_linear",
+"deg_to_rad",
+"dict_to_inst",
+"ease",
+"error_string",
+"exp",
+"floor",
+"floorf",
+"floori",
+"fmod",
+"fposmod",
+"get_stack",
+"hash",
+"inst_to_dict",
+"instance_from_id",
+"inverse_lerp",
+"is_equal_approx",
+"is_finite",
+"is_inf",
+"is_instance_id_valid",
+"is_instance_of",
+"is_instance_valid",
+"is_nan",
+"is_same",
+"is_zero_approx",
+"len",
+"lerp",
+"lerp_angle",
+"lerpf",
+"linear_to_db",
+"load",
+"log",
+"max",
+"maxf",
+"maxi",
+"min",
+"minf",
+"mini",
+"move_toward",
+"nearest_po2",
+"ord",
+"pingpong",
+"posmod",
+"pow",
+"preload",
+"print",
+"print_debug",
+"print_rich",
+"print_stack",
+"print_verbose",
+"printerr",
+"printraw",
+"prints",
+"printt",
+"push_error",
+"push_warning",
+"rad_to_deg",
+"rand_from_seed",
+"randf",
+"randf_range",
+"randfn",
+"randi",
+"randi_range",
+"randomize",
+"range",
+"remap",
+"rid_allocate_id",
+"rid_from_int64",
+"rotate_toward",
+"round",
+"roundf",
+"roundi",
+"seed",
+"sign",
+"signf",
+"signi",
+"sin",
+"sinh",
+"smoothstep",
+"snapped",
+"snappedf",
+"snappedi",
+"sqrt",
+"step_decimals",
+"str",
+"str_to_var",
+"tan",
+"tanh",
+"type_convert",
+"type_exists",
+"type_string",
+"typeof",
+"var_to_bytes",
+"var_to_bytes_with_objects",
+"var_to_str",
+"weakref",
+"wrap",
+"wrapf",
+"wrapi"
+],
+"singletons": [
+"AccessibilityServer",
+"AudioServer",
+"CameraServer",
+"ClassDB",
+"DisplayServer",
+"EditorInterface",
+"Engine",
+"EngineDebugger",
+"GDExtensionManager",
+"GDScriptLanguageProtocol",
+"Geometry2D",
+"Geometry3D",
+"IP",
+"Input",
+"InputMap",
+"JavaClassWrapper",
+"JavaScriptBridge",
+"Marshalls",
+"NativeMenu",
+"NavigationMeshGenerator",
+"NavigationServer2D",
+"NavigationServer2DManager",
+"NavigationServer3D",
+"NavigationServer3DManager",
+"OS",
+"Performance",
+"PhysicsServer2D",
+"PhysicsServer2DManager",
+"PhysicsServer3D",
+"PhysicsServer3DManager",
+"ProjectSettings",
+"RenderingServer",
+"ResourceLoader",
+"ResourceSaver",
+"ResourceUID",
+"TextServerManager",
+"ThemeDB",
+"Time",
+"TranslationServer",
+"WorkerThreadPool",
+"XRServer"
+]
+}

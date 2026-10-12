@@ -1,0 +1,6 @@
+# difftest: seed=17690789 master=1 arg=
+# FIX N11: init_names() stops a name at 40 characters but still adds the space after a word it left empty: this seed's scroll 0 is titled 'zantargdalf tursstaprok nelgkliswhon ' (init.c:279-286; seeds with such a title are rare: 5 in the first 50 million)
+# expect-classic: titled 'zantargdalf tursstaprok nelgkliswhon '
+# expect-fixed: titled 'zantargdalf tursstaprok nelgkliswhon'
+# expect-not-fixed: nelgkliswhon '
+67 63 48 32

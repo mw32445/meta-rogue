@@ -1,0 +1,304 @@
+--- a/main.c	2026-10-11 05:00:33.048827026 +0000
++++ b/main.c	2026-10-11 05:00:33.074528243 +0000
+@@ -238,8 +238,7 @@
+     getyx(curscr, y, x);
+     mvcur(y, x, oy, ox);
+     fflush(stdout);
+-    curscr->_cury = oy;
+-    curscr->_curx = ox;
++    /* ORACLE: removed curscr->_cury/_curx writes (opaque WINDOW in ncurses 6; tstp is dead code) */
+ }
+ 
+ /*
+--- a/io.c	2026-10-11 05:00:33.048990297 +0000
++++ b/io.c	2026-10-11 05:00:33.074672104 +0000
+@@ -220,7 +220,7 @@
+     if (stat_msg)
+     {
+ 	move(0, 0);
+-        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%ld  %s",
++        msg("Level: %d  Gold: %-5d  Hp: %*d(%*d)  Str: %2d(%d)  Arm: %-2d  Exp: %d/%d  %s",
+ 	    level, purse, hpwidth, pstats.s_hpt, hpwidth, max_hp, pstats.s_str,
+ 	    max_stats.s_str, 10 - s_arm, pstats.s_lvl, pstats.s_exp,
+ 	    state_name[hungry_state]);
+--- a/sticks.c	2026-10-11 05:00:33.049008883 +0000
++++ b/sticks.c	2026-10-11 05:00:33.074752068 +0000
+@@ -307,6 +307,8 @@
+     static coord spotpos[BOLT_LENGTH];
+     THING bolt;
+ 
++    memset(&bolt, 0, sizeof bolt);	/* ORACLE: was uninitialized (UB) */
++    bolt.o_launch = -1;		/* ORACLE: intended: o_launch < 0 => use o_hurldmg "6x6" */
+     bolt.o_type = WEAPON;
+     bolt.o_which = FLAME;
+     strncpy(bolt.o_hurldmg,"6x6",sizeof(bolt.o_hurldmg));
+--- a/rogue.h	2026-10-11 05:00:33.049028430 +0000
++++ b/rogue.h	2026-10-11 05:00:33.075399222 +0000
+@@ -71,10 +71,11 @@
+ #define ISRING(h,r)	(cur_ring[h] != NULL && cur_ring[h]->o_which == r)
+ #define ISWEARING(r)	(ISRING(LEFT, r) || ISRING(RIGHT, r))
+ #define ISMULT(type) 	(type == POTION || type == SCROLL || type == FOOD)
+-#define INDEX(y,x)	(&places[((x) << 5) + (y)])
+-#define chat(y,x)	(places[((x) << 5) + (y)].p_ch)
+-#define flat(y,x)	(places[((x) << 5) + (y)].p_flags)
+-#define moat(y,x)	(places[((x) << 5) + (y)].p_monst)
++/* ORACLE: out-of-range map indices go to a blank dummy PLACE instead of foreign memory */
++#define INDEX(y,x)	(oracle_place((y), (x)))
++#define chat(y,x)	(oracle_place((y), (x))->p_ch)
++#define flat(y,x)	(oracle_place((y), (x))->p_flags)
++#define moat(y,x)	(oracle_place((y), (x))->p_monst)
+ #define unc(cp)		(cp).y, (cp).x
+ #ifdef MASTER
+ #define debug		if (wizard) msg
+@@ -447,6 +448,8 @@
+     THING *p_monst;
+ } PLACE;
+ 
++PLACE *oracle_place(int y, int x);	/* ORACLE: harness/oracle/hooks.c */
++
+ /*
+  * Array containing information on all the various types of monsters
+  */
+--- a/daemons.c	2026-10-11 05:00:33.049047559 +0000
++++ b/daemons.c	2026-10-11 05:00:33.075571772 +0000
+@@ -160,7 +160,11 @@
+     else
+     {
+ 	oldfood = food_left;
+-	food_left -= ring_eat(LEFT) + ring_eat(RIGHT) + 1 - amulet;
++	{ /* ORACLE: unsequenced in C; stock gcc evaluates LEFT then RIGHT */
++	    int ring_l = ring_eat(LEFT);
++	    int ring_r = ring_eat(RIGHT);
++	    food_left -= ring_l + ring_r + 1 - amulet;
++	}
+ 
+ 	if (food_left < MORETIME && oldfood >= MORETIME)
+ 	{
+--- a/state.c	2026-10-11 06:04:36.961335168 +0000
++++ b/state.c	2026-10-11 06:04:36.976690659 +0000
+@@ -1050,6 +1050,14 @@
+             func = 8;
+         else if (d_list[i].d_func == sight)
+             func = 9;
++        else if (d_list[i].d_func == land)		/* oracle: the four */
++            func = 10;					/* daemons the save */
++        else if (d_list[i].d_func == come_down)		/* format forgot */
++            func = 11;
++        else if (d_list[i].d_func == visuals)
++            func = 12;
++        else if (d_list[i].d_func == (void (*)()) turn_see)
++            func = 13;
+         else if (d_list[i].d_func == NULL)
+             func = 0;
+         else
+@@ -1108,18 +1116,21 @@
+                     break;
+             case 9: d_list[i].d_func = sight;
+                     break;
++            case 10: d_list[i].d_func = land;
++                    break;
++            case 11: d_list[i].d_func = come_down;
++                    break;
++            case 12: d_list[i].d_func = visuals;
++                    break;
++            case 13: d_list[i].d_func = (void (*)()) turn_see;
++                    break;
+             default:d_list[i].d_func = NULL;
+                     break;
+         }
+     }
+ 
+-    if (d_list[i].d_func == NULL)
+-    {
+-        d_list[i].d_type = 0;
+-        d_list[i].d_arg = 0;
+-        d_list[i].d_time = 0;
+-    }
+-    
++    /* oracle: removed an out-of-bounds write to d_list[count] */
++
+     return(READSTAT);
+ }       
+         
+@@ -1276,6 +1287,9 @@
+     for (i = 0; i < MAXROOMS; i++)
+         if (&rooms[i] == rp)
+             room = i;
++    for (i = 0; i < MAXPASS; i++)		/* oracle: passages were */
++        if (&passages[i] == rp)			/* saved as &rooms[-1] */
++            room = MAXROOMS + i;
+ 
+     rs_write_int(savef, room);
+ 
+@@ -1292,7 +1306,12 @@
+ 
+     rs_read_int(inf, &i);
+ 
+-    *rp = &rooms[i];
++    if (i >= 0 && i < MAXROOMS)
++        *rp = &rooms[i];
++    else if (i >= MAXROOMS && i < MAXROOMS + MAXPASS)
++        *rp = &passages[i - MAXROOMS];
++    else
++        *rp = NULL;
+             
+     return(READSTAT);
+ }
+--- a/passages.c	2026-10-11 06:35:33.973240133 +0000
++++ b/passages.c	2026-10-11 06:35:33.987433326 +0000
+@@ -14,6 +14,8 @@
+ #include <curses.h>
+ #include "rogue.h"
+ 
++void oracle_stuck(void);	/* oracle: hooks.c */
++
+ /*
+  * do_passages:
+  *	Draw all the passages on a level.
+@@ -171,16 +173,26 @@
+ 	epos.x = rpt->r_pos.x;			/* end of move */
+ 	epos.y = rpt->r_pos.y;
+ 	if (!(rpf->r_flags & ISGONE))		/* if not gone pick door pos */
++	{
++	    int tries = 0;			/* oracle: see oracle_stuck() */
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		spos.x = rpf->r_pos.x + rnd(rpf->r_max.x - 2) + 1;
+ 		spos.y = rpf->r_pos.y + rpf->r_max.y - 1;
+ 	    } while ((rpf->r_flags&ISMAZE) && !(flat(spos.y, spos.x)&F_PASS));
++	}
+ 	if (!(rpt->r_flags & ISGONE))
++	{
++	    int tries = 0;
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		epos.x = rpt->r_pos.x + rnd(rpt->r_max.x - 2) + 1;
+ 	    } while ((rpt->r_flags&ISMAZE) && !(flat(epos.y, epos.x)&F_PASS));
++	}
+ 	distance = abs(spos.y - epos.y) - 1;	/* distance to move */
+ 	turn_delta.y = 0;			/* direction to turn */
+ 	turn_delta.x = (spos.x < epos.x ? 1 : -1);
+@@ -197,16 +209,26 @@
+ 	epos.x = rpt->r_pos.x;
+ 	epos.y = rpt->r_pos.y;
+ 	if (!(rpf->r_flags & ISGONE))
++	{
++	    int tries = 0;
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		spos.x = rpf->r_pos.x + rpf->r_max.x - 1;
+ 		spos.y = rpf->r_pos.y + rnd(rpf->r_max.y - 2) + 1;
+ 	    } while ((rpf->r_flags&ISMAZE) && !(flat(spos.y, spos.x)&F_PASS));
++	}
+ 	if (!(rpt->r_flags & ISGONE))
++	{
++	    int tries = 0;
+ 	    do
+ 	    {
++		if (++tries > 10000)
++		    oracle_stuck();
+ 		epos.y = rpt->r_pos.y + rnd(rpt->r_max.y - 2) + 1;
+ 	    } while ((rpt->r_flags&ISMAZE) && !(flat(epos.y, epos.x)&F_PASS));
++	}
+ 	distance = abs(spos.x - epos.x) - 1;
+ 	turn_delta.y = (spos.y < epos.y ? 1 : -1);
+ 	turn_delta.x = 0;
+--- a/weapons.c	2026-10-11 06:53:45.184291003 +0000
++++ b/weapons.c	2026-10-11 06:53:45.209249930 +0000
+@@ -146,8 +146,14 @@
+ 	    endmsg();
+ 	    has_hit = FALSE;
+ 	}
++	/*
++	 * oracle: any pack object can be thrown; past the end of weap_info[]
++	 * the std/master builds read scr_info[], which follows it in memory
++	 */
+ 	msg("the %s vanishes as it hits the ground",
+-	    weap_info[obj->o_which].oi_name);
++	    obj->o_which <= MAXWEAPONS ? weap_info[obj->o_which].oi_name
++	    : obj->o_which - (MAXWEAPONS + 1) < MAXSCROLLS
++		? scr_info[obj->o_which - (MAXWEAPONS + 1)].oi_name : NULL);
+     }
+     discard(obj);
+ }
+--- a/pack.c	2026-10-11 06:53:45.188236401 +0000
++++ b/pack.c	2026-10-11 06:53:45.209422599 +0000
+@@ -218,7 +218,8 @@
+     else
+     {
+ 	last_pick = NULL;
+-	pack_used[obj->o_packch - 'a'] = FALSE;
++	if ((unsigned) (obj->o_packch - 'a') < 26)	/* oracle: o_packch 0 wrote */
++	    pack_used[obj->o_packch - 'a'] = FALSE;	/* before the array */
+ 	detach(pack, obj);
+     }
+     return nobj;
+@@ -233,9 +234,10 @@
+ {
+     bool *bp;
+ 
+-    for (bp = pack_used; *bp; bp++)
+-	continue;
+-    *bp = TRUE;
++    for (bp = pack_used; bp < &pack_used[26] && *bp; bp++)	/* oracle: */
++	continue;					/* stay inside */
++    if (bp < &pack_used[26])				/* pack_used[] */
++	*bp = TRUE;
+     return (char)((int)(bp - pack_used) + 'a');
+ }
+ 
+--- a/list.c	2026-10-11 06:53:45.191670481 +0000
++++ b/list.c	2026-10-11 06:53:45.210336602 +0000
+@@ -14,6 +14,9 @@
+ #include <curses.h>
+ #include "rogue.h"
+ 
++int oracle_on_list(THING *list, THING *item);	/* oracle: hooks.c */
++void oracle_doomed(void);
++
+ #ifdef MASTER
+ int total = 0;			/* total dynamic memory bytes */
+ #endif
+@@ -44,6 +47,16 @@
+ void
+ _attach(THING **list, THING *item)
+ {
++    /*
++     * oracle: attaching an item that is already on the list makes it circular
++     * (the add_pack() empty-pack bug) and the next walk of the list never
++     * ends.  The attach is skipped and the game ends at the next key read.
++     */
++    if (oracle_on_list(*list, item))
++    {
++	oracle_doomed();
++	return;
++    }
+     if (*list != NULL)
+     {
+ 	item->l_next = *list;
+--- a/wizard.c	2026-10-11 07:00:35.468335194 +0000
++++ b/wizard.c	2026-10-11 07:00:35.485290936 +0000
+@@ -17,6 +17,8 @@
+ #include <ctype.h>
+ #include "rogue.h"
+ 
++int oracle_bad_which(int type, int which);	/* oracle: hooks.c */
++
+ /*
+  * whatis:
+  *	What a certin object is
+@@ -139,6 +141,8 @@
+     obj->o_group = 0;
+     obj->o_count = 1;
+     mpos = 0;
++    if (oracle_bad_which(obj->o_type, obj->o_which))	/* oracle: a kind past */
++	return;						/* the tables: nothing */
+     if (obj->o_type == WEAPON || obj->o_type == ARMOR)
+     {
+ 	msg("blessing? (+,-,n)");

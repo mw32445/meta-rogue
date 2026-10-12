@@ -1,0 +1,12 @@
+# difftest: seed=4449 master=1 arg=
+# FIX 3: relocate() takes the monster's old room after updating it, so find_dest() never runs on a change of room (chase.c:89-95). Wizard, level 13: a nymph (which wants any object) is zapped with teleport away into another room: classic goes on chasing the hero; fixed goes for the food ration in its new room and takes it, which the wizard map shows 40 turns later
+# expect-classic: |....:.................|   #+....!
+# expect-not-fixed: |....:.................|   #+....!
+# expect-fixed: |......................|   #+....!
+# expect-not-classic: |......................|   #+....!
+9 32 32 32 32 32 32 32 32 67 58 48 32 4 4 4 4 4 4 4
+4 4 4 4 4 67 63 101 32 114 104 27 70 104 67 63 101 32 114 104
+27 67 47 98 32 122 121 104 115 115 115 115 115 115 115 115 115 115 115 115
+115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115
+115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 6
+32

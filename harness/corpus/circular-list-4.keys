@@ -1,0 +1,3 @@
+# difftest: seed=4
+# the add_pack() empty-pack bug: drop everything, pick up the last item dropped, drop it again -> circular lvl_obj (game ends at the next key)
+100 97 108 100 98 108 100 99 108 100 100 108 100 101 108 104 107 100 97 27 27

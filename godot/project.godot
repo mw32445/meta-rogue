@@ -1,0 +1,44 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Meta-Rogue"
+config/description="Meta-Rogue: Rogue 5.4.4 (Michael Toy, Ken Arnold, Glenn Wichman), ported 1:1 to Godot, with the Fighters' Guild between games."
+config/version="1.0.0"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Meta-Rogue"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.png"
+run/main_scene="res://main.tscn"
+run/low_processor_mode=true
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+
+[debug]
+
+gdscript/warnings/integer_division=0
+gdscript/warnings/unused_parameter=0
+gdscript/warnings/unused_variable=0
+gdscript/warnings/shadowed_variable=0
+gdscript/warnings/shadowed_variable_base_class=0
+gdscript/warnings/return_value_discarded=0
+gdscript/warnings/narrowing_conversion=0
+gdscript/warnings/redundant_await=2
+gdscript/warnings/shadowed_global_identifier=2

@@ -1,0 +1,9 @@
+# oracle builds and test outputs
+/harness/oracle/build/
+/harness/out/
+__pycache__/
+*.pyc
+# Godot
+/godot/.godot/
+# the downloads tools/export.sh makes
+/dist/

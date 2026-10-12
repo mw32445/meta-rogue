@@ -1,0 +1,11 @@
+# difftest: seed=5506 master=1 arg=
+# FIX N5: runners() saves next before moving a monster; a dragon whose flame kills that next monster sends the loop to the dead monster, whose links are cleared: it acts once more and the monsters after it lose their turn (chase.c:33-51, sticks.c:373). Wizard, level 5, a corridor: a bat created first, then a monster on the other side polymorphed into a dragon (so the bat follows it in mlist), aggravate monsters, wait: the flame passes the hero and kills the bat; then classic monsters stand still (the emu stays on the door), fixed ones move
+# expect-fixed: +E@D
+# expect-not-classic: +E@D
+9 32 32 32 32 32 32 32 32 9 32 32 32 32 32 32 32 32 4 4
+4 4 6 32 108 108 108 108 108 108 108 108 108 108 108 108 108 108 108 67
+63 101 32 114 106 27 67 63 101 32 114 106 27 67 47 53 32 30 106 122
+108 106 122 108 106 122 108 106 122 108 106 122 108 106 122 108 106 122 108 106
+122 108 106 122 108 106 122 108 106 122 108 106 122 108 106 122 108 106 122 108
+106 122 108 106 122 108 106 122 108 106 122 108 106 122 108 106 122 108 106 67
+63 103 32 114 107 32 27 115 32 32 32 115

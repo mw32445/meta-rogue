@@ -1,0 +1,8 @@
+# difftest: seed=1401 master=1 arg=
+# FIX 14: raise_level() at experience level 21 (the top) set s_exp from e_levels[20] == 0 and dropped the hero to level 1 (potions.c:346); three wizard ^I go 1->10->19->21 (classic: ->21->1->7)
+# expect-classic: Exp: 7/321
+# expect-not-classic: Exp: 21/
+# expect-fixed: Exp: 21/8000001
+# expect-not-fixed: Exp: 7/
+9 32 32 32 32 32 32 32 32 9 32 32 32 32 32 32 32 32 9 32
+32 32 32 32 32 32 115

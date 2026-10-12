@@ -1,0 +1,11 @@
+# difftest: seed=1301 master=1 arg=
+# FIX N13 (wizard): ^I with a full pack: the sword and plate mail do not fit, yet the hero wielded and wore them (command.c:400-417)
+# expect-classic: Arm: 15
+# expect-fixed: You are wielding (c) a +1,+1 mace
+# expect-fixed: You are wearing (b) +1 ring mail
+# expect-not-fixed: Arm: 15
+67 33 48 32 67 33 49 32 67 33 50 32 67 33 51 32 67 33 52 32
+67 33 53 32 67 33 54 32 67 33 55 32 67 33 56 32 67 33 57 32
+67 33 97 32 67 33 98 32 67 33 99 32 67 33 100 32 67 63 48 32
+67 63 49 32 67 63 50 32 67 63 51 32 9 32 32 32 32 32 32 32
+32 32 32 41 32 93 32

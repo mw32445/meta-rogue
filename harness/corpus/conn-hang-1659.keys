@@ -1,0 +1,3 @@
+# difftest: seed=1659 master=1 arg=
+# conn() hang on level 5 (top-row maze): the game ends after 10000 tries
+4 4 4 4 4 4

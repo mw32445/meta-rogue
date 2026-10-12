@@ -1,0 +1,8 @@
+# difftest: seed=1301 master=1 arg=
+# FIX 13 (wizard): walking into an object whose type is a monster letter (created with C F 0) calls fight() on a square with no monster: MASTER messages, then runto() dereferences NULL and the game crashes (fight.c:73-90, chase.c:293-304); fixed: no fight, the game goes on
+# expect-classic: Fight what @ 18,48--More--
+# expect-not-classic: mctesq was here
+# expect-fixed: Fight what @ 18,48
+# expect-fixed: mctesq was here
+# expect-not-fixed: Fight what @ 18,48--More--
+67 70 48 32 32 100 102 32 108 104 32 118 32

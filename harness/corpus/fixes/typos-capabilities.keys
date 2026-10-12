@@ -1,0 +1,14 @@
+# difftest: seed=6101 master=1 arg=
+# FIX typo: weak with hunger while hallucinating, "the munchies are interfering with your motor capabilites" (daemons.c:168). Wizard: ^I, rest (killing what comes) until food is low, a potion of hallucination, rest
+# expect-classic: interfering with your motor capabilites
+# expect-fixed: interfering with your motor capabilities
+# expect-not-fixed: capabilites
+9 32 32 32 32 32 32 32 32 70 107 53 48 115 53 48 115 53 48 115
+53 48 115 53 48 115 53 48 115 53 48 115 53 48 115 53 48 115 53 48
+115 32 70 107 53 48 115 53 48 115 53 48 115 53 48 115 53 48 115 53
+48 115 53 48 115 53 48 115 67 33 49 32 113 104 49 48 115 70 107 49
+48 115 49 48 115 49 48 115 49 48 115 49 48 115 49 48 115 49 48 115
+49 48 115 49 48 115 49 48 115 49 48 115 32 49 48 115 49 48 115 70
+107 49 48 115 49 48 115 49 48 115 49 48 115 49 48 115 49 48 115 49
+48 115 49 48 115 49 48 115 49 48 115 49 48 115 49 48 115 49 48 115
+49 48 115

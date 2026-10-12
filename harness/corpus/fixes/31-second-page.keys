@@ -1,0 +1,13 @@
+# difftest: seed=3101 master=1 arg=
+# FIX 31: add_line() touched stdscr after every page, so the getch() waiting on the next page repainted the map over it: a list past 23 lines never showed its second page (things.c:537-543; getch() is wgetch(stdscr)). Wizard: 14 potions and 7 scrolls identified (^W), 3 potions quaffed to free their slots, then D * (26 lines): page 2 holds the rings' and sticks' lines
+# expect-classic: --Press space to continue--
+# expect-not-classic: Haven't discovered anything about any rings
+# expect-not-classic: Haven't discovered anything about any sticks
+# expect-fixed: Haven't discovered anything about any rings
+# expect-fixed: Haven't discovered anything about any sticks
+67 33 48 23 102 67 33 49 23 103 67 33 50 23 104 67 33 51 23 105
+67 33 52 23 106 67 33 53 23 107 67 33 54 23 108 67 33 55 23 109
+67 33 56 23 110 67 33 57 23 111 67 33 97 23 112 67 33 98 23 113
+67 33 99 23 114 67 33 100 23 115 113 107 113 111 113 106 67 63 48 23
+106 67 63 49 23 107 67 63 50 23 111 67 63 51 23 116 67 63 52 23
+117 67 63 53 23 118 67 63 54 23 119 68 42 32 32

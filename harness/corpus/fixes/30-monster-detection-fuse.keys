@@ -1,0 +1,6 @@
+# difftest: seed=3001 master=1 arg=
+# FIX 30: each potion of monster detection adds a new turn_see fuse instead of lengthening the one burning (potions.c:114): the 20 daemon slots fill up (with ~15 overlapping potions C dereferences NULL; not scripted: the port reports that d_slot() failure with push_error, unlike C), and the first fuse ends the detection: wizard, three potions, 30 turns later classic (20-turn fuses) shows no monsters while fixed (one 60-turn fuse) still shows the emu E
+# expect-fixed: |................|                    E
+# expect-not-classic: |................|                    E
+9 32 32 32 32 32 32 32 32 67 33 54 32 113 104 27 67 33 54 32
+113 104 27 67 33 54 32 113 104 27 51 48 115 115 107 115
