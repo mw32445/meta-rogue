@@ -37,6 +37,14 @@ untouched original.
 - **The Fighters' Guild:** before every new game the Guild's Quartermaster spends the
   coffers of the Hall of Fame (now 20 entries) on your training and gear
   (`../docs/GUILD.md`).
+- **The Guild's prices** (and its formulas, the coffers' too) are in
+  `guild_prices.txt`, a plain text file that explains itself. Edit it with any text
+  editor: the Guild reads it each time it opens, and shows any line it can't use. In a
+  source download it is `godot/guild_prices.txt`, next to `project.godot`. An exported
+  game reads it from next to its executable and writes it there on its first run (in the
+  user data folder if it can't). To ship your own edited file in an export, add `*.txt`
+  to the export's non-resource filter; without it the game uses its built-in copy (the
+  same text as the file here) and writes that.
 - **End of game:** when a game ends, you see the Hall of Fame and how much the Guild's
   coffers now hold. Enter opens the Guild for a new game; Esc quits.
 - **Command line** (after `--`): `--rogueopts=OPTS`, `--master` (enables the wizard-mode
@@ -55,7 +63,7 @@ untouched original.
   - `replay.gd`: replays key scripts and writes step logs for the differential tests;
   - `check_all.gd`: compiles every script;
   - `curses_fuzz.gd`: the curses emulation side of the fuzzer;
-  - `guild_test.gd`: the Guild's tests;
+  - `guild_test.gd`: the Guild's tests; `prices_test.gd`: its price file's;
   - `ui_screenshot.gd`: a UI smoke test.
 
 See `../CLAUDE.md` for commands and rules, and `../docs/` for the design, the
