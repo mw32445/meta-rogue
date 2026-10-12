@@ -12,7 +12,8 @@
 #     the "fixed" oracle (C + harness/oracle/fixes.patch), plus the
 #     expectations ("# expect-...") of the per-bug scripts in harness/corpus/fixes;
 #   - the tests of what the oracle cannot judge: the Fighters' Guild
-#     (godot/tests/guild_test.gd), the item menus and the status line's next-level
+#     (godot/tests/guild_test.gd), its skills in the game (godot/tests/skills_test.gd),
+#     the item menus and the status line's next-level
 #     experience (godot/tests/menus_test.gd), the
 #     fixes' UI checks (godot/tests/fixes_test.gd), the user data folder
 #     (godot/tests/user_data_test.gd), and smoke runs of random games
@@ -43,6 +44,10 @@ step "GDScript compile + await lint"
 step "the Fighters' Guild (godot/tests/guild_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/guild_test.gd 2>&1)" || fail=1
 echo "$out" | grep -E "^(FAIL|guild_test:)"
+
+step "the Guild's skills in the game (godot/tests/skills_test.gd)"
+out="$("$GODOT" --headless --path "$root/godot" --script res://tests/skills_test.gd 2>&1)" || fail=1
+echo "$out" | grep -E "^(FAIL|skills_test:)"
 
 step "the Guild's price file (godot/tests/prices_test.gd)"
 out="$("$GODOT" --headless --path "$root/godot" --script res://tests/prices_test.gd 2>&1)" || fail=1

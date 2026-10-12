@@ -44,10 +44,16 @@ static func look(wakeup: bool) -> void:
 	pch = pp.p_ch
 	pfl = pp.p_flags
 
-	for y in range(sy, ey + 1):
+	# (Low-Light Vision: in a dark room, the room's squares 2 away show too; the
+	# rest, waking and running, is about the 3 x 3 alone, as in C)
+	var r := 2 if Skills.low_light() else 1
+	for y in range(hero.y - r, hero.y + r + 1):
 		if y > 0 and y < NUMLINES - 1:
-			for x in range(sx, ex + 1):
+			for x in range(hero.x - r, hero.x + r + 1):
 				if x < 0 or x >= NUMCOLS:
+					continue
+				var far := y < sy or y > ey or x < sx or x > ex
+				if far and not Skills.low_light_sees(y, x):
 					continue
 				if not on(player, ISBLIND):
 					if y == hero.y and x == hero.x:
@@ -72,11 +78,11 @@ static func look(wakeup: bool) -> void:
 					ch = trip_ch(y, x, ch)
 				else:
 					if on(player, SEEMONST) and on(tp, ISINVIS):
-						if door_stop and not firstmove:
+						if door_stop and not firstmove and not far:
 							running = false
 						continue
 					else:
-						if wakeup:
+						if wakeup and not far:
 							await Monsters.wake_monster(y, x)
 						if Chase.see_monst(tp):
 							if on(player, ISHALU):
@@ -94,7 +100,7 @@ static func look(wakeup: bool) -> void:
 				if tp != null or ch != CCHAR(inch()):
 					addch(ch)
 
-				if door_stop and not firstmove and running:
+				if door_stop and not firstmove and running and not far:
 					match runch:
 						ord("h"):
 							if x == ex:
@@ -165,9 +171,13 @@ static func erase_lamp(pos: Coord, rp: Room) -> void:
 	ey = pos.y + 1
 	ex = pos.x + 1
 	sy = pos.y - 1
-	for x in range(pos.x - 1, ex + 1):
-		for y in range(sy, ey + 1):
+	# (Low-Light Vision: what look() showed 2 away in the room, as there)
+	var r := 2 if skill(SK_LOW_LIGHT) > 0 and (flat(pos.y, pos.x) & F_PASS) == 0 else 1
+	for x in range(pos.x - r, pos.x + r + 1):
+		for y in range(pos.y - r, pos.y + r + 1):
 			if y == hero.y and x == hero.x:
+				continue
+			if (y < sy or y > ey or x < pos.x - 1 or x > ex) and not Skills.in_room(rp, y, x):
 				continue
 			move(y, x)
 			if inch() == FLOOR:

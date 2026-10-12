@@ -117,7 +117,8 @@ static func wanderer() -> void:
 		else:
 			addch(rnd(26) + ord("A"))
 		standend()
-	Chase.runto(tp.t_pos)
+	if not (cult_member() and is_snake(tp)):	# the Serpentine Cult: snakes sleep
+		Chase.runto(tp.t_pos)
 	if MASTER:
 		if wizard:
 			await Io.msg("started a wandering %s", [monsters[tp.t_type - ord("A")].m_name])
@@ -148,7 +149,9 @@ static func wake_monster(y: int, x: int) -> Thing:
 			await abort()
 	ch = tp.t_type
 	# Every time he sees mean monster, it might start chasing him
-	if not on(tp, ISRUN) and rnd(3) != 0 and on(tp, ISMEAN) and not on(tp, ISHELD) \
+	# (not a snake, in the Serpentine Cult: docs/GUILD.md, "Skills")
+	if not on(tp, ISRUN) and not (cult_member() and is_snake(tp)) and rnd(3) != 0 \
+			and on(tp, ISMEAN) and not on(tp, ISHELD) \
 			and not ISWEARING(R_STEALTH) and not on(player, ISLEVIT):
 		tp.t_dest = hero
 		tp.t_flags |= ISRUN
@@ -159,16 +162,20 @@ static func wake_monster(y: int, x: int) -> Thing:
 				or Chase.dist(y, x, hero.y, hero.x) < LAMPDIST:
 			tp.t_flags |= ISFOUND
 			if not save(VS_MAGIC):
-				if on(player, ISHUH):
-					Daemon.lengthen(D_UNCONFUSE, Misc.spread(HUHDURATION))
-				else:
-					Daemon.fuse(D_UNCONFUSE, 0, Misc.spread(HUHDURATION), AFTER())
-				player.t_flags |= ISHUH
+				if skill(SK_INTELLECT) == 0:	# High Intellect: never confused
+					if on(player, ISHUH):
+						Daemon.lengthen(D_UNCONFUSE, Misc.spread(HUHDURATION))
+					else:
+						Daemon.fuse(D_UNCONFUSE, 0, Misc.spread(HUHDURATION), AFTER())
+					player.t_flags |= ISHUH
 				mname = Fight.set_mname(tp)
 				await Io.addmsg("%s", [mname])
 				if mname != "it":
 					await Io.addmsg("'")
-				await Io.msg("s gaze has confused you")
+				if skill(SK_INTELLECT) > 0:
+					await Io.msg("s gaze has no effect on you")
+				else:
+					await Io.msg("s gaze has confused you")
 	# Let greedy ones guard gold
 	if on(tp, ISGREED) and not on(tp, ISRUN):
 		tp.t_flags |= ISRUN

@@ -44,6 +44,9 @@ static func do_zap() -> void:
 	if obj.o_charges == 0:
 		await Io.msg("nothing happens")
 		return
+	# the Serpentine Cult: a zap at a snake is asked first
+	if cult_member() and not await Skills.cult_allows(Skills.zap_targets(obj)):
+		return
 	match obj.o_which:
 		WS_LIGHT:
 			# Reddy Kilowat wand.  Light up the room

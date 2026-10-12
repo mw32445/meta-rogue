@@ -453,6 +453,8 @@ static func _menu_fits(obj: Thing, type_: int) -> bool:
 ## money:
 ##	Add or subtract gold from the pack
 static func money(value: int) -> void:
+	if value > 0 and skill(SK_COIN) > 0:	# Coin Scrounger: x2, x3, ... (docs/GUILD.md)
+		value *= skill(SK_COIN) + 1
 	purse += value
 	mvaddch(hero.y, hero.x, floor_ch())
 	INDEX(hero.y, hero.x).p_ch = PASSAGE if (proom.r_flags & ISGONE) != 0 else FLOOR

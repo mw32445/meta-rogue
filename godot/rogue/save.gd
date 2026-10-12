@@ -751,8 +751,10 @@ static func _save_state() -> Dictionary:
 		for col in width:
 			win.append(mvwinch(stdscr, row, col))
 	st["window"] = [height, width, win]
-	if guild:	# the pack size the Guild sold (optional on restore)
+	if guild:	# the pack size and the skills the Guild sold (optional on restore)
 		st["maxpack"] = maxpack
+		st["skills"] = skills.duplicate()
+		st["cult_banished"] = cult_banished
 	return st
 
 
@@ -925,4 +927,6 @@ static func _restore_state(st: Dictionary) -> bool:
 				mvwaddch(stdscr, row, col, cells[k])
 			k += 1
 	maxpack = int(st.get("maxpack", MAXPACK))
+	skills = st.get("skills", {}).duplicate()
+	cult_banished = bool(st.get("cult_banished", false))
 	return true

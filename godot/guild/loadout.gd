@@ -39,6 +39,10 @@
 ##   "potions", "scrolls": [{"which": p, "count": n}, ...]
 ##   "food": n               rations added
 ##   "know_potions", "know_scrolls": [p, ...]   kinds identified for the run
+##   "skills": {name: level, ...}
+##                           the skills (GuildCatalog.SKILLS' names): RogueBase.skills,
+##                           which the game reads with skill(); a name the catalog
+##                           lacks is left out with an error
 ## The counts (hit points, arrows, missiles, charges) are in the loadout: applying
 ## one needs no price list. Every weapon, armour, ring and stick is known
 ## (ISKNOW), and every kind bought or identified is known for the run (oi_know).
@@ -50,6 +54,19 @@ extends RogueBase
 
 static func apply(l: Dictionary) -> void:
 	var obj: Thing
+
+	# The skills
+	skills = {}
+	var sk: Variant = l.get("skills", {})
+	if sk is Dictionary:
+		for name in sk:
+			var known := false
+			for row in GuildCatalog.SKILLS:
+				known = known or row[0] == name
+			if not known:
+				push_error("Loadout: there is no skill '%s'" % name)
+			elif int(sk[name]) > 0:
+				skills[String(name)] = int(sk[name])
 
 	# The pack's size first: everything below must fit (52: pack letters a-z, A-Z)
 	maxpack = clampi(_int(l, "maxpack", MAXPACK), MAXPACK, GuildCatalog.PACK_MAX)

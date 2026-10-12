@@ -30,6 +30,8 @@ static func runners(_arg: int = 0) -> void:
 	while tp != null:
 		# remember this in case the monster's "next" is changed
 		next = tp.l_next
+		if guild:
+			Skills.mon_turn(tp)	# the rings it was hit with (Throw Anything)
 		if not on(tp, ISHELD) and on(tp, ISRUN):
 			_runners_orig_pos.copy_from(tp.t_pos)
 			wastarget = on(tp, ISTARGET)
@@ -82,7 +84,7 @@ static func relocate(th: Thing, new_loc: Coord) -> void:
 
 		# (oroom was taken after t_room changed: find_dest() is never
 		# called here. Kept: docs/FIDELITY.md; fixed by FIX 3)
-		if oroom != th.t_room:
+		if oroom != th.t_room and not (guild and Skills.drawn(th)):
 			th.t_dest = find_dest(th)
 		th.t_pos.copy_from(new_loc)
 		INDEX(new_loc.y, new_loc.x).p_monst = th
@@ -108,6 +110,10 @@ static func do_chase(th: Thing) -> int:
 	var obj: Thing
 
 	rer = th.t_room		# Find room of chaser
+	# (Throw Anything: one going to a monster it was drawn to meets the hero on
+	# the way; it would not step onto him)
+	if guild and th.t_dest != hero and dist_cp(th.t_pos, hero) <= 2 and Skills.drawn(th):
+		th.t_dest = hero
 	if on(th, ISGREED) and rer.r_goldval == 0:
 		th.t_dest = hero	# If gold has been taken, run after hero
 	if th.t_dest == hero:	# Find room of chasee
@@ -196,7 +202,7 @@ static func set_oldch(tp: Thing, cp: Coord) -> void:
 		if (sch == FLOOR or tp.t_oldch == FLOOR) \
 				and (tp.t_room.r_flags & ISDARK) != 0:
 			tp.t_oldch = ord(" ")
-		elif dist_cp(cp, hero) <= LAMPDIST and see_floor:
+		elif (dist_cp(cp, hero) <= LAMPDIST or Skills.low_light_sees(cp.y, cp.x)) and see_floor:
 			tp.t_oldch = chat(cp.y, cp.x)
 
 
@@ -216,6 +222,8 @@ static func see_monst(mp: Thing) -> bool:
 		if y != hero.y and x != hero.x \
 				and not Io.step_ok(chat(y, hero.x)) and not Io.step_ok(chat(hero.y, x)):
 			return false
+		return true
+	if Skills.low_light_sees(y, x):	# Low-Light Vision (docs/GUILD.md)
 		return true
 	if mp.t_room != proom:
 		return false
@@ -363,6 +371,8 @@ static func cansee(y: int, x: int) -> bool:
 			if y != hero.y and x != hero.x \
 					and not Io.step_ok(chat(y, hero.x)) and not Io.step_ok(chat(hero.y, x)):
 				return false
+		return true
+	if Skills.low_light_sees(y, x):	# Low-Light Vision (docs/GUILD.md)
 		return true
 	# We can only see if the hero in the same room as
 	# the coordinate and the room is lit or if it is close.
