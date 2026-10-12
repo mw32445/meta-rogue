@@ -13,7 +13,8 @@
 ##   9. with several monitors: the window moves to the second one (its size fitted to
 ##      it, centred), goes fullscreen there, and comes back fullscreen on the first.
 ## With --windowed (the game's option: this run only) it checks the first launch
-## alone: a window of the default size, while the file keeps fullscreen.
+## alone: a window of the default size, while the file keeps fullscreen. With
+## --fullscreen it starts from a file that says windowed: fullscreen, file unchanged.
 ## Needs a display whose window manager handles fullscreen, e.g.
 ##   godot/tests/with_display.sh --workarea=0,0,1920,1040 -- godot --path godot \
 ##       --script res://tests/ui_video.gd -- --out=/tmp/video
@@ -43,6 +44,10 @@ func _initialize() -> void:
 		return
 	_cfg = data.path_join("ui_video.cfg")
 	DirAccess.remove_absolute(_cfg)
+	if OS.get_cmdline_user_args().has("--fullscreen"):
+		var f := FileAccess.open(_cfg, FileAccess.WRITE)
+		f.store_string("[video]\nmode=\"windowed\"\nsize=Vector2i(1280, 720)\n")
+		f.close()
 	var main_script: GDScript = load("res://ui/main.gd")
 	main_script.skip_guild = true	# a new game at once
 	main_script.video_path = _cfg
@@ -64,6 +69,12 @@ func _run() -> void:
 			and w.size == want and w.position == centred, "%d %s at %s" % [w.mode, w.size, w.position])
 		_expect("--windowed: not saved", _saved("mode", "\"fullscreen\""), _text())
 		_shot()
+		_finish()
+		return
+	if OS.get_cmdline_user_args().has("--fullscreen"):
+		_expect("--fullscreen: fullscreen over a windowed setting", w.mode == Window.MODE_FULLSCREEN
+			and w.size == screen, "%d %s" % [w.mode, w.size])
+		_expect("--fullscreen: not saved", _saved("mode", "\"windowed\""), _text())
 		_finish()
 		return
 
@@ -172,7 +183,7 @@ func _run() -> void:
 	_finish()
 
 
-## 7. Windowed on the first monitor: to the second and back.
+## 9. Windowed on the first monitor: to the second and back.
 func _second_monitor() -> void:
 	var w := root
 	var at := DisplayServer.screen_get_position(1)
