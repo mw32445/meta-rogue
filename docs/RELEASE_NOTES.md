@@ -1,8 +1,20 @@
 Meta-Rogue is **Rogue 5.4.4**, the 1980 dungeon crawler that named the roguelike genre, ported screen for screen to the Godot engine, with a meta-progression layer on top.
 
+### New in 1.1.0
+- **Skills.** The Guild has a ninth section, Skills, bought for one hero like everything else:
+  - Frost Resistance and Frost Immunity;
+  - Sure Sight and High Intellect;
+  - Low-Light Vision;
+  - Throw Anything: thrown potions, scrolls, rings and wands work on the monster they hit;
+  - Coin Scrounger: the gold you find x2, x3, ...;
+  - Safe Pockets, the Serpentine Cult and Advanced Recovery.
+
+  The line under the list says what each one does.
+- **Cheaper wands and rings.** Wands cost about a third of what they did: teleport away is 300, and a second wand of a kind costs twice as much, not four times. Rings cost about 10% less. If you never edited `guild_prices.txt`, the game replaces it with the new list. An edited one is kept, and the skills' prices come from the game.
+
 ### What's in it
 - **The original game, 1:1.** It has the same dungeons, monsters and rules, checked keystroke by keystroke against the C program. `--classic` plays it untouched.
-- **The Fighters' Guild.** Before each new game, the gold of your Hall of Fame (20 heroes) buys training, arms, armour, rings, wands, potions, scrolls and supplies. Every price and formula is in `guild_prices.txt`, a text file you can edit.
+- **The Fighters' Guild.** Before each new game, the gold of your Hall of Fame (20 heroes) buys training, arms, armour, rings, wands, potions, scrolls, supplies and skills. Every price and formula is in `guild_prices.txt`, a text file you can edit.
 - **The known bugs of 5.4.4, fixed.**
 - **Item menus as in PC Rogue.** Read, quaff, wield and the rest list the items that fit, at once.
 - **The next level on the status line:** `Exp: 2/15/20` means level 2, 15 points, level 3 at 20.

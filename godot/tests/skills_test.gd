@@ -12,7 +12,7 @@ extends SceneTree
 
 const R := preload("res://rogue/rogue_base.gd")
 ## The seed: the hero starts at row 10, column 44 of a lit room whose floor is
-## rows 9 to 13, columns 30 to 49 (nothing near him).
+## rows 9 to 13, columns 30 to 49 (nothing near the hero).
 const SEED := 8
 
 var _passed := 0
@@ -222,7 +222,7 @@ func _give(type_: int, which: int, arm := 1, charges := 3) -> String:
 		R.STICK:
 			Sticks.fix_stick(obj)
 			obj.o_charges = charges
-			obj.o_damage = "0x0"	# a wand's or a staff's blow alike: his strength's 1
+			obj.o_damage = "0x0"	# a wand's or a staff's blow alike: the hero's strength's 1
 		R.RING:
 			obj.o_arm = arm
 		R.ARMOR:
@@ -255,7 +255,7 @@ func _on_floor(type_: int) -> int:
 	return n
 
 
-## Hard to kill: the checks that let monsters hit him.
+## A hero hard to kill: for the checks that let monsters hit the hero.
 func _tough() -> void:
 	R.pstats.s_hpt = 5000
 	R.max_hp = 5000
@@ -264,7 +264,7 @@ func _tough() -> void:
 # ---- Frost Resistance, Frost Immunity --------------------------------------------
 
 func _test_frost() -> void:
-	# An ice monster beside him that always hits; he starves 60 turns on.
+	# An ice monster beside the hero that always hits; the hero starves 60 turns on.
 	for has in [false, true]:
 		_start({"frost resistance": 1} if has else {})
 		_tough()
@@ -277,7 +277,7 @@ func _test_frost() -> void:
 		if has:
 			_check("frost resistance: frozen past the hypothermia limit, alive", frozen > 0
 				and not _saw("hypothermia"), _seen.right(600))
-			_check("frost resistance: frozen until he starves (%d turns to go)" % R.no_command,
+			_check("frost resistance: frozen until the hero starves (%d turns to go)" % R.no_command,
 				_saw("starvation") and R.no_command > R.BORE_LEVEL, R.no_command)
 		else:
 			_check("no frost resistance: death by hypothermia", _saw("hypothermia"), _seen.right(600))
@@ -304,7 +304,7 @@ func _test_sure_sight() -> void:
 		var blind := R.on(R.player, R.ISBLIND)
 		if has:
 			_check("sure sight: the potion of blindness does not blind", not blind)
-			_check("sure sight: what he sees", _saw("a cloak of darkness falls around you, and fades away"))
+			_check("sure sight: the message", _saw("a cloak of darkness falls around you, and fades away"))
 			_check("sure sight: the potion is known", R.pot_info[R.P_BLIND].oi_know)
 			_check("sure sight: the potion is gone", _in_pack(R.POTION, R.P_BLIND) == null)
 		else:
@@ -321,14 +321,14 @@ func _test_high_intellect() -> void:
 		var huh := R.on(R.player, R.ISHUH)
 		if has:
 			_check("high intellect: the potion of confusion does not confuse", not huh)
-			_check("high intellect: what he feels",
+			_check("high intellect: the message",
 				_saw("you feel confused for a moment, then your mind clears"))
 			_check("high intellect: the potion is known", R.pot_info[R.P_CONFUSE].oi_know)
 		else:
 			_check("no high intellect: confused by the potion", huh)
 		R.player.t_flags &= ~R.ISHUH
 		Daemon.extinguish(R.D_UNCONFUSE)
-		# The medusa's gaze, beside him; he never saves (save_throw needs 37).
+		# The medusa's gaze, beside the hero, who never saves (save_throw needs 37).
 		_seen = ""
 		var lvl := R.pstats.s_lvl
 		R.pstats.s_lvl = -40
@@ -420,7 +420,7 @@ func _test_throw_items() -> void:
 		_start({"throw anything": 1} if has else {})
 		_tough()
 		var n := "throw anything: " if has else "no throw anything: "
-		# armour: 1x4 (+1 for his strength); without the skill 0x0 (+1)
+		# armour: 1x4 (+1 for the hero's strength); without the skill 0x0 (+1)
 		var l := _give(R.ARMOR, R.LEATHER)
 		var tp := _target()
 		var armours := _on_floor(R.ARMOR)
@@ -482,6 +482,17 @@ func _test_throw_items() -> void:
 	_keys("th" + l)
 	_check(n + "a scroll of teleportation", Chase._on_mlist(tp) and Vector2i(tp.t_pos.x, tp.t_pos.y) != was
 		and _saw("the zombie vanishes"))
+	# a venus flytrap holding the hero, teleported away, lets go
+	l = _give(R.SCROLL, R.S_TELEP)
+	while R.mlist != null:
+		_remove(R.mlist)
+	var fly := _monster("F", 0, -1, true)
+	fly.t_stats.s_arm = 20
+	fly.t_stats.s_hpt = 1000
+	R.player.t_flags |= R.ISHELD
+	_keys("th" + l)
+	_check(n + "a venus flytrap teleported away lets go", Chase._on_mlist(fly) and not R.on(R.player, R.ISHELD))
+	_remove(fly)
 	# a miss lands
 	l = _give(R.POTION, R.P_RESTORE)
 	tp = _target("Z", false)
@@ -572,12 +583,18 @@ func _test_throw_wands() -> void:
 	lost = 1000 - tp.t_stats.s_hpt
 	_check(n + "a wand of cold: the hit's 1, then 6x6", lost >= 7 and lost <= 37 and _saw("the ice hits"),
 		lost)
-	# teleport away
-	l = _give(R.STICK, R.WS_TELAWAY, 1, 3)
+	# polymorph: a new monster, awake
+	l = _give(R.STICK, R.WS_POLYMORPH, 1, 3)
 	tp = _target()
 	_keys("th" + l)
-	_check(n + "a wand of teleport away", Chase._on_mlist(tp) and Chase.dist(tp.t_pos.y, tp.t_pos.x,
-		R.hero.y, R.hero.x) > 4)
+	_check(n + "a wand of polymorph: a new monster, awake", Chase._on_mlist(tp) and R.on(tp, R.ISRUN))
+	# teleport away (a venus flytrap: it does not move on its own)
+	l = _give(R.STICK, R.WS_TELAWAY, 1, 3)
+	tp = _target("F")
+	var was := Vector2i(tp.t_pos.x, tp.t_pos.y)
+	_keys("th" + l)
+	_check(n + "a wand of teleport away", Chase._on_mlist(tp) and Vector2i(tp.t_pos.x, tp.t_pos.y) != was,
+		[was, tp.t_pos.y, tp.t_pos.x])
 	_end()
 
 
@@ -672,7 +689,7 @@ func _test_cult_asleep() -> void:
 			_key(".")
 			woke = woke or R.on(sn, R.ISRUN)
 		if has:
-			_check("serpentine cult: a snake beside him sleeps on", not woke)
+			_check("serpentine cult: a snake beside the hero sleeps on", not woke)
 		else:
 			_check("no serpentine cult: the snake wakes", woke)
 		_end()
@@ -690,8 +707,8 @@ func _test_cult_bites() -> void:
 			_key(".")
 			low = mini(low, R.pstats.s_str)
 		if has:
-			_check("serpentine cult: bites never weaken him", low == str0, low)
-			_check("serpentine cult: a snake's bites make him stronger once (40 bites: +1)",
+			_check("serpentine cult: bites never weaken the hero", low == str0, low)
+			_check("serpentine cult: a snake's bites make the hero stronger once (40 bites: +1)",
 				R.pstats.s_str == str0 + 1 and R.on(sn, R.GAVESTR) and _saw("the snake's bite makes you stronger"),
 				R.pstats.s_str)
 			# another snake: one more
@@ -702,7 +719,7 @@ func _test_cult_bites() -> void:
 				_key(".")
 			_check("serpentine cult: another snake, once more (+2)", R.pstats.s_str == str0 + 2, R.pstats.s_str)
 		else:
-			_check("no serpentine cult: bites weaken him", R.pstats.s_str < str0, R.pstats.s_str)
+			_check("no serpentine cult: bites weaken the hero", R.pstats.s_str < str0, R.pstats.s_str)
 		_end()
 
 
@@ -788,9 +805,9 @@ func _test_cult_banished() -> void:
 	sn.t_stats.s_hpt = 1
 	sn.t_stats.s_arm = 20
 	_keys("hh")
-	_check("serpentine cult: killing a snake banishes him", R.cult_banished and not Chase._on_mlist(sn)
+	_check("serpentine cult: killing a snake banishes the hero", R.cult_banished and not Chase._on_mlist(sn)
 		and _saw("you are banished from the Serpentine Cult!"))
-	# now rattlesnakes weaken him again, and hit 50% harder: 1x6 makes 1 3 4 6 7 9
+	# now rattlesnakes weaken the hero again, and hit 50% harder: 1x6 makes 1 3 4 6 7 9
 	var str0: int = R.pstats.s_str
 	sn = _monster("R", 0, -1, true)
 	sn.t_stats.s_lvl = 20
@@ -803,7 +820,7 @@ func _test_cult_banished() -> void:
 	for d in losses:
 		ok = ok and d in [1, 3, 4, 6, 7, 9]
 	_check("banished: snakes hit 50% harder", ok and losses.max() > 6, losses)
-	_check("banished: bites weaken him again", R.pstats.s_str < str0, R.pstats.s_str)
+	_check("banished: bites weaken the hero again", R.pstats.s_str < str0, R.pstats.s_str)
 	# the next snake sleeps no more
 	_seen = ""
 	var sn2 := _monster("S", -1, -1)
@@ -851,5 +868,5 @@ func _test_save() -> void:
 	while mp != null:
 		gave = gave or (mp.t_type == ord("R") and R.on(mp, R.GAVESTR))
 		mp = mp.l_next
-	_check("the save keeps which snakes have made him stronger", gave)
+	_check("the save keeps which snakes have made the hero stronger", gave)
 	_end()

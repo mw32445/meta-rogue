@@ -71,8 +71,10 @@ static func in_room(rp: Room, y: int, x: int) -> bool:
 # ---- monsters moved by a skill's effect -----------------------------------------------
 
 ## Teleport a monster to a random place on the level (as the wand of teleport away
-## does, without sending it after the hero).
+## does, without sending it after the hero). A venus flytrap lets go of the hero.
 static func mon_teleport(tp: Thing) -> void:
+	if tp.t_type == ord("F"):
+		player.t_flags &= ~ISHELD
 	var new_pos := Coord.new()
 	while true:
 		Rooms.find_floor(null, new_pos, 0, true)
@@ -258,6 +260,8 @@ static func _create_near(tp: Thing) -> void:
 				continue
 			if y < 1 or y >= NUMLINES - 1 or x < 0 or x >= NUMCOLS or moat(y, x) != null:
 				continue
+			if winat(y, x) == SCROLL and _scare_at(y, x):
+				continue
 			if Io.step_ok(winat(y, x)):
 				i += 1
 				if rnd(i) == 0:
@@ -265,6 +269,16 @@ static func _create_near(tp: Thing) -> void:
 					mp.x = x
 	if i > 0:
 		Monsters.new_monster(List.new_item(), Monsters.randmonster(false), mp)
+
+
+## A scroll of scare monster lies there.
+static func _scare_at(y: int, x: int) -> bool:
+	var op := lvl_obj
+	while op != null:
+		if op.o_pos.y == y and op.o_pos.x == x:
+			return op.o_type == SCROLL and op.o_which == S_SCARE
+		op = op.l_next
+	return false
 
 
 static func _ring_on(obj: Thing, tp: Thing) -> void:
@@ -286,6 +300,9 @@ static func _stick_on(obj: Thing, tp: Thing) -> void:
 	var x := tp.t_pos.x
 	var seen := Chase.see_monst(tp)
 	var nm := Fight.set_mname(tp)
+	if tp.t_type == ord("F") and obj.o_which in [WS_HASTE_M, WS_SLOW_M, WS_TELAWAY, WS_TELTO,
+			WS_CANCEL, WS_POLYMORPH]:
+		player.t_flags &= ~ISHELD	# as do_zap(): a venus flytrap lets go
 	match obj.o_which:
 		WS_LIGHT:	# as when zapped: the hero's room is lit
 			if proom.r_flags & ISGONE:
@@ -317,6 +334,7 @@ static func _stick_on(obj: Thing, tp: Thing) -> void:
 				mvaddch(y, x, kind)
 			tp.t_oldch = oldch
 			tp.t_pack = pp
+			Chase.runto(_cp)	# as do_zap() does after it
 		WS_CANCEL:
 			tp.t_flags |= ISCANC
 			tp.t_flags &= ~(ISINVIS | CANHUH)
@@ -403,7 +421,8 @@ static func zap_targets(obj: Thing) -> Array:
 					out.append(mp)
 				mp = mp.l_next
 			return out
-	var tp := first_monster(delta.y, delta.x, false)
+	# (a magic missile flies as a thrown thing does, stopping at a door)
+	var tp := first_monster(delta.y, delta.x, obj.o_which == WS_MISSILE)
 	return [tp] if tp != null else []
 
 

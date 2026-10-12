@@ -81,7 +81,9 @@ Four switches exist (`RogueBase`, set by the host like `MASTER`, untouched by `r
 - `guild`: the Fighters' Guild (`docs/GUILD.md`), tested by `godot/tests/guild_test.gd`
   and replays with `--guild --loadout F.json`. Its prices and formulas are in
   `godot/guild_prices.txt`, which players edit; `godot/tests/prices_test.gd` keeps that
-  file and the built-in copy (`GuildCatalog.PRICES`) identical.
+  file and the built-in copy (`GuildCatalog.PRICES`) identical. The skills it sells
+  change rules in the game (`godot/rogue/skills.gd`; `RogueBase.skill()` is 0 out of
+  guild mode), tested by `godot/tests/skills_test.gd`.
 - `menus`: PC Rogue-style item menus (`Pack.get_item`), tested by
   `godot/tests/menus_test.gd`.
 - `exp_next`: the status line shows the next level's experience (`Io.status`),

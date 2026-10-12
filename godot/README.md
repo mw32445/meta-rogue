@@ -116,6 +116,7 @@ untouched original.
   - `check_all.gd`: compiles every script;
   - `curses_fuzz.gd`: the curses emulation side of the fuzzer;
   - `guild_test.gd`: the Guild's tests; `prices_test.gd`: its price file's;
+    `skills_test.gd`: its skills in the game;
   - `settings_test.gd`: the video settings (made-up screens, the file, the menu's
     keys, F10 and Alt+Enter in the main scene), headless;
   - `user_data_test.gd`: the user data folder and the move of the old one;
