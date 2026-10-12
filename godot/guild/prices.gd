@@ -86,14 +86,22 @@ class Entry:
 
 ## The game's price list (see above).
 static func read() -> GuildPrices:
+	var at := places_of(not OS.has_feature("editor"), OS.has_feature("pc"))
+	return read_from(at[0], at[1], "res://" + FILE_NAME)
+
+
+## Where a game looks for the file, in order, and where it may write the default
+## one: [places, write_to]. An exported game on a desktop looks next to its
+## executable first; only an exported game writes.
+static func places_of(exported: bool, desktop: bool) -> Array:
 	var places: Array[String] = []
-	if not OS.has_feature("editor") and OS.has_feature("pc"):
+	if exported and desktop:
 		places.append(_exe_dir().path_join(FILE_NAME))
 	places.append("user://" + FILE_NAME)
 	var write_to: Array[String] = []
-	if not OS.has_feature("editor"):
-		write_to = places
-	return read_from(places, write_to, "res://" + FILE_NAME)
+	if exported:
+		write_to.assign(places)
+	return [places, write_to]
 
 
 ## The first file of places that exists. When none does, the default list (the

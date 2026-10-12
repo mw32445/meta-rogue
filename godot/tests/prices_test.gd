@@ -522,6 +522,8 @@ func _test_override() -> void:
 
 
 ## read_from(): the first file found; else the default list written where it can be.
+## places_of(): where a game looks and writes, from source and exported. read() from
+## source.
 func _test_places() -> void:
 	var dir := _dir.path_join("places")
 	DirAccess.make_dir_recursive_absolute(dir)
@@ -555,10 +557,22 @@ func _test_places() -> void:
 	p = GuildPrices.read_from(places, places, SHIPPED)
 	_check("places: read again each time (an edit counts at once)",
 		p.price("training", "strength") == 2)
+	# where a game looks, and writes
+	var mine := "user://" + GuildPrices.FILE_NAME
+	var src := GuildPrices.places_of(false, true)
+	var exported := GuildPrices.places_of(true, true)
+	var phone := GuildPrices.places_of(true, false)
+	var exe := OS.get_executable_path().get_base_dir().path_join(GuildPrices.FILE_NAME)
+	_check("places: from source, the user data folder (then the shipped file); no writing",
+		Array(src[0]) == [mine] and src[1].is_empty(), src)
+	_check("places: an exported game on a desktop: next to the executable, then the user"
+		+ " data folder; it writes there", Array(exported[0]) == [exe, mine]
+		and Array(exported[1]) == [exe, mine], exported)
+	_check("places: an exported game elsewhere: the user data folder", Array(phone[0]) == [mine]
+		and Array(phone[1]) == [mine], phone)
 	# the game's read(): from source (this editor binary) it only reads: the user data
 	# folder's file if there is one (the player's: its values are not checked), else
 	# the shipped one
-	var mine := "user://" + GuildPrices.FILE_NAME
 	var had := FileAccess.file_exists(mine)
 	p = GuildPrices.read()
 	_check("places: read() from source reads %s, writes nothing" % ("the player's file" if had
