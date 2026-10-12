@@ -70,6 +70,7 @@ code that added the last of them (the Guild's skills):
 | Smoke: random games with every switch on (fixes, Guild with random loadouts and random skills, menus, next-level experience), the port alone, no script error and no hang | 300 + 200 wizard | 0 problems |
 | The downloads (`tools/export.sh`, `tools/check_export.py --run`): the three zips' files, the executables' formats, the macOS bundle and its signature, each platform's game data loaded by Godot; the Linux build played in a window (first launch fullscreen, the Guild, the dungeon, save and restore, an old "Rogue" folder moved) | 3 zips | all pass |
 | The published release `v1.0.0`, built by `.github/workflows/release.yml` and downloaded from GitHub: the same checks, and SHA256SUMS.txt | 3 zips | all pass |
+| The published release `v1.1.0` (the Guild's skills), the same way: built by the workflow, downloaded from GitHub, the same checks and SHA256SUMS.txt; the Linux build played in a window | 3 zips | all pass |
 
 The renames for Godot's built-in names (CONVENTIONS.md §1) were checked on their own
 before the switches: the quick suite was identical in every batch.
