@@ -46,20 +46,24 @@ behavior, decided in `docs/FIDELITY.md`. Each now has a script in `harness/corpu
 The curses emulation was checked separately against real ncurses: 10,000 out of 10,000
 random scripts were identical.
 
-## The gameplay switches (fixes, guild, menus)
-The playable game adds bug fixes, the Fighters' Guild and item menus, each behind a
-switch (`docs/CHANGES.md`). One full run of `harness/run_all.sh` at the code that added
-them:
+## The gameplay switches and the playable game
+The playable game adds bug fixes, the Fighters' Guild (with its editable price file),
+item menus and the next level's experience on the status line, each behind a switch
+(`docs/CHANGES.md`), and video settings. One full run of `harness/run_all.sh` at the
+code that added the last of them:
 
 | Batch | Runs | Result |
 |---|---|---|
 | Classic game (all switches off) vs the stock oracle: corpus, level generation, random games, wizard games, save chains | 68 + 500 + 300 + 200 + 100 | all identical |
 | Bug fixes on vs the fixed oracle (C + `fixes.patch`): the same five batches | 68 + 500 + 300 + 200 + 100 | all identical; every `# expect-classic/fixed:` line of the 33 per-bug scripts in `harness/corpus/fixes/` holds |
 | Curses emulation vs ncurses | 1,000 | 1,000/1,000 |
-| `guild_test.gd` (the Guild's rules, coffers, loadouts, big packs, Hall of Fame migration, screen keys) | 113 checks | all pass |
-| `menus_test.gd` (the item menus) | 13 checks | all pass |
+| `guild_test.gd` (rules, coffers, loadouts, big packs, Hall of Fame migration, screen keys, edited prices) | 123 checks | all pass |
+| `prices_test.gd` (the formula language, the price file, errors; the shipped file equals the built-in prices) | 244 checks | all pass |
+| `menus_test.gd` (item menus; the status line's next-level experience) | 18 checks | all pass |
+| `settings_test.gd` (video settings: detection, presets, the file, the menu) | 81 checks | all pass |
+| `ui_video.gd` in a real window at 1920 x 1080 (first-launch fullscreen, F10, windowed 1600 x 900, Alt+Enter) | 1 | passes |
 | `fixes_test.gd` (keypad 5, connected levels after the `conn()` fix, the wizard map's standout) | 61 checks | all pass |
-| Smoke: random games with every switch on (fixes, Guild with random loadouts, menus), the port alone, no script error and no hang | 300 + 200 wizard | 0 problems |
+| Smoke: random games with every switch on (fixes, Guild with random loadouts, menus, next-level experience), the port alone, no script error and no hang | 300 + 200 wizard | 0 problems |
 
 The renames for Godot's built-in names (CONVENTIONS.md §1) were checked on their own
 before the switches: the quick suite was identical in every batch.
