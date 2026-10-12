@@ -5,8 +5,9 @@ Xvfb has no window manager, and an X11 program goes fullscreen by asking the win
 manager (the EWMH _NET_WM_STATE_FULLSCREEN request): without one, Godot's fullscreen
 modes do nothing there. This window manager does what the video tests need and no more:
   - it maps windows and grants their move and resize requests (no decorations);
-  - on a fullscreen request it makes the window cover its monitor (Xinerama) and sets
-    _NET_WM_STATE; leaving fullscreen restores the window's previous geometry;
+  - on a fullscreen request it makes the window cover its monitor (Xinerama), on a
+    maximize request the usable part of it, and sets _NET_WM_STATE; leaving both
+    restores the window's previous geometry;
   - --workarea=X,Y,W,H publishes _NET_WORKAREA, the usable area a desktop panel
     leaves (Godot's DisplayServer.screen_get_usable_rect());
   - --monitors=WxH+X+Y,... splits the screen into several monitors (RandR 1.5
@@ -143,9 +144,14 @@ class WindowManager:
         self.atom = lambda name: X.XInternAtom(self.d, name.encode(), 0)
         self.wm_state = self.atom("_NET_WM_STATE")
         self.fullscreen = self.atom("_NET_WM_STATE_FULLSCREEN")
-        self.saved = {}	# window -> geometry before fullscreen
+        self.maximized = (self.atom("_NET_WM_STATE_MAXIMIZED_HORZ"),
+                          self.atom("_NET_WM_STATE_MAXIMIZED_VERT"))
+        self.workarea = workarea
+        self.states = {}	# window -> the state atoms it has (fullscreen, maximized)
+        self.normal = {}	# window -> its geometry before it had any
         X.XSelectInput(self.d, self.root, SUBSTRUCTURE_REDIRECT | SUBSTRUCTURE_NOTIFY)
-        self._set_atoms(self.root, "_NET_SUPPORTED", [self.wm_state, self.fullscreen])
+        self._set_atoms(self.root, "_NET_SUPPORTED", [self.wm_state, self.fullscreen,
+                                                       *self.maximized])
         if workarea:
             self._set_cardinals(self.root, "_NET_WORKAREA", workarea)
         if monitors:
@@ -202,16 +208,32 @@ class WindowManager:
                 return m
         return mons[0]
 
-    def set_fullscreen(self, w, on):
-        if on == (w in self.saved):
-            return
-        if on:
-            self.saved[w] = self.geometry(w)
-            X.XMoveResizeWindow(self.d, w, *self.monitor_of(w))
-            self._set_atoms(w, "_NET_WM_STATE", [self.fullscreen])
+    def usable(self, mon):
+        """The part of a monitor the work area leaves (all of it without one)."""
+        if not self.workarea:
+            return mon
+        x, y, w, h = self.workarea
+        x0, y0 = max(x, mon[0]), max(y, mon[1])
+        x1, y1 = min(x + w, mon[0] + mon[2]), min(y + h, mon[1] + mon[3])
+        return (x0, y0, x1 - x0, y1 - y0) if x1 > x0 and y1 > y0 else mon
+
+    def change_state(self, w, action, atoms):
+        """A _NET_WM_STATE request: add, remove or toggle fullscreen / maximized."""
+        have = self.states.setdefault(w, set())
+        for a in atoms:
+            if a == self.fullscreen or a in self.maximized:
+                if action == NET_WM_STATE_ADD or (action == NET_WM_STATE_TOGGLE and a not in have):
+                    have.add(a)
+                elif action in (NET_WM_STATE_REMOVE, NET_WM_STATE_TOGGLE):
+                    have.discard(a)
+        if not have:
+            if w in self.normal:
+                X.XMoveResizeWindow(self.d, w, *self.normal.pop(w))
         else:
-            X.XMoveResizeWindow(self.d, w, *self.saved.pop(w))
-            self._set_atoms(w, "_NET_WM_STATE", [])
+            self.normal.setdefault(w, self.geometry(w))
+            mon = self.monitor_of(w)
+            X.XMoveResizeWindow(self.d, w, *(mon if self.fullscreen in have else self.usable(mon)))
+        self._set_atoms(w, "_NET_WM_STATE", sorted(have))
 
     def run(self):
         ev = XEvent()
@@ -223,16 +245,13 @@ class WindowManager:
                 X.XSetInputFocus(self.d, w, 1, 0)	# RevertToPointerRoot, CurrentTime
             elif ev.type == CONFIGURE_REQUEST:
                 r = ev.xconfigurerequest
-                if r.window in self.saved:
-                    continue	# a fullscreen window keeps covering its monitor
+                if self.states.get(r.window):
+                    continue	# a fullscreen or maximized window keeps its place
                 ch = XWindowChanges(r.x, r.y, r.width, r.height, r.border_width, r.above, r.detail)
                 X.XConfigureWindow(self.d, r.window, r.value_mask & 0x7F, ctypes.byref(ch))
             elif ev.type == CLIENT_MESSAGE and ev.xclient.message_type == self.wm_state:
                 c = ev.xclient
-                if self.fullscreen in (c.l[1], c.l[2]):
-                    on = {NET_WM_STATE_REMOVE: False, NET_WM_STATE_ADD: True}.get(
-                        c.l[0], c.window not in self.saved)
-                    self.set_fullscreen(c.window, on)
+                self.change_state(c.window, c.l[0], [c.l[1], c.l[2]])
             X.XFlush(self.d)
 
 

@@ -226,18 +226,24 @@ static func from_window(window: Window) -> VideoSettings:
 	return v
 
 
+## Whether the window is windowed as far as the settings go: maximized counts too.
+static func _windowed(window: Window) -> bool:
+	return window.mode == Window.MODE_WINDOWED or window.mode == Window.MODE_MAXIMIZED
+
+
 ## Take in what the player did to the window itself: in windowed mode, the size and
-## monitor it was dragged to.
+## monitor it was dragged (or maximized) to.
 func sync(window: Window) -> void:
-	if can_apply() and mode == WINDOWED and window.mode == Window.MODE_WINDOWED:
+	if can_apply() and mode == WINDOWED and _windowed(window):
 		size = window.size
 		screen = window.current_screen
 
 
 ## Set the window up: VSync, mode and monitor, and in windowed mode the size. The
 ## window is placed (centred in the monitor's usable area) only when it changes
-## mode, monitor or size. A move to another monitor goes through windowed mode (an
-## X11 window in exclusive fullscreen cannot change screens).
+## mode, monitor or size, so a maximized window stays so. A move to another monitor
+## goes through windowed mode (an X11 window in exclusive fullscreen cannot change
+## screens).
 func apply(window: Window) -> void:
 	if not can_apply():
 		return
@@ -249,7 +255,7 @@ func apply(window: Window) -> void:
 		DisplayServer.window_set_vsync_mode(sync_mode, id)
 	var moving := window.current_screen != screen
 	if mode == WINDOWED:
-		if moving or window.mode != Window.MODE_WINDOWED or window.size != size:
+		if moving or not _windowed(window) or window.size != size:
 			_place(window, all[screen])
 		return
 	if moving:

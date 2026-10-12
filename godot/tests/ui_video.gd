@@ -7,7 +7,10 @@
 ##   4. Alt+Enter goes back to fullscreen, saved;
 ##   5. Escape gives the game its screen back, and its keys ('v' shows the version);
 ##   6. Alt+Enter during the game makes the window windowed again;
-##   7. with several monitors: the window moves to the second one (its size fitted to
+##   7. the player resizes and moves the window: F10 shows it as it is, a VSync change
+##      leaves it there, a size from the list centres it;
+##   8. a maximized window counts as windowed and stays maximized;
+##   9. with several monitors: the window moves to the second one (its size fitted to
 ##      it, centred), goes fullscreen there, and comes back fullscreen on the first.
 ## With --windowed (the game's option: this run only) it checks the first launch
 ## alone: a window of the default size, while the file keeps fullscreen.
@@ -144,6 +147,26 @@ func _run() -> void:
 		and w.position == usable.position + (usable.size - w.size) / 2, "%s at %s" % [w.size, w.position])
 	_type(char(27))
 	await _frames(4)
+
+	# 8. maximized counts as windowed: F10 shows its size, a VSync change leaves it so
+	w.mode = Window.MODE_MAXIMIZED
+	await _frames(8)
+	var big := w.size
+	_expect("maximized: the usable area", w.mode == Window.MODE_MAXIMIZED and big == usable.size,
+		"%d %s" % [w.mode, big])
+	_key(KEY_F10)
+	await _frames(4)
+	_expect("maximized: the settings show its size", _row(view.cs, 5).contains("%d x %d" % [big.x, big.y]),
+		_row(view.cs, 5))
+	for c in "jjjl":	# VSync on again
+		_type(c)
+	await _frames(8)
+	_expect("maximized: a VSync change leaves it maximized", w.mode == Window.MODE_MAXIMIZED
+		and w.size == big and _saved("vsync", "true"), "%d %s" % [w.mode, w.size])
+	_type(char(27))
+	await _frames(4)
+	w.mode = Window.MODE_WINDOWED
+	await _frames(8)
 	if DisplayServer.get_screen_count() > 1:
 		await _second_monitor()
 	_finish()
