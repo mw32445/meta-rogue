@@ -10,8 +10,9 @@ No installer: unzip it and play. See the [install instructions](INSTALL.md).
 
 - **The original, 1:1.** It has the same dungeons, monsters and rules, verified keystroke
   by keystroke against the C program in this repository. `--classic` plays it untouched.
-- **The Fighters' Guild** between games ([docs/GUILD.md](docs/GUILD.md)), with its prices
-  and formulas in a text file you can edit.
+- **The Fighters' Guild** between games ([docs/GUILD.md](docs/GUILD.md)): gear, and skills
+  that change the rules for a hero, with its prices and formulas in a text file you can
+  edit.
 - **The known bugs of 5.4.4, fixed** ([docs/FIXES.md](docs/FIXES.md)).
 - **Item menus as in PC Rogue**, and the next level's experience on the status line.
 - **Any screen:** fullscreen at your resolution, with video settings (F10).

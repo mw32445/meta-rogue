@@ -9,7 +9,7 @@ Meta-Rogue is **Rogue 5.4.4**, the 1980 dungeon crawler that named the roguelike
   - Coin Scrounger: the gold you find x2, x3, ...;
   - Safe Pockets, the Serpentine Cult and Advanced Recovery.
 
-  The line under the list says what each one does.
+  The text under the list says what each one does.
 - **Cheaper wands and rings.** Wands cost about a third of what they did: teleport away is 300, and a second wand of a kind costs twice as much, not four times. Rings cost about 10% less. If you never edited `guild_prices.txt`, the game replaces it with the new list. An edited one is kept, and the skills' prices come from the game.
 
 ### What's in it

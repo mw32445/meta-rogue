@@ -1,9 +1,10 @@
 ## Unit tests of the Fighters' Guild (godot/guild, docs/GUILD.md): the coffers,
 ## the prices, the shop's rules, the random identifications, the 20-entry Hall of
-## Fame, the catalog against the game's tables, loadouts applied to new games, and
-## a shop with an edited price list. The shops use the built-in price list
-## (GuildPrices.defaults()), never the player's guild_prices.txt; the price list
-## itself is tested by godot/tests/prices_test.gd.
+## Fame, the catalog against the game's tables, loadouts applied to new games, a
+## shop with an edited price list, and the skills (the shop's rules, the loadout, the
+## Skills tab). The shops use the built-in price list (GuildPrices.defaults()), never
+## the player's guild_prices.txt; the price list itself is tested by
+## godot/tests/prices_test.gd, the skills in the game by godot/tests/skills_test.gd.
 ##   godot --headless --path godot --script res://tests/guild_test.gd
 ## Prints PASS or FAIL for each check; exit status 1 if any check fails. Works in
 ## (and removes) the folder "guild_test" of the project's user data folder.

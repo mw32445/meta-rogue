@@ -79,7 +79,7 @@ For a desktop shortcut: right-click Meta-Rogue.exe, then "Show more options",
   Your first hero has nothing to spend: the coffers fill as your heroes die, or
   win. Skills change a rule of the game for that hero: Throw Anything makes thrown
   potions, scrolls, rings and wands work on the monster they hit, Coin Scrounger
-  multiplies the gold you find, and so on. The line under the list says what the
+  multiplies the gold you find, and so on. The text under the list says what the
   chosen skill does.
 - In the dungeon you play Rogue as it was. "?" lists the commands and "/" names
   a symbol on the map. h j k l y u b n, the arrow keys or the keypad move; with
