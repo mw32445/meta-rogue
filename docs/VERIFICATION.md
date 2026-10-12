@@ -49,21 +49,25 @@ random scripts were identical.
 ## The gameplay switches and the playable game
 The playable game adds bug fixes, the Fighters' Guild (with its editable price file),
 item menus and the next level's experience on the status line, each behind a switch
-(`docs/CHANGES.md`), and video settings. One full run of `harness/run_all.sh` at the
-code that added the last of them:
+(`docs/CHANGES.md`), and video settings; it is Meta-Rogue, with its own data folder,
+the Compatibility renderer and downloads for Windows, macOS and Linux. One full run of
+`harness/run_all.sh` at the code that added the last of them:
 
 | Batch | Runs | Result |
 |---|---|---|
 | Classic game (all switches off) vs the stock oracle: corpus, level generation, random games, wizard games, save chains | 68 + 500 + 300 + 200 + 100 | all identical |
 | Bug fixes on vs the fixed oracle (C + `fixes.patch`): the same five batches | 68 + 500 + 300 + 200 + 100 | all identical; every `# expect-classic/fixed:` line of the 33 per-bug scripts in `harness/corpus/fixes/` holds |
 | Curses emulation vs ncurses | 1,000 | 1,000/1,000 |
-| `guild_test.gd` (rules, coffers, loadouts, big packs, Hall of Fame migration, screen keys, edited prices) | 123 checks | all pass |
-| `prices_test.gd` (the formula language, the price file, errors; the shipped file equals the built-in prices) | 244 checks | all pass |
+| `guild_test.gd` (rules, coffers, loadouts, big packs, Hall of Fame migration, screen keys, edited prices, the name and version) | 124 checks | all pass |
+| `prices_test.gd` (the formula language, the price file, errors; the shipped file equals the built-in prices; where each platform looks) | 245 checks | all pass |
 | `menus_test.gd` (item menus; the status line's next-level experience) | 18 checks | all pass |
 | `settings_test.gd` (video settings: detection, presets, the file, the menu) | 81 checks | all pass |
 | `ui_video.gd` in a real window at 1920 x 1080 (first-launch fullscreen, F10, windowed 1600 x 900, Alt+Enter) | 1 | passes |
+| `user_data_test.gd` (Meta-Rogue's data folder; the player's files copied once from the old "Rogue" folder, not the lock or Godot's folders) | 10 checks | all pass |
 | `fixes_test.gd` (keypad 5, connected levels after the `conn()` fix, the wizard map's standout) | 61 checks | all pass |
 | Smoke: random games with every switch on (fixes, Guild with random loadouts, menus, next-level experience), the port alone, no script error and no hang | 300 + 200 wizard | 0 problems |
+| The downloads (`tools/export.sh`, `tools/check_export.py --run`): the three zips' files, the executables' formats, the macOS bundle and its signature, each platform's game data loaded by Godot; the Linux build played in a window (first launch fullscreen, the Guild, the dungeon, save and restore, an old "Rogue" folder moved) | 3 zips | all pass |
+| The published release `v1.0.0`, built by `.github/workflows/release.yml` and downloaded from GitHub: the same checks, and SHA256SUMS.txt | 3 zips | all pass |
 
 The renames for Godot's built-in names (CONVENTIONS.md §1) were checked on their own
 before the switches: the quick suite was identical in every batch.
