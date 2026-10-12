@@ -15,12 +15,22 @@
 ## Command line (after --): --rogueopts=OPTS, --master (wizard-capable build),
 ## --classic (the original game: no fixes, no Guild, and its own save and score
 ## files in the "classic" folder of the user data folder), --no-guild (no Guild
-## screen: new games start with the issued kit), and Rogue's own arguments (-s,
-## -d, a save file name).
+## screen: new games start with the issued kit), --windowed / --fullscreen (the
+## display mode for this run, not saved), and Rogue's own arguments (-s, -d, a save
+## file name).
+##
+## The window follows the video settings (VideoSettings, user://video.cfg; the
+## first launch detects the screen and goes borderless fullscreen at its
+## resolution). F10 opens OPTIONS - VIDEO (SettingsScreen) over whatever is shown;
+## the game waits for its next key meanwhile. Alt+Enter switches between windowed
+## and fullscreen.
 extends Control
 
 ## Tests: start new games without the Guild screen (set before instantiate()).
 static var skip_guild := false
+## Tests: the video settings file, or "" to leave the window as it is (no settings
+## are read, applied at startup or saved). Set before instantiate().
+static var video_path := VideoSettings.PATH
 
 @onready var view: TerminalView = $TerminalView
 var cs: Curses = null
@@ -30,12 +40,35 @@ var _closing := false
 var _guild: GuildScreen = null
 var _no_guild := false
 var _data := ""
+var video: VideoSettings
+## The video settings screen while it is open (it gets the keys first), else null,
+## and the screen it covers (the game's, the Guild's, or the end-of-game console).
+var _settings: SettingsScreen = null
+var _covered: Curses = null
 
 
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
 	view.key_pressed.connect(_on_key)
+	view.settings_requested.connect(_on_settings_key)
+	view.fullscreen_toggled.connect(_on_fullscreen_key)
+	_setup_video()
 	_start()
+
+
+## The video settings: the saved ones (on first launch the detected ones), with
+## --windowed or --fullscreen for this run only.
+func _setup_video() -> void:
+	if video_path == "":
+		video = VideoSettings.from_window(get_window())
+		return
+	video = VideoSettings.open(video_path, get_window())
+	for a in OS.get_cmdline_user_args():
+		if a == "--windowed":
+			video.mode = VideoSettings.WINDOWED
+		elif a == "--fullscreen" and video.mode == VideoSettings.WINDOWED:
+			video.mode = VideoSettings.FULLSCREEN
+	video.apply(get_window())
 
 
 ## A new run: a saved game is restored, a new game first visits the Guild.
@@ -125,7 +158,9 @@ func _setup_env() -> void:
 
 
 func _on_key(code: int) -> void:
-	if _guild != null:
+	if _settings != null:
+		_settings.key(code)
+	elif _guild != null:
 		_guild.key(code)
 	elif _running:
 		cs.push_key(code)
@@ -175,3 +210,39 @@ func _close() -> void:
 	if _running and not cs.curses_gone and not cs.isendwin() and RogueBase.pstats.s_hpt > 0:
 		await Save.auto_save(0)	# exits: _on_exit quits
 	get_tree().quit()
+
+
+# ---- video settings -------------------------------------------------------------
+
+## F10: open OPTIONS - VIDEO over whatever is shown, or close it.
+func _on_settings_key() -> void:
+	if _settings != null:
+		_close_settings()
+		return
+	_covered = view.cs
+	video.sync(get_window())
+	_settings = SettingsScreen.new(video, VideoSettings.screens(true))
+	_settings.changed.connect(_on_video_changed)
+	_settings.closed.connect(_close_settings)
+	view.cs = _settings.cs
+
+
+## Back to the screen it covered (redrawn whole); a game resumes with its next key.
+func _close_settings() -> void:
+	_settings = null
+	view.cs = _covered
+	_covered = null
+
+
+func _on_video_changed() -> void:
+	video.apply(get_window())
+	video.save()
+
+
+## Alt+Enter: windowed <-> fullscreen (on the window's monitor), saved.
+func _on_fullscreen_key() -> void:
+	video.sync(get_window())
+	video.toggle_fullscreen()
+	_on_video_changed()
+	if _settings != null:
+		_settings.draw()

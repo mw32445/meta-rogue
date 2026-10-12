@@ -17,8 +17,8 @@ run/main_scene="res://main.tscn"
 
 [display]
 
-window/size/viewport_width=1100
-window/size/viewport_height=660
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [debug]
 
