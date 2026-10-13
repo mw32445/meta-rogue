@@ -82,6 +82,8 @@ static func fight(mp: Coord, weap: Thing, thrown: bool) -> int:
 			await Io.msg("couldn't find monster in runto at (%d,%d)", [mp.y, mp.x])
 		await exit(139)
 		return 0
+	if not thrown and is_snake(tp) and not await Skills.cult_allows([tp]):
+		return 0	# the Serpentine Cult: asked first (no time passes)
 	Chase.runto(mp)
 	# Let him know it was really a xeroc (if it was one).
 	ch = 0
@@ -101,6 +103,13 @@ static func fight(mp: Coord, weap: Thing, thrown: bool) -> int:
 		did_hit = false
 		if thrown:
 			await thunk(weap, mname, terse)
+			# Throw Anything: the thrown item works on the monster, if it lived
+			if skill(SK_THROW) > 0 and weap.o_type != WEAPON and tp.t_stats.s_hpt > 0:
+				if has_hit:
+					await Io.endmsg()
+					has_hit = false
+				if not await Skills.thrown_at(weap, tp):
+					return 1	# it died of it (drain life)
 		else:
 			await hit(null, mname, terse)
 		if on(player, CANHUH):
@@ -167,21 +176,30 @@ static func attack(mp: Thing) -> int:
 					await Move.rust_armor(cur_armor)
 				ord("I"):
 					# The ice monster freezes you
-					player.t_flags &= ~ISRUN
-					if no_command == 0:
-						await Io.addmsg("you are frozen")
-						if not terse:
-							if fixes:	# FIX 9: set_mname() already says "the"
-								await Io.addmsg(" by %s", [mname])
-							else:
-								await Io.addmsg(" by the %s", [mname])
-						await Io.endmsg()
-					no_command += rnd(2) + 2
-					if no_command > BORE_LEVEL:
-						await Rip.death(ord("h"))
+					if skill(SK_FROST_IMM) > 0:	# Frost Immunity: never frozen
+						await Io.msg("you feel a brief chill")
+					else:
+						player.t_flags &= ~ISRUN
+						if no_command == 0:
+							await Io.addmsg("you are frozen")
+							if not terse:
+								if fixes:	# FIX 9: set_mname() already says "the"
+									await Io.addmsg(" by %s", [mname])
+								else:
+									await Io.addmsg(" by the %s", [mname])
+							await Io.endmsg()
+						no_command += rnd(2) + 2
+						# Frost Resistance: no death by hypothermia (the freezing goes on)
+						if no_command > BORE_LEVEL and skill(SK_FROST_RES) == 0:
+							await Rip.death(ord("h"))
 				ord("R"):
 					# Rattlesnakes have poisonous bites
-					if not Monsters.save(VS_POISON):
+					if cult_member():	# the Serpentine Cult: never weakened; 1 in 4 strengthens,
+						if not on(mp, GAVESTR) and rnd(4) == 0:	# once a snake
+							mp.t_flags |= GAVESTR
+							Misc.chg_str(1)
+							await Io.msg("the snake's bite makes you stronger")
+					elif not Monsters.save(VS_POISON):
 						if not ISWEARING(R_SUSTSTR):
 							Misc.chg_str(-1)
 							if not terse:
@@ -231,6 +249,10 @@ static func attack(mp: Thing) -> int:
 					pstats.s_hpt -= 1
 					if pstats.s_hpt <= 0:
 						await Rip.death(ord("F"))
+				ord("L") when skill(SK_POCKETS) > 0:
+					pass	# Safe Pockets: no theft, the leprechaun fights on
+				ord("N") when skill(SK_POCKETS) > 0:
+					pass	# Safe Pockets: no theft, the nymph fights on
 				ord("L"):
 					# Leperachaun steals some gold
 					var lastpurse: int
@@ -342,10 +364,17 @@ static func roll_em(thatt: Thing, thdef: Thing, weap: Thing, hurl: bool) -> bool
 
 	att = thatt.t_stats
 	def = thdef.t_stats
+	var astr: int = att.s_str
 	if weap == null:
 		cp = att.s_dmg
 		dplus = 0
 		hplus = 0
+		if guild and thatt != player:	# the Guild's skills (docs/GUILD.md)
+			if (thatt.t_type == ord("L") or thatt.t_type == ord("N")) and skill(SK_POCKETS) > 0:
+				cp = "1x8"	# Safe Pockets: they fight as a zombie does
+			hplus += Skills.mon_bonus(thatt, R_ADDHIT)
+			dplus += Skills.mon_bonus(thatt, R_ADDDAM) + Skills.mon_enchants(thatt)
+			astr = clampi(astr + Skills.mon_bonus(thatt, R_ADDSTR), 3, 31)
 	else:
 		hplus = 0 if weap == null else weap.o_hplus
 		dplus = 0 if weap == null else weap.o_dplus
@@ -367,6 +396,8 @@ static func roll_em(thatt: Thing, thdef: Thing, weap: Thing, hurl: bool) -> bool
 				dplus += cur_weapon.o_dplus
 			elif weap.o_launch < 0:
 				cp = weap.o_hurldmg
+			if weap.o_type == ARMOR and skill(SK_THROW) > 0:
+				cp = "1x4"	# Throw Anything: thrown armour hurts
 	# If the creature being attacked is not running (alseep or held)
 	# then the attacker gets a plus four bonus to hit.
 	if not on(thdef, ISRUN):
@@ -379,6 +410,8 @@ static func roll_em(thatt: Thing, thdef: Thing, weap: Thing, hurl: bool) -> bool
 			def_arm -= cur_ring[LEFT].o_arm
 		if ISRING(RIGHT, R_PROTECT):
 			def_arm -= cur_ring[RIGHT].o_arm
+	elif guild:	# Throw Anything: a ring of protection the monster was hit with
+		def_arm -= Skills.mon_bonus(thdef, R_PROTECT)
 	ci = 0
 	while cat(cp, ci) != 0:	# C: cp != NULL && *cp != '\0'
 		ndice = atoi(cp.substr(ci))
@@ -387,15 +420,17 @@ static func roll_em(thatt: Thing, thdef: Thing, weap: Thing, hurl: bool) -> bool
 			break
 		ci += 1
 		nsides = atoi(cp.substr(ci))
-		if swing(att.s_lvl, def_arm, hplus + str_plus[att.s_str]):
+		if swing(att.s_lvl, def_arm, hplus + str_plus[astr]):
 			var proll: int
 
 			proll = roll(ndice, nsides)
 			if MASTER:
 				if ndice + nsides > 0 and proll <= 0:
 					await debug("Damage for %dx%d came out %d, dplus = %d, add_dam = %d, def_arm = %d",
-						[ndice, nsides, proll, dplus, add_dam[att.s_str], def_arm])
-			damage = dplus + proll + add_dam[att.s_str]
+						[ndice, nsides, proll, dplus, add_dam[astr], def_arm])
+			damage = dplus + proll + add_dam[astr]
+			if guild and def == pstats and is_snake(thatt) and cult_banished:
+				damage = damage * 3 / 2	# banished from the Serpentine Cult: 50% more
 			def.s_hpt -= maxi(0, damage)
 			did_hit = true
 		ci = cp.find("/", ci)	# C: cp = strchr(cp, '/')
@@ -502,11 +537,14 @@ static func remove_mon(mp: Coord, tp: Thing, waskill: bool) -> void:
 		nexti = obj.l_next
 		obj.o_pos.copy_from(tp.t_pos)
 		tp.t_pack = List._detach(tp.t_pack, obj)
-		if waskill:
+		# (Throw Anything: what was used up on the monster goes with it)
+		if waskill and (obj.o_flags & ISMONWORN) == 0:
 			await Weapons.fall(obj, false)
 		else:
 			List.discard(obj)
 		obj = nexti
+	if guild:
+		Skills.forget(tp)	# those it drew (aggravate monster) go after the hero again
 	INDEX(mp.y, mp.x).p_monst = null
 	mvaddch(mp.y, mp.x, tp.t_oldch)
 	mlist = List._detach(mlist, tp)
@@ -554,6 +592,8 @@ static func killed(tp: Thing, pr: bool) -> void:
 				await Io.addmsg("you have ")
 			await Io.addmsg("defeated ")
 		await Io.msg(mname)
+	if guild:
+		await Skills.cult_kill(tp)	# a snake killed: banished from the Serpentine Cult
 	# Do adjustments if he went up a level
 	await Misc.check_level()
 	if fight_flush:

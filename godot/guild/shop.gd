@@ -39,10 +39,14 @@ const ALREADY := "already"	## that is the student's choice already
 const ALL_KNOWN := "known"	## every kind is identified already
 const IN_USE := "in use"	## the pack slot holds purchases
 const NO_SUCH := "no such"	## not an offer
+const NEEDS := "needs"		## a skill needs another first
+const NEEDED := "needed"	## another skill needs this one
 
-## The sections of the stores, in screen order (keys 1-8).
-const SECTIONS: Array[String] = ["Training", "Arms", "Armour", "Rings", "Wands", "Potions",
-	"Scrolls", "Stores"]
+## The sections of the stores, in screen order (keys 1-9).
+const SECTIONS: Array[String] = ["Train", "Arms", "Armour", "Rings", "Wands", "Potions",
+	"Scrolls", "Stores", "Skills"]
+## The section of the skills.
+const SKILLS_SECTION := 8
 
 var hall: HallOfFame
 var prices: GuildPrices
@@ -69,6 +73,7 @@ var scr_count: Array[int] = []
 var food := 0			## rations
 var missiles: Array[int] = []	## purchases per line of GuildCatalog.MISSILES
 var slots := 0			## pack slots
+var skills := {}		## skill name (GuildCatalog.SKILLS) -> level
 ## The kind the last identification named (-1: none yet).
 var last_named := -1
 
@@ -127,6 +132,8 @@ func spent() -> int:
 	for i in C.MISSILES.size():
 		t += _total("stores", C.MISSILES[i][1], missiles[i])
 	t += _total("stores", "pack slot", slots)
+	for sk in C.SKILLS:
+		t += _total("skills", sk[0], skill_level(sk[0]))
 	return t
 
 
@@ -300,6 +307,19 @@ func buy(id: String) -> String:
 			if pack_size() >= C.PACK_MAX:
 				return AT_MAX
 			return _pay(prices.price("stores", "pack slot", slots), 0, "slots")
+		"sk":
+			if n < 0 or n >= C.SKILLS.size():
+				return NO_SUCH
+			var sk: Array = C.SKILLS[n]
+			var have := skill_level(sk[0])
+			if have > 0 and not sk[5]:
+				return ALREADY
+			if sk[4] != "" and skill_level(sk[4]) == 0:
+				return NEEDS
+			var why := _check(prices.price("skills", sk[0], have), 0)
+			if why == DONE:
+				skills[sk[0]] = have + 1
+			return why
 	return NO_SUCH
 
 
@@ -378,6 +398,18 @@ func refund(id: String) -> String:
 			if pack_load() > pack_size() - 1:
 				return IN_USE
 			slots -= 1
+			return DONE
+		"sk":
+			if n < 0 or n >= C.SKILLS.size():
+				return NO_SUCH
+			var name: String = C.SKILLS[n][0]
+			if skill_level(name) == 0:
+				return NONE
+			if needed_by(name) != "":
+				return NEEDED
+			skills[name] = skill_level(name) - 1
+			if skills[name] == 0:
+				skills.erase(name)
 			return DONE
 	return NO_SUCH
 
@@ -601,7 +633,50 @@ func offers(section: int) -> Array:
 			out.append(_offer("pk", "A bigger pack", _change(C.PACK_START, pack_size()) + " slots",
 				"next +1", p.price("stores", "pack slot", slots),
 				"max" if pack_size() >= C.PACK_MAX else ""))
+		SKILLS_SECTION:
+			for i in C.SKILLS.size():
+				var sk: Array = C.SKILLS[i]
+				var lvl := skill_level(sk[0])
+				var o: Dictionary
+				if sk[5]:	# levels: the gold multiplier
+					o = _offer("sk:%d" % i, sk[1], "gold " + _change_s("x1", "x%d" % (lvl + 1)),
+						"next x%d" % (lvl + 2), p.price("skills", sk[0], lvl), "")
+				else:
+					var locked: bool = lvl == 0 and sk[4] != "" and skill_level(sk[4]) == 0
+					o = _offer("sk:%d" % i, sk[1], sk[2], "needs res." if locked else "",
+						p.price("skills", sk[0], 0), "yours" if lvl > 0 else "")
+					o.mark = "*" if lvl > 0 else ""
+				o["text"] = sk[3]
+				out.append(o)
 	return out
+
+
+## How many of a skill (GuildCatalog.SKILLS' name) the student has: its level, or 0.
+func skill_level(name: String) -> int:
+	return int(skills.get(name, 0))
+
+
+## The title of the skill that a skill needs and the student lacks ("" if none).
+func needs(name: String) -> String:
+	for sk in C.SKILLS:
+		if sk[0] == name and sk[4] != "" and skill_level(sk[4]) == 0:
+			return _title_of(sk[4])
+	return ""
+
+
+## The title of a skill the student has that needs this one ("" if none).
+func needed_by(name: String) -> String:
+	for sk in C.SKILLS:
+		if sk[4] == name and skill_level(sk[0]) > 0:
+			return sk[1]
+	return ""
+
+
+static func _title_of(name: String) -> String:
+	for sk in C.SKILLS:
+		if sk[0] == name:
+			return sk[1]
+	return name
 
 
 ## Charges of a wand or staff the Guild sells, recharged enh times, by a price
@@ -705,6 +780,7 @@ func loadout() -> Dictionary:
 	l["food"] = food
 	l["know_potions"] = _known(pot_known)
 	l["know_scrolls"] = _known(scr_known)
+	l["skills"] = skills.duplicate()
 	return l
 
 

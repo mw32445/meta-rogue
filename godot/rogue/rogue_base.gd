@@ -96,6 +96,9 @@ const ISKNOW := 0x2
 const ISMISL := 0x4
 const ISMANY := 0x8
 const ISPROT := 0x20
+## (Guild mode, Throw Anything) a ring or scroll a monster was hit with: it works on
+## the monster that carries it, and goes with it when it dies (docs/GUILD.md).
+const ISMONWORN := 0x40
 
 ## flags for creatures
 const CANHUH := 0x1
@@ -117,6 +120,9 @@ const ISRUN := 0x2000
 const SEEMONST := 0x4000
 const ISFLY := 0x4000
 const ISSLOW := 0x8000
+## (Guild mode, the Serpentine Cult) a rattlesnake whose bite has made the hero
+## stronger: each one does it once (docs/GUILD.md, "Skills"). Saved with it.
+const GAVESTR := 0x10000
 
 ## flags for level map
 const F_PASS := 0x80
@@ -432,6 +438,17 @@ static var inpack := 0
 ## Guild mode: the pack's size (Rogue's MAXPACK, more with slots bought from the
 ## Guild, see godot/guild/loadout.gd); pack_room() uses it instead of MAXPACK.
 static var maxpack := MAXPACK
+## Guild mode: the skills bought from the Guild (docs/GUILD.md, "Skills"): name
+## (GuildCatalog.SKILLS, the SK_* below) -> level (1; the coin scrounger's level).
+## Loadout.apply sets them; the save keeps them. skill() reads them.
+static var skills := {}
+## The Serpentine Cult: the hero killed a snake (the benefits are lost and snakes
+## hit 50% harder). Saved.
+static var cult_banished := false
+## The snakes a hostile action was confirmed against, and those the last warning
+## was about (a hostile action on them now goes through). Not saved.
+static var cult_confirmed: Array = []
+static var cult_warned: Array = []
 static var inv_type := 0
 static var level := 1
 static var max_hit := 0
@@ -634,6 +651,10 @@ static func reset() -> void:
 	hungry_state = 0
 	inpack = 0
 	maxpack = MAXPACK
+	skills = {}
+	cult_banished = false
+	cult_confirmed = []
+	cult_warned = []
 	inv_type = 0
 	level = 1
 	max_hit = 0
@@ -965,6 +986,36 @@ static func ce(a: Coord, b: Coord) -> bool:
 
 static func GOLDCALC() -> int:
 	return rnd(50 + 10 * level) + 2
+
+
+# ---- the Guild's skills (guild mode; docs/GUILD.md, "Skills") ------------------
+
+## Their names, as GuildCatalog.SKILLS and the price list have them.
+const SK_FROST_RES := "frost resistance"
+const SK_FROST_IMM := "frost immunity"
+const SK_SURE_SIGHT := "sure sight"
+const SK_INTELLECT := "high intellect"
+const SK_LOW_LIGHT := "low-light vision"
+const SK_THROW := "throw anything"
+const SK_COIN := "coin scrounger"
+const SK_POCKETS := "safe pockets"
+const SK_CULT := "serpentine cult"
+const SK_RECOVERY := "advanced recovery"
+
+
+## The level of a skill the hero has (0: none; always 0 out of guild mode).
+static func skill(name: String) -> int:
+	return int(skills.get(name, 0)) if guild else 0
+
+
+## The hero is in the Serpentine Cult (and not banished from it).
+static func cult_member() -> bool:
+	return skill(SK_CULT) > 0 and not cult_banished
+
+
+## A snake, for the Serpentine Cult: a rattlesnake or a snake.
+static func is_snake(tp: Thing) -> bool:
+	return tp != null and (tp.t_type == ord("R") or tp.t_type == ord("S"))
 
 
 static func ISRING(h: int, r: int) -> bool:

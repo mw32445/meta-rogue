@@ -181,7 +181,19 @@ func _refused(o: Dictionary, why: String) -> String:
 			return "every kind is known"
 		GuildShop.IN_USE:
 			return "your pack would be too full"
+		GuildShop.NEEDS:
+			return "you need %s first" % shop.needs(_skill_name(o))
+		GuildShop.NEEDED:
+			return "return %s first" % shop.needed_by(_skill_name(o))
 	return "that's not for sale"
+
+
+## The skill's name of an offer of the skills ("" for another offer).
+static func _skill_name(o: Dictionary) -> String:
+	var id: String = o.get("id", "")
+	if not id.begins_with("sk:"):
+		return ""
+	return GuildCatalog.SKILLS[int(id.get_slice(":", 1))][0]
 
 
 # ---- drawing ------------------------------------------------------------------
@@ -207,12 +219,12 @@ func _draw_shop() -> void:
 	_put(2, 1, "Spent %d   Left %d" % [shop.spent(), shop.left()])
 	var pk := "Pack %d/%d" % [shop.pack_load(), shop.pack_size()]
 	_put(2, WIDTH - 1 - pk.length(), pk)
-	# the sections
+	# the sections (nine: one space apart, to fit)
 	var x := 1
 	for s in GuildShop.SECTIONS.size():
 		var tab := "%d %s" % [s + 1, GuildShop.SECTIONS[s]]
 		_put(3, x, tab, s == section)
-		x += tab.length() + 2
+		x += tab.length() + 1
 	# the list
 	var lines := shop.offers(section)
 	var cur := _cursor[section]
@@ -234,8 +246,9 @@ func _draw_shop() -> void:
 		if i >= lines.size():
 			break
 		_line(LIST_TOP + r, lines[i], i == cur)
+	_describe(lines, cur, top)
 	_rule(LIST_TOP + LIST_ROWS, "more below" if top + LIST_ROWS < lines.size() else "")
-	_put(22, 1, "Enter buy  Backspace return  j/k choose  1-8 section  ? help  e enter dungeon")
+	_put(22, 1, "Enter buy  Backspace return  j/k choose  1-9 section  ? help  e enter dungeon")
 	if _mode == CONFIRM:
 		_put(23, 1, "Enter the Dungeons of Doom? (%d gold unspent) [y/n]" % shop.left())
 		return
@@ -245,6 +258,22 @@ func _draw_shop() -> void:
 			_say += " (? shows all %d)" % (prices.errors.size() - _told)
 		_told = prices.errors.size()
 	_message(_say)
+
+
+## Under the list, when it leaves room: the description of the line under the cursor
+## (the skills have one), a blank line above it if that fits too.
+func _describe(lines: Array, cur: int, top: int) -> void:
+	if cur < 0 or cur >= lines.size() or not lines[cur].has("text"):
+		return
+	var shown := mini(LIST_ROWS, lines.size() - top)
+	var room := LIST_ROWS - shown
+	var rows := _wrap(lines[cur].text, WIDTH - 3)
+	if rows.size() > room:
+		return
+	var y := LIST_TOP + shown + (1 if rows.size() < room else 0)
+	for r in rows:
+		_put(y, 2, r)
+		y += 1
 
 
 ## The bottom line; a message too long for it takes the line above it too.
@@ -295,7 +324,7 @@ func _draw_help() -> void:
 	rows.append_array(_indent(_wrap(f.text, WIDTH - 15), "    coffers = ", 14))
 	rows.append_array(_indent(_wrap(f.with_values(vars), WIDTH - 15), "            = ", 14))
 	rows.append_array(["            = %d gold" % shop.coffers, "",
-		"  j k, up down    choose a line        1-8, left right   change section",
+		"  j k, up down    choose a line        1-9, left right   change section",
 		"  Enter           buy one more         Backspace         return one",
 		"  ?               this page            e                 enter the dungeon",
 		"  F10             video settings       Alt+Enter         fullscreen",

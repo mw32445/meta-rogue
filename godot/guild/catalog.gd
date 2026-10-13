@@ -169,6 +169,40 @@ const MISSILES: Array = [
 	[4, "daggers"],
 ]
 
+## The skills (docs/GUILD.md, "Skills"), in the shop's order: [name (in [skills] of
+## the price list, and RogueBase's SK_* constants), title, what the list says,
+## the description (shown under the list), the skill it needs ("" for none), whether
+## it has levels (bought again and again) or is bought once].
+const SKILLS: Array = [
+	["frost resistance", "Frost Resistance", "no instant kill",
+		"Ice Monster can no longer instant kill you.", "", false],
+	["frost immunity", "Frost Immunity", "no freezing",
+		"Ice Monster can no longer freeze you. Needs Frost Resistance.", "frost resistance", false],
+	["sure sight", "Sure Sight", "immune to blind", "Immune to Blind.", "", false],
+	["high intellect", "High Intellect", "immune to confusion",
+		"Immune to Confusion. Both Medusa effect and potion impact.", "", false],
+	["low-light vision", "Low-Light Vision", "+1 tile in dark rooms",
+		"See 1 extra tile in dark rooms in all directions.", "", false],
+	["throw anything", "Throw Anything", "thrown items work",
+		"Thrown items have effects. Hitting enemies with armor does damage to them (1x4), potions"
+		+ " and scrolls work on them, a ring has its effect on that monster, and a wand expends a"
+		+ " charge. All items are listed in the throw menu. You cannot throw the amulet.", "", false],
+	["coin scrounger", "Coin Scrounger", "",
+		"Doubles amount of money gained on pickup. Each level after this increases the multiplier"
+		+ " to 3x, 4x, 5x, etc.", "", true],
+	["safe pockets", "Safe Pockets", "no stealing",
+		"Leprechauns and Nymphs may no longer steal from you, instead they attack you like normal"
+		+ " monsters. They do Zombie level damage.", "", false],
+	["serpentine cult", "Serpentine Cult", "snakes sleep",
+		"If a Rattlesnake bites, it no longer reduces your strength, and the bite has a 25% chance"
+		+ " of increasing your strength instead, once per snake. All snakes start as sleeping. If you kill any"
+		+ " snakes, you will be banished from the cult, and all snakes will do 50% more damage to"
+		+ " you for the rest of the run, in addition to losing all benefits. You must repeat a"
+		+ " hostile action against a snake to confirm it.", "", false],
+	["advanced recovery", "Advanced Recovery", "heal as level +1",
+		"Your HP recovery is from one level higher than your current level.", "", false],
+]
+
 ## The built-in price list: the text of godot/guild_prices.txt (see above).
 const PRICES := """# The Fighters' Guild: the Quartermaster's price list
 #
@@ -271,44 +305,45 @@ armour = 100 * 2^k           # +1 to a suit of armour
 ring = 150 * 2^k
 polish = 5 * 2^k
 polish max = 7               # 20 at most
-wand charges = 80 * 2^k
+wand charges = 40 * 2^k
 charges per purchase = 2
 
 [rings]
 # Each kind's number (base) is what the first one costs; price is what the
 # next one costs when you have k of that kind.
 price = base * 4^k
-regeneration = 900
-slow digestion = 700
-stealth = 600
-increase damage = 550
-protection = 500
-add strength = 500
-dexterity = 450
-sustain strength = 400
-maintain armor = 400
-see invisible = 300
-searching = 250
-teleportation = 200
+regeneration = 800
+slow digestion = 625
+stealth = 550
+increase damage = 500
+protection = 450
+add strength = 450
+dexterity = 400
+sustain strength = 350
+maintain armor = 350
+see invisible = 275
+searching = 225
+teleportation = 175
 aggravate monster = 10
 adornment = 0
 
 [wands]
-# Wands and staves, priced as the rings.
-price = base * 4^k
+# Wands and staves. Each kind's number (base) is what the first one costs;
+# price is what the next one costs when you have k of that kind.
+price = base * 2^k
 charges = 5                  # a new one's charges
 light charges = 15           # a new wand of light's
-teleport away = 900
-slow monster = 650
-lightning = 600
-fire = 600
-cold = 600
-cancellation = 500
-drain life = 400
-polymorph = 300
-magic missile = 250
-teleport to = 150
-light = 120
+teleport away = 300
+slow monster = 250
+lightning = 250
+fire = 250
+cold = 250
+cancellation = 200
+drain life = 150
+polymorph = 120
+magic missile = 80
+teleport to = 60
+light = 50
 invisibility = 5
 haste monster = 5
 nothing = 5
@@ -371,6 +406,21 @@ shuriken = 25
 shuriken per purchase = 5
 daggers = 30
 daggers per purchase = 2
+
+[skills]
+# Skills for this game. Each is bought once, except coin scrounger: each level
+# adds 1 to what gold is multiplied by (x2, then x3, ...), and k is how many
+# levels you have already. frost immunity needs frost resistance.
+frost resistance = 200
+frost immunity = 300
+sure sight = 100
+high intellect = 500
+low-light vision = 700
+throw anything = 200
+coin scrounger = 1000 * (k + 1)
+safe pockets = 300
+serpentine cult = 0
+advanced recovery = 800
 """
 
 

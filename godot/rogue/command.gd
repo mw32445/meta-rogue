@@ -435,6 +435,8 @@ static func command() -> void:
 			await Pack.pick_up(take)
 		if not running:
 			door_stop = false
+		if guild and after:	# the Serpentine Cult's warning holds until time passes
+			cult_warned = []
 		if not after:
 			ntimes += 1
 	await Daemon.do_daemons(AFTER())

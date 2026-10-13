@@ -1,0 +1,201 @@
+# The Fighters' Guild: the Quartermaster's price list
+#
+# Before every new game the Guild outfits its student with the gold in its
+# coffers. This file says how much gold that is and what everything costs.
+# Change a number or a formula with any text editor and save the file: the
+# Guild reads it each time it opens.
+#
+# The file
+#   [training]             a heading: the part of the stores below it
+#   strength = 100 * 2^k   a name, then "=", then a number or a formula
+#   # ...                  a comment: the rest of the line is not read
+# Everything before the "=" is the name. Keep the names as they are: the Guild
+# knows its goods by them. A line you delete keeps its original value.
+#
+# Formulas
+#   k        how many of that item you have already bought (0 for the first)
+#   base     the item's own number in its list ([rings], [wands], [potions],
+#            [scrolls])
+#   + - * /  plus, minus, times, divided by
+#   ^        to the power of: 2^k doubles the price with each one bought,
+#            1.5^k makes each one half as dear again
+#   ( )      brackets: (a + b) * c
+#   floor ceil round min max pow sqrt abs clamp lerp
+#            floor(x) rounds down, ceil(x) up, round(x) to the nearest;
+#            min(a, b) is the smaller, max(a, b) the larger; pow(a, b) is a^b;
+#            sqrt(x) the square root; abs(x) is x without a minus sign;
+#            clamp(x, low, high) keeps x between low and high; lerp(a, b, t)
+#            goes from a to b as t goes from 0 to 1: a + (b - a) * t
+# Prices are rounded down to whole gold pieces.
+#
+# A line the Guild can't read is shown at the bottom of its screen (and all of
+# them on its help page, ?), and the original value is used for it.
+#
+# Not in this file, because they are facts of the game: what the items do and
+# how often they turn up in the dungeon, strength 31 at most, 52 items in a
+# pack at most, the 20 places of the Hall of Fame, and the kit every student
+# is issued.
+
+[coffers]
+# The gold the Guild gives each new student. It comes from the Hall of Fame,
+# the top 20 scores: best = the best score, sum = all the scores added up,
+# n = how many heroes are in it (0 to 20). lerp(0.5, 1.5, n / 20) grows from
+# 0.5 with no heroes to 1.5 with twenty.
+coffers = best / 2 + (sum / 20) * lerp(0.5, 1.5, n / 20)
+
+[training]
+# Strength starts at 16 and rises by 1, up to 31. Hit points start at 12.
+strength = 100 * 2^k
+hit points = 60 * 2^k
+hit points per purchase = 2
+
+[your weapon]
+# You are issued a mace +1,+1. Changing it for another weapon (which keeps the
+# +1,+1) costs that weapon's price less the mace's; changing back refunds it.
+dagger = 0
+spear = 0
+mace = 0
+long sword = 190
+two handed sword = 540
+
+[spare weapons]
+# An extra weapon, +0,+0. k: how many of that kind you have bought.
+spear = 40
+mace = 60
+long sword = 250
+two handed sword = 600
+
+[your armour]
+# You are issued ring mail +1. Changing it for another kind (which keeps the
+# +1) costs that kind's price less the ring mail's; changing back refunds it.
+leather armor = 0
+studded leather armor = 0
+ring mail = 0
+scale mail = 140
+chain mail = 340
+splint mail = 640
+banded mail = 640
+plate mail = 1040
+
+[spare armour]
+# An extra suit of armour, +0.
+leather armor = 20
+studded leather armor = 60
+ring mail = 60
+scale mail = 200
+chain mail = 400
+splint mail = 700
+banded mail = 700
+plate mail = 1100
+
+[enhancing]
+# k: how many times that one item has been enhanced already.
+# weapon: +1 to its hit or damage bonus, whichever is lower.
+# ring: +1 to a ring of protection, add strength, dexterity or increase damage.
+# polish: a ring of adornment; each polish doubles what a winner sells it for.
+# wand charges: recharging a wand or a staff.
+weapon = 75 * 2^k
+armour = 100 * 2^k           # +1 to a suit of armour
+ring = 150 * 2^k
+polish = 5 * 2^k
+polish max = 7               # 20 at most
+wand charges = 80 * 2^k
+charges per purchase = 2
+
+[rings]
+# Each kind's number (base) is what the first one costs; price is what the
+# next one costs when you have k of that kind.
+price = base * 4^k
+regeneration = 900
+slow digestion = 700
+stealth = 600
+increase damage = 550
+protection = 500
+add strength = 500
+dexterity = 450
+sustain strength = 400
+maintain armor = 400
+see invisible = 300
+searching = 250
+teleportation = 200
+aggravate monster = 10
+adornment = 0
+
+[wands]
+# Wands and staves, priced as the rings.
+price = base * 4^k
+charges = 5                  # a new one's charges
+light charges = 15           # a new wand of light's
+teleport away = 900
+slow monster = 650
+lightning = 600
+fire = 600
+cold = 600
+cancellation = 500
+drain life = 400
+polymorph = 300
+magic missile = 250
+teleport to = 150
+light = 120
+invisibility = 5
+haste monster = 5
+nothing = 5
+
+[potions]
+# identify names one random kind you don't know, for this game: no potion
+# comes with it, and it can't be returned (k: how many you have had named).
+# price is what a potion of a kind you know costs when you have k of it.
+identify = 40
+price = base * 2^k
+raise level = 250
+extra healing = 200
+gain strength = 180
+healing = 120
+haste self = 100
+restore strength = 60
+magic detection = 50
+see invisible = 40
+monster detection = 30
+levitation = 20
+confusion = 5
+hallucination = 5
+poison = 5
+blindness = 5
+
+[scrolls]
+# As the potions.
+identify = 40
+price = base * 2^k
+enchant armor = 200
+enchant weapon = 200
+scare monster = 160
+teleportation = 160
+protect armor = 120
+magic mapping = 100
+hold monster = 70
+remove curse = 50
+identify ring, wand or staff = 40
+identify potion = 30
+identify armor = 30
+identify scroll = 25
+identify weapon = 25
+monster confusion = 20
+food detection = 20
+create monster = 10
+sleep = 5
+aggravate monsters = 5
+
+[stores]
+# food: a ration. pack slot: one more place in your pack (23 to start, 52 at
+# most). Arrows go onto the issued stack and take no place; darts, shuriken
+# and daggers make one stack each.
+food = 30 * 1.3^k
+pack slot = 50 * 1.5^k
+arrows = 10
+arrows per purchase = 10
+darts = 8
+darts per purchase = 10
+shuriken = 25
+shuriken per purchase = 5
+daggers = 30
+daggers per purchase = 2

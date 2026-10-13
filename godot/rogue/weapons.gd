@@ -34,9 +34,18 @@ static func missile(ydelta: int, xdelta: int) -> void:
 	var obj: Thing
 
 	# Get which thing we are hurling
-	obj = await Pack.get_item("throw", WEAPON)
+	# (Throw Anything: any item; docs/GUILD.md, "Skills")
+	obj = await Pack.get_item("throw", 0 if skill(SK_THROW) > 0 else WEAPON)
 	if obj == null:
 		return
+	if skill(SK_THROW) > 0 and obj.o_type == AMULET:
+		after = false
+		await Io.msg("Not even this can be thrown.")
+		return
+	if cult_member():	# the Serpentine Cult: a throw at a snake is asked first
+		var tp := Skills.first_monster(ydelta, xdelta, true)
+		if tp != null and not await Skills.cult_allows([tp]):
+			return
 	if not await Things.dropcheck(obj) or await Misc.is_current(obj):
 		return
 	obj = Pack.leave_pack(obj, true, false)

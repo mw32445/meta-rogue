@@ -146,8 +146,10 @@ turns one on only when a test asks (`fixes=1`, `guild=1`), so the classic game s
   Fame, the shop before each new game, and the loadout it buys (`RogueBase.loadout`,
   applied by `Main.main()`). Its prices and the coffers formula are read from
   `godot/guild_prices.txt` (`GuildPrices`, `GuildFormula`), which players may edit.
+  Its skills change rules of the game for the run (`godot/rogue/skills.gd`, called
+  where each rule is; `RogueBase.skill()` is 0 out of guild mode).
   The oracle cannot judge it; its own tests are `godot/tests/guild_test.gd`,
-  `prices_test.gd` and replays with `--guild --loadout FILE`.
+  `prices_test.gd`, `skills_test.gd` and replays with `--guild --loadout FILE`.
 - **`menus`** makes item commands list the items that fit at once, as PC Rogue does
   (`Pack.get_item`); tested by `godot/tests/menus_test.gd`.
 - **`exp_next`** adds the experience at which the next level starts to the status

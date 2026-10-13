@@ -72,12 +72,15 @@ For a desktop shortcut: right-click Meta-Rogue.exe, then "Show more options",
   settings (window or fullscreen, window size, monitor, VSync); Alt+Enter
   switches between a window and fullscreen.
 - Each new game starts at the Fighters' Guild. The gold of your Hall of Fame buys
-  training, arms, armour, rings, wands, potions, scrolls and supplies:
-      j k      choose                    1-8         change section
+  training, arms, armour, rings, wands, potions, scrolls, supplies and skills:
+      j k      choose                    1-9         change section
       Enter    buy                       Backspace   return
       ?        the coffers and keys      e           enter the dungeon
   Your first hero has nothing to spend: the coffers fill as your heroes die, or
-  win.
+  win. Skills change a rule of the game for that hero: Throw Anything makes thrown
+  potions, scrolls, rings and wands work on the monster they hit, Coin Scrounger
+  multiplies the gold you find, and so on. The text under the list says what the
+  chosen skill does.
 - In the dungeon you play Rogue as it was. "?" lists the commands and "/" names
   a symbol on the map. h j k l y u b n, the arrow keys or the keypad move; with
   Shift you run. A command that needs an item (read, quaff, wield, ...) lists the

@@ -15,6 +15,8 @@ static func doctor(_arg: int = 0) -> void:
 	var ohp: int
 
 	lv = pstats.s_lvl
+	if skill(SK_RECOVERY) > 0:	# Advanced Recovery: heals as one level higher
+		lv += 1
 	ohp = pstats.s_hpt
 	quiet += 1
 	if lv < 8:

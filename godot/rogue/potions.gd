@@ -82,6 +82,10 @@ static func quaff() -> void:
 	discardit = obj.o_count == 1
 	Pack.leave_pack(obj, false, false)
 	match obj.o_which:
+		P_CONFUSE when skill(SK_INTELLECT) > 0:	# High Intellect: never confused
+			if not trip:
+				pot_info[P_CONFUSE].oi_know = true
+			await Io.msg("you feel confused for a moment, then your mind clears")
 		P_CONFUSE:
 			await do_pot(P_CONFUSE, not trip)
 		P_POISON:
@@ -193,6 +197,9 @@ static func quaff() -> void:
 				await Io.msg("hey, this tastes great.  It makes you feel warm all over")
 			else:
 				await Io.msg("hey, this tastes great.  It make you feel warm all over")
+		P_BLIND when skill(SK_SURE_SIGHT) > 0:	# Sure Sight: never blinded
+			pot_info[P_BLIND].oi_know = true
+			await Io.msg("a cloak of darkness falls around you, and fades away")
 		P_BLIND:
 			await do_pot(P_BLIND, true)
 		P_LEVIT:

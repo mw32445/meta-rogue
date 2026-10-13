@@ -504,6 +504,16 @@ def random_loadout(rng, path):
           "scrolls": [{"which": rng.randrange(18), "count": rng.randint(1, 3)} for _ in range(rng.randint(0, 4))],
           "know_potions": rng.sample(range(14), rng.randint(0, 5)),
           "know_scrolls": rng.sample(range(18), rng.randint(0, 5))}
+    # the skills (GuildCatalog.SKILLS), each one half the time; coin scrounger 0-3
+    skills = {n: 1 for n in ["frost resistance", "frost immunity", "sure sight", "high intellect",
+                             "low-light vision", "throw anything", "safe pockets", "serpentine cult",
+                             "advanced recovery"] if rng.random() < 0.5}
+    if "frost immunity" in skills:
+        skills["frost resistance"] = 1
+    coin = rng.randint(0, 3)
+    if coin:
+        skills["coin scrounger"] = coin
+    lo["skills"] = skills
     with open(path, "w") as f:
         json.dump(lo, f)
     return path

@@ -1,9 +1,10 @@
 ## Unit tests of the Fighters' Guild (godot/guild, docs/GUILD.md): the coffers,
 ## the prices, the shop's rules, the random identifications, the 20-entry Hall of
-## Fame, the catalog against the game's tables, loadouts applied to new games, and
-## a shop with an edited price list. The shops use the built-in price list
-## (GuildPrices.defaults()), never the player's guild_prices.txt; the price list
-## itself is tested by godot/tests/prices_test.gd.
+## Fame, the catalog against the game's tables, loadouts applied to new games, a
+## shop with an edited price list, and the skills (the shop's rules, the loadout, the
+## Skills tab). The shops use the built-in price list (GuildPrices.defaults()), never
+## the player's guild_prices.txt; the price list itself is tested by
+## godot/tests/prices_test.gd, the skills in the game by godot/tests/skills_test.gd.
 ##   godot --headless --path godot --script res://tests/guild_test.gd
 ## Prints PASS or FAIL for each check; exit status 1 if any check fails. Works in
 ## (and removes) the folder "guild_test" of the project's user data folder.
@@ -34,6 +35,9 @@ func _initialize() -> void:
 	_test_big_pack()
 	_test_screen()
 	_test_edited_prices()
+	_test_skills()
+	_test_skills_loadout()
+	_test_skills_screen()
 	_clean()
 	print("guild_test: %d passed, %d failed" % [_passes, _fails])
 	quit(1 if _fails > 0 else 0)
@@ -156,7 +160,7 @@ func _test_prices() -> void:
 	_check("prices: food 30 * 1.3^k", food.slice(0, 6) == [30, 39, 50, 65, 85, 111], food)
 	var rings: int = p.price("rings", C.RINGS[10][0], 0) + p.price("rings", C.RINGS[10][0], 1)
 	_check("prices: 13 rations (%d) cost less than two rings of slow digestion (%d)" % [rations, rings],
-		rations < rings and rings == 3500 and rations > 2500)
+		rations < rings and rings == 3125 and rations > 2500)
 	var pk := []
 	for i in 5:
 		pk.append(p.price("stores", "pack slot", i))
@@ -166,13 +170,13 @@ func _test_prices() -> void:
 		var before := s.spent()
 		s.buy("rg:0")
 		seq.append(s.spent() - before)
-	_check("prices: a second ring of a kind costs 4 times as much", seq == [500, 2000, 8000], seq)
+	_check("prices: a second ring of a kind costs 4 times as much", seq == [450, 1800, 7200], seq)
 	seq = []
 	for i in 2:
 		var before := s.spent()
 		s.buy("wd:11")
 		seq.append(s.spent() - before)
-	_check("prices: wands too", seq == [900, 3600], seq)
+	_check("prices: a second wand of a kind twice as much (teleport away 300)", seq == [300, 600], seq)
 	var polish := []
 	s.buy("rg:5")
 	var adorn := s.rings.size() - 1
@@ -314,7 +318,7 @@ func _test_refunds() -> void:
 	s.buy("er:0")
 	var with_enh := s.spent()
 	s.refund("rg:1")
-	_check("returns: a ring goes back with its enchantments", s.spent() == 40 and with_enh == 40 + 500
+	_check("returns: a ring goes back with its enchantments", s.spent() == 40 and with_enh == 40 + 450
 		+ 150 + 300)
 
 
@@ -873,7 +877,7 @@ func _test_edited_prices() -> void:
 		seq.append(s.spent() - before)
 	_check("edited prices: its prices (strength 50 + 10k, spears 40 * 2^k, rings base * 2^k, food 25, "
 		+ "identifications 10 + 5k, darts 6), the built-in ones elsewhere (hit points 60, "
-		+ "regeneration 900)", seq == [50, 60, 70, 60, 40, 80, 160, 300, 600, 900, 1800, 25, 25, 10,
+		+ "regeneration 800)", seq == [50, 60, 70, 60, 40, 80, 160, 300, 600, 800, 1600, 25, 25, 10,
 		15, 6], seq)
 	_check("edited prices: its amounts (+5 hit points, 4 darts a purchase)", s.hp_now() == 17
 		and _offer(s, 7, "ms:1").label == "4 darts" and _offer(s, 7, "ms:1").info == "have 4")
@@ -909,3 +913,130 @@ func _test_edited_prices() -> void:
 		ok = ok and s.refund(id) == GuildShop.DONE
 	_check("edited prices: every purchase returned in full (the identifications stay)", ok
 		and s.spent() == 25, s.spent())
+
+
+# ---- the skills ------------------------------------------------------------------
+
+## The offer id of a skill (GuildCatalog.SKILLS' name).
+static func _sk(name: String) -> String:
+	for i in C.SKILLS.size():
+		if C.SKILLS[i][0] == name:
+			return "sk:%d" % i
+	return "sk:?"
+
+
+func _test_skills() -> void:
+	var names := []
+	for sk in C.SKILLS:
+		names.append(sk[0])
+	_check("skills: ten, in the order asked", names == ["frost resistance", "frost immunity", "sure sight",
+		"high intellect", "low-light vision", "throw anything", "coin scrounger", "safe pockets",
+		"serpentine cult", "advanced recovery"], names)
+	var ok := true
+	for sk in C.SKILLS:
+		ok = ok and sk[0] == {"frost resistance": RogueBase.SK_FROST_RES, "frost immunity": RogueBase.SK_FROST_IMM,
+			"sure sight": RogueBase.SK_SURE_SIGHT, "high intellect": RogueBase.SK_INTELLECT,
+			"low-light vision": RogueBase.SK_LOW_LIGHT, "throw anything": RogueBase.SK_THROW,
+			"coin scrounger": RogueBase.SK_COIN, "safe pockets": RogueBase.SK_POCKETS,
+			"serpentine cult": RogueBase.SK_CULT, "advanced recovery": RogueBase.SK_RECOVERY}.get(sk[0], "")
+	_check("skills: the game knows them by the same names", ok)
+	var s := GuildShop.new()
+	s.coffers = 100000
+	var prices := []
+	for sk in C.SKILLS:
+		prices.append(_offer(s, GuildShop.SKILLS_SECTION, _sk(sk[0])).price)
+	_check("skills: the prices", prices == [200, 300, 100, 500, 700, 200, 1000, 300, 0, 800], prices)
+	var fr := _sk("frost resistance")
+	var fi := _sk("frost immunity")
+	_check("skills: frost immunity needs frost resistance", s.buy(fi) == GuildShop.NEEDS and s.spent() == 0
+		and _offer(s, GuildShop.SKILLS_SECTION, fi).note == "needs res.")
+	_check("skills: frost resistance, then frost immunity", s.buy(fr) == GuildShop.DONE and s.spent() == 200
+		and s.buy(fi) == GuildShop.DONE and s.spent() == 500
+		and _offer(s, GuildShop.SKILLS_SECTION, fi).note == "")
+	_check("skills: each is bought once", s.buy(fr) == GuildShop.ALREADY and s.buy(fi) == GuildShop.ALREADY
+		and s.spent() == 500)
+	var o := _offer(s, GuildShop.SKILLS_SECTION, fr)
+	_check("skills: one you have is marked yours", o.status == "yours" and o.mark == "*")
+	_check("skills: frost resistance can't go back before frost immunity", s.refund(fr) == GuildShop.NEEDED
+		and s.spent() == 500 and s.needed_by("frost resistance") == "Frost Immunity")
+	_check("skills: returned in full", s.refund(fi) == GuildShop.DONE and s.refund(fr) == GuildShop.DONE
+		and s.spent() == 0 and s.refund(fr) == GuildShop.NONE)
+	var coin := _sk("coin scrounger")
+	var paid := []
+	for i in 3:
+		var before := s.spent()
+		s.buy(coin)
+		paid.append(s.spent() - before)
+	_check("skills: coin scrounger costs 1000, 2000, 3000", paid == [1000, 2000, 3000], paid)
+	o = _offer(s, GuildShop.SKILLS_SECTION, coin)
+	_check("skills: coin scrounger shows its multiplier", o.info == "gold x1 -> x4" and o.note == "next x5"
+		and o.price == 4000, [o.info, o.note, o.price])
+	_check("skills: in the loadout", s.loadout().skills == {"coin scrounger": 3}, s.loadout().skills)
+	_check("skills: coin scrounger goes back a level at a time", s.refund(coin) == GuildShop.DONE
+		and s.skill_level("coin scrounger") == 2 and s.spent() == 3000)
+	_check("skills: the serpentine cult is free", s.buy(_sk("serpentine cult")) == GuildShop.DONE
+		and s.spent() == 3000)
+	_check("skills: no such skill", s.buy("sk:10") == GuildShop.NO_SUCH and s.refund("sk:-1") == GuildShop.NO_SUCH)
+	ok = true
+	var lines := s.offers(GuildShop.SKILLS_SECTION)
+	for i in C.SKILLS.size():
+		ok = ok and lines[i].text == C.SKILLS[i][3]
+	_check("skills: ten lines, each with its description", lines.size() == 10 and ok)
+	var t := GuildShop.new()
+	t.coffers = 150
+	_check("skills: within the coffers", t.buy(_sk("sure sight")) == GuildShop.DONE
+		and t.buy(_sk("frost resistance")) == GuildShop.NO_GOLD and t.left() == 50)
+
+
+func _test_skills_loadout() -> void:
+	var R := RogueBase
+	var s := GuildShop.new()
+	s.coffers = 1 << 40
+	for id in [_sk("frost resistance"), _sk("frost immunity"), _sk("coin scrounger"), _sk("coin scrounger"),
+			_sk("serpentine cult")]:
+		s.buy(id)
+	var lo: Variant = JSON.parse_string(JSON.stringify(s.loadout()))	# as a file would give it
+	var cs := _start_game(lo)
+	_check("skills loadout: the game has them", R.skill(R.SK_FROST_RES) == 1 and R.skill(R.SK_FROST_IMM) == 1
+		and R.skill(R.SK_COIN) == 2 and R.cult_member() and R.skill(R.SK_THROW) == 0, R.skills)
+	R.guild = false
+	_check("skills loadout: none out of guild mode", R.skill(R.SK_COIN) == 0 and not R.cult_member())
+	_stop_game(cs)
+
+
+func _test_skills_screen() -> void:
+	var path := _dir.path_join("skills.scr")
+	_write_hall(path, [2400, 1500, 1000], 20)
+	var g := GuildScreen.new(path, GuildPrices.defaults())
+	var bar := _row(g, 3)
+	_check("skills screen: nine tabs, within 79 columns", bar.contains("1 Train") and bar.contains("9 Skills")
+		and bar.strip_edges(false, true).length() <= 79 and bar.substr(79).strip_edges() == "", bar)
+	g.key(ord("9"))
+	var all := ""
+	for y in 24:
+		all += _row(g, y) + "\n"
+	_check("skills screen: the list", all.contains("Frost Resistance") and all.contains("Advanced Recovery")
+		and all.contains("gold x1") and all.contains("needs res."), all)
+	_check("skills screen: the description of the line under the cursor",
+		all.contains("Ice Monster can no longer instant kill you."), all)
+	for i in 5:
+		g.key(ord("j"))
+	all = ""
+	for y in 24:
+		all += _row(g, y) + "\n"
+	_check("skills screen: a long description is wrapped under the list", all.contains("Thrown items have effects.")
+		and all.contains("You cannot throw the amulet."), all)
+	for i in 5:
+		g.key(ord("k"))
+	g.key(ord("j"))
+	g.key(13)
+	_check("skills screen: frost immunity first is refused", _row(g, 23).contains("you need Frost Resistance first")
+		and g.shop.skill_level("frost immunity") == 0, _row(g, 23))
+	g.key(ord("k"))
+	g.key(13)
+	g.key(ord("j"))
+	g.key(13)
+	g.key(ord("k"))
+	g.key(8)
+	_check("skills screen: frost resistance can't go back first", _row(g, 23).contains("return Frost Immunity first")
+		and g.shop.skill_level("frost resistance") == 1, _row(g, 23))

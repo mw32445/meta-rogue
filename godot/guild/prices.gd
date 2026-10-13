@@ -39,6 +39,12 @@ const PRICE_MAX := 1000000000000000
 ## The sections whose kinds each have their own number (base) and share a price
 ## formula ("price").
 const LISTS: Array[String] = ["rings", "wands", "potions", "scrolls"]
+## SHA-256 of the default lists of earlier versions. A player's file that still
+## holds one exactly was never edited: read_from() replaces it with today's default,
+## so that new prices reach it.
+const OLD_DEFAULTS: Array[String] = [
+	"77359ae8dbc15996c0021a012986daa090943781aa422e31b48e3d6af582c137",	# 1.0.0
+]
 ## The lines that are amounts, not prices: whole numbers, from the first number
 ## to the second.
 const AMOUNTS := {
@@ -106,17 +112,23 @@ static func places_of(exported: bool, desktop: bool, macos := false) -> Array:
 	return [places, write_to]
 
 
-## The first file of places that exists. When none does, the default list (the
+## The first file of places that exists (an untouched default of an earlier version
+## is first replaced by today's, OLD_DEFAULTS). When none does, the default list (the
 ## text of the file shipped, if it exists, else the built-in one) is written to the
 ## first of write_to that takes it, and read from there; when none takes it, the
 ## file shipped is read, or else the built-in list used.
 static func read_from(places: Array[String], write_to: Array[String],
 		shipped: String) -> GuildPrices:
-	for p in places:
-		if FileAccess.file_exists(p):
-			return from_file(p)
 	var have := shipped != "" and FileAccess.file_exists(shipped)
 	var text: String = FileAccess.get_file_as_string(shipped) if have else C.PRICES
+	for p in places:
+		if FileAccess.file_exists(p):
+			if OLD_DEFAULTS.has(FileAccess.get_file_as_string(p).sha256_text()):
+				var old := FileAccess.open(p, FileAccess.WRITE)
+				if old != null:
+					old.store_string(text)
+					old.close()
+			return from_file(p)
 	for p in write_to:
 		var f := FileAccess.open(p, FileAccess.WRITE)
 		if f != null:

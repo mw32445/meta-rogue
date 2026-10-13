@@ -32,16 +32,18 @@ The stores:
 - **Stable draws.** The draws are fixed by the Hall of Fame. Closing the window, or
   quitting at once and starting again, names the same kinds in the same order. They
   change only when the Hall of Fame does.
+- **Skills.** The ninth section sells skills: rules of the game changed for the run
+  (section 6).
 - **Prices.** Every price, the coffers formula and the amounts (hit points, charges,
   missiles per purchase, ...) are in a text file anyone can edit, `guild_prices.txt`
-  (section 7). The Guild reads it each time it opens.
+  (section 8). The Guild reads it each time it opens.
 
 | Key | Action |
 |---|---|
 | `j` `k`, up/down | choose a line (PgUp/PgDn, Home/End, space pages down) |
 | Enter (or `+`, `l`) | buy one more |
 | Backspace (or `-`, `h`) | return one |
-| `1`-`8`, left/right, Tab | section |
+| `1`-`9`, left/right, Tab | section |
 | `?` | the coffers formula with its numbers, the keys, the price file's path and the lines of it that can't be used |
 | `e` | enter the dungeon (asks `[y/n]`) |
 
@@ -49,7 +51,8 @@ The screen has no explanatory text and no flavor lines: only the lists, their sh
 headings and prices. The bottom line stays empty unless a key was refused; it then
 says why, in Rogue's message style ("you can't afford that", "there's no room in your
 pack", "an identification can't be returned", ...). It also shows the first line of
-the price file that can't be used, until a key is pressed (section 7).
+the price file that can't be used, until a key is pressed (section 8). In the Skills
+section, the full description of the skill under the cursor is under the list.
 
 When a game ends, the end screen shows the 20-entry list and then one line:
 `The Guild's coffers now hold N gold. [Enter: the Guild, Esc: quit]` (by the price
@@ -59,7 +62,7 @@ file's coffers formula).
 ```
 coffers = best / 2 + (sum / 20) * lerp(0.5, 1.5, n / 20)
 ```
-- This is the `[coffers]` line of the price file (section 7), which can change it.
+- This is the `[coffers]` line of the price file (section 8), which can change it.
 - `n` is the number of Hall-of-Fame entries with a score above 0, `sum` their total and
   `best` the best of them. Every death, quit and win counts.
 - `lerp(0.5, 1.5, n / 20)` is `0.5 + n / 20`: it grows from 0.5 (no heroes) to 1.5
@@ -91,8 +94,8 @@ In guild mode:
 ## 4. The price list
 These are the prices of the shipped `guild_prices.txt`, and the built-in ones (section
 7). All prices are whole gold pieces. `k` is how many of that line were already
-bought: the first costs the base price. Copies of a ring or wand cost `base * 4^k`.
-Potions and scrolls cost `base * 2^k` once their kind is known.
+bought: the first costs the base price. Copies of a ring cost `base * 4^k`, of a wand
+`base * 2^k`. Potions and scrolls cost `base * 2^k` once their kind is known.
 
 | Section | What | Price |
 |---|---|---|
@@ -104,11 +107,11 @@ Potions and scrolls cost `base * 2^k` once their kind is known.
 | Armour | your armour, +1: leather, studded (free), ring mail (issued), scale, chain, splint, banded, plate | 0 / 0 / - / 140 / 340 / 640 / 640 / 1040 |
 | | spare armour, +0, known | leather 20, ring mail 60, studded 60, scale 200, chain 400, splint 700, banded 700, plate 1100 |
 | | enhance: -1 armour class, per suit | 100 * 2^k |
-| Rings | known; protection, add strength, dexterity, increase damage come +1; teleportation and aggravate monster are cursed (as in the dungeon) | regeneration 900, slow digestion 700, stealth 600, increase damage 550, protection 500, add strength 500, dexterity 450, sustain strength 400, maintain armor 400, see invisible 300, searching 250, teleportation 200, aggravate monster 10, adornment free; copies * 4^k |
+| Rings | known; protection, add strength, dexterity, increase damage come +1; teleportation and aggravate monster are cursed (as in the dungeon) | regeneration 800, slow digestion 625, stealth 550, increase damage 500, protection 450, add strength 450, dexterity 400, sustain strength 350, maintain armor 350, see invisible 275, searching 225, teleportation 175, aggravate monster 10, adornment free; copies * 4^k |
 | | enhance: +1 to a bonus ring | 150 * 2^k |
 | | polishing a ring of adornment: a total winner sells it for its worth (10 plus its stone's, learned in the dungeon) times 2^k (at most 7) | 5 * 2^k (half what it adds to a plain 10-gold ring) |
-| Wands | wands and staves, known, 5 charges (light 15) | teleport away 900, slow monster 650, lightning/fire/cold 600, cancellation 500, drain life 400, polymorph 300, magic missile 250, teleport to 150, light 120, haste monster 5, invisibility 5, nothing 5; copies * 4^k |
-| | recharging: +2 charges, per wand | 80 * 2^k |
+| Wands | wands and staves, known, 5 charges (light 15) | teleport away 300, slow monster 250, lightning/fire/cold 250, cancellation 200, drain life 150, polymorph 120, magic missile 80, teleport to 60, light 50, haste monster 5, invisibility 5, nothing 5; copies * 2^k |
+| | recharging: +2 charges, per wand | 40 * 2^k |
 | Potions | identify one (random, weighted, final, no item) | 40 |
 | | a known kind | raise level 250, extra healing 200, gain strength 180, healing 120, haste self 100, restore strength 60, magic detection 50, see invisible 40, monster detection 30, levitation 20, confusion/hallucination/poison/blindness 5; * 2^k |
 | Scrolls | identify one (random, weighted, final, no item) | 40 |
@@ -116,6 +119,8 @@ Potions and scrolls cost `base * 2^k` once their kind is known.
 | Stores | a food ration | 30 * 1.3^k (30, 39, 50, 65, 85, 111, ...) |
 | | 10 arrows / 10 darts / 5 shuriken / 2 daggers | 10 / 8 / 25 / 30, flat |
 | | a bigger pack: +1 slot, 23 up to 52 | 50 * 1.5^k (50, 75, 112, 168, 253, ...) |
+| Skills | each bought once (section 6) | frost resistance 200, frost immunity 300 (after frost resistance), sure sight 100, high intellect 500, low-light vision 700, throw anything 200, safe pockets 300, serpentine cult free, advanced recovery 800 |
+| | coin scrounger, by level: gold x2, x3, x4, ... | 1000 * (k + 1): 1000, 2000, 3000, ... (x4 costs 6000 in all) |
 
 Notes:
 - **Your weapon and armour.** They are the issued ones, changed in place. Switching
@@ -123,7 +128,19 @@ Notes:
   that makes the issued one dearer than another makes that other a trade-in: choosing
   it gives the difference back, and going back to the issued one pays it again.
 - **Food.** 13 rations cost 2,922 gold, less than the two rings of slow digestion they
-  stand in for (700 + 2,800 = 3,500). The test asserts this.
+  stand in for (625 + 2,500 = 3,125). The test asserts this.
+- **Wands** cost more in 1.0.0 (teleport away 900, copies * 4^k, recharging 80 * 2^k).
+  A student with about 2,000 gold could rarely afford one, and their charges run out. A
+  bolt and teleport away now cost 550 together. Rings are about 10% cheaper than in 1.0.0.
+- **Coin Scrounger's price.** Each level adds the same +1x of the gold found and costs
+  1,000 more than the last, so the total for xm is 500 * m * (m - 1): x2 1,000, x3
+  3,000, x4 6,000, x5 10,000.
+  - A run finds about 100 + 19 * depth gold a level (about 2,000 by depth 10).
+  - With a full Hall of Fame, the coffers hold about twice a typical score.
+
+  So the next level pays back when a run finds about as much gold as it costs. A
+  middling player settles around x3 or x4 while still buying gear; a deep player goes
+  higher.
 - **Missiles.** Extra arrows go onto the issued stack and need no slot. Darts, shuriken
   and daggers make one stack per kind, which takes one slot.
 - **Pack slots.** The pack is counted the way `Pack.pack_room()` counts:
@@ -172,7 +189,127 @@ Notes:
 A dagger, a wand or a staff draws on the RNG, so a loadout changes the dungeon of a
 seed. This is fine in guild mode.
 
-## 6. The loadout
+## 6. Skills
+The ninth section sells skills: rules of the game changed for the run.
+- **Buying.** Each skill is bought once, except Coin Scrounger, whose levels are bought
+  one at a time. A skill is returned for its full price, like everything else.
+- **Frost Immunity** needs Frost Resistance, and Frost Resistance can't be returned
+  while Frost Immunity is held.
+- **On the screen**, each line shows the skill's short effect (Coin Scrounger: `gold x1
+  -> x3`, `next x4`). The skill under the cursor has its full description under the list.
+
+| Skill | Price | In the game |
+|---|---|---|
+| Frost Resistance | 200 | The ice monster's touch never kills by hypothermia. Its freezes still add up, so the hero can stay frozen while it, or anything else, keeps hitting; another monster or hunger ends it. |
+| Frost Immunity | 300, needs Frost Resistance | The ice monster freezes nothing ("you feel a brief chill"). |
+| Sure Sight | 100 | The potion of blindness, the game's only blindness, doesn't blind; it is identified. |
+| High Intellect | 500 | No confusion from the potion of confusion (identified) or from the medusa's gaze ("the medusa's gaze has no effect on you"). |
+| Low-Light Vision | 700 | In a dark room (not a corridor or a maze), the hero sees the room's squares 2 away like the adjacent ones: floor, walls, doors, objects, monsters. Only the adjacent squares wake monsters or stop a run, as before. |
+| Throw Anything | 200 | Thrown items have effects (below). |
+| Coin Scrounger | 1000 * (k + 1) | Gold picked up is multiplied by the level + 1 (x2, x3, x4, ...); the message shows what was gained. |
+| Safe Pockets | 300 | Leprechauns and nymphs don't steal (or vanish): they fight on and hit for 1x8, the zombie's damage. |
+| Serpentine Cult | free | Below. |
+| Advanced Recovery | 800 | The hero regenerates as at one level higher. |
+
+**Throw Anything.**
+- **The command.** It lists every item and throws any, except the amulet: "Not even
+  this can be thrown." (no time passes). As in 5.4.4, worn armour is taken off first (it
+  takes a turn) and a ring comes off its finger.
+- **A hit** uses the item up, whatever it is, as 5.4.4 does with a weapon. A miss lands
+  as before. A monster that the hit kills gets no effect.
+- **Armour** hits for 1x4, plus the hero's strength bonus.
+- **A potion** works on the monster as if it drank it. It is identified when the effect
+  is seen:
+
+  | Potion | The monster |
+  |---|---|
+  | confusion, blindness | confused: it moves at random until it shakes it off |
+  | healing, extra healing | heals as the hero would (its level in d4 or d8; past its maximum, the maximum grows) |
+  | raise level | +1 level, +1d8 hit points |
+  | haste self | hasted; one already hasted faints from exhaustion (falls asleep) |
+  | poison | -1 to -3 strength (none if it wears sustain strength) |
+  | gain strength, restore strength | +1 strength; back to its kind's |
+  | the detections, see invisible, levitation, hallucination | nothing |
+- **A scroll** works as if the monster read it:
+
+  | Scroll | The monster |
+  |---|---|
+  | monster confusion | confused |
+  | sleep | falls asleep |
+  | hold monster | it and the running monsters within 2 of it are held |
+  | teleportation | teleported away |
+  | create monster | a monster appears next to it |
+  | aggravate monsters | the level's other monsters wake and go to it |
+  | enchant armor, enchant weapon | its armour class -1; its damage +1 |
+  | the others | nothing |
+- **A ring** is used up, and the monster keeps its effect: the ring stays in its pack
+  and goes with it when it dies (it is not dropped):
+
+  | Ring | The monster |
+  |---|---|
+  | teleportation | teleported now and then (1 turn in 50, as the hero) |
+  | aggravate monster | the level's other monsters wake and go to it |
+  | protection, add strength, dexterity, increase damage | its armour, strength, to-hit or damage by the ring's bonus |
+  | regeneration | +1 hit point a turn |
+  | sustain strength | its strength can't be lowered (poison) |
+  | the others | nothing |
+- **A wand or staff** spends one last charge on the monster, even an empty one, then is
+  gone:
+  - slow and haste monster, invisibility, polymorph, cancellation, teleport away and
+    teleport to act on it as when zapped;
+  - lightning, fire and cold do their bolt's damage to it alone (6x6, unless it saves;
+    the flame bounces off a dragon);
+  - magic missile does its 1x4 + 1;
+  - light and drain life act as when zapped: the hero's room is lit; drain life drains
+    around the hero;
+  - nothing does nothing.
+- **A venus flytrap** holding the hero lets go when a thrown wand acts on it, as when
+  zapped, or when a thrown scroll or ring teleports it.
+
+**The Serpentine Cult.**
+- **Sleeping snakes.** Rattlesnakes and snakes start asleep, wandering ones too, and
+  the hero coming near never wakes them (5.4.4 wakes a "mean" monster next to the
+  hero 2 times in 3). Being attacked, aggravation and the like still wake them.
+- **Bites.** A rattlesnake's bite never weakens the hero. One bite in 4 gives +1
+  strength ("the snake's bite makes you stronger"), at most once per snake.
+- **Confirmation.** A hostile action against a snake is asked first. The first is
+  stopped ("snakes are sacred to the cult: do it again to attack") and no time passes.
+  The same or another hostile action right after it goes ahead, and that snake is
+  never asked about again. Once time passes, the warning is forgotten. This covers:
+  - melee: moving into it, `F`;
+  - a throw whose path meets it first;
+  - a zap whose first target it is (drain life: any snake it would drain).
+- **Banishment.** Killing a snake, by any means, banishes the hero ("you are banished
+  from the Serpentine Cult!"). The benefits end, and snakes hit 50% harder for the rest
+  of the run.
+
+**In the code.**
+- `RogueBase.skills` (name -> level) is set by `Loadout.apply` from the loadout's
+  `"skills"`. `RogueBase.skill(name)` reads it and is 0 out of guild mode, so the
+  classic and fixed games, which the differential tests check, are untouched.
+- The save keeps `skills` and `cult_banished`. A snake that made the hero stronger is
+  flagged `GAVESTR` in its `t_flags`, saved with it.
+- `godot/rogue/skills.gd` (`Skills`) holds the new rules. The game's functions call it
+  where a rule changes:
+  - `Fight`: `attack` (the ice monster, the rattlesnake, the leprechaun, the nymph),
+    `roll_em` (thrown armour, a monster's rings, Safe Pockets' damage, the banished's
+    50%), `fight` (the cult's question, a thrown item's effect), `killed`
+    (banishment), `remove_mon` (what was used up on a monster goes with it);
+  - `Potions.quaff`; `Monsters.wake_monster`, `wanderer`;
+  - `Misc.look`, `erase_lamp`; `Chase.cansee`, `see_monst`, `set_oldch`;
+  - `Chase.runners` (a monster's rings, each turn), `relocate`, `do_chase` (a monster
+    drawn by aggravation);
+  - `Weapons.missile`, `Sticks.do_zap`, `Pack.money`, `Daemons.doctor`;
+  - `Command.command` (the cult's warning expires when time passes).
+- **What a monster was hit with.** A ring or a scroll of enchant weapon stays in the
+  monster's pack, flagged `ISMONWORN` in its `o_flags`. It works there, and is
+  discarded, not dropped, when the monster dies.
+- **Aggravation on a monster.** The level's other monsters wake and set their
+  destination (`t_dest`) to it. When it goes, they go after the hero again. One that
+  comes within 2 of the hero on its way goes after the hero instead: C's `chase()`
+  would step onto the hero.
+
+## 7. The loadout
 `GuildShop.loadout()` makes it; `replay.gd --loadout FILE.json` reads one (JSON numbers
 may be floats). Every key is optional:
 
@@ -192,6 +329,7 @@ may be floats). Every key is optional:
 "potions", "scrolls": [{"which", "count"}]
 "food": n                    rations added
 "know_potions", "know_scrolls": [which, ...]   identified for the run
+"skills": {name: level}      the skills (section 6), by their price-file names
 ```
 `which` is the game's `o_which`, the order of the tables in `rogue_base.gd` and
 `catalog.gd`. The shop's loadout carries every count the price file sets (hit points,
@@ -200,7 +338,7 @@ arrows, missiles, charges), so applying one needs no price file; a loadout witho
 "enh": 1}, "rings": [{"which": 5, "enh": 3}]}` gives 30 slots, a +1,+2 long sword and a
 ring of adornment worth 80 to a winner.
 
-## 7. The price file: `guild_prices.txt`
+## 8. The price file: `guild_prices.txt`
 Every price, the coffers formula and the amounts are in a plain text file that anyone
 can edit after downloading the game, formulas included. The Guild reads it each time
 it opens (so an edit counts from the next new game), and so does the end-of-game
@@ -311,10 +449,10 @@ which a downloaded file must not. After a change, run `tools/check.sh`,
 `godot/tests/prices_test.gd` and `godot/tests/guild_test.gd`. The food-versus-rings
 invariant and the price schedules are asserted there.
 
-## 8. Files
+## 9. Files
 | File | What |
 |---|---|
-| `godot/guild_prices.txt` | The price file, as shipped (section 7). |
+| `godot/guild_prices.txt` | The price file, as shipped (section 8). |
 | `godot/guild/catalog.gd` | `GuildCatalog`: what the Guild sells (names, frequencies, orders, limits); `PRICES`, the built-in copy of the price file. |
 | `godot/guild/formula.gd` | `GuildFormula`: a formula of the price file, parsed once, computed for its names. |
 | `godot/guild/prices.gd` | `GuildPrices`: reads the price file (where the game looks; the built-in values for the lines it can't use, and why); a line's price for `k`, the amounts, the coffers. |
@@ -322,13 +460,15 @@ invariant and the price schedules are asserted there.
 | `godot/guild/shop.gd` | `GuildShop`: the rules (no UI), at a price list's prices: buy/refund, limits, identifications, the offers of each section, the loadout. |
 | `godot/guild/guild_screen.gd` | `GuildScreen`: the 80x24 screen on its own `Curses`; keys come from `ui/main.gd`. It reads the price file when it opens. |
 | `godot/guild/loadout.gd` | `Loadout.apply()`: the purchases into a new game; the schema. |
-| `godot/rogue/` | Guild-mode branches: `main.gd` (20 entries, 52 letters, apply), `pack.gd` (maxpack, letters), `save.gd` (rd_score, maxpack), `rip.gd` and `things.gd` (adornment worth; inventory pages), `rogue_base.gd` (`maxpack`). |
+| `godot/rogue/` | Guild-mode branches: `main.gd` (20 entries, 52 letters, apply), `pack.gd` (maxpack, letters), `save.gd` (rd_score, maxpack, skills), `rip.gd` and `things.gd` (adornment worth; inventory pages), `rogue_base.gd` (`maxpack`, `skills`, `skill()`); the skills' hooks (section 6). |
+| `godot/rogue/skills.gd` | `Skills`: the skills' rules in the game (section 6). |
 | `godot/ui/main.gd` | Runs the Guild before new games; `--classic`, `--no-guild`; the end prompt (the coffers by the price file); `skip_guild` for UI tests. |
 | `godot/ui/terminal_view.gd` | A new `cs` resets the caches; long consoles in a smaller font. |
 | `godot/tests/guild_test.gd` | Unit and whole-game tests (below). |
 | `godot/tests/prices_test.gd` | The price file's tests (below). |
+| `godot/tests/skills_test.gd` | The skills in the game (below). |
 
-## 9. Testing
+## 10. Testing
 - **Classic stays 1:1.** `harness/run_all.sh` (or `difftest.py corpus`, `seeds`, `fuzz`,
   `fuzz --wizard`, `saves`, and the same with `--fixes`) runs with the switch off. The
   oracle cannot judge the Guild.
@@ -345,7 +485,29 @@ invariant and the price schedules are asserted there.
   - a won game selling a ring polished 3 times for 8 times its worth;
   - a 30-slot wizard game: both inventory pages, drop and pick up, save and restore;
   - a shop with an edited price list: its prices, the built-in ones elsewhere, its
-    amounts in the loadout, a trade-in, polish max, every purchase returned in full.
+    amounts in the loadout, a trade-in, polish max, every purchase returned in full;
+  - the skills in the shop (prices, once each, Frost Immunity's requirement and the
+    return guard, Coin Scrounger's 1000 / 2000 / 3000), in the loadout and in a game,
+    and the Skills tab (nine tabs in 79 columns, the description under the list).
+- **`godot --headless --path godot --script res://tests/skills_test.gd`** (FAIL lines
+  and a summary, exit status 1 on a failure) plays games in guild mode with the fixes
+  on, a key at a time; between keys it places a monster or an item and reads the state
+  and the screen. Each skill is tried with it and without it:
+  - Frost Resistance (frozen past the hypothermia limit until the hero starves) and Frost
+    Immunity (never frozen);
+  - Sure Sight and High Intellect (the potions; the medusa's gaze);
+  - Low-Light Vision (the floor and a monster 2 away; `cansee`, `see_monst`; no waking;
+    the old squares dark again after a step);
+  - Throw Anything (the menu; the amulet; armour's 1x4; potions, scrolls, rings and
+    wands on a monster; an empty wand; worn armour and rings; a miss lands; a ring
+    goes with a dead monster);
+  - Coin Scrounger (x1, x2, x4), Safe Pockets (no theft; 1x8);
+  - the Serpentine Cult (sleeping snakes, bites, +1 strength once per snake, the
+    confirmation for melee, `F`, throws and zaps, banishment and the 50%);
+  - Advanced Recovery (heals 2 turns sooner at level 1);
+  - a save and a restore keep the skills, the banishment and the snakes' flags.
+- **Smoke.** `difftest.py smoke --guild` draws random loadouts with random skills (Coin
+  Scrounger 0-3): no script error, no hang.
 - **`godot --headless --path godot --script res://tests/prices_test.gd`** (FAIL lines
   and a summary, exit status 1 on a failure; it never reads or writes the player's
   file, except that `read()` may read it) covers:

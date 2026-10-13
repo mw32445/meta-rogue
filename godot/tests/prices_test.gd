@@ -13,9 +13,11 @@ extends SceneTree
 const C := preload("res://guild/catalog.gd")
 const SHIPPED := "res://guild_prices.txt"
 
-## The prices the Guild had before its price list was a file (GuildCatalog's
-## constants and its exact integer grow()): a number is a flat price (or an
-## amount); [base, num, den] the price floor(base * (num / den)^k).
+## The Guild's prices, as its exact integer rules give them (first those of before
+## its price list was a file, GuildCatalog's constants and grow(); since 1.1.0 wands
+## and rings are cheaper and there are skills): a number is a flat price (or an
+## amount); [base, num, den] the price floor(base * (num / den)^k); ["step", n] the
+## price n * (k + 1).
 const BEFORE := {
 	"training": {"strength": [100, 2, 1], "hit points": [60, 2, 1], "hit points per purchase": 2},
 	"your weapon": {"dagger": 0, "spear": 0, "mace": 0, "long sword": 190,
@@ -28,20 +30,20 @@ const BEFORE := {
 		"scale mail": 200, "chain mail": 400, "splint mail": 700, "banded mail": 700,
 		"plate mail": 1100},
 	"enhancing": {"weapon": [75, 2, 1], "armour": [100, 2, 1], "ring": [150, 2, 1],
-		"polish": [5, 2, 1], "polish max": 7, "wand charges": [80, 2, 1],
+		"polish": [5, 2, 1], "polish max": 7, "wand charges": [40, 2, 1],
 		"charges per purchase": 2},
-	"rings": {"protection": [500, 4, 1], "add strength": [500, 4, 1],
-		"sustain strength": [400, 4, 1], "searching": [250, 4, 1], "see invisible": [300, 4, 1],
-		"adornment": [0, 4, 1], "aggravate monster": [10, 4, 1], "dexterity": [450, 4, 1],
-		"increase damage": [550, 4, 1], "regeneration": [900, 4, 1],
-		"slow digestion": [700, 4, 1], "teleportation": [200, 4, 1], "stealth": [600, 4, 1],
-		"maintain armor": [400, 4, 1]},
-	"wands": {"charges": 5, "light charges": 15, "light": [120, 4, 1],
-		"invisibility": [5, 4, 1], "lightning": [600, 4, 1], "fire": [600, 4, 1],
-		"cold": [600, 4, 1], "polymorph": [300, 4, 1], "magic missile": [250, 4, 1],
-		"haste monster": [5, 4, 1], "slow monster": [650, 4, 1], "drain life": [400, 4, 1],
-		"nothing": [5, 4, 1], "teleport away": [900, 4, 1], "teleport to": [150, 4, 1],
-		"cancellation": [500, 4, 1]},
+	"rings": {"protection": [450, 4, 1], "add strength": [450, 4, 1],
+		"sustain strength": [350, 4, 1], "searching": [225, 4, 1], "see invisible": [275, 4, 1],
+		"adornment": [0, 4, 1], "aggravate monster": [10, 4, 1], "dexterity": [400, 4, 1],
+		"increase damage": [500, 4, 1], "regeneration": [800, 4, 1],
+		"slow digestion": [625, 4, 1], "teleportation": [175, 4, 1], "stealth": [550, 4, 1],
+		"maintain armor": [350, 4, 1]},
+	"wands": {"charges": 5, "light charges": 15, "light": [50, 2, 1],
+		"invisibility": [5, 2, 1], "lightning": [250, 2, 1], "fire": [250, 2, 1],
+		"cold": [250, 2, 1], "polymorph": [120, 2, 1], "magic missile": [80, 2, 1],
+		"haste monster": [5, 2, 1], "slow monster": [250, 2, 1], "drain life": [150, 2, 1],
+		"nothing": [5, 2, 1], "teleport away": [300, 2, 1], "teleport to": [60, 2, 1],
+		"cancellation": [200, 2, 1]},
 	"potions": {"identify": 40, "confusion": [5, 2, 1], "hallucination": [5, 2, 1],
 		"poison": [5, 2, 1], "gain strength": [180, 2, 1], "see invisible": [40, 2, 1],
 		"healing": [120, 2, 1], "monster detection": [30, 2, 1], "magic detection": [50, 2, 1],
@@ -58,6 +60,10 @@ const BEFORE := {
 	"stores": {"food": [30, 13, 10], "pack slot": [50, 3, 2], "arrows": 10,
 		"arrows per purchase": 10, "darts": 8, "darts per purchase": 10, "shuriken": 25,
 		"shuriken per purchase": 5, "daggers": 30, "daggers per purchase": 2},
+	"skills": {"frost resistance": 200, "frost immunity": 300, "sure sight": 100,
+		"high intellect": 500, "low-light vision": 700, "throw anything": 200,
+		"coin scrounger": ["step", 1000], "safe pockets": 300, "serpentine cult": 0,
+		"advanced recovery": 800},
 }
 
 var _fails := 0
@@ -79,6 +85,7 @@ func _initialize() -> void:
 	_test_coffers()
 	_test_override()
 	_test_places()
+	_test_old_default()
 	_test_every_name()
 	_test_screen()
 	_clean(_dir)
@@ -282,7 +289,7 @@ func _test_file() -> void:
 			+ " (using 2)",
 		"guild_prices.txt line 30: a price can't be over 1000000000000000 (here 10000000000000000"
 			+ " when k = 0)"
-			+ " (using 80 * 2^k)",
+			+ " (using 40 * 2^k)",
 	]
 	_check("file: every line that can't be read is reported, in order", p.errors == want,
 		"\n".join(p.errors))
@@ -304,8 +311,8 @@ func _test_file() -> void:
 		and p.price("stores", "arrows", 4) == 10 and p.price("stores", "daggers") == 30
 		and p.price("enhancing", "polish", 2) == 20 and p.amount("enhancing", "polish max") == 7
 		and p.amount("enhancing", "charges per purchase") == 2
-		and p.price("enhancing", "wand charges", 1) == 160)
-	_check("file: and where it sets none", p.price("rings", "protection", 1) == 2000
+		and p.price("enhancing", "wand charges", 1) == 80)
+	_check("file: and where it sets none", p.price("rings", "protection", 1) == 1800
 		and p.price("training", "strength", 0) == 100)
 	_check("file: no path for a text", p.path == "" and p.where() == "")
 	# Windows line ends and a byte order mark
@@ -358,17 +365,17 @@ func _test_late_errors() -> void:
 func _test_lists() -> void:
 	var p := GuildPrices.from_text("[wands]\nprice = base + 100 * k\nlight = 50\n")
 	_check("lists: the price formula with each kind's number", p.price("wands", "light", 2) == 250
-		and p.price("wands", "fire", 1) == 700 and p.price("wands", "price", 3, 7) == 307)
+		and p.price("wands", "fire", 1) == 350 and p.price("wands", "price", 3, 7) == 307)
 	p = GuildPrices.from_text("[rings]\nprice = 1000 / base\n")
 	_check("lists: a price formula that fails for a kind (adornment, base 0) is not used",
-		p.price("rings", "protection", 1) == 2000 and p.errors == [
+		p.price("rings", "protection", 1) == 1800 and p.errors == [
 		"guild_prices.txt line 2: division by zero when k = 0, base = 0 (using base * 4^k)"],
 		p.errors)
 	p = GuildPrices.from_text("[rings]\nprotection = -5\nstealth = 10 * (k + 1)\n")
 	_check("lists: a kind's number below 0 is not used; one may use k",
-		p.price("rings", "protection") == 500 and p.price("rings", "stealth", 1) == 80
+		p.price("rings", "protection") == 450 and p.price("rings", "stealth", 1) == 80
 		and p.errors == ["guild_prices.txt line 2: a price can't be below 0 (here -5 when k = 0)"
-		+ " (using 500)"], p.errors)
+		+ " (using 450)"], p.errors)
 
 
 # ---- the shipped file ---------------------------------------------------------------
@@ -415,14 +422,15 @@ func _test_shipped() -> void:
 			continue
 		var bad := []
 		for k in 13:
-			var want: int = was if was is int else _grow(was[0], was[1], was[2], k)
+			var want: int = was if was is int else (was[1] * (k + 1) if was[0] is String
+				else _grow(was[0], was[1], was[2], k))
 			if file.price(section, nm, k) != want or built.price(section, nm, k) != want:
 				bad.append([k, want, file.price(section, nm, k), built.price(section, nm, k)])
-		_check("shipped: [%s] %s, k = 0 to 12, as before" % [section, nm], bad.is_empty(), bad)
+		_check("shipped: [%s] %s, k = 0 to 12" % [section, nm], bad.is_empty(), bad)
 	var all := 0
 	for section in BEFORE:
 		all += BEFORE[section].size()
-	_check("shipped: every price of before is in it (%d of %d)" % [seen, all], seen == all)
+	_check("shipped: every price of the table is in it (%d of %d)" % [seen, all], seen == all)
 	# the kinds the shop sells, by the catalog's names
 	var missing := []
 	for t in [["rings", C.RINGS], ["wands", C.STICKS], ["potions", C.POTIONS],
@@ -502,7 +510,7 @@ func _test_override() -> void:
 	_check("override: a price, an amount and the coffers change",
 		p.price("training", "strength", 2) == 21 and p.amount("stores", "arrows per purchase") == 25
 		and p.coffers(100, 1000, 3) == 1500)
-	_check("override: the rest is the built-in list", p.price("rings", "protection", 1) == 2000
+	_check("override: the rest is the built-in list", p.price("rings", "protection", 1) == 1800
 		and p.price("training", "hit points", 2) == 240 and p.amount("wands", "charges") == 5)
 	var h := HallOfFame.new()
 	h.best = 100
@@ -601,6 +609,9 @@ func _test_every_name() -> void:
 	ids.append_array(["str", "hp", "sw:1", "ew:you", "ew:bow", "sa:7", "ea:you", "fd", "xw:8",
 		"ew:0", "xa:0", "ea:0", "rg:0", "er:0", "rg:5", "pr:1", "wd:0", "ec:0", "ms:0", "ms:1",
 		"ms:2", "ms:3", "bp:0", "bs:0"])
+	for i in C.SKILLS.size():	# frost resistance comes before frost immunity
+		ids.append("sk:%d" % i)
+	ids.append("sk:%d" % C.SKILLS.map(func(sk: Array) -> String: return sk[0]).find("coin scrounger"))
 	var refused := []
 	for id in ids:
 		var why := s.buy(id)
@@ -613,6 +624,33 @@ func _test_every_name() -> void:
 	_check("every name: a shop with every kind of purchase and every line on offer (%d) asks"
 		% lines + " for no line the list lacks", refused.is_empty() and p.errors.is_empty()
 		and lo.sticks[0].charges == 17 and s.spent() > 0, [refused, p.errors])
+
+
+## A player's untouched copy of the 1.0.0 list (tests/data/guild_prices_1.0.0.txt) is
+## replaced by today's when read; an edited one is kept, and takes the built-in
+## values for the lines it lacks ([skills]).
+func _test_old_default() -> void:
+	var old := FileAccess.get_file_as_string("res://tests/data/guild_prices_1.0.0.txt")
+	_check("old default: the 1.0.0 list's SHA-256 is in OLD_DEFAULTS", old.length() > 5000
+		and GuildPrices.OLD_DEFAULTS.has(old.sha256_text()), old.sha256_text())
+	var dir := _dir.path_join("old")
+	DirAccess.make_dir_recursive_absolute(dir)
+	var a := dir.path_join("untouched.txt")
+	_write(a, old)
+	var none: Array[String] = []
+	var p := GuildPrices.read_from([a] as Array[String], none, SHIPPED)
+	_check("old default: an untouched 1.0.0 file becomes today's list", FileAccess.get_file_as_string(a)
+		== FileAccess.get_file_as_string(SHIPPED) and p.errors.is_empty() and p.path == a
+		and p.price("wands", "teleport away") == 300 and p.price("skills", "frost immunity") == 300,
+		[p.errors, p.price("wands", "teleport away")])
+	var b := dir.path_join("edited.txt")
+	var edited := old.replace("strength = 100 * 2^k", "strength = 99 * 2^k")
+	_write(b, edited)
+	p = GuildPrices.read_from([b] as Array[String], none, SHIPPED)
+	_check("old default: an edited one is kept, its prices used, the new lines built in",
+		FileAccess.get_file_as_string(b) == edited and p.price("training", "strength") == 99
+		and p.price("wands", "teleport away") == 900 and p.price("skills", "coin scrounger", 2) == 3000
+		and p.errors.is_empty(), [p.errors, p.price("wands", "teleport away")])
 
 
 # ---- the Guild screen ---------------------------------------------------------------------

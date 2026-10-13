@@ -99,44 +99,45 @@ armour = 100 * 2^k           # +1 to a suit of armour
 ring = 150 * 2^k
 polish = 5 * 2^k
 polish max = 7               # 20 at most
-wand charges = 80 * 2^k
+wand charges = 40 * 2^k
 charges per purchase = 2
 
 [rings]
 # Each kind's number (base) is what the first one costs; price is what the
 # next one costs when you have k of that kind.
 price = base * 4^k
-regeneration = 900
-slow digestion = 700
-stealth = 600
-increase damage = 550
-protection = 500
-add strength = 500
-dexterity = 450
-sustain strength = 400
-maintain armor = 400
-see invisible = 300
-searching = 250
-teleportation = 200
+regeneration = 800
+slow digestion = 625
+stealth = 550
+increase damage = 500
+protection = 450
+add strength = 450
+dexterity = 400
+sustain strength = 350
+maintain armor = 350
+see invisible = 275
+searching = 225
+teleportation = 175
 aggravate monster = 10
 adornment = 0
 
 [wands]
-# Wands and staves, priced as the rings.
-price = base * 4^k
+# Wands and staves. Each kind's number (base) is what the first one costs;
+# price is what the next one costs when you have k of that kind.
+price = base * 2^k
 charges = 5                  # a new one's charges
 light charges = 15           # a new wand of light's
-teleport away = 900
-slow monster = 650
-lightning = 600
-fire = 600
-cold = 600
-cancellation = 500
-drain life = 400
-polymorph = 300
-magic missile = 250
-teleport to = 150
-light = 120
+teleport away = 300
+slow monster = 250
+lightning = 250
+fire = 250
+cold = 250
+cancellation = 200
+drain life = 150
+polymorph = 120
+magic missile = 80
+teleport to = 60
+light = 50
 invisibility = 5
 haste monster = 5
 nothing = 5
@@ -199,3 +200,18 @@ shuriken = 25
 shuriken per purchase = 5
 daggers = 30
 daggers per purchase = 2
+
+[skills]
+# Skills for this game. Each is bought once, except coin scrounger: each level
+# adds 1 to what gold is multiplied by (x2, then x3, ...), and k is how many
+# levels you have already. frost immunity needs frost resistance.
+frost resistance = 200
+frost immunity = 300
+sure sight = 100
+high intellect = 500
+low-light vision = 700
+throw anything = 200
+coin scrounger = 1000 * (k + 1)
+safe pockets = 300
+serpentine cult = 0
+advanced recovery = 800
