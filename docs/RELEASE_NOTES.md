@@ -1,5 +1,8 @@
 Meta-Rogue is **Rogue 5.4.4**, the 1980 dungeon crawler that named the roguelike genre, ported screen for screen to the Godot engine, with a meta-progression layer on top.
 
+### New in 1.1.1
+- **Food and magic detection fixed.** The scroll of food detection and the potion of magic detection show where the food or the magic lies until you press a key. In 1.0.0 and 1.1.0 the item menus painted the map over them at once, so they seemed to do nothing.
+
 ### New in 1.1.0
 - **Skills.** The Guild has a ninth section, Skills, bought for one hero like everything else:
   - Frost Resistance and Frost Immunity;

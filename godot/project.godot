@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Meta-Rogue"
 config/description="Meta-Rogue: Rogue 5.4.4 (Michael Toy, Ken Arnold, Glenn Wichman), ported 1:1 to Godot, with the Fighters' Guild between games."
-config/version="1.1.0"
+config/version="1.1.1"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Meta-Rogue"
 config/features=PackedStringArray("4.7", "GL Compatibility")
