@@ -420,6 +420,10 @@ static func _menu_item(purpose: String, type_: int) -> Thing:
 		var ch: int = await Io.readchar()
 		delwin(win)
 		touchwin(stdscr)
+		# The map back at once: left for the next key's refresh, it would paint over
+		# a window the command shows and waits on (show_win(): the scroll of food
+		# detection, the potion of magic detection).
+		refresh()
 		mpos = 0
 		if ch == ESCAPE:
 			reset_last()

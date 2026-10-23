@@ -13,6 +13,8 @@ var _failed := 0
 var _screens: Array[String] = []
 var _done := false
 var _dir := ""
+## Where _place() put its object.
+var _placed := Vector2i(-1, -1)
 
 
 func _initialize() -> void:
@@ -25,6 +27,7 @@ func _initialize() -> void:
 	_test_pages()
 	_test_identify_nothing()
 	_test_classic_unchanged()
+	_test_detection_windows()
 	_test_exp_next()
 	for f in DirAccess.get_files_at(_dir):
 		DirAccess.remove_absolute(_dir.path_join(f))
@@ -42,9 +45,9 @@ func _check(what: String, ok: bool, detail: Variant = "") -> void:
 
 
 ## Play keys in a new game (seed 1) with the menus on; returns stdout. _screens
-## gets the screen at every key read.
+## gets the screen at every key read. setup, if given, runs at the first key read.
 func _play(keys: Array, menus := true, lo: Variant = null, exp_next := false, wizard := false,
-		fixes := false) -> String:
+		fixes := false, setup := Callable()) -> String:
 	R.reset()
 	var cs := Curses.new()
 	cs.replay = true
@@ -71,6 +74,8 @@ func _play(keys: Array, menus := true, lo: Variant = null, exp_next := false, wi
 	_screens = []
 	_done = false
 	cs.step_hook = func(_key: int) -> void:
+		if setup.is_valid() and _screens.is_empty():
+			setup.call()
 		if not cs.curses_gone:
 			var t := ""
 			for y in R.NUMLINES:
@@ -169,6 +174,45 @@ func _test_classic_unchanged() -> void:
 	_play(["w", " "], false)
 	_check("menus off: the original question", _screen(2).contains("Which object do you want to wield? (* for list)")
 		and not _screen(2).contains("c) A +1,+1 mace"), _screen(2))
+
+
+## An object of a type on the first free floor square of the hero's room (not drawn:
+## only a detection shows it), at _placed.
+func _place(type_: int, which: int) -> void:
+	var rp: Room = R.proom
+	for y in range(rp.r_pos.y + 1, rp.r_pos.y + rp.r_max.y - 1):
+		for x in range(rp.r_pos.x + 1, rp.r_pos.x + rp.r_max.x - 1):
+			if R.chat(y, x) == R.FLOOR and R.moat(y, x) == null and (y != R.hero.y or x != R.hero.x):
+				var obj := List.new_item()
+				obj.o_type = type_
+				obj.o_which = which
+				obj.o_count = 1
+				obj.o_pos.y = y
+				obj.o_pos.x = x
+				R.lvl_obj = List._attach(R.lvl_obj, obj)
+				R.INDEX(y, x).p_ch = type_
+				_placed = Vector2i(x, y)
+				return
+
+
+## The scroll of food detection and the potion of magic detection show what they
+## find in a window and wait for a key (show_win()). The item menu closed before
+## must not paint the map over that window (it did, from the next key's refresh).
+func _test_detection_windows() -> void:
+	for menus in [true, false]:
+		var m := " (menus %s)" % ("on" if menus else "off")
+		_play(["r", "f", " ", " "], menus, {"scrolls": [{"which": R.S_FDET, "count": 1}]}, false, false, true,
+			_place.bind(R.FOOD, 0))
+		var rows := _screen(3).split("\n")
+		_check("food detection" + m + ": the food shown where it lies, until a key", rows.size() > _placed.y
+			and rows[0].contains("Your nose tingles and you smell food.") and rows[_placed.y][_placed.x] == ":",
+			_screen(3))
+		_play(["q", "f", " ", " "], menus, {"potions": [{"which": R.P_TFIND, "count": 1}]}, false, false, true,
+			_place.bind(R.POTION, R.P_HEALING))
+		rows = _screen(3).split("\n")
+		_check("magic detection" + m + ": the magic shown where it lies, until a key", rows.size() > _placed.y
+			and rows[0].contains("You sense the presence of magic on this level.")
+			and rows[_placed.y][_placed.x] == "$", _screen(3))
 
 
 ## The status line (row 23) of a screen.
